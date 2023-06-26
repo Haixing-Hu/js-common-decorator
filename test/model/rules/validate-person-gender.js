@@ -18,7 +18,7 @@ export default function validatePersonGenderField(gender, { instance, displayNam
     return new ValidationResult(false, `请选择${whose}${displayName}`);
   }
   // 确认性别的取值正确
-  if (!Gender.has(gender)) {
+  if (!Gender.hasValue(gender)) {
     return new ValidationResult(false, `${whose}${displayName}只能是“男”或“女”`);
   }
   // 检查性别和身份证号码是否匹配

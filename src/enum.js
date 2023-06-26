@@ -12,7 +12,8 @@ import { setClassMetadata } from '@/impl/utils';
  *
  * 此装饰器需要一个数组作为参数，数组中每个元素是一个对象。每个对象必须具有`name`和`value`属性，
  * 分别其对应的枚举子的显示名称和枚举值字符串表示。该对象还可以具有可选属性`code`和`data`，分别
- * 表示其对应的枚举子的编码（通常是字符串或整数类型）和额外数据（可以是任意Object）。
+ * 表示其对应的枚举子的编码（通常是字符串或整数等可以通过`===`比较相等性的简单类型）和额外数据
+ * （可以是任意Object）。
  *
  * 该装饰器所装饰的类必须是一个类，此类可以有自定义属性和自定义方法。该装饰器会为被装饰的类添加下述
  * 属性和方法：
@@ -26,18 +27,26 @@ import { setClassMetadata } from '@/impl/utils';
  * - 静态类方法`values()`，返回该枚举类所有枚举值组成的数组；
  * - 静态类方法`forValue(value)`，返回字符串表示为`value`的枚举子，若不存在这样
  *   的枚举子则返回`undefined`；
- * - 静态类方法`getNameOf(value)`，返回字符串表示为`value`的枚举子的名称，若不存
+ * - 静态类方法`forCode(code)`，返回编码为`code`的枚举子，若不存在这样的枚举子则返回
+ *   `undefined`；
+ * - 静态类方法`nameOfValue(value)`，返回字符串表示为`value`的枚举子的名称，若不存
  *   在这样的枚举子则返回`undefined`。
- * - 静态类方法`has(value)`，测试字符串`value`是否为该枚举类的某个枚举子的值。
+ * - 静态类方法`nameOfCode(code)`，返回编码为`code`的枚举子的名称，若不存在这样的枚举子
+ *   则返回`undefined`。
+ * - 静态类方法`hasValue(value)`，测试字符串`value`是否为该枚举类的某个枚举子的值。
+ * - 静态类方法`hasCode(code)`，测试`code`是否为该枚举类的某个枚举子的编码，注意编码可能是
+ *   任意类型，但应该是简单类型。这里比较编码相等直接使用`===`。
  *
  * 使用示例：
  * ```js
  * &#064;Enum([{
  *   name: '男',
  *   value: 'MALE',
+ *   code: 0,
  * }, {
  *   name: '女',
  *   value: 'FEMALE',
+ *   code: 1,
  * }])
  * class Gender {}
  * ```
@@ -52,11 +61,13 @@ import { setClassMetadata } from '@/impl/utils';
  * Gender.MALE = new Gender();
  * Gender.MALE.name = '男';
  * Gender.MALE.value = 'MALE';
+ * Gender.MALE.code = 0;
  * Object.freeze(Gender.MALE);
  *
  * Gender.FEMALE = new Gender();
  * Gender.FEMALE.name = '男';
  * Gender.FEMALE.value = 'FEMALE';
+ * Gender.FEMALE.code = 1;
  * Object.freeze(Gender.FEMALE);
  *
  * Gender.values = function() {
@@ -67,12 +78,31 @@ import { setClassMetadata } from '@/impl/utils';
  *   return Gender[value];
  * }
  *
- * Gender.getNameOf = function(value) {
+ * Gender.forCode = function(code) {
+ *   for (e of Gender.values()) {
+ *     if (e.code === code) {
+ *       return e;
+ *     }
+ *   }
+ *   return undefined;
+ * }
+ *
+ * Gender.nameOfValue = function(value) {
  *    return (Gender[value] ? Gender[value].name : undefined);
  * }
  *
- * Gender.has = function(value) {
+ * Gender.nameOfCode = function(code) {
+ *    const e = Gender.forCode(code);
+ *    return (e ? e.name : undefined);
+ * }
+ *
+ * Gender.hasValue = function(value) {
  *   return (Gender[value] instanceof Gender);
+ * }
+ *
+ * Gender.hasCode = function(code) {
+ *   const e = Gender.forCode(code);
+ *   return (e !== undefined);
  * }
  *
  * Object.freeze(Gender);
@@ -137,27 +167,40 @@ export function Enum(items) {
     };
     // 添加类静态方法 forValue()
     Class.forValue = function forValue(value) {
-      // if (value === undefined || value === null || typeof value !== 'string') {
-      //   return undefined;
-      // }
+      if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
+        return undefined;
+      }
       const e = Class[value];
       return (e instanceof Class ? e : undefined);
     };
-    // 添加类静态方法 getNameOf()
-    Class.getNameOf = function getNameOf(value) {
-      // if (value === undefined || value === null || typeof value !== 'string') {
-      //   return undefined;
-      // }
-      const e = Class[value];
-      return (e instanceof Class ? e.name : undefined);
+    // 添加类静态方法 forCode()
+    Class.forCode = function forCode(code) {
+      if ((code === undefined) || (code === null)) {
+        return undefined;
+      }
+      const item = items.find((item) => item.code === code);
+      return (item ? Class[item.value] : undefined);
     };
-    // 添加类静态方法 has()
-    Class.has = function has(value) {
-      // if (value === undefined || value === null || typeof value !== 'string') {
-      //   return false;
-      // }
+    // 添加类静态方法 nameOfValue()
+    Class.nameOfValue = function nameOfValue(value) {
+      if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
+        return undefined;
+      }
       const e = Class[value];
-      return (e instanceof Class);
+      return ((e instanceof Class) ? e.name : undefined);
+    };
+    // 添加类静态方法 nameOfCode()
+    Class.nameOfCode = function nameOfCode(code) {
+      const e = Class.forCode(code);
+      return (e ? e.name : undefined);
+    };
+    // 添加类静态方法 hasValue()
+    Class.hasValue = function hasValue(value) {
+      return Class.forValue(value) !== undefined;
+    };
+    // 添加类静态方法 hasCode()
+    Class.hasCode = function hasCode(code) {
+      return Class.forCode(code) !== undefined;
     };
     // 冻结这个枚举类
     Object.freeze(Class);
