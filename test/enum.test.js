@@ -139,33 +139,86 @@ describe('测试 @Enum 类装饰器', () => {
     nonExist = Gender.forValue('forValue');
     expect(nonExist).toBeUndefined();
   });
-  test('测试 @Enum 是否为类增加 getNameOf() 静态方法', () => {
-    const male = Gender.getNameOf('MALE');
-    expect(male).toBe('男');
-    const female = Gender.getNameOf('FEMALE');
-    expect(female).toBe('女');
-
-    let nonExist = Gender.getNameOf('xxx');
+  test('测试 @Enum 是否为类增加 forCode() 静态方法', () => {
+    const male = GenderWithCodeData.forCode(0);
+    // console.dir(male);
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.code).toBe(0);
+    const female = GenderWithCodeData.forCode(1);
+    // console.dir(female);
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.code).toBe(1);
+    // console.dir(female);
+    let nonExist = GenderWithCodeData.forCode(2);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.getNameOf(undefined);
+    nonExist = GenderWithCodeData.forCode(undefined);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.getNameOf(null);
+    nonExist = GenderWithCodeData.forCode(null);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.getNameOf(123);
+    nonExist = GenderWithCodeData.forCode(123);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.getNameOf('forValue');
+    nonExist = GenderWithCodeData.forCode('forValue');
     expect(nonExist).toBeUndefined();
   });
-  test('测试 @Enum 是否为类增加 has() 静态方法', () => {
-    expect(Gender.has('MALE')).toBe(true);
-    expect(Gender.has('FEMALE')).toBe(true);
-    expect(Gender.has('xxx')).toBe(false);
-    expect(Gender.has('has')).toBe(false);
-    expect(Gender.has('getNameOf')).toBe(false);
-    expect(Gender.has('forValue')).toBe(false);
-    expect(Gender.has(undefined)).toBe(false);
-    expect(Gender.has(null)).toBe(false);
-    expect(Gender.has(123)).toBe(false);
+  test('测试 @Enum 是否为类增加 nameOfValue() 静态方法', () => {
+    const male = Gender.nameOfValue('MALE');
+    expect(male).toBe('男');
+    const female = Gender.nameOfValue('FEMALE');
+    expect(female).toBe('女');
+    let nonExist = Gender.nameOfValue('xxx');
+    expect(nonExist).toBeUndefined();
+    nonExist = Gender.nameOfValue(undefined);
+    expect(nonExist).toBeUndefined();
+    nonExist = Gender.nameOfValue(null);
+    expect(nonExist).toBeUndefined();
+    nonExist = Gender.nameOfValue(123);
+    expect(nonExist).toBeUndefined();
+    nonExist = Gender.nameOfValue('forValue');
+    expect(nonExist).toBeUndefined();
+  });
+  test('测试 @Enum 是否为类增加 nameOfCode() 静态方法', () => {
+    const male = GenderWithCodeData.nameOfCode(0);
+    expect(male).toBe('男');
+    const female = GenderWithCodeData.nameOfCode(1);
+    expect(female).toBe('女');
+    let nonExist = GenderWithCodeData.nameOfCode(2);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithCodeData.nameOfCode(undefined);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithCodeData.nameOfCode(null);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithCodeData.nameOfCode(123);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithCodeData.nameOfCode('forValue');
+    expect(nonExist).toBeUndefined();
+  });
+  test('测试 @Enum 是否为类增加 hasValue() 静态方法', () => {
+    expect(Gender.hasValue('MALE')).toBe(true);
+    expect(Gender.hasValue('FEMALE')).toBe(true);
+    expect(Gender.hasValue('xxx')).toBe(false);
+    expect(Gender.hasValue('has')).toBe(false);
+    expect(Gender.hasValue('nameOfValue')).toBe(false);
+    expect(Gender.hasValue('forValue')).toBe(false);
+    expect(Gender.hasValue(undefined)).toBe(false);
+    expect(Gender.hasValue(null)).toBe(false);
+    expect(Gender.hasValue(123)).toBe(false);
+  });
+  test('测试 @Enum 是否为类增加 hasCode() 静态方法', () => {
+    expect(GenderWithCodeData.hasCode(0)).toBe(true);
+    expect(GenderWithCodeData.hasCode(1)).toBe(true);
+    expect(GenderWithCodeData.hasCode(2)).toBe(false);
+    expect(GenderWithCodeData.hasCode('has')).toBe(false);
+    expect(GenderWithCodeData.hasCode('nameOfValue')).toBe(false);
+    expect(GenderWithCodeData.hasCode('forValue')).toBe(false);
+    expect(GenderWithCodeData.hasCode(undefined)).toBe(false);
+    expect(GenderWithCodeData.hasCode(null)).toBe(false);
+    expect(GenderWithCodeData.hasCode(123)).toBe(false);
   });
   test('测试 @Enum 装饰的类是否可改变', () => {
     expect(() => {
