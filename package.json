@@ -11,7 +11,7 @@
     "doc:server": "gulp doc-server",
     "analyze": "USE_ANALYZER=true gulp build",
     "es5": "./node_modules/.bin/check-es-version -e 5 -p .",
-    "deploy": "gulp build && npm publish --registry='https://registry.npmjs.org/' --access public"
+    "deploy": "gulp build && npm publish --registry='https://registry.npmjs.com/' --access public"
   },
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "MIT",
