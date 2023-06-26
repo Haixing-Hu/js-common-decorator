@@ -33,7 +33,7 @@ function validateEnumValue(value, options) {
     } else {
       return new ValidationResult(false, `请选择${whose}${options.displayName}`);
     }
-  } else if (options.type.has(value)) {
+  } else if (options.type.hasValue(value)) {
     return new ValidationResult(true);
   } else {
     return new ValidationResult(false, `${whose}${options.displayName}不受支持："${value}"`);
