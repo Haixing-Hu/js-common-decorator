@@ -15,7 +15,7 @@ import { ValidationResult } from '@/index';
 export default function validateCredentialNumber(number, { instance, displayName, parentInstance }) {
   let credentialName = '';
   if (instance && instance.type) {
-    credentialName = CredentialType.getNameOf(instance.type) || '';
+    credentialName = CredentialType.nameOfValue(instance.type) || '';
   }
   const whose = (parentInstance && parentInstance.name ? `${parentInstance.name}的` : '');
   if ((number === undefined)
