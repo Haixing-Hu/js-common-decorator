@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { logger, getDeclaringClass } from '@haixing_hu/common-util';
+import getDeclaringClass from '@haixing_hu/common-util/src/get-declaring-class';
 import { PROPERTY_NORMALIZER } from '@/normalizer';
 import {
   getFieldMetadata,
@@ -57,12 +57,12 @@ const NormalizeImpl = {
   normalizeField(Class, obj, field) {
     // console.log('NormalizeImpl.normalizeField: Class = ', Class, ', obj = ', obj, ', field = ', field);
     if (!Object.hasOwn(obj, field)) {
-      logger.warn('Cannot normalize the non-existing field "{0}" of the object: {1}', field, obj);
+      console.warn('Cannot normalize the non-existing field "%s" of the object: %o', field, obj);
       return;
     }
     const DeclClass = getDeclaringClass(Class, field);
     if (DeclClass === null) {
-      logger.warn('Cannot find the declaration class of the field "{0}" of object: {1}', field, obj);
+      console.warn('Cannot find the declaration class of the field "%s" of object: %o', field, obj);
       return;
     }
     // 若声明类不是当前类，即使当前类的祖先类，

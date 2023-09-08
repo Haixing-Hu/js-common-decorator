@@ -613,20 +613,20 @@ describe('测试@Model类装饰器添加的静态类方法createPage()', () => {
     expect(result).toBeNull();
   });
   test('Person.createPage("")', () => {
-    const result = Person.createPage('');
-    expect(result).toBeNull();
+    expect(() => Person.createPage(''))
+      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
   });
   test('Person.createPage("xx")', () => {
-    const result = Person.createPage('xx');
-    expect(result).toBeNull();
+    expect(() => Person.createPage('xx'))
+      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
   });
   test('Person.createPage({ xx: 123 })', () => {
-    const result = Person.createPage({ xx: 123 });
-    expect(result).toBeNull();
+    expect(() => Person.createPage({ xx: 123 }))
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
   });
   test('Person.createPage({ page_index: 0, page_size: 10 })', () => {
-    const result = Person.createPage({ page_index: 0, page_size: 10 });
-    expect(result).toBeNull();
+    expect(() => Person.createPage({ page_index: 0, page_size: 10 }))
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
   });
   test('Person.createPage(), 空页', () => {
     const result = Person.createPage({

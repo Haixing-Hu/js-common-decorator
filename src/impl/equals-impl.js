@@ -6,7 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { isUndefinedOrNull, deepEqual } from '@haixing_hu/common-util';
+import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
+import deepEqual from '@haixing_hu/common-util/src/deep-equal';
 
 const EqualsImpl = {
   /**

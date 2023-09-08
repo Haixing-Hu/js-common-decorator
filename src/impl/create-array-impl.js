@@ -6,7 +6,6 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { logger } from '@haixing_hu/common-util';
 
 const CreateArrayImpl = {
   /**
@@ -25,7 +24,9 @@ const CreateArrayImpl = {
   create(Class, array, normalizable) {
     // console.log('CreateArrayImpl.create: Class = ', Class,
     //   ', array = ', array, ', Array.isArray(array) = ', Array.isArray(array));
-    if (Array.isArray(array)) {
+    if (array === undefined || array === null) {
+      return null;
+    } else if (Array.isArray(array)) {
       // 处理标准数组
       return array.map((e) => Class.create(e, normalizable));
     // 不需要特殊处理Vue托管的数组
@@ -39,8 +40,7 @@ const CreateArrayImpl = {
     //   }
     //   return result;
     } else {
-      logger.error(`The argument of ${Class.name}.createArray() is not an array.`);
-      return null;
+      throw new TypeError(`The argument of ${Class.name}.createArray() is not an array.`);
     }
   },
 };

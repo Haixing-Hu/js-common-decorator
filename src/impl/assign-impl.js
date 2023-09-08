@@ -6,12 +6,9 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import {
-  isBuiltInClass,
-  isUndefinedOrNull,
-  clone,
-  logger,
-} from '@haixing_hu/common-util';
+import isBuiltInClass from '@haixing_hu/common-util/src/is-built-in-class';
+import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
+import clone from '@haixing_hu/common-util/src/clone';
 import { PROPERTY_TYPE } from '@/type';
 import { PROPERTY_ELEMENT_TYPE } from '@/element-type';
 import {
@@ -114,7 +111,8 @@ const AssignImpl = {
           return sourceValue;
         } else {
           // 源属性值不是字符串，返回默认值
-          logger.warn(`The value of ${path} should be a string representation of the ${Type.name} enumeration.`);
+          console.warn('The value of %s should be a string representation of '
+              + 'the %s enumeration.', path, Type.name);
           return defaultValue;
         }
       case 'model':
@@ -147,7 +145,7 @@ const AssignImpl = {
   copyArrayWithoutElementType(path, sourceArray, defaultArray/* , normalizable*/) {
     // TODO: 如果其默认字段值中有类型信息，则可以根据默认字段值中类型信息构造同类型数组
     if (!Array.isArray(sourceArray)) {
-      logger.warn(`The value of ${path} should be an array.`);
+      console.warn('The value of %s should be an array.', path);
       return clone(defaultArray, CLONE_OPTIONS);
     }
     return clone(sourceArray, CLONE_OPTIONS);
@@ -173,7 +171,7 @@ const AssignImpl = {
    */
   copyArrayWithElementType(path, ElementType, sourceArray, defaultArray, normalizable) {
     if (!Array.isArray(sourceArray)) {
-      logger.warn(`The value of ${path} should be an array.`);
+      console.warn('The value of %s should be an array.', path);
       return clone(defaultArray, CLONE_OPTIONS);
     }
     if (isBuiltInClass(ElementType)) {

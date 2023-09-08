@@ -45,7 +45,7 @@ function test() {
       '\\.js$': 'babel-jest',
       '\\.vue$': 'vue-jest',
     },
-    transformIgnorePatterns: ["/node_modules/"],
+    transformIgnorePatterns: ['/node_modules/(?!@haixing_hu)'],
     testEnvironment: 'jest-environment-jsdom-global',
     setupFilesAfterEnv: ['jest-extended/all'],
     collectCoverage: true,
@@ -53,7 +53,7 @@ function test() {
   };
   if (hasTarget) {
     const target = testTarget.substring('--target='.length);
-    config.testRegex = [ target ];
+    config.testRegex = [target];
   }
   process.env.NODE_ENV = 'test';
   // console.log('Jest config: ', config);
@@ -62,7 +62,7 @@ function test() {
 }
 
 function isFixed(file) {
-	return file.eslint !== null && file.eslint.fixed;
+  return file.eslint !== null && file.eslint.fixed;
 }
 
 function lint() {

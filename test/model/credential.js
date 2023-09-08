@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { trimUppercaseString } from '@haixing_hu/common-util';
+import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
 import { Model } from '@/index';
 
 @Model
