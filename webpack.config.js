@@ -28,11 +28,6 @@ const { merge } = require('webpack-merge');
   mode: 'production',
   stats: 'summary',
   target: ['web', 'es5'],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
   externals: {
     vue: 'commonjs2 vue',
   },
