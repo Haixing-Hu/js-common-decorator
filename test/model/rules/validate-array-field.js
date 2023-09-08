@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { isUndefinedOrNullOrEmptyArray } from '@haixing_hu/common-util';
+import isUndefinedOrNullOrEmptyArray from '@haixing_hu/common-util/src/is-undefined-or-null-or-empty-array';
 import { ValidationResult } from '@/index';
 
 /**

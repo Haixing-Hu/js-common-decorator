@@ -7,7 +7,6 @@
  *
  ******************************************************************************/
 import { Vue } from 'vue-property-decorator';
-import logger from '@haixing_hu/common-util/src/logger';
 
 /**
  * Vue 的生命周期钩子函数名称列表。
@@ -48,10 +47,9 @@ const VUE_LIFECYCLE_HOOKS = [
  */
 function printMethodLog(className, methodName, args) {
   if (args.length === 0) {
-    logger.debug(`${className}.${methodName}.`);
+    console.debug(`${className}.${methodName}.`);
   } else {
-    const placeholders = args.map((arg, index) => `{${index}}`).join(', ');
-    logger.debug(`${className}.${methodName}: ${placeholders}`, ...args);
+    console.debug(`${className}.${methodName}:`, ...args);
   }
 }
 
