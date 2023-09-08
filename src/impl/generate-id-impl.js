@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setClassMetadata, getClassMetadata } from '@/impl/utils';
+import { setClassMetadata, getClassMetadata } from './utils';
 
 const GenerateIdImpl = {
   /**

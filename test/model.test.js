@@ -7,7 +7,8 @@
  *
  ******************************************************************************/
 import { mount } from '@vue/test-utils';
-import { getClassMetadataObject, getClassMetadata, getDefaultInstance } from '@/impl/utils';
+import { Page } from '../src/index';
+import { getClassMetadataObject, getClassMetadata, getDefaultInstance } from '../src/impl/utils';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import Person from './model/person';
@@ -18,7 +19,6 @@ import Child from './model/child';
 import ArrayWrapper from './model/vue-array-wrapper';
 import PageWrapper from './model/vue-page-wrapper';
 import ObjWithArrayField from './model/obj-with-array-field';
-import Page from '../src/models/Page';
 
 describe('测试@Model类装饰器添加的元信息', () => {
   test('测试 Person 类的 metadata 对象', () => {

@@ -6,17 +6,19 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { PROPERTY_VALIDATOR } from '@/validator';
-import { PROPERTY_TYPE } from '@/type';
-import { PROPERTY_NULLABLE } from '@/nullable';
-import { PROPERTY_DISPLAY_NAME } from '@/display-name';
+import {
+  PROPERTY_VALIDATOR,
+  PROPERTY_TYPE,
+  PROPERTY_NULLABLE,
+  PROPERTY_DISPLAY_NAME,
+} from './constants';
 import {
   getFieldMetadata,
   getDefaultInstance,
   hasOwnPrototypeFunction,
   isNull,
-} from '@/impl/utils';
-import ValidationResult from '@/models/ValidationResult';
+} from './utils';
+import ValidationResult from '../models/ValidationResult';
 
 const ValidateImpl = {
 

@@ -6,14 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata } from '@/impl/utils';
-
-/**
- * 被`@{@link Type}`修饰的字段的元信息属性名。
- *
- * @private
- */
-const PROPERTY_TYPE = 'type';
+import { setFieldMetadata } from './impl/utils';
+import { PROPERTY_TYPE } from './impl/constants';
 
 /**
  * 修饰类字段，将其类型标记为指定的类。

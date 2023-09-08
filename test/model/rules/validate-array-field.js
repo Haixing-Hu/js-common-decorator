@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import isUndefinedOrNullOrEmptyArray from '@haixing_hu/common-util/src/is-undefined-or-null-or-empty-array';
-import { ValidationResult } from '@/index';
+import { ValidationResult } from '../../../src/index';
 
 /**
  * 校验某个对象的一个数组类型的字段值中每个元素是否合法。

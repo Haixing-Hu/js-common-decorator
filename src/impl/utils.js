@@ -6,7 +6,12 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { PROPERTY_TYPE } from '@/type';
+import {
+  PROPERTY_TYPE,
+  PROPERTY_METADATA,
+  PROPERTY_DEFAULT_INSTANCE,
+  PROPERTY_FIELDS,
+} from './constants';
 
 /**
  * 判定给定的对象是否是一个属性描述符(descriptor)。
@@ -21,12 +26,8 @@ export function isDescriptor(desc) {
   if (!desc || (typeof desc !== 'object') || !desc.hasOwnProperty) {
     return false;
   }
-  return ['value', 'initializer', 'get', 'set'].find((key) => {
-    if (Object.prototype.hasOwnProperty.call(desc, key)) {
-      return true;
-    }
-    return false;
-  }) !== undefined;
+  return ['value', 'initializer', 'get', 'set']
+    .find((key) => Object.prototype.hasOwnProperty.call(desc, key)) !== undefined;
 }
 
 /**
@@ -71,8 +72,6 @@ export function getDefaultValue(descriptor) {
   }
   return undefined;
 }
-
-const PROPERTY_METADATA = '__metadata__';
 
 /**
  * 获取指定类的元数据对象，如果不存在则为其创建一个新的。
@@ -124,8 +123,6 @@ export function setClassMetadata(Class, key, value) {
   const metadata = getClassMetadataObject(Class);
   metadata[key] = value;
 }
-
-const PROPERTY_FIELDS = 'fields';
 
 /**
  * 获取指定类的字段的元数据对象，如果不存在则为其创建一个新的。
@@ -185,8 +182,6 @@ export function setFieldMetadata(Class, field, key, value) {
   const metadata = getFieldMetadataObject(Class, field);
   metadata[key] = value;
 }
-
-const PROPERTY_DEFAULT_INSTANCE = 'default_instance';
 
 /**
  * 获取制指定类的默认实例，若不存在则创建一个新的实例。

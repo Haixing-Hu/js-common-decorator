@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, ElementType, DefaultNormalizer } from '@/index';
+import { Model, ElementType, DefaultNormalizer } from '../../src/index';
 import Credential from './credential';
 
 @Model

@@ -6,8 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { ValidationResult } from '@/index';
-import { isNull } from '@/impl/utils';
+import { ValidationResult } from '../../../src/index';
+import { isNull } from '../../../src/impl/utils';
 import Email from './email';
 
 export default function validatePersonEmail(email, { instance, displayName, nullable }) {

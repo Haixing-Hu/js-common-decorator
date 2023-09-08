@@ -6,10 +6,9 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, EnumNormalizer } from '@/index';
+import { Model, EnumNormalizer, Type } from '../src/index';
 import Credential from './model/normalizable-credential';
-import { getClassMetadataObject } from '@/impl/utils';
-import { Type } from '../src';
+import { getClassMetadataObject } from '../src/impl/utils';
 
 /**
  * 单元测试 @EnumNormalizer 装饰器。

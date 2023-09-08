@@ -8,7 +8,7 @@
  ******************************************************************************/
 import { Vue } from 'vue-property-decorator';
 import Component from 'vue-class-component';
-import { Log } from '@/index';
+import { Log } from '../../src/index';
 
 // 封装待测试Vue组件
 @Component({

@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setClassMetadata } from '@/impl/utils';
+import { setClassMetadata } from './impl/utils';
 
 /**
  * 修饰一个空类，将其转换为枚举类。

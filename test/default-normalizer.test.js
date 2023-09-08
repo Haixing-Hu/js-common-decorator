@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { getClassMetadataObject } from '@/impl/utils';
+import { getClassMetadataObject } from '../src/impl/utils';
 import Credential from './model/credential';
 import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-field';
 import NonDecoratedClass from './model/non-decorated-class';

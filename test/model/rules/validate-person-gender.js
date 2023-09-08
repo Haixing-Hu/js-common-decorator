@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { ValidationResult } from '@/index';
+import { ValidationResult } from '../../../src/index';
 import Gender from '../gender';
 import IdentityCard from './identity-card';
 

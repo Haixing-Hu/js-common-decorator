@@ -7,8 +7,8 @@
  *
  ******************************************************************************/
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
-import { setFieldMetadata, ensureEnumField } from '@/impl/utils';
-import { PROPERTY_NORMALIZER } from '@/normalizer';
+import { setFieldMetadata, ensureEnumField } from './impl/utils';
+import { PROPERTY_NORMALIZER } from './normalizer';
 
 /**
  * 修饰某个枚举字段，指定其正则化函数为特定的`trimUppercaseString()`函数。

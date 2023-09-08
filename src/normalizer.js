@@ -6,14 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata } from '@/impl/utils';
-
-/**
- * 被`@{@link Normalizer}`修饰的字段的元信息属性名。
- *
- * @private
- */
-const PROPERTY_NORMALIZER = 'normalizer';
+import { setFieldMetadata } from './impl/utils';
+import { PROPERTY_NORMALIZER } from './impl/constants';
 
 /**
  * 修饰类字段，为其指定正则化函数。

@@ -13,14 +13,14 @@ import {
   getDefaultInstance,
   hasOwnPrototypeFunction,
   hasPrototypeFunction,
-} from '@/impl/utils';
-import AssignImpl from '@/impl/assign-impl';
-import NormalizeImpl from '@/impl/normalize-impl';
-import ValidateImpl from '@/impl/validate-impl';
-import EqualsImpl from '@/impl/equals-impl';
-import GenerateIdImpl from '@/impl/generate-id-impl';
-import CreateArrayImpl from '@/impl/create-array-impl';
-import Page from '@/models/Page';
+} from './impl/utils';
+import AssignImpl from './impl/assign-impl';
+import NormalizeImpl from './impl/normalize-impl';
+import ValidateImpl from './impl/validate-impl';
+import EqualsImpl from './impl/equals-impl';
+import GenerateIdImpl from './impl/generate-id-impl';
+import CreateArrayImpl from './impl/create-array-impl';
+import Page from './models/Page';
 
 /**
  * 修饰领域类，为其增加常用方法。

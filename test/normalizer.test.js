@@ -7,11 +7,11 @@
  *
  ******************************************************************************/
 import trimString from '@haixing_hu/common-util/src/trim-string';
-import { Model, Normalizer } from '@/index';
+import { Model, Normalizer } from '../src/index';
+import { getClassMetadataObject } from '../src/impl/utils';
 import ObjWithNormalizableField from './model/obj-with-normalizable-field';
 import ObjWithoutDecoratedField from './model/obj-without-decorated-field';
 import Credential from './model/normalizable-credential';
-import { getClassMetadataObject } from '@/impl/utils';
 
 /**
  * 单元测试 @Normalizer 装饰器。

@@ -6,8 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { ValidationResult } from '@/index';
-import { isNull } from '@/impl/utils';
+import { ValidationResult } from '../../../src/index';
+import { isNull } from '../../../src/impl/utils';
 import Mobile from './mobile';
 
 export default function validatePersonMobile(mobile, { instance, displayName, nullable }) {

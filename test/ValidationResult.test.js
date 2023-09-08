@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { ValidationResult } from '@/index';
+import { ValidationResult } from '../src/index';
 
 /**
  * 单元测试 ValidationResult.merge

@@ -6,11 +6,10 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, EnumValidator, ValidationResult } from '@/index';
+import { Model, EnumValidator, ValidationResult, Type } from '../src/index';
+import { getClassMetadataObject } from '../src/impl/utils';
 import CredentialType from './model/credential-type';
 import Credential from './model/validatible-credential';
-import { getClassMetadataObject } from '@/impl/utils';
-import { Type } from '../src';
 
 /**
  * 单元测试 @EnumValidator 装饰器。

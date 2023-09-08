@@ -6,9 +6,9 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata, isNull } from '@/impl/utils';
-import { PROPERTY_VALIDATOR } from '@/validator';
-import ValidationResult from '@/models/ValidationResult';
+import { setFieldMetadata, isNull } from './impl/utils';
+import { PROPERTY_VALIDATOR } from './validator';
+import ValidationResult from './models/ValidationResult';
 
 function defaultValidate(value, options) {
   if (isNull(value)) {

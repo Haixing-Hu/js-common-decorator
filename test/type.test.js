@@ -6,10 +6,10 @@
  *    All rights reserved.
  *
  ******************************************************************************/
+import { getClassMetadataObject } from '../src/impl/utils';
 import Credential from './model/credential';
 import NonDecoratedClass from './model/non-decorated-class';
 import ObjWithAnnotatedNullField from './model/obj-with-annotated-null-field';
-import { getClassMetadataObject } from '@/impl/utils';
 
 /**
  * 单元测试 @Model 和 @Type 装饰器。
