@@ -15,6 +15,9 @@ window.console = {          // 重载 window.console
   debug: (...args) => {
     logs.push({ type: 'DEBUG', args });
   },
+  trace: (...args) => {
+    logs.push({ type: 'TRACE', args });
+  },
   info: (...args) => {
     logs.push({ type: 'INFO', args });
   },
@@ -41,7 +44,7 @@ describe('Test @Log decorator for class method', () => {
     foo.say('Hello');
     expect(logs.length).toBe(2);
     expect(logs[0]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Foo.say:',
         'Hello',
@@ -61,7 +64,7 @@ describe('Test @Log decorator for class method', () => {
     foo.add(1, 2);
     expect(logs.length).toBe(3);
     expect(logs[0]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Foo.add:',
         1,
@@ -69,7 +72,7 @@ describe('Test @Log decorator for class method', () => {
       ],
     });
     expect(logs[1]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Foo.say:',
         'Foo.add: 1, 2',
@@ -100,7 +103,7 @@ describe('Test @Log decorator for Vue method', () => {
     // 检查 Hello.created() 的日志
     expect(logs.length).toBe(2);
     expect(logs[0]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Hello.created.',
       ],
@@ -115,7 +118,7 @@ describe('Test @Log decorator for Vue method', () => {
     hello.vm.foo(1, 2);
     expect(logs.length).toBe(5);
     expect(logs[2]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Hello.foo:',
         1,
@@ -144,7 +147,7 @@ describe('Test @Log decorator for Vue method', () => {
     expect(result).toBe(3);
     expect(logs.length).toBe(7);
     expect(logs[5]).toEqual({
-      type: 'DEBUG',
+      type: 'TRACE',
       args: [
         'Hello.add:',
         1,
