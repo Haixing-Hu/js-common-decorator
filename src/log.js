@@ -47,9 +47,9 @@ const VUE_LIFECYCLE_HOOKS = [
  */
 function printMethodLog(className, methodName, args) {
   if (args.length === 0) {
-    console.trace(`${className}.${methodName}.`);
+    console.debug(`${className}.${methodName}.`);
   } else {
-    console.trace(`${className}.${methodName}:`, ...args);
+    console.debug(`${className}.${methodName}:`, ...args);
   }
 }
 
