@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import { Vue } from 'vue-property-decorator';
-import { logger } from '@haixing_hu/common-util';
+import logger from '@haixing_hu/common-util/src/logger';
 
 /**
  * Vue 的生命周期钩子函数名称列表。

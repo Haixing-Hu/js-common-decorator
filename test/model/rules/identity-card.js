@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import CredentialType from '../credential-type'
+import CredentialType from '../credential-type';
 import {
   isIdCardNumberValid, getIdCardBirthday, getIdCardGender,
 } from './identity-card-validator';

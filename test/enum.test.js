@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { clone } from '@haixing_hu/common-util';
+import clone from '@haixing_hu/common-util/src/clone';
 import { getClassMetadataObject, getClassMetadata } from '@/impl/utils';
 import Gender from './model/gender';
 import GenderWithCodeData from './model/gender-with-code-data';

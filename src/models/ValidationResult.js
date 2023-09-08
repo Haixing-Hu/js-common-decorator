@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { defaultIfUndefinedOrNull } from '@haixing_hu/common-util';
+import defaultIfUndefinedOrNull from '@haixing_hu/common-util/src/default-if-undefined-or-null';
 
 /**
  * 此模型表示校验结果。
@@ -27,9 +27,9 @@ class ValidationResult {
   /**
    * 创建一个新的{@link ValidationResult}对象。
    *
-   * @param {String} success
+   * @param {boolean} success
    *     新的{@link ValidationResult}对象的验证正确与否标记，如不提供则使用默认值 true。
-   * @param {String} description
+   * @param {string} description
    *     新的{@link ValidationResult}对象的对验证结果的描述，如不提供则使用默认值空字符串。
    */
   constructor(success = true, description = '') {

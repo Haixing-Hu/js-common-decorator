@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { logger, Logger } from '@haixing_hu/common-util';
+import { logger, Logger } from '@haixing_hu/common-util/src/logger';
 import { mount } from '@vue/test-utils';
 import Foo from './model/foo';
 import Hello from './model/hello-vue';

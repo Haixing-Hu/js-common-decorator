@@ -6,7 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { isUndefinedOrNull, deepEqual, logger } from '@haixing_hu/common-util';
+import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
+import deepEqual from '@haixing_hu/common-util/src/deep-equal';
 import {
   setClassMetadata,
   getDefaultInstance,
@@ -263,7 +264,9 @@ export function Model(Class) {
   // 添加 createPage() 静态方法
   if (!Object.hasOwn(Class, 'createPage')) {
     Class.createPage = function createPage(page) {
-      if (Page.isValid(page)) {
+      if (page === undefined || page === null) {
+        return null;
+      } else if (Page.isValid(page)) {
         return new Page(
           page.total_count,
           page.total_pages,
@@ -272,8 +275,7 @@ export function Model(Class) {
           CreateArrayImpl.create(Class, page.content, true),
         );
       } else {
-        logger.error('Invalid page format: {0}', page);
-        return null;
+        throw new TypeError(`Invalid page format: ${JSON.stringify(page)}`);
       }
     };
   }

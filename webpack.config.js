@@ -34,8 +34,7 @@ const { merge } = require('webpack-merge');
     },
   },
   externals: {
-    '@haixing_hu/common-util': 'commonjs2 @haixing_hu/common-util',
-    'vue': 'commonjs2 vue',
+    vue: 'commonjs2 vue',
   },
   optimization: {
     minimize: true,
