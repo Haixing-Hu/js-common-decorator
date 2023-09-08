@@ -7,12 +7,12 @@
  *
  ******************************************************************************/
 import getDeclaringClass from '@haixing_hu/common-util/src/get-declaring-class';
-import { PROPERTY_NORMALIZER } from '@/normalizer';
+import { PROPERTY_NORMALIZER } from './constants';
 import {
   getFieldMetadata,
   getDefaultInstance,
   hasOwnPrototypeFunction,
-} from '@/impl/utils';
+} from './utils';
 
 const NormalizeImpl = {
 

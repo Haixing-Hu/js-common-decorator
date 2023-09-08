@@ -6,14 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setClassMetadata } from '@/impl/utils';
-
-/**
- * 被`@{@link NameField}`修饰的字段的元信息属性名。
- *
- * @private
- */
-const PROPERTY_NAME_FIELD = 'name_field';
+import { setClassMetadata } from './impl/utils';
+import { PROPERTY_NAME_FIELD } from './impl/constants';
 
 /**
  * 修饰类字段，指定其为该对象的"名称"。

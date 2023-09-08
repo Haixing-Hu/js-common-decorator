@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import clone from '@haixing_hu/common-util/src/clone';
-import { getClassMetadataObject, getClassMetadata } from '@/impl/utils';
+import { getClassMetadataObject, getClassMetadata } from '../src/impl/utils';
 import Gender from './model/gender';
 import GenderWithCodeData from './model/gender-with-code-data';
 

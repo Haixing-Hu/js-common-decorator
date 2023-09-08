@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, Validator, ElementType, Nullable } from '@/index';
+import { Model, Validator, ElementType, Nullable } from '../../src/index';
 import validateArrayField from './rules/validate-array-field';
 import validateIntegerField from './rules/validate-integer-field';
 

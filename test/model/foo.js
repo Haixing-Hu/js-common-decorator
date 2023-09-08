@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Log } from '@/index';
+import { Log } from '../../src/index';
 
 export default class Foo {
   @Log

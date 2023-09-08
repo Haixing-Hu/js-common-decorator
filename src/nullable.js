@@ -6,14 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata } from '@/impl/utils';
-
-/**
- * 被`@{@link Nullable}`修饰的字段的元信息属性名。
- *
- * @private
- */
-const PROPERTY_NULLABLE = 'nullable';
+import { setFieldMetadata } from './impl/utils';
+import { PROPERTY_NULLABLE } from './impl/constants';
 
 /**
  * 修饰类字段，指定其可以为`null`。

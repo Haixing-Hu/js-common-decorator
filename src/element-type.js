@@ -6,9 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { getDefaultValue, setFieldMetadata } from '@/impl/utils';
-
-const PROPERTY_ELEMENT_TYPE = 'element_type';
+import { getDefaultValue, setFieldMetadata } from './impl/utils';
+import { PROPERTY_ELEMENT_TYPE } from './impl/constants';
 
 /**
  * 修饰类字段，将其标记为元素类型为指定的类的数组。

@@ -6,14 +6,8 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata } from '@/impl/utils';
-
-/**
- * 被`@{@link DisplayName}`修饰的字段的元信息属性名。
- *
- * @private
- */
-const PROPERTY_DISPLAY_NAME = 'display_name';
+import { setFieldMetadata } from './impl/utils';
+import { PROPERTY_DISPLAY_NAME } from './impl/constants';
 
 /**
  * 修饰类字段，为其指定显示名称。

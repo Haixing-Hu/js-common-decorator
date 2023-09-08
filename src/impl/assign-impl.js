@@ -9,15 +9,14 @@
 import isBuiltInClass from '@haixing_hu/common-util/src/is-built-in-class';
 import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
 import clone from '@haixing_hu/common-util/src/clone';
-import { PROPERTY_TYPE } from '@/type';
-import { PROPERTY_ELEMENT_TYPE } from '@/element-type';
+import { PROPERTY_TYPE, PROPERTY_ELEMENT_TYPE } from './constants';
 import {
   getClassMetadata,
   getFieldMetadata,
   getDefaultInstance,
   hasOwnPrototypeFunction,
   normalize,
-} from '@/impl/utils';
+} from './utils';
 
 /**
  * 用于调用 clone() 函数复制属性时用到的参数。

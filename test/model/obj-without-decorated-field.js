@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model } from '@/index';
+import { Model } from '../../src/index';
 
 @Model
 export default class ObjWithoutDecoratedField {

@@ -6,9 +6,9 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { setFieldMetadata, ensureEnumField, isNull } from '@/impl/utils';
-import { PROPERTY_VALIDATOR } from '@/validator';
-import ValidationResult from '@/models/ValidationResult';
+import { setFieldMetadata, ensureEnumField, isNull } from './impl/utils';
+import { PROPERTY_VALIDATOR } from './validator';
+import ValidationResult from './models/ValidationResult';
 
 /**
  * 校验某个字符串字段值是否是指定的枚举类的枚举子的值。
