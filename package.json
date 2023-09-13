@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "A JavaScript ES7 library of common decorators",
   "main": "dist/common-decorator.min.js",
   "scripts": {
@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@haixing_hu/common-util": "^2.9.1"
+    "@haixing_hu/common-util": "^2.10.2"
   },
   "peerDependencies": {
     "vue-property-decorator": "^9.1.2"
