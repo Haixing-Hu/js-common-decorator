@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, EnumNormalizer, Type } from '../src/index';
+import { Model, EnumNormalizer, Type } from '../main';
 import Credential from './model/normalizable-credential';
 import { getClassMetadataObject } from '../src/impl/utils';
 

@@ -78,7 +78,7 @@ function lint() {
 }
 
 function build() {
-  return gulp.src('./src/index.js')
+  return gulp.src('./main.js')
     .pipe(webpack(require('./webpack.config')))
     .pipe(gulp.dest('dist/'));
 }

@@ -11,7 +11,7 @@ import Passport from './passport';
 import OfficerCard from './officer-card';
 import OtherCredential from './other-credential';
 import CredentialType from '../credential-type';
-import { ValidationResult } from '../../../src/index';
+import { ValidationResult } from '../../../main';
 
 export default function validateCredentialNumber(number, { instance, displayName, parentInstance }) {
   let credentialName = '';

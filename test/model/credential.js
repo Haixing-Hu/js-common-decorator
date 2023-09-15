@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
-import { Model } from '../../src/index';
+import { Model } from '../../main';
 
 @Model
 export default class Credential {

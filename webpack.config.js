@@ -12,41 +12,31 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { merge } = require('webpack-merge');
 
 /**
- * 所有环境下的公共配置。
+ * Common configuration across all environments.
  */
- const commonConfig = {
-  entry: resolve(__dirname, 'src/index.js'),
+const commonConfig = {
+  entry: resolve(__dirname, 'main.js'),
   output: {
-    filename: 'common-decorator.min.js',
+    filename: 'common-decorator.js',
     library: {
-      name: 'common-decorator',
+      name: 'commonDecorator',
       type: 'umd',
     },
     globalObject: 'this',
   },
   devtool: 'source-map',
-  mode: 'production',
+  mode: 'development',
   stats: 'summary',
   target: ['web', 'es5'],
   externals: {
-    vue: 'commonjs2 vue',
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          compress: {
-            drop_debugger: true,
-          },
-        },
-      }),
-    ],
+    '@haixing_hu/common-logging': 'es5 @haixing_hu/common-logging',
+    '@haixing_hu/common-util': 'es5 @haixing_hu/common-util',
   },
   module: {
     rules: [{
       test: /\.js$/,
       include: [
+        resolve(__dirname, 'main.js'),
         resolve(__dirname, 'src'),
       ],
       loader: 'babel-loader',
@@ -60,12 +50,43 @@ const { merge } = require('webpack-merge');
 };
 
 /**
- * 模块分析配置。
+ * Configuration for production environment.
  */
- const analyzerConfig = {
+const productionConfig = {
+  output: {
+    filename: 'common-decorator.min.js',
+  },
+  devtool: 'source-map',
+  mode: 'production',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_debugger: true,
+            drop_console: false,
+          },
+        },
+      }),
+    ],
+  },
+};
+
+/**
+ * Module analysis configuration.
+ */
+const analyzerConfig = {
   plugins: [
     new BundleAnalyzerPlugin(),
   ],
 };
 
-module.exports = (process.env.USE_ANALYZER ? merge(commonConfig, analyzerConfig) : commonConfig);
+let config = commonConfig;
+if (process.env.NODE_ENV === 'production') {
+  config = merge(config, productionConfig);
+}
+if (process.env.USE_ANALYZER) {
+  config = merge(config, analyzerConfig);
+}
+module.exports = config;

@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { ValidationResult } from '../../../src/index';
+import { ValidationResult } from '../../../main';
 import Name from './name';
 
 export default function validatePersonName(name, { displayName }) {

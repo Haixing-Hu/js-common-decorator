@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model } from '../../src/index';
+import { Model } from '../../main';
 import Credential from './credential';
 
 @Model

@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
-import { Model, Type, EnumNormalizer, Normalizer } from '../../src/index';
+import { Model, Type, EnumNormalizer, Normalizer } from '../../main';
 import CredentialType from './credential-type';
 
 @Model

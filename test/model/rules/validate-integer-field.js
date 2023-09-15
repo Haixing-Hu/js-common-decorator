@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import isUndefinedOrNullOrEmptyString from '@haixing_hu/common-util/src/is-undefined-or-null-or-empty-string';
-import { ValidationResult } from '../../../src/index';
+import { ValidationResult } from '../../../main';
 import Integer from './integer';
 
 /**

@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import { mount } from '@vue/test-utils';
-import { Page } from '../src/index';
+import { Page } from '../main';
 import { getClassMetadataObject, getClassMetadata, getDefaultInstance } from '../src/impl/utils';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';

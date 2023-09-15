@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
-import { Model, Normalizer } from '../../src/index';
+import { Model, Normalizer } from '../../main';
 import Parent from './parent';
 
 @Model

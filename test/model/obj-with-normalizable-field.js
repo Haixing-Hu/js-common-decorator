@@ -7,10 +7,10 @@
  *
  ******************************************************************************/
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
-import { Model, Type, Normalizer, EnumNormalizer, DefaultNormalizer } from '../../src/index';
+import { Model, Type, Normalizer, EnumNormalizer, DefaultNormalizer } from '../../main';
 import Credential from './normalizable-credential';
 import CredentialType from './credential-type';
-import { ElementType } from '../../src';
+import { ElementType } from '../../main';
 
 @Model
 export default class ObjWithNormalizableField {

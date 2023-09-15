@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Model, Validator, DisplayName } from '../../src/index';
+import { Model, Validator, DisplayName } from '../../main';
 import Credential from './validatible-credential';
 import validateCredentialNumber from './rules/validate-credential-number';
 

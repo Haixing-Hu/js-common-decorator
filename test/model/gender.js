@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Enum } from '../../src/index';
+import { Enum } from '../../main';
 
 @Enum([{
   name: '男',

@@ -8,7 +8,7 @@
  ******************************************************************************/
 import {
   Model, Validator, ValidationResult, ElementType, Nullable,
-} from '../src/index';
+} from '../main';
 import { getClassMetadataObject } from '../src/impl/utils';
 import CredentialType from './model/credential-type';
 import Credential from './model/validatible-credential';
