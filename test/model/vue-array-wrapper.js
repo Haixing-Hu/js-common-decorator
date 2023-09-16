@@ -6,7 +6,7 @@
  *    All rights reserved.
  *
  ******************************************************************************/
-import { Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import Credential from './credential';
 import ObjWithArrayField from './obj-with-array-field';
 

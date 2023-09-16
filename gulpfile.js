@@ -83,6 +83,10 @@ function build() {
     .pipe(gulp.dest('dist/'));
 }
 
+function inspect() {
+
+}
+
 gulp.task('lint', lint);
 gulp.task('doc', doc);
 gulp.task('server', server);

@@ -28,10 +28,9 @@ const commonConfig = {
   mode: 'development',
   stats: 'summary',
   target: ['web', 'es5'],
-  externals: {
-    '@haixing_hu/common-logging': 'es5 @haixing_hu/common-logging',
-    '@haixing_hu/common-util': 'es5 @haixing_hu/common-util',
-  },
+  externals: [
+    /^@haixing_hu\/common-util/i,
+  ],
   module: {
     rules: [{
       test: /\.js$/,
