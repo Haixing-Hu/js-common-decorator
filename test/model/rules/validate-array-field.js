@@ -1,11 +1,11 @@
-/*******************************************************************************
- *
- *    Copyright (c) 2022 - 2023.
- *    Haixing Hu, Qubit Co. Ltd.
- *
- *    All rights reserved.
- *
- ******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
 import isUndefinedOrNullOrEmptyArray from '@haixing_hu/common-util/src/is-undefined-or-null-or-empty-array';
 import { ValidationResult } from '../../../main';
 

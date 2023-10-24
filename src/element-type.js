@@ -1,11 +1,11 @@
-/*******************************************************************************
- *
- *    Copyright (c) 2022 - 2023.
- *    Haixing Hu, Qubit Co. Ltd.
- *
- *    All rights reserved.
- *
- ******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
 import { getDefaultValue, setFieldMetadata } from './impl/utils';
 import { PROPERTY_ELEMENT_TYPE } from './impl/constants';
 

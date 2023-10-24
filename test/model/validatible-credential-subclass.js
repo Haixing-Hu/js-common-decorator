@@ -1,11 +1,11 @@
-/*******************************************************************************
- *
- *    Copyright (c) 2022 - 2023.
- *    Haixing Hu, Qubit Co. Ltd.
- *
- *    All rights reserved.
- *
- ******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
 import { Model, Validator, DisplayName } from '../../main';
 import Credential from './validatible-credential';
 import validateCredentialNumber from './rules/validate-credential-number';

@@ -1,11 +1,11 @@
-/*******************************************************************************
- *
- *    Copyright (c) 2022 - 2023.
- *    Haixing Hu, Qubit Co. Ltd.
- *
- *    All rights reserved.
- *
- ******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
 import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
 import { Model, Type, Normalizer, EnumNormalizer, DefaultNormalizer } from '../../main';
 import Credential from './normalizable-credential';

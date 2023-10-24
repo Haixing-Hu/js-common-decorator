@@ -1,11 +1,11 @@
-/*******************************************************************************
- *
- *    Copyright (c) 2022 - 2023.
- *    Haixing Hu, Qubit Co. Ltd.
- *
- *    All rights reserved.
- *
- ******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
 import isBuiltInClass from '@haixing_hu/common-util/src/is-built-in-class';
 import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
 import clone from '@haixing_hu/common-util/src/clone';
