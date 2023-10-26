@@ -139,7 +139,7 @@ const AssignImpl = {
    * @author 胡海星
    * @private
    */
-  copyArrayWithoutElementType(path, sourceArray, defaultArray/* , normalizable*/) {
+  copyArrayWithoutElementType(path, sourceArray, defaultArray/* , normalizable */) {
     // TODO: 如果其默认字段值中有类型信息，则可以根据默认字段值中类型信息构造同类型数组
     if (!Array.isArray(sourceArray)) {
       console.warn('The value of %s should be an array.', path);

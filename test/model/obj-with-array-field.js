@@ -11,7 +11,6 @@ import Credential from './credential';
 
 @Model
 export default class ObjWithArrayField {
-
   @DefaultNormalizer
   @ElementType(Credential)
   credentials = [

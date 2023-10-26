@@ -12,7 +12,6 @@ import CredentialType from './credential-type';
 
 @Model
 export default class Credential {
-
   @EnumNormalizer
   @Type(CredentialType)
   type = 'IDENTITY_CARD';

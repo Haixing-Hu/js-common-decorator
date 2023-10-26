@@ -10,7 +10,6 @@ import { Model } from '../../main';
 
 @Model
 export default class ObjWithoutDecoratedField {
-
   key = '';
 
   value = '';

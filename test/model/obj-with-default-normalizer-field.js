@@ -14,7 +14,6 @@ import NonDecoratedClass from './non-decorated-class';
 
 @Model
 export default class ObjWithNormalizableField {
-
   @Normalizer(trimUppercaseString)
   number = '';
 

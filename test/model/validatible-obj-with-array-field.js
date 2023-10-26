@@ -12,7 +12,6 @@ import validateIntegerField from './rules/validate-integer-field';
 
 @Model
 export default class ObjWithArrayField {
-
   @Validator(validateArrayField, { elementValidator: validateIntegerField })
   @ElementType(Number)
   @Nullable

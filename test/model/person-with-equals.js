@@ -28,14 +28,14 @@ export default class PersonWithEquals {
   }
 
   equals(other) {
-  if (!(other instanceof PersonWithEquals)) {
-    return false;
-  }
-  if ((this.credential === null) || (other.credential === null)) {
+    if (!(other instanceof PersonWithEquals)) {
+      return false;
+    }
+    if ((this.credential === null) || (other.credential === null)) {
     // 若两人之一无身份证信息，无法比较他们是否同一人，认为不同
-    return false;
-  }
-  return (this.credential.type === other.credential.type)
+      return false;
+    }
+    return (this.credential.type === other.credential.type)
       && (this.credential.number === other.credential.number);
   }
 }

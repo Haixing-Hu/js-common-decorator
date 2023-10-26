@@ -12,7 +12,6 @@ import Parent from './parent';
 
 @Model
 export default class Child extends Parent {
-
   @Normalizer(trimUppercaseString)
   message = '';
 }

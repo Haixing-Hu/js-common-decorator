@@ -12,7 +12,6 @@ import validateCredentialNumber from './rules/validate-credential-number';
 
 @Model
 export default class CredentialSubclass extends Credential {
-
   @Validator(validateCredentialNumber)
   @DisplayName('证件子号码')
   childNumber = '';

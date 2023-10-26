@@ -12,7 +12,9 @@ import { Model } from '../../main';
 @Model
 export default class Parent {
   x = 0;
+
   y = 0;
+
   z = '';
 
   assign(obj, normalizable) {
