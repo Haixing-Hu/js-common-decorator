@@ -6,15 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Enum } from '../../src';
+import rollupBuilder from '@haixing_hu/rollup-builder';
 
-@Enum([{
-  name: '男',
-  value: 'MALE',
-}, {
-  name: '女',
-  value: 'FEMALE',
-}])
-class Gender {}
-
-export default Gender;
+export default rollupBuilder('CommonDecorator', import.meta.url);

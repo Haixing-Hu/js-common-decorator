@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ElementType } from '../main';
+import { ElementType } from '../src';
 import { getClassMetadataObject } from '../src/impl/utils';
 import Credential from './model/credential';
 import ObjWithArrayMember from './model/obj-with-array-member';

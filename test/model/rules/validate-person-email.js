@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../../main';
+import { ValidationResult } from '../../../src';
 import { isNull } from '../../../src/impl/utils';
 import Email from './email';
 

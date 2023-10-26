@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimString } from '@haixing_hu/common-util';
-import { Model, Normalizer } from '../main';
+import { Model, Normalizer } from '../src';
 import { getClassMetadataObject } from '../src/impl/utils';
 import ObjWithNormalizableField from './model/obj-with-normalizable-field';
 import ObjWithoutDecoratedField from './model/obj-without-decorated-field';

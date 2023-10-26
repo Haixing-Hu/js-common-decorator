@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Enum } from '../../main';
+import { Enum } from '../../src';
 
 @Enum([{
   name: '男',

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, EnumValidator, ValidationResult, Type } from '../main';
+import { Model, EnumValidator, ValidationResult, Type } from '../src';
 import { getClassMetadataObject } from '../src/impl/utils';
 import CredentialType from './model/credential-type';
 import Credential from './model/validatible-credential';

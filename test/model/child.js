@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Normalizer } from '../../main';
+import { Model, Normalizer } from '../../src';
 import Parent from './parent';
 
 @Model

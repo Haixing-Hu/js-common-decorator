@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, ElementType } from '../../main';
+import { Model, ElementType } from '../../src';
 import Credential from './credential';
 import NonDecoratedClass from './non-decorated-class';
 import Gender from './gender';

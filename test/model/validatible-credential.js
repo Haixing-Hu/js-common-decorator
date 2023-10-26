@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validator, Type, EnumValidator, DisplayName } from '../../main';
+import { Model, Validator, Type, EnumValidator, DisplayName } from '../../src';
 import CredentialType from './credential-type';
 import validateCredentialNumber from './rules/validate-credential-number';
 

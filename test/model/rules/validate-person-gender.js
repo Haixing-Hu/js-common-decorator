@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../../main';
+import { ValidationResult } from '../../../src';
 import Gender from '../gender';
 import IdentityCard from './identity-card';
 

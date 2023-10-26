@@ -13,7 +13,7 @@ import {
   DefaultValidator,
   Nullable,
   Type,
-} from '../../main';
+} from '../../src';
 import Credential from './validatible-credential';
 import Gender from './gender';
 import validatePersonName from './rules/validate-person-name';

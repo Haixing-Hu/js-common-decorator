@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model } from '../../main';
+import { Model } from '../../src';
 
 @Model
 export default class ObjWithoutDecoratedField {
