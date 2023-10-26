@@ -6,8 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import defaultIfUndefinedOrNull from '@haixing_hu/common-util/src/default-if-undefined-or-null';
-import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
+import { trimUppercaseString } from '@haixing_hu/common-util';
 import { Model } from '../../main';
 
 @Model
@@ -18,9 +17,9 @@ export default class Parent {
 
   assign(obj, normalizable) {
     console.log('Parent.assign: this = ', this, ', obj = ', obj, ', normalizable = ', normalizable);
-    this.x = defaultIfUndefinedOrNull(obj.x, 0);
-    this.y = defaultIfUndefinedOrNull(obj.y, 0);
-    this.z = defaultIfUndefinedOrNull(obj.z, 0);
+    this.x = obj.x ?? 0;
+    this.y = obj.y ?? 0;
+    this.z = obj.z ?? 0;
     if (normalizable === true) {
       Parent.prototype.normalize.call(this);
     }

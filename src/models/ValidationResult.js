@@ -6,7 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import defaultIfUndefinedOrNull from '@haixing_hu/common-util/src/default-if-undefined-or-null';
 
 /**
  * 此模型表示校验结果。
@@ -33,8 +32,8 @@ class ValidationResult {
    *     新的{@link ValidationResult}对象的对验证结果的描述，如不提供则使用默认值空字符串。
    */
   constructor(success = true, description = '') {
-    this.success = defaultIfUndefinedOrNull(success, true);
-    this.description = defaultIfUndefinedOrNull(description, '');
+    this.success = success ?? true;
+    this.description = description ?? '';
   }
 
   /**

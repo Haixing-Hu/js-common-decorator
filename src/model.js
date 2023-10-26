@@ -6,8 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
-import deepEqual from '@haixing_hu/common-util/src/deep-equal';
+import { deepEqual } from '@haixing_hu/common-util';
 import {
   setClassMetadata,
   getDefaultInstance,
@@ -252,7 +251,13 @@ export function Model(Class) {
   // 添加 create() 静态方法
   if (!Object.hasOwn(Class, 'create')) {
     Class.create = function create(obj, normalizable = true) {
-      return isUndefinedOrNull(obj) ? null : new Class().assign(obj, normalizable);
+      if (obj === undefined || obj === null) {
+        return null;
+      } else if (!(obj instanceof Object)) {
+        throw new TypeError('The first argument must be an object.');
+      } else {
+        return new Class().assign(obj, normalizable);
+      }
     };
   }
   // 添加 createArray() 静态方法

@@ -6,9 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import isBuiltInClass from '@haixing_hu/common-util/src/is-built-in-class';
-import isUndefinedOrNull from '@haixing_hu/common-util/src/is-undefined-or-null';
-import clone from '@haixing_hu/common-util/src/clone';
+import { isUndefinedOrNull, isBuiltInClass, clone } from '@haixing_hu/common-util';
 import { PROPERTY_TYPE, PROPERTY_ELEMENT_TYPE } from './constants';
 import {
   getClassMetadata,

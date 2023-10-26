@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getDeclaringClass from '@haixing_hu/common-util/src/get-declaring-class';
+import { getDeclaringClass } from '@haixing_hu/common-util';
 import { PROPERTY_NORMALIZER } from './constants';
 import {
   getFieldMetadata,

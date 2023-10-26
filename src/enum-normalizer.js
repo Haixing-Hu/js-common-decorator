@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import trimUppercaseString from '@haixing_hu/common-util/src/trim-uppercase-string';
+import { trimUppercaseString } from '@haixing_hu/common-util';
 import { setFieldMetadata, ensureEnumField } from './impl/utils';
 import { PROPERTY_NORMALIZER } from './normalizer';
 

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import isUndefinedOrNullOrEmptyString from '@haixing_hu/common-util/src/is-undefined-or-null-or-empty-string';
+import { isUndefinedOrNullOrEmptyString } from '@haixing_hu/common-util';
 import { ValidationResult } from '../../../main';
 import Integer from './integer';
 

@@ -6,10 +6,10 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Credential from './credential';
 
-const PageWrapper = Vue.extend({
+const PageWrapper = defineComponent({
   data() {
     return {
       page: {
