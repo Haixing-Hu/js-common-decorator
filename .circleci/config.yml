@@ -12,8 +12,9 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          pkg-manager: yarn
-          with-cache: true
+          pkg-manager: yarn-berry
+          check-cache: always
+          with-cache: false
       - run:
           name: Lint the Source Code
           command: yarn lint
