@@ -7,6 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isUndefinedOrNull, isBuiltInClass, clone } from '@haixing_hu/common-util';
+import metadataSymbol from './symbol-metadata';
 import { PROPERTY_TYPE, PROPERTY_ELEMENT_TYPE } from './constants';
 import {
   getClassMetadata,
@@ -17,9 +18,9 @@ import {
 } from './utils';
 
 /**
- * 用于调用 clone() 函数复制属性时用到的参数。
+ * Parameters used when calling the `clone()` function to copy attributes.
  *
- * @author 胡海星
+ * @author Haixing Hu
  * @private
  */
 const CLONE_OPTIONS = {
@@ -32,13 +33,14 @@ const CLONE_OPTIONS = {
 const AssignImpl = {
 
   /**
-   * 将源对象的所有可配置、可枚举，以及非只读属性复制到目标对象。
+   * Copies all configurable, enumerable, and non-read-only properties of the
+   * source object to the target object.
    *
    * @param {Object} target
-   *     目标对象。
+   *     The target object.
    * @param {Object} source
-   *     源对象。
-   * @author 胡海星
+   *     The source object.
+   * @author Haixing Hu
    * @private
    */
   copyAllProperties(target, source) {
@@ -47,60 +49,63 @@ const AssignImpl = {
       // console.log('copyAllProperties: key = ', key);
       if (Object.hasOwn(source, key)) {
         const value = source[key];
-        const clonedValue = clone(value, CLONE_OPTIONS);
-        // console.log('copyAllProperties: key = ', key,
-        //   ', value = ', value,
-        //   ', clonedValue = ', clonedValue);
-        target[key] = clonedValue;
+        target[key] = clone(value, CLONE_OPTIONS);
+        // console.log('copyAllProperties: key = ', key, ', value = ', value, ', cloned = ', target[key]);
       }
     });
     // console.log('copyAllProperties: finished. target = ', target);
   },
 
   /**
-   * 复制一个不知类型的对象。
+   * Copies an object of an unknown type.
    *
    * @param {String} path
-   *     当前被复制的对象在属性树中的路径。
+   *     The path in the property tree of the currently copied object.
    * @param {Object} sourceValue
-   *     被复制的源对象。
+   *     The source object being copied.
    * @param {Object} defaultValue
-   *     默认对象实例。
+   *     The default instance of the source object.
    * @param {Boolean} normalizable
-   *     是否要对复制后的目标对象进行正则化。
+   *     Whether to regularize the copied target object.
    * @returns
-   *     从源对象深度复制而来的目标对象，其类型和默认对象完全一致。
-   * @author 胡海星
+   *     The type of the target object deeply copied from the source object is
+   *     exactly the same as the default object.
+   * @author Haixing Hu
    * @private
    */
   copyObjectWithoutType(path, sourceValue, defaultValue, normalizable) {
-    // 如果目标对象的属性值是一个对象，必须创建相同原型的对象并复制源对象的属性值
+    // If the property value of the target object is an object, you must create
+    // an object of the same prototype and copy the property values of the
+    // source object
     const prototype = Object.getPrototypeOf(defaultValue);
-    const targetValue = Object.create(prototype);
-    // 递归地将sourceValue的各属性值赋值给targetValue，使用defaultValue作为默认实例
+    const TargetClass = prototype.constructor;
+    const targetValue = new TargetClass();
+    // Recursively assign each attribute value of sourceValue to targetValue,
+    // using defaultValue as the default instance
     return this.assign(path, targetValue, sourceValue, defaultValue, normalizable);
   },
 
   /**
-   * 复制一个知道类型的对象。
+   * Copies an object of a known type.
    *
    * @param {String} path
-   *     当前被复制的对象在属性树中的路径。
-   * @param {Function} Type
-   *     被复制的对象的类的构造器。
+   *     The path in the property tree of the currently copied object.
+   * @param {Function} SourceType
+   *     Constructor for the class of the object being copied.
    * @param {Object} sourceValue
-   *     被复制的源对象。
+   *     The source object being copied.
    * @param {Object} defaultValue
-   *     默认对象实例。
+   *     Default object instance.
    * @param {Boolean} normalizable
-   *     是否要对复制后的目标对象进行正则化。
+   *     Whether to regularize the copied target object.
    * @returns
-   *     从源对象深度复制而来的目标对象，其类型和指定的类完全一致。
-   * @author 胡海星
+   *     The type of the target object deeply copied from the source object is
+   *     exactly the same as the specified class.
+   * @author Haixing Hu
    * @private
    */
-  copyObjectWithType(path, Type, sourceValue, defaultValue, normalizable) {
-    const category = getClassMetadata(Type, 'category');
+  copyObjectWithType(path, SourceType, sourceValue, defaultValue, normalizable) {
+    const category = getClassMetadata(SourceType, 'category');
     switch (category) {
       case 'enum':
         // 对于枚举类，因为枚举类型总是以字符串形式表示，所以只需要将源字符串复制一份即可
@@ -109,14 +114,14 @@ const AssignImpl = {
         } else {
           // 源属性值不是字符串，返回默认值
           console.warn('The value of %s should be a string representation of '
-              + 'the %s enumeration.', path, Type.name);
+              + 'the %s enumeration.', path, SourceType.name);
           return defaultValue;
         }
       case 'model':
       default: {
         // 根据 @Type 标注的类型构造一个 targetValue
-        const targetValue = new Type();
-        const defaultValue = getDefaultInstance(Type);
+        const targetValue = new SourceType();
+        const defaultValue = getDefaultInstance(SourceType);
         // 递归地将sourceValue的各属性值赋值给targetValue，使用defaultValue作为默认实例
         return this.assign(path, targetValue, sourceValue, defaultValue, normalizable);
       }
@@ -124,22 +129,21 @@ const AssignImpl = {
   },
 
   /**
-   * 复制一个不知元素类型的数组。
+   * Copies an array whose element type is unknown.
    *
    * @param {String} path
-   *     当前被复制的数组在属性树中的路径。
+   *     The path in the property tree of the currently copied array.
    * @param {Array} sourceArray
-   *     被复制的源数组。
+   *     The source array being copied.
    * @param {Array} defaultArray
-   *     默认数组。
-   * @param {Boolean} normalizable
-   *     是否要对复制后的目标对象进行正则化。
+   *     Default array.
    * @returns
-   *     从源数组深度复制而来的目标数组，其元素类型和默认数组的元素类型完全一致。
-   * @author 胡海星
+   *     The element type of the target array deeply copied from the source
+   *     array is exactly the same as the element type of the default array.。
+   * @author Haixing Hu
    * @private
    */
-  copyArrayWithoutElementType(path, sourceArray, defaultArray/* , normalizable */) {
+  copyArrayWithoutElementType(path, sourceArray, defaultArray) {
     // TODO: 如果其默认字段值中有类型信息，则可以根据默认字段值中类型信息构造同类型数组
     if (!Array.isArray(sourceArray)) {
       console.warn('The value of %s should be an array.', path);
@@ -149,21 +153,22 @@ const AssignImpl = {
   },
 
   /**
-   * 复制一个知道元素类型的数组。
+   * Copies an array whose element types are known.
    *
    * @param {String} path
-   *     当前被复制的数组在属性树中的路径。
+   *     The path in the property tree of the currently copied array.
    * @param {Function} ElementType
-   *     被复制的数组的元素的类的构造器。
+   *     Constructor for the class of the array elements to be copied.
    * @param {Object} sourceArray
-   *     被复制的源数组。
+   *     The source array being copied.
    * @param {Object} defaultArray
-   *     默认数组实例。
+   *     Default array instance.
    * @param {Boolean} normalizable
-   *     是否要对复制后的目标对象进行正则化。
+   *     Whether to regularize the copied target object.
    * @returns
-   *     从源数组深度复制而来的目标对象，其元素类型和指定的元素类完全一致。
-   * @author 胡海星
+   *     The element type of the target object deeply copied from the source
+   *     array is exactly the same as the specified element class.
+   * @author Haixing Hu
    * @private
    */
   copyArrayWithElementType(path, ElementType, sourceArray, defaultArray, normalizable) {
@@ -204,45 +209,57 @@ const AssignImpl = {
   },
 
   /**
-   * 复制一个源对象的属性到目标对象。
+   * Copies all properties of a source object to a target object.
    *
-   * @param {String} path
-   *     当前被复制的对象在原始根对象中的路径。
    * @param {Object} target
-   *     目标对象。
+   *     The target object.
    * @param {Object} source
-   *     源对象，可以为null或undefined。
+   *     The source object, which can be null or undefined, and can be a
+   *     plain old JavaScript object without class information.
+   * @param {String} path
+   *     The path of the currently copied object in the original root object.
+   * @param {Function} type
+   *     The type of the target object, i.e., the constructor of the class of
+   *     the target object.
+   * @param {Object} metadata
+   *     The metadata associated to the class of the target object, which usually
+   *     can be obtained by `type[Symbol.metadata]`.
    * @param {Object} defaultInstance
-   *     与目标对象有相同原型的默认实例，如果目标对象的某个属性值在源对象中不存在
-   *     或为null，则使用此默认实例的对应属性值赋值给目标对象的对应属性。
+   *     A default instance that has the same prototype as the target object.
+   *     If a certain attribute value of the target object does not exist in the
+   *     source object or is null, the corresponding attribute value of this
+   *     default instance is used to assign the corresponding attribute of the
+   *     target object.
    * @param {Boolean} normalizable
-   *     是否要对复制后的目标对象进行正则化。
+   *     Whether to regularize the copied target object.
    * @returns
-   *     赋值后的目标对象。
-   * @author 胡海星
+   *     The target object after assignment.
+   * @author Haixing Hu
    * @private
    */
-  assign(path, target, source, defaultInstance, normalizable) {
+  assign(target, source, { path, type, metadata, defaultInstance, normalizable }) {
     // console.log('AssignImpl.assign: target = ', target,
     //   ', source = ', source,
+    //   ', type = ', type,
+    //   ', metadata = ', metadata,
     //   ', defaultInstance = ', defaultInstance,
     //   ', normalizable = ', normalizable);
     if (isUndefinedOrNull(source)) {
+      // if source is undefined or null, assign the default instance to the target
       this.copyAllProperties(target, defaultInstance);
     } else {
-      // 获取当前类的构造器
-      const Class = Object.getPrototypeOf(defaultInstance).constructor;
-      // 获取当前类默认实例的所有字段
+      // Get all fields of the default instance of the current class
       let fields = Object.keys(defaultInstance);
-      // 获取其父类构造器
-      const Parent = Object.getPrototypeOf(Class);
-      // console.log('Parent = ', Parent, ', normalizable = ', normalizable);
-      if (hasOwnPrototypeFunction(Parent, 'assign')) {
-        // 父类如果有assign方法，先调用父类的assign方法
-        Parent.prototype.assign.call(target, source, normalizable);
-        // console.log('target = ', target);
-        // 然后排除父类拥有的字段
-        const parentInstance = getDefaultInstance(Parent);
+      // Get its parent class of the class of target object
+      const parentType = Object.getPrototypeOf(type);
+      // console.log('parentType = ', parentType);
+      if (hasOwnPrototypeFunction(parentType, 'assign')) {
+        // If the parent class has an `assign()` method, call the `assign()`
+        // method of the parent class.
+        parentType.prototype.assign.call(target, source, normalizable);
+        // then exclude fields owned by the parent class
+        const parentMetadata = parentType[metadataSymbol];
+        const parentInstance = getDefaultInstance(parentType, parentMetadata);
         const parentFields = Object.keys(parentInstance);
         // console.log('parentFields = ', parentFields);
         fields = fields.filter((f) => !parentFields.includes(f));
@@ -250,11 +267,13 @@ const AssignImpl = {
       // console.log('fields = ', fields);
       fields.forEach((field) => {
         const targetPath = `${path}.${field}`;
-        const sourceFieldValue = source[field];            // 源对象的字段值
-        const defaultFieldValue = defaultInstance[field];  // 默认实例的字段值
-        // 目标对象的字段被@Type标注的类型
+        const sourceFieldValue = source[field];            // field value of source
+        const defaultFieldValue = defaultInstance[field];  // field value of default instance
+        // If field of the target object is decorated with `@Type`, get the type
+        // FIXME
         const FieldType = getFieldMetadata(Class, field, PROPERTY_TYPE);
-        // 目标对象的字段被@ElementType标注的类型
+        // If field of the target object is decorated with `@ElementType`, get the element type
+        // FIXME
         const FieldElementType = getFieldMetadata(Class, field, PROPERTY_ELEMENT_TYPE);
         // console.log('targetPath = ', targetPath,
         //   ', field = ', field,
@@ -263,10 +282,11 @@ const AssignImpl = {
         //   ', FieldType = ', FieldType,
         //   ', FieldElementType = ', FieldElementType);
         if (isUndefinedOrNull(sourceFieldValue)) {
-          // 如果源对象字段值为空，则直接复制默认字段值
+          // If the source object field value is nullish, copy the default field
+          // value directly.
           target[field] = clone(defaultFieldValue, CLONE_OPTIONS);
         } else if (FieldType) {
-          // 如果目标对象的字段被@Type标注过
+          // If the field of the target object is decorated with `@Type`
           target[field] = this.copyObjectWithType(
             targetPath,
             FieldType,
@@ -275,7 +295,7 @@ const AssignImpl = {
             normalizable,
           );
         } else if (FieldElementType) {
-          // 如果目标对象的字段被@ElementType标注过
+          // If the field of the target object is decorated with `@ElementType`
           target[field] = this.copyArrayWithElementType(
             targetPath,
             FieldElementType,
@@ -284,19 +304,25 @@ const AssignImpl = {
             normalizable,
           );
         } else if (isUndefinedOrNull(defaultFieldValue)) {
-          // 如果默认字段值为空，但源对象字段值不为空，且字段没有被@Type标注，
-          // 则无法判定该属性的类型，直接克隆源对象字段值
+          // If the field value of the default instance is empty, but the
+          // source object field value is not empty, and the field is not
+          // decorated with `@Type`, it is impossible to determine the type of
+          // the attribute, therefore we directly clone the source object field
+          // value.
           target[field] = clone(sourceFieldValue, CLONE_OPTIONS);
-        } else if (Array.isArray(defaultFieldValue)) {   // 注意Array是一种特殊的Object
-          // 如果目标对象字段值是一个数组，但没有被 @ElementType 标注过
+        } else if (Array.isArray(defaultFieldValue)) {
+          // Note that Array is a special Object
+          // If the field value of the target object is an array but has not
+          // been annotated with `@ElementType`
           target[field] = this.copyArrayWithoutElementType(
             targetPath,
             sourceFieldValue,
             defaultFieldValue,
-            normalizable,
           );
         } else if ((typeof defaultFieldValue) === 'object') {
-          // 如果目标对象的属性值是一个对象，必须创建相同原型的对象并复制源对象的属性值
+          // If the property value of the target object is an object, you must
+          // create an object of the same prototype and copy the property value
+          // of the source object
           target[field] = this.copyObjectWithoutType(
             targetPath,
             sourceFieldValue,
@@ -304,7 +330,9 @@ const AssignImpl = {
             normalizable,
           );
         } else {
-          // 如果目标对象的属性值不是一个对象，直接将源对象的属性值克隆赋值给目标对象
+          // If the attribute value of the target object is not an object,
+          // directly clone the attribute value of the source object and assign
+          // it to the target object.
           target[field] = clone(sourceFieldValue, CLONE_OPTIONS);
         }
       });

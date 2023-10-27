@@ -7,6 +7,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import {
+  DEFAULT_INSTANCE_KEY
+} from './metadata-keys';
+import {
   PROPERTY_TYPE,
   PROPERTY_METADATA,
   PROPERTY_DEFAULT_INSTANCE,
@@ -184,28 +187,37 @@ export function setFieldMetadata(Class, field, key, value) {
 }
 
 /**
- * 获取制指定类的默认实例，若不存在则创建一个新的实例。
+ * Get the default instance of the specified class, or create a new instance if
+ * it does not exist.
  *
  * @param {Function} Class
- *     指定类的构造器。
+ *     The constructor of the class being decorated.
+ * @param {Object} metadata
+ *     The metadata of the class being decorated. It could be null if the metadata
+ *     of the class is not created yet.
  * @returns {Object}
- *     该指定类的默认实例，若不存在则创建一个新的实例。
+ *     The default instance of the specified class, or a new instance will be
+ *     created if it does not exist.
+ * @author Haixing Hu
+ * @private
  */
-export function getDefaultInstance(Class) {
-  const metadata = getClassMetadataObject(Class);
-  if (!metadata[PROPERTY_DEFAULT_INSTANCE]) {
-    metadata[PROPERTY_DEFAULT_INSTANCE] = new Class();
+export function getDefaultInstance(Class, metadata) {
+  if (!metadata) {
+    return new Class();
+  } else if (!metadata[DEFAULT_INSTANCE_KEY]) {
+    metadata[DEFAULT_INSTANCE_KEY] = new Class();
   }
-  return metadata[PROPERTY_DEFAULT_INSTANCE];
+  return metadata[DEFAULT_INSTANCE_KEY];
 }
 
 /**
- * 正则化一个对象。
+ * Normalizes an object if possible.
  *
  * @param {Object} obj
- *     待正则化的对象。
+ *     The object to be normalized.
  * @returns {Object}
- *     正则化后的对象。
+ *     The normalized object, or the original object if it has no `normalize()`
+ *     method.
  */
 export function normalize(obj) {
   if (typeof obj.normalize === 'function') {
@@ -215,14 +227,16 @@ export function normalize(obj) {
 }
 
 /**
- * 判定一个指定的类的原型中是否自己定义了指定的原型函数。
+ * Determines whether the specified prototype function is defined in the
+ * prototype of a specified class.
  *
  * @param {Function} Class
- *     指定的类的构造器。
+ *     Constructor for the specified class.
  * @param {String} name
- *     指定的原型函数的名称。
+ *     The name of the specified prototype function.
  * @returns {Boolean}
- *     指定的类的原型中是否自己定义了指定的原型函数。
+ *     Whether the specified prototype function is defined in the prototype of
+ *     the specified class.
  * @see hasPrototypeFunction
  */
 export function hasOwnPrototypeFunction(Class, name) {
@@ -233,14 +247,17 @@ export function hasOwnPrototypeFunction(Class, name) {
 }
 
 /**
- * 判定一个指定的类的原型中是否拥有指定的原型函数，注意该函数可能从其父类继承而来。
+ * Determine whether the prototype of a specified class has the specified
+ * prototype function. Note that the function may be inherited from its parent
+ * class.
  *
  * @param {Function} Class
- *     指定的类的构造器。
+ *     Constructor for the specified class.
  * @param {String} name
- *     指定的原型函数的名称。
+ *     The name of the specified prototype function.
  * @returns {Boolean}
- *     指定的类的原型中是否拥有指定的原型函数，注意该函数可能从其父类继承而来。
+ *     Whether the prototype of the specified class has the specified prototype
+ *     function. Note that the function may be inherited from its parent class.
  * @see hasOwnPrototypeFunction
  */
 export function hasPrototypeFunction(Class, name) {

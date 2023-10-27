@@ -7,6 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { deepEqual } from '@haixing_hu/common-util';
+import { CATEGORY_KEY, NEXT_ID_KEY } from './impl/metadata-keys';
 import {
   setClassMetadata,
   getDefaultInstance,
@@ -183,72 +184,87 @@ import Page from './models/Page';
  *   器不会覆盖其自己实现的`Person.prototype.equals()`方法。
  *
  * @param {Function} Class
- *     目标对象所属的类的构造函数。
- * @author 胡海星
+ *     The constructor of the class being decorated.
+ * @param {Object} context
+ *     The context object containing information about the class being decorated.
+ * @author Haixing Hu
  * @see Type
  * @see ElementType
  * @see Normalizer
  * @see Validator
  * @see ValidationResult
  */
-export function Model(Class) {
-  // 被@Model修饰的类的category分类设置为'model'
-  setClassMetadata(Class, 'category', 'model');
-  // 添加默认构造的实例作为类的静态成员
-  const defaultInstance = getDefaultInstance(Class);
-  // console.log('@Model: Class = ', Class, ',
-  //    defaultInstance = ', defaultInstance);
-  // 添加 assign() 实例方法
+function Model(Class, context) {
+  if (context === null || typeof context !== 'object') {
+    throw new TypeError('The context must be an object.');
+  }
+  if (typeof Class !== 'function' || context.kind !== 'class') {
+    throw new TypeError('The `@Model` can only decorate a class.');
+  }
+  // The category of the class modified by `@Model` is set to 'model'
+  context.metadata[CATEGORY_KEY] = 'model';
+  // Add a default constructed instance as a static member of the class
+  const defaultInstance = getDefaultInstance(Class, context.metadata);
+  // console.log('@Model: Class = ', Class, ', defaultInstance = ', defaultInstance);
+  // Add the instance method `assign()`
   if (!hasOwnPrototypeFunction(Class, 'assign')) {
     Class.prototype.assign = function assign(obj, normalizable = true) {
-      return AssignImpl.assign(Class.name, this, obj, defaultInstance, normalizable);
+      return AssignImpl.assign(this, obj, {
+        path: Class.name,
+        type: Class,
+        metadata: context.metadata,
+        defaultInstance,
+        normalizable,
+      });
     };
   }
-  // 添加 clear() 实例方法
+  // Add the instance method `clear()`
   if (!hasOwnPrototypeFunction(Class, 'clear')) {
     Class.prototype.clear = function clear() {
       return this.assign(defaultInstance);
     };
   }
-  // 添加 clone() 实例方法
+  // Add the instance method `clone()`
   if (!hasOwnPrototypeFunction(Class, 'clone')) {
     Class.prototype.clone = function clone() {
       return new Class().assign(this);
     };
   }
-  // 添加 isEmpty() 实例方法
+  // Add the instance method `isEmpty()`
   if (!hasOwnPrototypeFunction(Class, 'isEmpty')) {
     Class.prototype.isEmpty = function isEmpty() {
       return deepEqual(this, defaultInstance);
     };
   }
-  // 添加 equals() 实例方法
+  // Add the instance method `equals()`
   if (!hasOwnPrototypeFunction(Class, 'equals')) {
     Class.prototype.equals = function equals(obj) {
       return EqualsImpl.equals(this, obj);
     };
   }
-  // 添加 normalize() 实例方法
+  // Add the instance method `normalize()`
   if (!hasOwnPrototypeFunction(Class, 'normalize')) {
     Class.prototype.normalize = function normalize(field = '*') {
       return NormalizeImpl.normalize(Class, this, field);
     };
   }
-  // 添加 validate() 实例方法
+  // Add the instance method `validate()`
   if (!hasOwnPrototypeFunction(Class, 'validate')) {
     Class.prototype.validate = function validate(field = '*', options = {}) {
       return ValidateImpl.validate(Class, this, field, options);
     };
   }
-  // 为包含id字段的类添加 generateId() 实例方法
-  if (Object.hasOwn(defaultInstance, 'id')                // 自身实例有id字段
-      && !hasPrototypeFunction(Class, 'generateId')) {    // 自身或其父类原型没有generateId()方法
-    setClassMetadata(Class, 'next_id', 0);
+  // Add the instance method `generateId()` to the class containing the `id` field
+  if (Object.hasOwn(defaultInstance, 'id')
+      && !hasPrototypeFunction(Class, 'generateId')) {
+    // If its own instance has an `id` field,
+    // and there is no `generateId()` method on itself or its parent class prototype
+    context.metadata[NEXT_ID_KEY] = 0;
     Class.prototype.generateId = function generateId() {
       return GenerateIdImpl.generate(Class, this);
     };
   }
-  // 添加 create() 静态方法
+  // Add the class method `create()`
   if (!Object.hasOwn(Class, 'create')) {
     Class.create = function create(obj, normalizable = true) {
       if (obj === undefined || obj === null) {
@@ -260,13 +276,13 @@ export function Model(Class) {
       }
     };
   }
-  // 添加 createArray() 静态方法
+  // Add the class method `createArray()`
   if (!Object.hasOwn(Class, 'createArray')) {
     Class.createArray = function createArray(array, normalizable = true) {
       return CreateArrayImpl.create(Class, array, normalizable);
     };
   }
-  // 添加 createPage() 静态方法
+  // Add the class method `createPage()`
   if (!Object.hasOwn(Class, 'createPage')) {
     Class.createPage = function createPage(page) {
       if (page === undefined || page === null) {
@@ -284,7 +300,7 @@ export function Model(Class) {
       }
     };
   }
-  // 添加 nullOrEmpty() 静态方法
+  // Add the class method `nullOrEmpty()`
   if (!Object.hasOwn(Class, 'nullOrEmpty')) {
     Class.nullOrEmpty = function nullOrEmpty(obj) {
       if (obj === undefined || obj === null) {
@@ -296,8 +312,7 @@ export function Model(Class) {
       return obj.isEmpty();
     };
   }
-  // console.log('@Model: Class = ', Class,
-  //   ', Class.prototype = ', Class.prototype);
+  // console.log('@Model: Class = ', Class, ', Class.prototype = ', Class.prototype);
 }
 
 export default Model;

@@ -140,9 +140,6 @@ at least `7.23.0`.
     });
     ```
 
-For detailed configuration instructions, you can refer to:
-- A sample project created with [create-vue] and [vite]: [vue3-class-component-demo-vite]
-
 ## <span id="contributing">Contributing</span>
 
 If you find any issues or have suggestions for improvements, please feel free
