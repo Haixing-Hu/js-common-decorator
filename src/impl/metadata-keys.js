@@ -17,11 +17,13 @@ const KEY_CLASS_NAME_FIELD = '__common_decorator_name_field__';
 
 const KEY_CLASS_FIELDS_METADATA = '__common_decorator_fields_metadata__';
 
-const KEY_FIELD_TYPE = '__common_decorator_fields_metadata__field_type__';
+const KEY_FIELD_TYPE = '__common_decorator_fields_metadata__type__';
 
-const KEY_FIELD_ELEMENT_TYPE = '__common_decorator_fields_metadata__field_element_type__'
+const KEY_FIELD_ELEMENT_TYPE = '__common_decorator_fields_metadata__element_type__'
 
 const KEY_FIELD_NULLABLE = '__common_decorator_fields_metadata__nullable__';
+
+const KEY_FIELD_LABEL = '__common_decorator_fields_metadata__label__';
 
 const KEY_FIELD_NORMALIZER = '__common_decorator_fields_metadata__normalizer__';
 
@@ -36,6 +38,7 @@ export {
   KEY_FIELD_TYPE,
   KEY_FIELD_ELEMENT_TYPE,
   KEY_FIELD_NULLABLE,
+  KEY_FIELD_LABEL,
   KEY_FIELD_NORMALIZER,
   KEY_FIELD_VALIDATABLE,
 };

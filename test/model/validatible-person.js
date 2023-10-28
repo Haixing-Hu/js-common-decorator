@@ -9,7 +9,7 @@
 import {
   Model,
   Validator,
-  DisplayName,
+  Label,
   DefaultValidator,
   Nullable,
   Type,
@@ -24,34 +24,34 @@ import validatePersonEmail from './rules/validate-person-email';
 
 @Model
 export default class Person {
-  @DisplayName('ID')
+  @Label('ID')
   id = '';
 
   @Validator(validatePersonName)
-  @DisplayName('姓名')
+  @Label('姓名')
   name = '';
 
   @DefaultValidator
   @Type(Credential)
-  @DisplayName('证件')
+  @Label('证件')
   credential = new Credential();
 
   @Validator(validatePersonGender)
   @Type(Gender)
-  @DisplayName('性别')
+  @Label('性别')
   gender = '';
 
   @Validator(validatePersonBirthday)
-  @DisplayName('出生日期')
+  @Label('出生日期')
   birthday = '';
 
   @Validator(validatePersonMobile)
-  @DisplayName('手机号码')
+  @Label('手机号码')
   @Nullable
   mobile = '';
 
   @Validator(validatePersonEmail)
-  @DisplayName('电子邮件地址')
+  @Label('电子邮件地址')
   @Nullable
   email = '';
 }

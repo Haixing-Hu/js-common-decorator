@@ -19,7 +19,7 @@ import {
   KEY_FIELD_ELEMENT_TYPE,
   KEY_FIELD_TYPE
 } from '../metadata-keys';
-import ClassMetadataCache from '../../class-metadata-cache';
+import ClassMetadataCache from '../class-metadata-cache';
 
 /**
  * Parameters used when calling the `clone()` function to copy attributes.

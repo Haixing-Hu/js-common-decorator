@@ -20,9 +20,11 @@ import { Enum } from '../../src';
 @Enum
 class Gender {
 
-  static MALE = '男';
+  @Label('男')
+  static MALE;
 
-  static FEMALE = '女';
+  @Label('女')
+  static FEMALE;
 }
 
 export default Gender;

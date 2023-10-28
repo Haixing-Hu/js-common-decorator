@@ -37,7 +37,7 @@ function Type(type) {
       throw new TypeError(`The decorator @Type can only decorate a class field: ${name}`);
     }
     if (typeof type !== 'function') {
-      throw new TypeError(`The argument of @Type decorated on "${name}" must a class.`);
+      throw new TypeError(`The argument of @Type decorated on "${name}" must be a class.`);
     }
     setFieldMetadata(metadata, name, KEY_FIELD_TYPE, type);
   };

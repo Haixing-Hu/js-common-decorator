@@ -6,13 +6,13 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validator, DisplayName } from '../../src';
+import { Model, Validator, Label } from '../../src';
 import Credential from './validatible-credential';
 import validateCredentialNumber from './rules/validate-credential-number';
 
 @Model
 export default class CredentialSubclass extends Credential {
   @Validator(validateCredentialNumber)
-  @DisplayName('证件子号码')
+  @Label('证件子号码')
   childNumber = '';
 }

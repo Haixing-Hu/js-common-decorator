@@ -102,12 +102,12 @@ decorated class.
   @EnumNormalizer
   @Validator(validateCredentialTypeField)
   @Type(CredentialType)
-  @DisplayName('证件类型')
+  @Label('证件类型')
   type = 'IDENTITY_CARD';
 
   @Normalizable(trimUppercaseString)
   @Validator(validateCredentialNumberField)
-  @DisplayName('证件号码')
+  @Label('证件号码')
   number = '';
 
   constructor(type = CredentialType.DEFAULT.value, number = '') {
@@ -123,39 +123,39 @@ decorated class.
 @Model class Person {
 
   @Normalizable(trimString)
-  @DisplayName('ID')
+  @Label('ID')
   id = null;
 
   @Normalizable(trimUppercaseString)
   @Validator(validatePersonNameField)
-  @DisplayName('姓名')
+  @Label('姓名')
   name = '';
 
   @DefaultNormalizer
   @DefaultValidator
   @Type(Credential)
-  @DisplayName('证件')
+  @Label('证件')
   credential = null;
 
   @EnumNormalizer
   @Validator(validatePersonGenderField)
   @Type(Gender)
-  @DisplayName('性别')
+  @Label('性别')
   gender = '';
 
   @Normalizable(trimString)
   @Validator(validatePersonBirthdayField)
-  @DisplayName('出生日期')
+  @Label('出生日期')
   birthday = '';
 
   @Normalizable(trimUppercaseString)
   @Validator(validateMobileField)
-  @DisplayName('手机号码')
+  @Label('手机号码')
   mobile = '';
 
   @Normalizable(trimString)
   @Validator(validateEmailField)
-  @DisplayName('电子邮件地址')
+  @Label('电子邮件地址')
   @Nullable
   email = '';
 

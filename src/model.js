@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ClassMetadataCache from './class-metadata-cache';
+import ClassMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY, KEY_CLASS_NEXT_ID } from './impl/metadata-keys';
 import {
   hasOwnClassField,
@@ -108,12 +108,12 @@ import clearImpl from './impl/model/clear-impl';
  *   &#064;EnumNormalizer
  *   &#064;Validator(validateCredentialTypeField)
  *   &#064;Type(CredentialType)
- *   &#064;DisplayName('证件类型')
+ *   &#064;Label('证件类型')
  *   type = 'IDENTITY_CARD';
  *
  *   &#064;Normalizer(trimUppercaseString)
  *   &#064;Validator(validateCredentialNumberField)
- *   &#064;DisplayName('证件号码')
+ *   &#064;Label('证件号码')
  *   number = '';
  *
  *   constructor(type = CredentialType.DEFAULT.value, number = '') {
@@ -130,39 +130,39 @@ import clearImpl from './impl/model/clear-impl';
  * class Person {
  *
  *   &#064;Normalizable(trimString)
- *   &#064;DisplayName('ID')
+ *   &#064;Label('ID')
  *   id = null;
  *
  *   &#064;Normalizable(trimUppercaseString)
  *   &#064;Validatable(validatePersonNameField)
- *   &#064;DisplayName('姓名')
+ *   &#064;Label('姓名')
  *   name = '';
  *
  *   &#064;DefaultNormalizer
  *   &#064;DefaultValidator
  *   &#064;Type(Credential)
- *   &#064;DisplayName('证件')
+ *   &#064;Label('证件')
  *   credential = null;
  *
  *   &#064;Normalizable
  *   &#064;Validatable(validatePersonGenderField)
  *   &#064;Type(Gender)
- *   &#064;DisplayName('性别')
+ *   &#064;Label('性别')
  *   gender = '';
  *
  *   &#064;Normalizable(trimString)
  *   &#064;Validatable(validatePersonBirthdayField)
- *   &#064;DisplayName('出生日期')
+ *   &#064;Label('出生日期')
  *   birthday = '';
  *
  *   &#064;Normalizable(trimUppercaseString)
  *   &#064;Validatable(validateMobileField)
- *   &#064;DisplayName('手机号码')
+ *   &#064;Label('手机号码')
  *   mobile = '';
  *
  *   &#064;Normalizable(trimString)
  *   &#064;Validatable(validateEmailField)
- *   &#064;DisplayName('电子邮件地址')
+ *   &#064;Label('电子邮件地址')
  *   &#064;Nullable
  *   email = '';
  *
@@ -226,7 +226,7 @@ import clearImpl from './impl/model/clear-impl';
  * @see Type
  * @see ElementType
  * @see Nullable
- * @see DisplayName
+ * @see Label
  * @see NameField
  * @see Normalizable
  * @see Validatable

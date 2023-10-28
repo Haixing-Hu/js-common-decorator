@@ -19,11 +19,11 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  * ```js
  * class Employee {
  *   @Validator(nameValidator)
- *   @DisplayName('Name', 'i18n.field.name')
+ *   @Label('Name', 'i18n.field.name')
  *   name = '';
  *
  *   @Validator(integerValidator)
- *   @DisplayName('Level', 'i18n.field.level')
+ *   @Label('Level', 'i18n.field.level')
  *   @Nullable
  *   level = 0;
  * }

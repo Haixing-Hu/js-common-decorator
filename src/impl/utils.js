@@ -14,7 +14,7 @@ import {
   PROPERTY_TYPE,
   PROPERTY_FIELDS,
 } from './constants';
-import ClassMetadataCache from '../class-metadata-cache';
+import ClassMetadataCache from './class-metadata-cache';
 
 /**
  * 判定给定的对象是否是一个属性描述符(descriptor)。

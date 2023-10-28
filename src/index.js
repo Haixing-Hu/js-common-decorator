@@ -20,7 +20,7 @@ import Validatable from './validatable';
 import DefaultValidator from './default-validator';
 import EnumValidator from './enum-validator';
 import Nullable from './nullable';
-import DisplayName from './display-name';
+import Label from './label';
 import NameField from './name-field';
 import Model from './model';
 import ValidationResult from './models/ValidationResult';
@@ -41,7 +41,7 @@ export {
   DefaultValidator,
   EnumValidator,
   Nullable,
-  DisplayName,
+  Label,
   NameField,
   Model,
   ValidationResult,

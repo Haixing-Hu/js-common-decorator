@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validator, Type, EnumValidator, DisplayName } from '../../src';
+import { Model, Validator, Type, EnumValidator, Label } from '../../src';
 import CredentialType from './credential-type';
 import validateCredentialNumber from './rules/validate-credential-number';
 
@@ -14,11 +14,11 @@ import validateCredentialNumber from './rules/validate-credential-number';
 export default class Credential {
   @EnumValidator
   @Type(CredentialType)
-  @DisplayName('证件类型')
+  @Label('证件类型')
   type = 'IDENTITY_CARD';
 
   @Validator(validateCredentialNumber)
-  @DisplayName('证件号码')
+  @Label('证件号码')
   number = '';
 
   nonValidable = '';

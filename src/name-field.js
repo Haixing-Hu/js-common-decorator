@@ -18,18 +18,18 @@ import { KEY_CLASS_NAME_FIELD } from './impl/metadata-keys';
  * ```js
  * class Foo {
  *   @Validator(nameValidator)
- *   @DisplayName('Name')
+ *   @Label('Name')
  *   @NameField
  *   name = '';
  *
  *   @EnumValidator
- *   @DisplayName('Gender')
+ *   @Label('Gender')
  *   @Type(Gender)
  *   @Nullable
  *   gender = null;
  *
  *   @Validator(validatePersonBirthday)
- *   @DisplayName('Birthday')
+ *   @Label('Birthday')
  *   @Nullable
  *   birthday = '';
  * }

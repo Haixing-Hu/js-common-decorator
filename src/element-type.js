@@ -37,7 +37,7 @@ function ElementType(elementType) {
       throw new TypeError(`The decorator @ElementType can only decorate a class field: ${name}`);
     }
     if (typeof type !== 'function') {
-      throw new TypeError(`The argument of @ElementType decorated on "${name}" must a class.`);
+      throw new TypeError(`The argument of @ElementType decorated on "${name}" must be a class.`);
     }
     setFieldMetadata(metadata, name, KEY_FIELD_ELEMENT_TYPE, elementType);
   };

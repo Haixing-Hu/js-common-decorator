@@ -19,15 +19,15 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
  * ```js
  * class Foo {
  *   @Validatable({ validator : validateNameField })
- *   @DisplayName('Name', { i18n: 'i18n.field.name' })
+ *   @Label('Name', 'i18n.field.name')
  *   name = '';
  *
  *   @Validatable({ validator : validateIntegerField })
- *   @DisplayName('Number', { i18n: 'i18n.field.number' })
+ *   @Label('Number', 'i18n.field.number')
  *   number = 0;
  *
  *   @Validatable({ validator : validateArrayField, elementValidator: validateIntegerField })
- *   @DisplayName('Series', { i18n: 'i18n.field.series' })
+ *   @Label('Series', 'i18n.field.series')
  *   @ElementType(Number)
  *   series = [12, 13, 14];
  *
@@ -43,7 +43,7 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
  *   if (NAME_PATTERN.test(value)) {
  *     return new ValidationResult(true);
  *   } else {
- *     return new ValidationResult(false, `Please enter the correct ${options.displayName}`);
+ *     return new ValidationResult(false, `Please enter the correct ${options.label}`);
  *   }
  * }
  *
@@ -53,7 +53,7 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
  *   } else if ((typeof value === 'string') && /^\s*[+-]?\d+\s*$/.test(value)) {
  *     return new ValidationResult(true);
  *   }
- *   return new ValidationResult(false, `${options.displayName} must be an integer`);
+ *   return new ValidationResult(false, `${options.label} must be an integer`);
  * }
  * ```
  *
@@ -76,8 +76,8 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
  *        decorated by the `@{@link Type}` decorator, this property is a
  *        parameter of the decorator, otherwise it is `undefined`;
  *     - `options.field`：The name of the field to be verified;
- *     - `options.displayName`：The display name of the field to be verified.
- *       If the field is decorated with the `@{@link DisplayName}` decorator,
+ *     - `options.label`：The display name of the field to be verified.
+ *       If the field is decorated with the `@{@link Label}` decorator,
  *       this property is a parameter of the decorator, otherwise it is `options.field`;
  *     - `options.nullable`：Indicates whether the field to be verified can be
  *       null. If the field is decorated with the `@{@link Nullable}` decorator,
@@ -97,7 +97,7 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
  *     The field decorating function, which returns `void`.
  * @author Haixing Hu
  * @see Model
- * @see DisplayName
+ * @see Label
  */
 function Validatable(validator, options = {}) {
   return function decorate(field, { kind, name, metadata }) {
