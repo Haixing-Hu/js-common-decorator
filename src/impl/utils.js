@@ -7,19 +7,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import {
-  DEFAULT_INSTANCE_KEY
+  KEY_CLASS_DEFAULT_INSTANCE,
+  KEY_CLASS_FIELDS_METADATA,
 } from './metadata-keys';
 import {
   PROPERTY_TYPE,
-  PROPERTY_METADATA,
-  PROPERTY_DEFAULT_INSTANCE,
   PROPERTY_FIELDS,
 } from './constants';
+import ClassMetadataCache from '../class-metadata-cache';
 
 /**
  * 判定给定的对象是否是一个属性描述符(descriptor)。
  *
- * @param {Object} desc
+ * @param {object} desc
  *     给定的对象。
  * @returns
  *     该对象是否是一个属性描述符。
@@ -38,9 +38,9 @@ export function isDescriptor(desc) {
  *
  * 此函数的目的是为了能够统一处理针对类、方法和字段的修饰符。
  *
- * @param {Function} handleDescriptor
+ * @param {function} handleDescriptor
  *     目标对象的属性描述符修改函数。
- * @param {Array} entryArgs
+ * @param {array} entryArgs
  *     修饰器输入的参数。
  * @returns
  *     修饰后的目标对象的新的属性描述符。
@@ -57,7 +57,7 @@ export function decorate(handleDescriptor, entryArgs) {
 /**
  * 返回一个属性的默认值。
  *
- * @param {Object} descriptor
+ * @param {object} descriptor
  *     该属性的描述符。
  * @returns
  *     该属性的默认值，或`undefined`如果没有定义默认值。
@@ -77,145 +77,147 @@ export function getDefaultValue(descriptor) {
 }
 
 /**
- * 获取指定类的元数据对象，如果不存在则为其创建一个新的。
+ * Get the specified attribute value from the metadata of the specified class.
  *
- * @param {Function} Class
- *     指定的类的构造器函数。
- * @returns  {Object}
- *     指定类的元数据对象，如果不存在则为其创建一个新的。
- * @author 胡海星
- */
-export function getClassMetadataObject(Class) {
-  if (!Object.hasOwn(Class, PROPERTY_METADATA)) {
-    Object.defineProperty(Class, PROPERTY_METADATA, {
-      enumerable: false,      // 设置一个非可枚举的属性
-      value: {},              // 默认值为空对象
-    });
-  }
-  return Class[PROPERTY_METADATA];
-}
-
-/**
- * 获取指定的类的元数据的指定的属性值。
- *
- * @param {Function} Class
- *     指定的类的构造器。
- * @param {String} key
- *     指定的属性的名称。
- * @return  {Object}
- *     指定的类的元数据的指定属性值，如果不存在则返回`undefined`。
- * @author 胡海星
+ * @param {function} Class
+ *     The constructor of the specified class.
+ * @param {string} key
+ *     The key of the specified attribute.
+ * @return  {object}
+ *     The value associated with the specified key in the metadata of the
+ *     specified class, or `undefined` if it does not exist.
+ * @author Haixing Hu
+ * @private
  */
 export function getClassMetadata(Class, key) {
-  const metadata = getClassMetadataObject(Class);
-  return metadata[key];
+  const metadata = ClassMetadataCache.get(Class);
+  if (!metadata) {
+    return undefined;
+  } else {
+    return metadata[key];
+  }
 }
 
 /**
- * 设置指定的类的元数据的指定属性值。
+ * Sets the specified attribute value of the metadata of the specified class.
  *
- * @param {Function} Class
- *     指定的类的构造器。
- * @param {String} key
- *     指定的属性名称。
+ * @param {function} Class
+ *     The constructor of the specified class.
+ * @param {string} key
+ *     The key of the specified attribute.
  * @param {any} value
- *     待设置的属性值。
- * @author 胡海星
+ *     The attribute value to be set.
+ * @returns {Boolean}
+ *     `true` if the specified attribute value of the metadata of the specified
+ *     class is set successfully; `false` otherwise.
+ * @author Haixing Hu
+ * @private
  */
 export function setClassMetadata(Class, key, value) {
-  const metadata = getClassMetadataObject(Class);
-  metadata[key] = value;
-}
-
-/**
- * 获取指定类的字段的元数据对象，如果不存在则为其创建一个新的。
- *
- * @param {Function} Class
- *     指定的类的构造器函数。
- * @param {String} field
- *     指定的字段的名称。
- * @returns {Object}
- *     指定类的字段的元数据对象，如果不存在则为其创建一个新的。
- * @author 胡海星
- */
-export function getFieldMetadataObject(Class, field) {
-  const metadata = getClassMetadataObject(Class);
-  if (!metadata[PROPERTY_FIELDS]) {
-    metadata[PROPERTY_FIELDS] = {};
+  const metadata = ClassMetadataCache.get(Class);
+  if (metadata) {
+    metadata[key] = value;
+    return true;
+  } else {
+    return false;
   }
-  const fieldMetadata = metadata[PROPERTY_FIELDS];
-  if (!fieldMetadata[field]) {
-    fieldMetadata[field] = {};
-  }
-  return fieldMetadata[field];
 }
 
 /**
- * 获取指定的类的指定字段的元数据的指定属性值。
+ * Gets the metadata object for the field of the specified class, or creates a
+ * new one if it does not exist.
  *
- * @param {Function} Class
- *     指定的类的构造器。
- * @param {String} field
- *     指定的字段的名称。
- * @param {String} key
- *     指定字段的指定属性的名称。
- * @return {Object}
- *     指定的类的指定字段的元数据的指定属性值，如果不存在则返回`undefined`。
- * @author 胡海星
+ * @param {object} metadata
+ *     The metadata of the specified class.
+ * @param {string} field
+ *     The name of the specified field.
+ * @returns {object}
+ *     The metadata object for the field of the specified class, creating a new
+ *     one if it does not exist.
+ * @author Haixing Hu
+ * @private
  */
-export function getFieldMetadata(Class, field, key) {
-  const metadata = getFieldMetadataObject(Class, field);
-  return metadata[key];
+export function getFieldMetadataObject(metadata, field) {
+  if (!metadata[KEY_CLASS_FIELDS_METADATA]) {
+    metadata[KEY_CLASS_FIELDS_METADATA] = {};
+  }
+  const fieldsMetadata = metadata[KEY_CLASS_FIELDS_METADATA];
+  if (!fieldsMetadata[field]) {
+    fieldsMetadata[field] = {};
+  }
+  return fieldsMetadata[field];
 }
 
 /**
- * 设置指定的类的指定字段的元数据的指定属性值。
+ * Gets the specified attribute value of the metadata of the specified field
+ * of the specified class.
  *
- * @param {Function} Class
- *     指定的类的构造器。
- * @param {String} field
- *     指定的字段的名称。
- * @param {String} key
- *     指定字段的指定属性的名称。
+ * @param {object} metadata
+ *     The metadata of the specified class.
+ * @param {string} field
+ *     The name of the specified field.
+ * @param {string} key
+ *     The key of the specified attribute for the specified field.
+ * @return {object}
+ *     The attribute value associated with the specified key in the metadata of
+ *     the specified field of the specified class, or `undefined` if it does
+ *     not exist.
+ * @author Haixing Hu
+ * @private
+ */
+export function getFieldMetadata(metadata, field, key) {
+  const md = getFieldMetadataObject(metadata, field);
+  return md[key];
+}
+
+/**
+ * Sets the specified attribute value of the metadata for the specified field
+ * of the specified class.
+ *
+ * @param {object} metadata
+ *     The metadata of the specified class.
+ * @param {string} field
+ *     The name of the specified field.
+ * @param {string} key
+ *     The key of the specified attribute for the specified field.
  * @param {any} value
- *     待设置的属性值。
- * @author 胡海星
+ *     The attribute value to be set.
+ * @author Haixing Hu
+ * @private
  */
-export function setFieldMetadata(Class, field, key, value) {
-  const metadata = getFieldMetadataObject(Class, field);
-  metadata[key] = value;
+export function setFieldMetadata(metadata, field, key, value) {
+  const md = getFieldMetadataObject(metadata, field);
+  md[key] = value;
 }
 
 /**
  * Get the default instance of the specified class, or create a new instance if
  * it does not exist.
  *
- * @param {Function} Class
+ * @param {function} Class
  *     The constructor of the class being decorated.
- * @param {Object} metadata
- *     The metadata of the class being decorated. It could be null if the metadata
- *     of the class is not created yet.
- * @returns {Object}
+ * @returns {object}
  *     The default instance of the specified class, or a new instance will be
  *     created if it does not exist.
  * @author Haixing Hu
  * @private
  */
-export function getDefaultInstance(Class, metadata) {
+export function getDefaultInstance(Class) {
+  const metadata = ClassMetadataCache.get(Class);
   if (!metadata) {
     return new Class();
-  } else if (!metadata[DEFAULT_INSTANCE_KEY]) {
-    metadata[DEFAULT_INSTANCE_KEY] = new Class();
+  } else if (!metadata[KEY_CLASS_DEFAULT_INSTANCE]) {
+    metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
   }
-  return metadata[DEFAULT_INSTANCE_KEY];
+  return metadata[KEY_CLASS_DEFAULT_INSTANCE];
 }
 
 /**
  * Normalizes an object if possible.
  *
- * @param {Object} obj
+ * @param {object} obj
  *     The object to be normalized.
- * @returns {Object}
+ * @returns {object}
  *     The normalized object, or the original object if it has no `normalize()`
  *     method.
  */
@@ -227,12 +229,35 @@ export function normalize(obj) {
 }
 
 /**
+ * Tests whether the specified class has the specified field.
+ *
+ * @param {function} Class
+ *     The constructor of the specified class.
+ * @param {string} field
+ *     The name of the specified field.
+ * @returns {boolean}
+ *     Whether the specified class has the specified field defined in its
+ *     prototype or its default instance.
+ */
+export function hasOwnClassField(Class, field) {
+  if (!Class || !Class.prototype) {
+    return false;
+  }
+  if (Object.hasOwn(Class.prototype, field)) {
+    return true;
+  } else {
+    const defaultInstance = getDefaultInstance(Class);
+    return Object.hasOwn(defaultInstance, field);
+  }
+}
+
+/**
  * Determines whether the specified prototype function is defined in the
  * prototype of a specified class.
  *
- * @param {Function} Class
+ * @param {function} Class
  *     Constructor for the specified class.
- * @param {String} name
+ * @param {string} name
  *     The name of the specified prototype function.
  * @returns {Boolean}
  *     Whether the specified prototype function is defined in the prototype of
@@ -248,12 +273,13 @@ export function hasOwnPrototypeFunction(Class, name) {
 
 /**
  * Determine whether the prototype of a specified class has the specified
- * prototype function. Note that the function may be inherited from its parent
- * class.
+ * prototype function.
  *
- * @param {Function} Class
+ * Note that the function may be inherited from its parent class.
+ *
+ * @param {function} Class
  *     Constructor for the specified class.
- * @param {String} name
+ * @param {string} name
  *     The name of the specified prototype function.
  * @returns {Boolean}
  *     Whether the prototype of the specified class has the specified prototype
@@ -270,11 +296,11 @@ export function hasPrototypeFunction(Class, name) {
 /**
  * 检查并确保指定类的指定字段的类型是被`@Enum`修饰的枚举类。
  *
- * @param {Function} Class
+ * @param {function} Class
  *     指定的类的构造器。
- * @param {String} field
+ * @param {string} field
  *     指定的字段的名称。
- * @return {Function}
+ * @return {function}
  *     指定字段的枚举类的构造器。
  */
 export function ensureEnumField(Class, field) {
@@ -299,5 +325,26 @@ export function ensureEnumField(Class, field) {
  *     给定的值是否为`undefined`或`null`或空字符串或空数组。
  */
 export function isNull(value) {
-  return (value === undefined || value === null || value === '' || value.length === 0);
+  return (value === undefined
+      || value === null
+      || value === ''
+      || value.length === 0);
+}
+
+/**
+ * Checks whether the specified class or its parent classes have a prototype
+ * method with the specified name.
+ *
+ * @param {function} Class
+ *     The constructor of the specified class.
+ * @param {string} func
+ *     The name of the specified prototype method.
+ * @throws TypeError
+ *     If the specified class and its parent classes do not have a prototype
+ *     method with the specified name.
+ */
+export function requirePrototypeMethod(Class, func) {
+  if (!hasPrototypeFunction(Class, func)) {
+    throw new TypeError(`The class ${Class.name} does not implement the prototype method "${func}()".`);
+  }
 }

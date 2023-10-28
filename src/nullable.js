@@ -7,44 +7,47 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata } from './impl/utils';
-import { PROPERTY_NULLABLE } from './impl/constants';
+import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
 
 /**
- * 修饰类字段，指定其可以为`null`。
+ * Decorates the class field to indicate that it can be `null`.
  *
- * 被修饰的对象必须是类的字段。
+ * The decorated target must be a field of a class.
  *
- * 使用示例：
+ * Usage example:
+ *
  * ```js
  * class Employee {
  *   @Validator(nameValidator)
- *   @DisplayName('姓名')
+ *   @DisplayName('Name', 'i18n.field.name')
  *   name = '';
  *
  *   @Validator(integerValidator)
- *   @DisplayName('级别')
+ *   @DisplayName('Level', 'i18n.field.level')
  *   @Nullable
  *   level = 0;
  * }
  * ```
  *
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ * @param {undefined} field
+ *     The decorated target. This argument should be `undefined` if this
+ *     decorator decorates a class field.
+ * @param {string} kind
+ *     The kind of decorated target. This argument should be `field` if this
+ *     decorator decorates a class field.
+ * @param {string} name
+ *     The name of the decorated target. This argument should be the name of a
+ *     class field if this decorator decorates a class field.
+ * @param {object} metadata
+ *     The metadata associated to the class the decorated target belongs to.
+ * @author Haixing Hu
+ * @see Model
  */
-function Nullable(prototype, field, descriptor) {
-  const Class = prototype.constructor;
-  setFieldMetadata(Class, field, PROPERTY_NULLABLE, true);
-  return descriptor;
+function Nullable(field, { kind, name, metadata }) {
+  if (kind !== 'field') {
+    throw new TypeError(`The decorator @Nullable can only decorate a class field: ${name}`);
+  }
+  setFieldMetadata(metadata, name, KEY_FIELD_NULLABLE, true);
 }
 
-export {
-  PROPERTY_NULLABLE,
-  Nullable,
-};
+export default Nullable;

@@ -1,0 +1,27 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//    Copyright (c) 2022 - 2023.
+//    Haixing Hu, Qubit Co. Ltd.
+//
+//    All rights reserved.
+//
+////////////////////////////////////////////////////////////////////////////////
+import { deepEqual } from '@haixing_hu/common-util';
+import { getDefaultInstance } from '../utils';
+
+/**
+ * Tests whether the specified object of the specified model class is empty.
+ *
+ * @param {function} Class
+ *     The constructor of the specified model class.
+ * @param {object} obj
+ *     The specified object in the specified model class.
+ * @return {boolean}
+ *     `true` if the specified object is empty; otherwise, `false`.
+ */
+function isEmptyImpl(Class, obj) {
+  const defaultInstance = getDefaultInstance(Class);
+  return deepEqual(obj, defaultInstance);
+}
+
+export default isEmptyImpl;

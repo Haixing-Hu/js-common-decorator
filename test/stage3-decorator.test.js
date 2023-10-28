@@ -12,6 +12,7 @@ describe('Test the feature of the stage 3 decorator', () => {
   test('The Symbol.metadata must exist', () => {
     expect(Symbol.metadata).toBeDefined();
   });
+
   test('Test the inheritance of metadata', () => {
     function meta(key, value) {
       return (Class, context) => {
@@ -26,20 +27,38 @@ describe('Test the feature of the stage 3 decorator', () => {
         }
       };
     }
-
     @meta('a', 'x')
     class C {
       m() {}
     }
-
     expect(C[metadataSymbol].a).toBe('x');
-
     @meta('a', 'z')
     class D extends C {
       m() {}
     }
-
     expect(D[metadataSymbol].a).toBe('z');
     expect(C[metadataSymbol].a).toBe('x');
+  });
+
+  test('Test the decorator of class field', () => {
+    function foo(field, context) {
+      context.metadata[context.name] = 'ok';
+      return function initializer(initialValue) {
+        console.log(`Initialize the ${context.name} with initial value ${initialValue}`);
+      }
+    }
+    class A {
+      @foo
+      x = 1;
+
+      @foo
+      y = 'hello';
+
+      @foo
+      z;
+    }
+    expect(A[metadataSymbol].x).toBe('ok');
+    expect(A[metadataSymbol].y).toBe('ok');
+    expect(A[metadataSymbol].z).toBe('ok');
   });
 });

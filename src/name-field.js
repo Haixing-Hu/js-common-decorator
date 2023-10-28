@@ -6,53 +6,58 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setClassMetadata } from './impl/utils';
-import { PROPERTY_NAME_FIELD } from './impl/constants';
+import { KEY_CLASS_NAME_FIELD } from './impl/metadata-keys';
 
 /**
- * 修饰类字段，指定其为该对象的"名称"。
+ * Decorates a class field to specify it as the "name" of the object.
  *
- * 被修饰的对象必须是类的字段。
+ * The decorated target must be a field of a class.
  *
- * 使用示例：
+ * Usage example:
+ *
  * ```js
  * class Foo {
  *   @Validator(nameValidator)
- *   @DisplayName('姓名')
+ *   @DisplayName('Name')
  *   @NameField
  *   name = '';
  *
  *   @EnumValidator
- *   @DisplayName('性别')
+ *   @DisplayName('Gender')
  *   @Type(Gender)
  *   @Nullable
  *   gender = null;
  *
  *   @Validator(validatePersonBirthday)
- *   @DisplayName('出生日期')
+ *   @DisplayName('Birthday')
  *   @Nullable
- *   brithday = '';
+ *   birthday = '';
  * }
  * ```
  *
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ * @param {undefined} field
+ *     The decorated target. This argument should be `undefined` if this
+ *     decorator decorates a class field.
+ * @param {string} kind
+ *     The kind of decorated target. This argument should be `field` if this
+ *     decorator decorates a class field.
+ * @param {string} name
+ *     The name of the decorated target. This argument should be the name of a
+ *     class field if this decorator decorates a class field.
+ * @param {object} metadata
+ *     The metadata associated to the class the decorated target belongs to.
+ * @author Haixing Hu
+ * @see Model
  */
-function NameField(prototype, field, descriptor) {
-  const Class = prototype.constructor;
-  // 将“名称”字段的名字记录在被修饰字段所属类的元信息内
-  setClassMetadata(Class, PROPERTY_NAME_FIELD, field);
-  return descriptor;
+function NameField(field, { kind, name, metadata }) {
+  if (kind !== 'field') {
+    throw new TypeError(`The decorator @NameField can only decorate a class field: ${name}`);
+  }
+  // Set the name of the decorated field as the name field of the class
+  if (metadata[KEY_CLASS_NAME_FIELD]) {
+    throw new Error(`There is already a name field for the class: ${metadata[KEY_CLASS_NAME_FIELD]}`);
+  }
+  metadata[KEY_CLASS_NAME_FIELD] = name;
 }
 
-export {
-  PROPERTY_NAME_FIELD,
-  NameField,
-};
+export default NameField;

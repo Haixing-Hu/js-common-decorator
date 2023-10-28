@@ -25,10 +25,12 @@ export default class Credential {
   }
 
   /**
-   * 将此对象的证件类型和证件号码正则化，即去除头尾空格，全部转换为大写字母。
+   * Normalizes the document type and document number of this object, that is,
+   * remove leading and trailing spaces, and convert them all to uppercase letters.
    *
-   * 如果证件类型错误的设置为{@link CredentialType}对象，此函数会将证件类型修改为
-   * {@link CredentialType}对象中的枚举项的value属性值。
+   * If the credential type is incorrectly set to a {@link CredentialType}
+   * object, this function will modify the credential type to the value attribute
+   * of the enumeration item in the {@link CredentialType} enumeration.
    */
   normalize() {
     if (typeof this.type === 'string') {

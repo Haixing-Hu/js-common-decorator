@@ -11,14 +11,14 @@ import {
   PROPERTY_TYPE,
   PROPERTY_NULLABLE,
   PROPERTY_DISPLAY_NAME,
-} from './constants';
+} from '../constants';
 import {
   getFieldMetadata,
   getDefaultInstance,
   hasOwnPrototypeFunction,
   isNull,
-} from './utils';
-import ValidationResult from '../models/ValidationResult';
+} from '../utils';
+import ValidationResult from '../../models/ValidationResult';
 
 const ValidateImpl = {
 

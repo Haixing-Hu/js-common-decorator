@@ -6,46 +6,41 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getDefaultValue, setFieldMetadata } from './impl/utils';
-import { PROPERTY_ELEMENT_TYPE } from './impl/constants';
+import { setFieldMetadata } from './impl/utils';
+import { KEY_FIELD_ELEMENT_TYPE } from './impl/metadata-keys';
 
 /**
- * 修饰类字段，将其标记为元素类型为指定的类的数组。
+ * Decorates a class field to mark it as an array of the specified type.
  *
- * 被修饰的对象必须是类的字段，且如果其默认不为null或undefined，则必须是一个数组。
+ * The decorated target must be a field of a class.
  *
- * 使用示例：
+ * Usage example:
+ *
  * ```js
  * class Foo {
  *   &#064;ElementType(ItemType)
  *   items = [];
  * }
  * ```
- * @param {Function} type
- *     被修饰的数组字段的元素所属类的原型。
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ *
+ * @param {function} elementType
+ *     The constructor of the class of the element in the decorated field.
+ * @returns {function}
+ *     The field decorating function, which returns `void`.
+ * @author Haixing Hu
+ * @see Model
+ * @see Type
  */
-function ElementType(type) {
-  return function decorate(prototype, field, descriptor) {
-    const defaultValue = getDefaultValue(descriptor);
-    const Class = prototype.constructor;
-    if (defaultValue !== null && !Array.isArray(defaultValue)) {
-      throw new SyntaxError(`The field "${Class.name}.${field}" decorated by @ElementType must be an array type field.`);
+function ElementType(elementType) {
+  return function decorate(field, { kind, name, metadata }) {
+    if (kind !== 'field') {
+      throw new TypeError(`The decorator @ElementType can only decorate a class field: ${name}`);
     }
-    setFieldMetadata(Class, field, PROPERTY_ELEMENT_TYPE, type);
-    return descriptor;
+    if (typeof type !== 'function') {
+      throw new TypeError(`The argument of @ElementType decorated on "${name}" must a class.`);
+    }
+    setFieldMetadata(metadata, name, KEY_FIELD_ELEMENT_TYPE, elementType);
   };
 }
 
-export {
-  PROPERTY_ELEMENT_TYPE,
-  ElementType,
-};
+export default ElementType;

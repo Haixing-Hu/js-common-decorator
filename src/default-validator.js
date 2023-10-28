@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata, isNull } from './impl/utils';
-import { PROPERTY_VALIDATOR } from './validator';
+import { PROPERTY_VALIDATOR } from './validatable';
 import ValidationResult from './models/ValidationResult';
 
 function defaultValidate(value, options) {

@@ -7,41 +7,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata } from './impl/utils';
-import { PROPERTY_TYPE } from './impl/constants';
+import { KEY_FIELD_TYPE } from './impl/metadata-keys';
 
 /**
- * 修饰类字段，将其类型标记为指定的类。
+ * Decorates a class field to mark it as an object of the specified type.
  *
- * 被修饰的对象必须是类的字段。
+ * The decorated target must be a field of a class.
  *
- * 使用示例：
+ * Usage example:
+ *
  * ```js
  * class Foo {
- *   @Type(ItemType)
+ *   &#064;Type(ItemType)
  *   item = null;
  * }
  * ```
- * @param {Function} type
- *     被修饰的字段所属类的原型。
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ *
+ * @param {function} type
+ *     The constructor of the class to which the decorated field belongs.
+ * @returns {function}
+ *     The field decorating function, which returns `void`.
+ * @author Haixing Hu
+ * @see Model
+ * @see ElementType
  */
 function Type(type) {
-  return function decorate(prototype, field, descriptor) {
-    const Class = prototype.constructor;
-    setFieldMetadata(Class, field, PROPERTY_TYPE, type);
-    return descriptor;
+  return function decorate(field, { kind, name, metadata }) {
+    if (kind !== 'field') {
+      throw new TypeError(`The decorator @Type can only decorate a class field: ${name}`);
+    }
+    if (typeof type !== 'function') {
+      throw new TypeError(`The argument of @Type decorated on "${name}" must a class.`);
+    }
+    setFieldMetadata(metadata, name, KEY_FIELD_TYPE, type);
   };
 }
 
-export {
-  PROPERTY_TYPE,
-  Type,
-};
+export default Type;

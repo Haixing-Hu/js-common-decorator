@@ -51,7 +51,4 @@ function DisplayName(displayName) {
   };
 }
 
-export {
-  PROPERTY_DISPLAY_NAME,
-  DisplayName,
-};
+export default DisplayName;

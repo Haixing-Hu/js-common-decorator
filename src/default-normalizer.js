@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata, normalize } from './impl/utils';
-import { PROPERTY_NORMALIZER } from './normalizer';
+import { PROPERTY_NORMALIZER } from './normalizable';
 
 /**
  * 修饰类字段，指定其正则化函数为该属性对象的`normalize()`函数。

@@ -8,13 +8,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { Enum } from '../../src';
 
-@Enum([{
-  name: '男',
-  value: 'MALE',
-}, {
-  name: '女',
-  value: 'FEMALE',
-}])
-class Gender {}
+// @Enum([{
+//   name: '男',
+//   value: 'MALE',
+// }, {
+//   name: '女',
+//   value: 'FEMALE',
+// }])
+// class Gender {}
+
+@Enum
+class Gender {
+
+  static MALE = '男';
+
+  static FEMALE = '女';
+}
 
 export default Gender;
