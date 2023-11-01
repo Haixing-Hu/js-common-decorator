@@ -14,7 +14,8 @@ supports the most recent (currently May 2023)
 ## <span id="content">Table of Contents</span>
 
 - [Usage](#usage)
-  - [`@Model` Decorator](#model)
+  - [@Model Decorator](#model)
+  - [@Enum Decorator](#enum)
 - [Usage Example](#example)
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
@@ -24,7 +25,7 @@ supports the most recent (currently May 2023)
 
 ## <span id="usage">Usage</span>
 
-### <span id="@Model">`@Model` Decorator</span>
+### <span id="model">@Model Decorator</span>
 
 This decorator is used to decorate a domain model class. It adds the following 
 methods to the decorated class:
@@ -94,10 +95,11 @@ methods to the decorated class:
 this decorator will not override the methods already implemented by the 
 decorated class.
 
-## <span id="example">Usage Example</span>
+The following is the usage example of the `@Model` decorator.
 
 ```js
-@Model class Credential {
+@Model 
+class Credential {
 
   @EnumNormalizer
   @Validator(validateCredentialTypeField)
@@ -120,7 +122,8 @@ decorated class.
   }
 }
 
-@Model class Person {
+@Model 
+class Person {
 
   @Normalizable(trimString)
   @Label('ID')
@@ -210,6 +213,177 @@ added:
 - Because `Person` already implements the `Person.prototype.equals()` method, 
   the `@Model` decorator will **not** override its own implementation of 
   the `Person.prototype.equals()` method.
+
+### <span id="enum">@Enum Decorator</span>
+
+This decorator is used to decorate an enumeration class.
+
+An enumeration class is a class whose instances are enumerators. An enumerator
+is an object with the following properties:
+- `value`：the value of the enumerator, which is exactly the name of the
+  static field of the enumeration class that corresponds to the enumerator.
+- `name`: the display name of the enumerator, which could be specified
+  by the default string or object value of the static field of the
+  enumeration class that corresponds to the enumerator. It the default value
+  is not specified, the name of the enumerator is the same as its value.
+- `i18n`: the i18n key of the enumerator, which is an optional property. It
+  could be specified by the default object value of the static field of the
+  enumeration class that corresponds to the enumerator. If this property is
+  specified, the `name` property will be transformed to a `getter`, which will
+  get the i18n value of the enumerator from the i18n resource bundle.
+- `code`: the code of the enumerator, which is an optional property. It could
+  be specified by the default object value of the static field of the
+  enumeration class that corresponds to the enumerator.
+- other properties: other properties of the enumerator could be specified
+  by the default object value of the static field of the enumeration class
+  that corresponds to the enumerator.
+
+An enumerator also has the following prototype method:
+- `toString()`: returns the value of the enumerator.
+- `toJSON()`: also returns the value of the enumerator.
+
+The enumeration class will have the following static methods:
+- `values()`: returns the array of all enumerators of this enumeration class.
+- `valueOf(value): returns the enumerator whose value is `value`, or
+  `undefined` if no such enumerator exists.
+- `hasValue(value): returns `true` if there is an enumerator whose value is
+  `value`, or `false` otherwise.
+- `nameOf(name): returns the enumerator whose name is `name`, or
+  `undefined` if no such enumerator exists.
+- `hasName(name): returns `true` if there is an enumerator whose name is
+  `name`, or `false` otherwise.
+- `codeOf(code): returns the enumerator whose code is `code`, or
+  `undefined` if no such enumerator exists.
+- `hasCode(code): returns `true` if there is an enumerator whose code is
+  `code`, or `false` otherwise.
+
+Usage example:
+```js
+@Enum
+class Gender {
+  static MALE = 'Male';
+  static FEMALE = 'Female';
+}
+```
+The above code is equivalent to the following code:
+```js
+class Gender {
+  static MALE = Object.freeze(new Gender('MALE', 'Male'));
+
+  static FEMALE = Object.freeze(new Gender('FEMALE', 'Female'));
+
+  static values() {
+    return [ Gender.MALE, Gender.FEMALE ];
+  }
+
+  static valueOf(value) {
+    switch (value) {
+    case 'MALE':
+      return Gender.MALE;
+    case 'FEMALE':
+      return Gender.FEMALE;
+    default:
+      return undefined;
+    }
+  }
+
+  static hasValue(value) {
+    return Gender.valueOf(value) !== undefined;
+  }
+
+  static nameOf(name) {
+    return Gender.values().find((e) => e.name === name);
+  }
+
+  static hasName(name) {
+    return Gender.nameOf(name) !== undefined;
+  }
+
+  static codeOf(code) {
+    return Gender.values().find((e) => e.code === code);
+  }
+
+  static hasCode(code) {
+    return Gender.codeOf(code) !== undefined;
+  }
+
+  constructor(value, name) {
+    this.value = value;
+    this.name = name;
+  }
+
+  toString() {
+    return this.value;
+  }
+
+  toJSON() {
+    return this.value;
+  }
+}
+```
+
+The static fields of the enumeration class could also be specified as objects,
+which will be used to initialize the enumerators. For example:
+```js
+@Enum
+class Gender {
+  static MALE = { name: 'Male', i18n: 'i18n.gender.male', code: '001', data: { value: 0 } };
+
+  static FEMALE = { name: 'Female', i18n: 'i18n.gender.female', code: '002', data: { value: 1 } };
+}
+```
+The above code is equivalent to the following code:
+```js
+class Gender {
+  static MALE = Object.freeze(new Gender('MALE', 'Male',
+     { i18n: 'i18n.gender.male', code: '001', data: {value: 0 } }));
+
+  static FEMALE = Object.freeze(new Gender('FEMALE', 'Female',
+     { i18n: 'i18n.gender.female', code: '002', data: {value: 1 } }));
+
+  ...
+
+  constructor(value, name, payload) {
+    this.value = value;
+    this.name = name;
+    Object.assign(this, payload);
+  }
+
+  ...
+}
+```
+Note that the enumerator in the above `Gender` class has a `code`, `i18n`
+and `data` properties. Since it has `i18n` property which specifies the i18n
+key of the enumerator in the resource bundle, the `name` property of the
+enumerator will be transformed to a `getter` which will get the i18n value
+corresponding to the i18n key from the i18n resource bundle.
+
+The enumerators can also be defined without default values, for example:
+```js
+@Enum
+class Gender {
+  static MALE;
+  static FEMALE;
+}
+```
+The above code is equivalent to the following code:
+```js
+class Gender {
+  static MALE = Object.freeze(new Gender('MALE'));
+
+  static FEMALE = Object.freeze(new Gender('FEMALE'));
+
+  ...
+
+  constructor(value) {
+    this.value = value;
+    this.name = value;
+  }
+
+  ...
+}
+```
+That is, the name of the enumerator is exactly its value.
 
 ## <span id="configuration">Configuration</span>
 

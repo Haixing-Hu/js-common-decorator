@@ -73,9 +73,9 @@ import codeOfImpl from './impl/enum/code-of-impl';
  * The above code is equivalent to the following code:
  * ```js
  * class Gender {
- *   static MALE = new Gender('MALE', 'Male');
+ *   static MALE = Object.freeze(new Gender('MALE', 'Male'));
  *
- *   static FEMALE = new Gender('FEMALE', 'Female');
+ *   static FEMALE = Object.freeze(new Gender('FEMALE', 'Female'));
  *
  *   static values() {
  *     return [ Gender.MALE, Gender.FEMALE ];
@@ -126,6 +126,69 @@ import codeOfImpl from './impl/enum/code-of-impl';
  *   }
  * }
  * ```
+ *
+ * The static fields of the enumeration class could also be specified as objects,
+ * which will be used to initialize the enumerators. For example:
+ * ```js
+ * &#064;Enum
+ * class Gender {
+ *   static MALE = { name: 'Male', i18n: 'i18n.gender.male', code: '001', data: { value: 0 } };
+ *
+ *   static FEMALE = { name: 'Female', i18n: 'i18n.gender.female', code: '002', data: { value: 1 } };
+ * }
+ * ```
+ * The above code is equivalent to the following code:
+ * ```js
+ * class Gender {
+ *   static MALE = Object.freeze(new Gender('MALE', 'Male',
+ *      { i18n: 'i18n.gender.male', code: '001', data: {value: 0 } }));
+ *
+ *   static FEMALE = Object.freeze(new Gender('FEMALE', 'Female',
+ *      { i18n: 'i18n.gender.female', code: '002', data: {value: 1 } }));
+ *
+ *   ...
+ *
+ *   constructor(value, name, payload) {
+ *     this.value = value;
+ *     this.name = name;
+ *     Object.assign(this, payload);
+ *   }
+ *
+ *   ...
+ * }
+ * ```
+ * Note that the enumerator in the above `Gender` class has a `code`, `i18n`
+ * and `data` properties. Since it has `i18n` property which specifies the i18n
+ * key of the enumerator in the resource bundle, the `name` property of the
+ * enumerator will be transformed to a `getter` which will get the i18n value
+ * corresponding to the i18n key from the i18n resource bundle.
+ *
+ * The enumerators can also be defined without default values, for example:
+ * ```js
+ * &#064;Enum
+ * class Gender {
+ *   static MALE;
+ *   static FEMALE;
+ * }
+ * ```
+ * The above code is equivalent to the following code:
+ * ```js
+ * class Gender {
+ *   static MALE = Object.freeze(new Gender('MALE'));
+ *
+ *   static FEMALE = Object.freeze(new Gender('FEMALE'));
+ *
+ *   ...
+ *
+ *   constructor(value) {
+ *     this.value = value;
+ *     this.name = value;
+ *   }
+ *
+ *   ...
+ * }
+ * ```
+ * That is, the name of the enumerator is exactly its value.
  *
  * @param {function} Class
  *     The constructor of the class being decorated.
