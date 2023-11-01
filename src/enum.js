@@ -207,8 +207,6 @@ function Enum(Class, context) {
   classMetadataCache.set(Class, context.metadata);
   // The category of the class modified by `@Enum` is set to 'enum'
   setClassMetadata(Class, KEY_CLASS_CATEGORY, 'enum');
-  // Defines the `name`, `label`, `i18n` properties on the prototype of the class
-  definePrototypeProperty(Class, 'value', 'name', 'i18n', 'code');
   // Loops through all static fields of the `Class` and defines them as enumerators
   context.addInitializer(() => {
     // NOTE that we must perform the following code in the `context.addInitializer()`
