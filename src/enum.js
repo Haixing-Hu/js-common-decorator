@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
+import nameOfImpl from './impl/enum/name-of-impl';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -6,205 +7,193 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setClassMetadata } from './impl/utils';
+import {
+  definePrototypeProperty,
+  setClassMetadata,
+} from './impl/utils';
+import classMetadataCache from './impl/class-metadata-cache';
+import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
+import defineEnumerator from './impl/enum/define-enumerator';
+import valueOfImpl from './impl/enum/value-of-impl';
+import valuesImpl from './impl/enum/values-impl';
+import codeOfImpl from './impl/enum/code-of-impl';
 
 /**
- * 修饰一个空类，将其转换为枚举类。
+ * This decorator is used to decorate an enumeration class.
  *
- * 此装饰器需要一个数组作为参数，数组中每个元素是一个对象。每个对象必须具有`name`和`value`属性，
- * 分别其对应的枚举子的显示名称和枚举值字符串表示。该对象还可以具有可选属性`code`和`data`，分别
- * 表示其对应的枚举子的编码（通常是字符串或整数等可以通过`===`比较相等性的简单类型）和额外数据
- * （可以是任意Object）。
+ * It must decorate a class.
  *
- * 该装饰器所装饰的类必须是一个类，此类可以有自定义属性和自定义方法。该装饰器会为被装饰的类添加下述
- * 属性和方法：
+ * An enumeration class is a class whose instances are enumerators. An enumerator
+ * is an object with the following properties:
+ * - `value`：the value of the enumerator, which is exactly the name of the
+ *   static field of the enumeration class that corresponds to the enumerator.
+ * - `name`: the display name of the enumerator, which could be specified
+ *   by the default string or object value of the static field of the
+ *   enumeration class that corresponds to the enumerator. It the default value
+ *   is not specified, the name of the enumerator is the same as its value.
+ * - `i18n`: the i18n key of the enumerator, which is an optional property. It
+ *   could be specified by the default object value of the static field of the
+ *   enumeration class that corresponds to the enumerator. If this property is
+ *   specified, the `name` property will be transformed to a `getter`, which will
+ *   get the i18n value of the enumerator from the i18n resource bundle.
+ * - `code`: the code of the enumerator, which is an optional property. It could
+ *   be specified by the default object value of the static field of the
+ *   enumeration class that corresponds to the enumerator.
+ * - other properties: other properties of the enumerator could be specified
+ *   by the default object value of the static field of the enumeration class
+ *   that corresponds to the enumerator.
  *
- * - 原型属性`name`，表示该对象对应的枚举子的显示名称；
- * - 原型属性`value`，表示该对象对应的枚举子的字符串表示；
- * - 可选原型属性`code`，表示该对象对应的枚举子的可选编码，编码可以是任意类型的数据，但通常应为字符串
- *   或整数型；
- * - 可选原型属性`data`，表示该对象对应的枚举子的其他额外数据；
- * - 对每个枚举子，添加一个与其`value`属性同名的静态类成员，表示对应的枚举子；
- * - 静态类方法`values()`，返回该枚举类所有枚举值组成的数组；
- * - 静态类方法`forValue(value)`，返回字符串表示为`value`的枚举子，若不存在这样
- *   的枚举子则返回`undefined`；
- * - 静态类方法`forCode(code)`，返回编码为`code`的枚举子，若不存在这样的枚举子则返回
- *   `undefined`；
- * - 静态类方法`nameOfValue(value)`，返回字符串表示为`value`的枚举子的名称，若不存
- *   在这样的枚举子则返回`undefined`。
- * - 静态类方法`nameOfCode(code)`，返回编码为`code`的枚举子的名称，若不存在这样的枚举子
- *   则返回`undefined`。
- * - 静态类方法`hasValue(value)`，测试字符串`value`是否为该枚举类的某个枚举子的值。
- * - 静态类方法`hasCode(code)`，测试`code`是否为该枚举类的某个枚举子的编码，注意编码可能是
- *   任意类型，但应该是简单类型。这里比较编码相等直接使用`===`。
+ * An enumerator also has the following prototype method:
+ * - `toString()`: returns the value of the enumerator.
+ * - `toJSON()`: also returns the value of the enumerator.
  *
- * 使用示例：
+ * The enumeration class will have the following static methods:
+ * - `values()`: returns the array of all enumerators of this enumeration class.
+ * - `valueOf(value): returns the enumerator whose value is `value`, or
+ *   `undefined` if no such enumerator exists.
+ * - `hasValue(value): returns `true` if there is an enumerator whose value is
+ *   `value`, or `false` otherwise.
+ * - `nameOf(name): returns the enumerator whose name is `name`, or
+ *   `undefined` if no such enumerator exists.
+ * - `hasName(name): returns `true` if there is an enumerator whose name is
+ *   `name`, or `false` otherwise.
+ * - `codeOf(code): returns the enumerator whose code is `code`, or
+ *   `undefined` if no such enumerator exists.
+ * - `hasCode(code): returns `true` if there is an enumerator whose code is
+ *   `code`, or `false` otherwise.
+ *
+ * Usage example:
  * ```js
- * &#064;Enum([{
- *   name: '男',
- *   value: 'MALE',
- *   code: 0,
- * }, {
- *   name: '女',
- *   value: 'FEMALE',
- *   code: 1,
- * }])
- * class Gender {}
+ * &#064;Enum
+ * class Gender {
+ *   static MALE = 'Male';
+ *   static FEMALE = 'Female';
+ * }
  * ```
- *
- * 对`Gender`类按上述方式使用`@Enum`装饰器后，会将该类修改为类似下述代码的形式：
+ * The above code is equivalent to the following code:
  * ```js
  * class Gender {
- *   name = '';
- *   value = '';
- * }
+ *   static MALE = new Gender('MALE', 'Male');
  *
- * Gender.MALE = new Gender();
- * Gender.MALE.name = '男';
- * Gender.MALE.value = 'MALE';
- * Gender.MALE.code = 0;
- * Object.freeze(Gender.MALE);
+ *   static FEMALE = new Gender('FEMALE', 'Female');
  *
- * Gender.FEMALE = new Gender();
- * Gender.FEMALE.name = '男';
- * Gender.FEMALE.value = 'FEMALE';
- * Gender.FEMALE.code = 1;
- * Object.freeze(Gender.FEMALE);
+ *   static values() {
+ *     return [ Gender.MALE, Gender.FEMALE ];
+ *   }
  *
- * Gender.values = function() {
- *   return [ Gender.MALE, Gender.FEMALE ];
- * }
- *
- * Gender.forValue = function(value) {
- *   return Gender[value];
- * }
- *
- * Gender.forCode = function(code) {
- *   for (e of Gender.values()) {
- *     if (e.code === code) {
- *       return e;
+ *   static valueOf(value) {
+ *     switch (value) {
+ *     case 'MALE':
+ *       return Gender.MALE;
+ *     case 'FEMALE':
+ *       return Gender.FEMALE;
+ *     default:
+ *       return undefined;
  *     }
  *   }
- *   return undefined;
- * }
  *
- * Gender.nameOfValue = function(value) {
- *    return (Gender[value] ? Gender[value].name : undefined);
- * }
+ *   static hasValue(value) {
+ *     return Gender.valueOf(value) !== undefined;
+ *   }
  *
- * Gender.nameOfCode = function(code) {
- *    const e = Gender.forCode(code);
- *    return (e ? e.name : undefined);
- * }
+ *   static nameOf(name) {
+ *     return Gender.values().find((e) => e.name === name);
+ *   }
  *
- * Gender.hasValue = function(value) {
- *   return (Gender[value] instanceof Gender);
- * }
+ *   static hasName(name) {
+ *     return Gender.nameOf(name) !== undefined;
+ *   }
  *
- * Gender.hasCode = function(code) {
- *   const e = Gender.forCode(code);
- *   return (e !== undefined);
- * }
+ *   static codeOf(code) {
+ *     return Gender.values().find((e) => e.code === code);
+ *   }
  *
- * Object.freeze(Gender);
+ *   static hasCode(code) {
+ *     return Gender.codeOf(code) !== undefined;
+ *   }
+ *
+ *   constructor(value, name) {
+ *     this.value = value;
+ *     this.name = name;
+ *   }
+ *
+ *   toString() {
+ *     return this.value;
+ *   }
+ *
+ *   toJSON() {
+ *     return this.value;
+ *   }
+ * }
  * ```
  *
- * @param {Array} items
- *     对被修饰的类的枚举子的描述。
- * @param {Function} Class
- *     被修饰的类。
- * @author 胡海星
+ * @param {function} Class
+ *     The constructor of the class being decorated.
+ * @param {object} context
+ *     The context object containing information about the class being decorated.
+ * @author Haixing Hu
  */
-export function Enum(items) {
-  return function decorate(Class) {
-    // 被@Enum修饰的类的category分类设置为'enum'
-    setClassMetadata(Class, 'category', 'enum');
-    // 添加属性 name
-    Object.defineProperty(Class.prototype, 'name', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-      value: '',
-    });
-    // 添加属性 value
-    Object.defineProperty(Class.prototype, 'value', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-      value: '',
-    });
-    // 添加属性 code
-    Object.defineProperty(Class.prototype, 'code', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-      value: undefined,
-    });
-    // 添加属性 data
-    Object.defineProperty(Class.prototype, 'data', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-      value: undefined,
-    });
-    // 为每个枚举值添加一个不可更改的同名类静态成员
-    items.forEach((item) => {
-      const e = new Class();
-      e.name = item.name;
-      e.value = item.value;
-      e.code = item.code;
-      e.data = item.data;
-      Object.freeze(e);
-      Class[item.value] = e;
-    });
-    // 添加类静态方法 values()
-    Class.values = function values() {
-      const result = [];
-      items.forEach((item) => {
-        const e = Class[item.value];
-        result.push(e);
-      });
-      return result;
-    };
-    // 添加类静态方法 forValue()
-    Class.forValue = function forValue(value) {
-      if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
-        return undefined;
+function Enum(Class, context) {
+  if (context === null || typeof context !== 'object') {
+    throw new TypeError('The context must be an object.');
+  }
+  if (typeof Class !== 'function' || context.kind !== 'class') {
+    throw new TypeError('The `@Enum` can only decorate a class.');
+  }
+  // put the context.metadata to the cache
+  classMetadataCache.set(Class, context.metadata);
+  // The category of the class modified by `@Enum` is set to 'enum'
+  setClassMetadata(Class, KEY_CLASS_CATEGORY, 'enum');
+  // Defines the `name`, `label`, `i18n` properties on the prototype of the class
+  definePrototypeProperty(Class, 'value', 'name', 'i18n', 'code');
+  // Loops through all static fields of the `Class` and defines them as enumerators
+  context.addInitializer(() => {
+    // NOTE that we must perform the following code in the `context.addInitializer()`
+    // function, since the decorator @Enum is applied **BEFORE** the static fields
+    // of the class were defined, but the `context.addInitializer()` function is
+    // called **AFTER** the static fields of the class were defined.
+    // see https://github.com/tc39/proposal-decorators#adding-initialization-logic-with-addinitializer
+    Object.keys(Class).forEach((field) => {
+      if (typeof Class[field] !== 'function') {
+        defineEnumerator(Class, field);
       }
-      const e = Class[value];
-      return (e instanceof Class ? e : undefined);
-    };
-    // 添加类静态方法 forCode()
-    Class.forCode = function forCode(code) {
-      if ((code === undefined) || (code === null)) {
-        return undefined;
-      }
-      const item = items.find((item) => item.code === code);
-      return (item ? Class[item.value] : undefined);
-    };
-    // 添加类静态方法 nameOfValue()
-    Class.nameOfValue = function nameOfValue(value) {
-      if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
-        return undefined;
-      }
-      const e = Class[value];
-      return ((e instanceof Class) ? e.name : undefined);
-    };
-    // 添加类静态方法 nameOfCode()
-    Class.nameOfCode = function nameOfCode(code) {
-      const e = Class.forCode(code);
-      return (e ? e.name : undefined);
-    };
-    // 添加类静态方法 hasValue()
-    Class.hasValue = function hasValue(value) {
-      return Class.forValue(value) !== undefined;
-    };
-    // 添加类静态方法 hasCode()
-    Class.hasCode = function hasCode(code) {
-      return Class.forCode(code) !== undefined;
-    };
-    // 冻结这个枚举类
-    Object.freeze(Class);
+    });
+  });
+  // Add prototype method toString()
+  Class.prototype.toString = function toString() {
+    return this.value;
+  }
+  // Add prototype method toJSON()
+  Class.prototype.toJSON = function toJSON() {
+    return this.value;
+  }
+  // Add static method values()
+  Class.values = function values() {
+    return valuesImpl(Class);
+  };
+  // Add static method valueOf()
+  Class.valueOf = function valueOf(value) {
+    return valueOfImpl(Class, value);
+  };
+  // Add static method hasValue()
+  Class.hasValue = function hasValue(value) {
+    return (valueOfImpl(Class, value) !== undefined);
+  };
+  // Add static method nameOf()
+  Class.nameOf = function nameOf(name) {
+    return nameOfImpl(Class, name);
+  };
+  // Add static method hasName()
+  Class.hasName = function hasName(name) {
+    return (nameOfImpl(Class, name) !== undefined);
+  };
+  // Add static method forCode()
+  Class.codeOf = function codeOf(code) {
+    return codeOfImpl(Class, code);
+  };
+  // Add static method hasCode()
+  Class.hasCode = function hasCode(code) {
+    return (codeOfImpl(Class, code) !== undefined);
   };
 }
 

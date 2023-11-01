@@ -7,12 +7,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '../../../src';
-import { isNull } from '../../../src/impl/utils';
+import { isNullishOrEmpty } from '../../../src/impl/utils';
 import Email from './email';
 
 export default function validatePersonEmail(email, { instance, displayName, nullable }) {
   const whose = (instance.name ? `${instance.name}的` : '');
-  if (isNull(email)) {
+  if (isNullishOrEmpty(email)) {
     if (nullable) {
       return new ValidationResult(true);
     } else {

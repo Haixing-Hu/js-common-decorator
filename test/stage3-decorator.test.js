@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import metadataSymbol from '../src/impl/symbol-metadata';
+const metadataSymbol = Symbol('metadata');
 
 describe('Test the feature of the stage 3 decorator', () => {
   test('The Symbol.metadata must exist', () => {
@@ -60,5 +60,33 @@ describe('Test the feature of the stage 3 decorator', () => {
     expect(A[metadataSymbol].x).toBe('ok');
     expect(A[metadataSymbol].y).toBe('ok');
     expect(A[metadataSymbol].z).toBe('ok');
+  });
+
+  test('Decorators applying order', () => {
+    function test(target, context) {
+      console.log(`Apply @test on ${context.name}`);
+      if (context.kind === 'class') {
+        console.log('Object.keys(Foo):', Object.keys(target));
+        console.log('Object.keys(Foo.prototype):', Object.keys(target.prototype));
+        console.log('Foo.INSTANCE:', target.INSTANCE);
+      }
+    }
+
+    @test
+    class Foo {
+      @test
+      x = 0;
+
+      @test
+      foo() {
+        console.log('foo');
+      }
+
+      @test
+      static INSTANCE = new Foo();
+    }
+
+    const f = new Foo();
+    f.foo();
   });
 });

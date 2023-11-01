@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata, ensureEnumField, isNull } from './impl/utils';
+import { setFieldMetadata, ensureEnumField, isNullishOrEmpty } from './impl/utils';
 import { PROPERTY_VALIDATOR } from './validatable';
 import ValidationResult from './models/ValidationResult';
 
@@ -28,7 +28,7 @@ function validateEnumValue(value, options) {
   } else if (options.parentInstance?.name) {
     whose = `${options.parentInstance.name}的`;
   }
-  if (isNull(value)) {
+  if (isNullishOrEmpty(value)) {
     if (options.nullable) {
       return new ValidationResult(true);
     } else {

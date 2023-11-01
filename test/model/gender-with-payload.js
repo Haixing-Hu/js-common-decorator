@@ -9,11 +9,11 @@
 import { Enum } from '../../src';
 
 @Enum
-class Gender {
+class GenderWithPayload {
 
-  static MALE = '男';
+  static MALE = { name: '男', i18n: 'i18n.gender.male', code: '001', data: { value: 0 } };
 
-  static FEMALE = '女';
+  static FEMALE = { name: '女', i18n: 'i18n.gender.female', code: '002', data: { value: 1 } };
 }
 
-export default Gender;
+export default GenderWithPayload;

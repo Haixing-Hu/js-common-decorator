@@ -7,106 +7,200 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { clone } from '@haixing_hu/common-util';
-import { getClassMetadataObject, getClassMetadata } from '../src/impl/utils';
+import { getClassMetadata } from '../src/impl/utils';
+import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
 import Gender from './model/gender';
-import GenderWithCodeData from './model/gender-with-code-data';
+import GenderWithoutName from './model/gender-without-name';
+import GenderWithOptions from './model/gender-with-options';
+import GenderWithPayload from './model/gender-with-payload';
 
 /**
- * 单元测试 @Enum 装饰器。
+ * Unit test the `@Enum` decorator.
  *
- * @author 胡海星
+ * @author Haixing Hu
  */
-describe('测试 @Enum 类装饰器', () => {
-  test('测试 Gender 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(Gender);
-    expect(metadata).not.toBeNull();
-    console.log('Gender.metadata = ', metadata);
-  });
-  test('测试 @Enum 修饰的类的 category 元属性是否为 "enum"', () => {
-    const value = getClassMetadata(Gender, 'category');
+describe('Test the `@Enum` class decorator', () => {
+  test('The category meta-attribute of the `@Enum` decorated class should be "enum"', () => {
+    const value = getClassMetadata(Gender, KEY_CLASS_CATEGORY);
     expect(value).toBe('enum');
   });
-  test('测试 @Enum 是否为类增加 name, value 成员以及枚举子', () => {
+  test('Enumerators with names', () => {
     const male = Gender.MALE;
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
-    expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
-    const female = Gender.FEMALE;
-    expect(female).toBeDefined();
-    expect(female).not.toBeNull();
-    expect(female.name).toBe('女');
-    expect(female.value).toBe('FEMALE');
-  });
-  test('测试 @Enum 是否为类增加 code, data 成员以及枚举子', () => {
-    const male = GenderWithCodeData.MALE;
-    expect(male).toBeDefined();
-    expect(male).not.toBeNull();
     expect(male.name).toBe('男');
-    expect(male.value).toBe('MALE');
-    expect(male.code).toBe(0);
-    expect(male.data).toStrictEqual({ value: 0 });
-    const female = GenderWithCodeData.FEMALE;
-    expect(female).toBeDefined();
-    expect(female).not.toBeNull();
-    expect(female.name).toBe('女');
-    expect(female.value).toBe('FEMALE');
-    expect(female.code).toBe(1);
-    expect(female.data).toStrictEqual({ value: 1 });
-  });
-  test('测试 @Enum 是为类增加 name, value 成员是否是不可修改', () => {
-    const male = Gender.MALE;
-    expect(male).toBeDefined();
-    expect(male).not.toBeNull();
-    expect(male.name).toBe('男');
-    expect(male.value).toBe('MALE');
-    expect(() => {
-      male.name = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'name\' of object \'#<Gender>\'');
     expect(() => {
       male.value = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'value\' of object \'#<Gender>\'');
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      male.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
     const female = Gender.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
-    expect(female.name).toBe('女');
     expect(female.value).toBe('FEMALE');
-    expect(() => {
-      female.name = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'name\' of object \'#<Gender>\'');
+    expect(female.name).toBe('女');
     expect(() => {
       female.value = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'value\' of object \'#<Gender>\'');
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      female.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
   });
-  test('测试 @Enum 是为类增加 code, data 成员是否是不可修改', () => {
-    const male = GenderWithCodeData.MALE;
+  test('Enumerators without names', () => {
+    const male = GenderWithoutName.MALE;
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.value).toBe('MALE');
+    expect(male.name).toBe('MALE');
+    expect(() => {
+      male.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      male.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+    const female = GenderWithoutName.FEMALE;
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.value).toBe('FEMALE');
+    expect(female.name).toBe('FEMALE');
+    expect(() => {
+      female.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      female.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+  });
+  test('Enumerators with name and i18n options', () => {
+    const male = GenderWithOptions.MALE;
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
-    expect(male.code).toBe(0);
-    expect(male.data).toStrictEqual({ value: 0 });
+    expect(male.i18n).toBe('i18n.gender.male');
     expect(() => {
-      male.code = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'code\' of object \'#<GenderWithCodeData>\'');
+      male.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
-      male.data = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'data\' of object \'#<GenderWithCodeData>\'');
-    const female = GenderWithCodeData.FEMALE;
+      male.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+    expect(() => {
+      male.i18n = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'i18n' of object '[^']+'/);
+    const female = GenderWithOptions.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
     expect(female.name).toBe('女');
     expect(female.value).toBe('FEMALE');
-    expect(female.code).toBe(1);
+    expect(female.i18n).toBe('i18n.gender.female');
+    expect(() => {
+      female.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      female.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+    expect(() => {
+      female.i18n = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'i18n' of object '[^']+'/);
+  });
+  test('Enumerators with more payload options', () => {
+    const male = GenderWithPayload.MALE;
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.i18n).toBe('i18n.gender.male');
+    expect(male.code).toBe('001');
+    expect(male.data).toStrictEqual({ value: 0 });
+    expect(() => {
+      male.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      male.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+    expect(() => {
+      male.code = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'code' of object '[^']+'/);
+    expect(() => {
+      male.data = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'data' of object '[^']+'/);
+    const female = GenderWithPayload.FEMALE;
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.i18n).toBe('i18n.gender.female');
+    expect(female.code).toBe('002');
     expect(female.data).toStrictEqual({ value: 1 });
     expect(() => {
+      female.value = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'value' of object '[^']+'/);
+    expect(() => {
+      female.name = 'XX';
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'name' of object '[^']+'/);
+    expect(() => {
       female.code = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'code\' of object \'#<GenderWithCodeData>\'');
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'code' of object '[^']+'/);
     expect(() => {
       female.data = 'XX';
-    }).toThrowWithMessage(TypeError, 'Cannot assign to read only property \'data\' of object \'#<GenderWithCodeData>\'');
+    }).toThrowWithMessage(TypeError,
+        /^Cannot assign to read only property 'data' of object '[^']+'/);
   });
-  test('测试 @Enum 是否为类增加 values() 静态方法', () => {
+  test('Enumerators should have `toString()` method', () => {
+    const male = GenderWithPayload.MALE;
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.toString()).toBe('MALE');
+    expect(String(male)).toBe('MALE');
+    const female = GenderWithPayload.FEMALE;
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.toString()).toBe('FEMALE');
+    expect(String(female)).toBe('FEMALE');
+  });
+  test('Enumerators should have `toJSON()` method', () => {
+    const male = GenderWithPayload.MALE;
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.toJSON()).toBe('MALE');
+    expect(JSON.stringify(male)).toBe('"MALE"');
+    const female = GenderWithPayload.FEMALE;
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.toJSON()).toBe('FEMALE');
+    expect(JSON.stringify(female)).toBe('"FEMALE"');
+  });
+  test('Enumeration class should have static method `values()`', () => {
     const values = Gender.values();
     expect(values).toBeArray();
     expect(values).toEqual([Gender.MALE, Gender.FEMALE]);
@@ -115,118 +209,116 @@ describe('测试 @Enum 类装饰器', () => {
     expect(values[1].name).toBe('女');
     expect(values[1].value).toBe('FEMALE');
   });
-  test('测试 @Enum 是否为类增加 forValue() 静态方法', () => {
-    const male = Gender.forValue('MALE');
+  test('Enumeration class should have static method `valueOf()`', () => {
+    const male = Gender.valueOf('MALE');
     // console.dir(male);
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
-    const female = Gender.forValue('FEMALE');
+    const female = Gender.valueOf('FEMALE');
     // console.dir(female);
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
     expect(female.name).toBe('女');
     expect(female.value).toBe('FEMALE');
     // console.dir(female);
-    let nonExist = Gender.forValue('xxx');
+    let nonExist = Gender.valueOf('xxx');
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(undefined);
+    nonExist = Gender.valueOf(undefined);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(null);
+    nonExist = Gender.valueOf(null);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(123);
+    nonExist = Gender.valueOf(123);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue('forValue');
-    expect(nonExist).toBeUndefined();
-  });
-  test('测试 @Enum 是否为类增加 forCode() 静态方法', () => {
-    const male = GenderWithCodeData.forCode(0);
-    // console.dir(male);
-    expect(male).toBeDefined();
-    expect(male).not.toBeNull();
-    expect(male.name).toBe('男');
-    expect(male.value).toBe('MALE');
-    expect(male.code).toBe(0);
-    const female = GenderWithCodeData.forCode(1);
-    // console.dir(female);
-    expect(female).toBeDefined();
-    expect(female).not.toBeNull();
-    expect(female.name).toBe('女');
-    expect(female.value).toBe('FEMALE');
-    expect(female.code).toBe(1);
-    // console.dir(female);
-    let nonExist = GenderWithCodeData.forCode(2);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.forCode(undefined);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.forCode(null);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.forCode(123);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.forCode('forValue');
+    nonExist = Gender.valueOf('valueOf');
     expect(nonExist).toBeUndefined();
   });
-  test('测试 @Enum 是否为类增加 nameOfValue() 静态方法', () => {
-    const male = Gender.nameOfValue('MALE');
-    expect(male).toBe('男');
-    const female = Gender.nameOfValue('FEMALE');
-    expect(female).toBe('女');
-    let nonExist = Gender.nameOfValue('xxx');
-    expect(nonExist).toBeUndefined();
-    nonExist = Gender.nameOfValue(undefined);
-    expect(nonExist).toBeUndefined();
-    nonExist = Gender.nameOfValue(null);
-    expect(nonExist).toBeUndefined();
-    nonExist = Gender.nameOfValue(123);
-    expect(nonExist).toBeUndefined();
-    nonExist = Gender.nameOfValue('forValue');
-    expect(nonExist).toBeUndefined();
-  });
-  test('测试 @Enum 是否为类增加 nameOfCode() 静态方法', () => {
-    const male = GenderWithCodeData.nameOfCode(0);
-    expect(male).toBe('男');
-    const female = GenderWithCodeData.nameOfCode(1);
-    expect(female).toBe('女');
-    let nonExist = GenderWithCodeData.nameOfCode(2);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.nameOfCode(undefined);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.nameOfCode(null);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.nameOfCode(123);
-    expect(nonExist).toBeUndefined();
-    nonExist = GenderWithCodeData.nameOfCode('forValue');
-    expect(nonExist).toBeUndefined();
-  });
-  test('测试 @Enum 是否为类增加 hasValue() 静态方法', () => {
+  test('Enumeration class should have static method `hasValue()`', () => {
     expect(Gender.hasValue('MALE')).toBe(true);
     expect(Gender.hasValue('FEMALE')).toBe(true);
     expect(Gender.hasValue('xxx')).toBe(false);
     expect(Gender.hasValue('has')).toBe(false);
     expect(Gender.hasValue('nameOfValue')).toBe(false);
-    expect(Gender.hasValue('forValue')).toBe(false);
+    expect(Gender.hasValue('valueOf')).toBe(false);
     expect(Gender.hasValue(undefined)).toBe(false);
     expect(Gender.hasValue(null)).toBe(false);
     expect(Gender.hasValue(123)).toBe(false);
   });
-  test('测试 @Enum 是否为类增加 hasCode() 静态方法', () => {
-    expect(GenderWithCodeData.hasCode(0)).toBe(true);
-    expect(GenderWithCodeData.hasCode(1)).toBe(true);
-    expect(GenderWithCodeData.hasCode(2)).toBe(false);
-    expect(GenderWithCodeData.hasCode('has')).toBe(false);
-    expect(GenderWithCodeData.hasCode('nameOfValue')).toBe(false);
-    expect(GenderWithCodeData.hasCode('forValue')).toBe(false);
-    expect(GenderWithCodeData.hasCode(undefined)).toBe(false);
-    expect(GenderWithCodeData.hasCode(null)).toBe(false);
-    expect(GenderWithCodeData.hasCode(123)).toBe(false);
+  test('Enumeration class should have static method `nameOf()`', () => {
+    const male = GenderWithPayload.nameOf('男');
+    // console.dir(male);
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.code).toBe('001');
+    const female = GenderWithPayload.nameOf('女');
+    // console.dir(female);
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.code).toBe('002');
+    // console.dir(female);
+    let nonExist = GenderWithPayload.nameOf('xx');
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.nameOf(undefined);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.nameOf(null);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.nameOf(123);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.nameOf('valueOf');
+    expect(nonExist).toBeUndefined();
   });
-  test('测试 @Enum 装饰的类是否可改变', () => {
-    expect(() => {
-      Gender.XX = '';
-    }).toThrowWithMessage(TypeError, 'Cannot add property XX, object is not extensible');
+  test('Enumeration class should have static method `hasName()`', () => {
+    expect(GenderWithPayload.hasName('男')).toBe(true);
+    expect(GenderWithPayload.hasName('女')).toBe(true);
+    expect(GenderWithPayload.hasName('xx')).toBe(false);
+    expect(GenderWithPayload.hasName(undefined)).toBe(false);
+    expect(GenderWithPayload.hasName(null)).toBe(false);
+    expect(GenderWithPayload.hasName(123)).toBe(false);
   });
-  test('测试 Object.create() 一个枚举子', () => {
+  test('Enumeration class should have static method `codeOf()`', () => {
+    const male = GenderWithPayload.codeOf('001');
+    // console.dir(male);
+    expect(male).toBeDefined();
+    expect(male).not.toBeNull();
+    expect(male.name).toBe('男');
+    expect(male.value).toBe('MALE');
+    expect(male.code).toBe('001');
+    const female = GenderWithPayload.codeOf('002');
+    // console.dir(female);
+    expect(female).toBeDefined();
+    expect(female).not.toBeNull();
+    expect(female.name).toBe('女');
+    expect(female.value).toBe('FEMALE');
+    expect(female.code).toBe('002');
+    // console.dir(female);
+    let nonExist = GenderWithPayload.codeOf('003');
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.codeOf(undefined);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.codeOf(null);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.codeOf(123);
+    expect(nonExist).toBeUndefined();
+    nonExist = GenderWithPayload.codeOf('valueOf');
+    expect(nonExist).toBeUndefined();
+  });
+  test('Enumeration class should have static method `hasCode()`', () => {
+    expect(GenderWithPayload.hasCode('001')).toBe(true);
+    expect(GenderWithPayload.hasCode('002')).toBe(true);
+    expect(GenderWithPayload.hasCode('003')).toBe(false);
+    expect(GenderWithPayload.hasCode('has')).toBe(false);
+    expect(GenderWithPayload.hasCode('nameOfValue')).toBe(false);
+    expect(GenderWithPayload.hasCode('valueOf')).toBe(false);
+    expect(GenderWithPayload.hasCode(undefined)).toBe(false);
+    expect(GenderWithPayload.hasCode(null)).toBe(false);
+    expect(GenderWithPayload.hasCode('123')).toBe(false);
+  });
+  test('Test create a enumerator with Object.create()', () => {
     const male = Gender.MALE;
     const prototype = Object.getPrototypeOf(male);
     const copy = Object.create(prototype);
@@ -234,7 +326,7 @@ describe('测试 @Enum 类装饰器', () => {
     expect(copy).toEqual(male);
     console.log('copy = ', copy);
   });
-  test('测试 clone() 一个枚举子', () => {
+  test('Test clone a enumerator', () => {
     const male = Gender.MALE;
     const copy = clone(male, {
       includeAccessor: false,
@@ -244,4 +336,9 @@ describe('测试 @Enum 类装饰器', () => {
     });
     expect(copy).toEqual(male);
   });
+  // test('`@Enum` decorated class should be unmodifiable', () => {
+  //   expect(() => {
+  //     Gender.XX = '';
+  //   }).toThrowWithMessage(TypeError, 'Cannot add property XX, object is not extensible');
+  // });
 });

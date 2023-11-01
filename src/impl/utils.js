@@ -85,17 +85,18 @@ export function getDefaultValue(descriptor) {
  *     The key of the specified attribute.
  * @return  {object}
  *     The value associated with the specified key in the metadata of the
- *     specified class, or `undefined` if it does not exist.
+ *     specified class.
+ * @throws Error
+ *     If the metadata of the specified class has not been cached.
  * @author Haixing Hu
  * @private
  */
 export function getClassMetadata(Class, key) {
   const metadata = ClassMetadataCache.get(Class);
   if (!metadata) {
-    return undefined;
-  } else {
-    return metadata[key];
+    throw new Error(`The metadata of the class "${Class.name}" has not been cached.`);
   }
+  return metadata[key];
 }
 
 /**
@@ -107,20 +108,17 @@ export function getClassMetadata(Class, key) {
  *     The key of the specified attribute.
  * @param {any} value
  *     The attribute value to be set.
- * @returns {Boolean}
- *     `true` if the specified attribute value of the metadata of the specified
- *     class is set successfully; `false` otherwise.
+ * @throws Error
+ *     If the metadata of the specified class has not been cached.
  * @author Haixing Hu
  * @private
  */
 export function setClassMetadata(Class, key, value) {
   const metadata = ClassMetadataCache.get(Class);
-  if (metadata) {
-    metadata[key] = value;
-    return true;
-  } else {
-    return false;
+  if (!metadata) {
+    throw new Error(`The metadata of the class "${Class.name}" has not been cached.`);
   }
+  metadata[key] = value;
 }
 
 /**
@@ -138,13 +136,9 @@ export function setClassMetadata(Class, key, value) {
  * @private
  */
 export function getFieldMetadataObject(metadata, field) {
-  if (!metadata[KEY_CLASS_FIELDS_METADATA]) {
-    metadata[KEY_CLASS_FIELDS_METADATA] = {};
-  }
+  metadata[KEY_CLASS_FIELDS_METADATA] ??= {};
   const fieldsMetadata = metadata[KEY_CLASS_FIELDS_METADATA];
-  if (!fieldsMetadata[field]) {
-    fieldsMetadata[field] = {};
-  }
+  fieldsMetadata[field] ??= {};
   return fieldsMetadata[field];
 }
 
@@ -317,14 +311,15 @@ export function ensureEnumField(Class, field) {
 }
 
 /**
- * 判定给定的值是否是空值。
+ * Determines whether the given value is nullish or empty.
  *
  * @param {String|Array} value
- *     待判定的值。
+ *     The value to be determined, which must be a string or an array.
  * @returns
- *     给定的值是否为`undefined`或`null`或空字符串或空数组。
+ *     Whether the given value is `undefined` or `null` or an empty string or
+ *     an empty array.
  */
-export function isNull(value) {
+export function isNullishOrEmpty(value) {
   return (value === undefined
       || value === null
       || value === ''
@@ -346,5 +341,24 @@ export function isNull(value) {
 export function requirePrototypeMethod(Class, func) {
   if (!hasPrototypeFunction(Class, func)) {
     throw new TypeError(`The class ${Class.name} does not implement the prototype method "${func}()".`);
+  }
+}
+
+/**
+ * Defines the specified properties on the prototype of a class.
+ *
+ * @param {function} Class
+ *     The constructor of the specified class.
+ * @param {string} properties
+ *     The array of names of the specified properties.
+ */
+export function definePrototypeProperty(Class, ...properties) {
+  for (const property of properties) {
+    Object.defineProperty(Class.prototype, property, {
+      value: '',
+      configurable: false,
+      enumerable: true,
+      writable: true,
+    });
   }
 }

@@ -33,7 +33,7 @@ const METADATA_CACHE = new WeakMap();
  * @author Haixing Hu
  * @private
  */
-const ClassMetadataCache = {
+const classMetadataCache = {
   /**
    * Gets the metadata of a class.
    *
@@ -71,4 +71,4 @@ const ClassMetadataCache = {
   }
 };
 
-export default ClassMetadataCache;
+export default classMetadataCache;

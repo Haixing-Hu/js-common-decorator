@@ -16,7 +16,7 @@ import {
   getFieldMetadata,
   getDefaultInstance,
   hasOwnPrototypeFunction,
-  isNull,
+  isNullishOrEmpty,
 } from '../utils';
 import ValidationResult from '../../models/ValidationResult';
 
@@ -107,7 +107,7 @@ const ValidateImpl = {
     // 获取字段是否可空
     const nullable = (getFieldMetadata(Class, field, PROPERTY_NULLABLE) === true);
     // 若字段可空，且字段值为空，则直接认为校验成功
-    if (isNull(value) && nullable) {
+    if (isNullishOrEmpty(value) && nullable) {
       return new ValidationResult(true);
     }
     // 获取字段的校验函数

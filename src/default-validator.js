@@ -6,12 +6,12 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata, isNull } from './impl/utils';
+import { setFieldMetadata, isNullishOrEmpty } from './impl/utils';
 import { PROPERTY_VALIDATOR } from './validatable';
 import ValidationResult from './models/ValidationResult';
 
 function defaultValidate(value, options) {
-  if (isNull(value)) {
+  if (isNullishOrEmpty(value)) {
     if (options.nullable === true) {
       return new ValidationResult(true);
     } else {

@@ -51,7 +51,7 @@ function Label(label, i18nKey = undefined) {
     if ((i18nKey !== undefined) && (typeof i18nKey !== 'string')) {
       throw new TypeError(`The second argument of @Label decorated on "${name}" must be a string.`);
     }
-    setFieldMetadata(metadata, name, KEY_FIELD_LABEL, { label, i18nKey });
+    setFieldMetadata(metadata, name, KEY_FIELD_LABEL, { name: label, i18n: i18nKey });
   };
 }
 

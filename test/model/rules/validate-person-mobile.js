@@ -7,12 +7,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '../../../src';
-import { isNull } from '../../../src/impl/utils';
+import { isNullishOrEmpty } from '../../../src/impl/utils';
 import Mobile from './mobile';
 
 export default function validatePersonMobile(mobile, { instance, displayName, nullable }) {
   const whose = (instance.name ? `${instance.name}的` : '');
-  if (isNull(mobile)) {
+  if (isNullishOrEmpty(mobile)) {
     if (nullable) {
       return new ValidationResult(true);
     } else {
