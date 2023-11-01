@@ -30,6 +30,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(male).not.toBeNull();
     expect(male.value).toBe('MALE');
     expect(male.name).toBe('男');
+    expect(Object.keys(male)).toEqual(['value', 'name']);
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -43,6 +44,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female).not.toBeNull();
     expect(female.value).toBe('FEMALE');
     expect(female.name).toBe('女');
+    expect(Object.keys(female)).toEqual(['value', 'name']);
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -58,6 +60,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(male).not.toBeNull();
     expect(male.value).toBe('MALE');
     expect(male.name).toBe('MALE');
+    expect(Object.keys(male)).toEqual(['value', 'name']);
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -71,6 +74,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female).not.toBeNull();
     expect(female.value).toBe('FEMALE');
     expect(female.name).toBe('FEMALE');
+    expect(Object.keys(female)).toEqual(['value', 'name']);
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -87,6 +91,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
     expect(male.i18n).toBe('i18n.gender.male');
+    expect(Object.keys(male)).toEqual(['value', 'name', 'i18n']);
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -105,6 +110,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female.name).toBe('女');
     expect(female.value).toBe('FEMALE');
     expect(female.i18n).toBe('i18n.gender.female');
+    expect(Object.keys(female)).toEqual(['value', 'name', 'i18n']);
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -127,6 +133,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(male.i18n).toBe('i18n.gender.male');
     expect(male.code).toBe('001');
     expect(male.data).toStrictEqual({ value: 0 });
+    expect(Object.keys(male)).toEqual(['value', 'name', 'i18n', 'code', 'data']);
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
@@ -151,6 +158,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female.i18n).toBe('i18n.gender.female');
     expect(female.code).toBe('002');
     expect(female.data).toStrictEqual({ value: 1 });
+    expect(Object.keys(female)).toEqual(['value', 'name', 'i18n', 'code', 'data']);
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
