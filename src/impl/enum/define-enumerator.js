@@ -6,9 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getFieldMetadata } from '../utils';
-import { KEY_FIELD_LABEL, KEY_FIELD_PAYLOAD } from '../metadata-keys';
-import classMetadataCache from '../class-metadata-cache';
 
 /**
  * Defines an enumerator of an enumeration class.

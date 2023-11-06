@@ -7,11 +7,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Normalizer } from '../../src';
+import { Model, Normalizable } from '../../src';
 import Parent from './parent';
 
 @Model
 export default class Child extends Parent {
-  @Normalizer(trimUppercaseString)
+  @Normalizable(trimUppercaseString)
   message = '';
 }

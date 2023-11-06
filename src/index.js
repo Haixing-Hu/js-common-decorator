@@ -12,7 +12,7 @@ import Model from './model';
 import Type from './type';
 import ElementType from './element-type';
 import Normalizable from './normalizable';
-import DefaultNormalizer from './default-normalizer';
+import defaultNormalizer from './default-normalizer';
 import EnumNormalizer from './enum-normalizer';
 import Validatable from './validatable';
 import DefaultValidator from './default-validator';
@@ -30,7 +30,7 @@ export {
   Type,
   ElementType,
   Normalizable,
-  DefaultNormalizer,
+  defaultNormalizer,
   Validatable,
   DefaultValidator,
   EnumValidator,

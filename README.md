@@ -15,6 +15,21 @@ supports the most recent (currently May 2023)
 
 - [Usage](#usage)
   - [@Model Decorator](#model)
+    - [Instance method: Class.prototype.assign(obj, normalized)](#assign)
+    - [Instance method: Class.prototype.clone()](#clone)
+    - [Instance method: Class.prototype.isEmpty()](#isEmpty)
+    - [Instance method: Class.prototype.clear()](#clear)
+    - [Instance method: Class.prototype.equals(other)](#equals)
+    - [Instance method: Class.prototype.generateId()](#generateId)
+    - [Instance method: Class.prototype.normalizeField(field)](#normalizeField)
+    - [Instance method: Class.prototype.normalize(fields)](#normalize)
+    - [Instance method: Class.prototype.validateField(field)](#validateField)
+    - [Instance method: Class.prototype.validate(fields)](#validate)
+    - [Static class method: Class.create(obj, normalized)](#create)
+    - [Static class method: Class.createArray(array, normalized)](#createArray)
+    - [Static class method: Class.createPage(page)](#createPage)
+    - [Static class method: Class.isNullishOrEmpty()](#isNullishOrEmpty)
+    - [Usage Examples](#model-usage-examples)
   - [@Enum Decorator](#enum)
 - [Usage Example](#example)
 - [Configuration](#configuration)
@@ -27,73 +42,230 @@ supports the most recent (currently May 2023)
 
 ### <span id="model">@Model Decorator</span>
 
-This decorator is used to decorate a domain model class. It adds the following 
-methods to the decorated class:
+This decorator is used to decorate a domain model class, which adds the 
+following instance and class methods to the decorated class.
 
-- Instance method `assign(obj, normalized)`: Copies the properties of the object 
-  `obj` to this object, only copying properties defined in this object's class. 
-  If a property in the `obj` object is `undefined` or `null`, it sets the 
-  property's value to the default value. The function returns the object itself. 
-  Note that `obj` can have a different prototype than this object. 
-  The `normalized` parameter indicates whether to normalize this object after 
-  copying properties, with a default value of `true`.
-- Instance method `clear()`: Sets all the properties of this object to their 
-  default values.
-- Instance method `clone()`: Returns a deep clone of this object.
-- Instance method `isEmpty()`: Checks if this object is empty, meaning that all 
-  of its properties have default values.
-- Instance method `equals(obj)`: Determines if this object is deeply equal 
-  to `obj`.
-- Instance method `normalize(fields)`: Normalizes a specified field of this 
-  object. The `fields` parameter specifies the names of fields to be normalized. 
-  If `fields` is `undefined`, `null`, or the string `"*"`, it normalizes all 
-  the fields that can be normalized for this object. If `fields` is an array of 
-  strings, it normalizes all the fields specified in the array. Note that a 
-  field must be specified as normalized using the `@{@link Normalizable}` 
-  decorator.
-- Instance method `validate(fields, options)`: Validates the specified fields of
-  this object. The `fields` parameter is the names of the fields to be validated. 
-  If `fields` is `undefined`, `null`, or the string `"*"`, it validates all the 
-  fields that can be validated for this object. If `fields` is an array of 
-  strings, it validates all the fields specified in the array. Note that a field
-  must be specified as validatable using the `@{@link Validatable}` decorator. 
-  The `options` parameter is an object comprising additional parameters, and its 
-  property values are passed as the second argument to the validation function. 
-  Refer to the documentation of `@{@link Validatable}` for more details.
-- Instance method `generateId()`: If the decorated class defines a property 
-  named `id`, this decorator automatically adds a `generateId()` instance method. 
-  Each call to this method generates a globally unique ID for the current 
-  calling object (represented as a string of an integer) and returns it. Note 
-  that if a parent class `A` defines the `id` field, and a subclass `B` inherits 
-  the `id` field but does not define its own `id` field, the `generateId()` 
-  method is added only to class `A`, not to class `B`.
-- Static class method `create(obj, normalized)`: Creates a new instance object
-  based on the `obj` object. It copies the property values from the corresponding 
-  properties of `obj`, maintaining the same prototype and class definition. This 
-  method is used to transform a plain JSON object into the specified domain 
-  object. The `normalized` parameter indicates whether to normalize the returned 
-  object, with a default value of `true`.
-- Static class method `createArray(array, normalized)`: Creates a new instance 
-  array based on an object array `array`, where each element's property values 
-  are copied from the corresponding elements in `array`, maintaining the same 
-  prototype and class definition. This method is used to transform an array of
-  plain JSON objects into an array of specified domain objects. The `normalized`
-  parameter indicates whether to normalize each object in the returned array, 
-  with a default value of `true`.
-- Static class method `createPage(page)`: Creates a new page object based on a
-  `page` pagination object. Typically, `page` is a list of domain objects 
-  obtained from a server using the GET method, and the object should conform to 
-  the `Page` class definition. This static class method returns a new `Page` 
-  object, with the `content` property being the result of 
-  `createArray(page.content, true)`, and the other properties matching those of 
-  the `page` object. If the input is not a valid `Page` object, it 
-  returns `null`.
-- Static class method `isNullishOrEmpty(obj)`: Determines if the given instance 
-  is `undefined`, `null`, or an empty object constructed with default values.
+**NOTE:** If the decorated class already implements any of the following methods,
+this decorator will not override the methods already implemented by the decorated 
+class.
 
-**NOTE:** If the decorated class already implements any of the above methods, 
-this decorator will not override the methods already implemented by the 
-decorated class.
+#### <span id="assign">Instance method: Class.prototype.assign(obj, normalized)</span>
+
+- Parameters:
+  - `obj: object`: the object whose fields will be copied to this object,
+     which may have a different prototype to this object.
+  - `normalized: boolean`: whether to normalize this object after copying 
+    properties. Default value is `true`.
+- Returns: 
+  - `object`: the calling object itself.
+
+This function copies the fields of the object `obj` to this object, only copying 
+fields defined in this object's class. If a field in the `obj` object is 
+`undefined` or `null`, it sets the field's value to the default value. Note that 
+`obj` can have a different prototype to this object. The `normalized` parameter 
+indicates whether to normalize this object after copying properties, with a 
+default value of `true`.
+
+#### <span id="clone">Instance method: Class.prototype.clone()</span>
+
+- Parameters: none.
+- Returns: 
+  - `object`: a instance of the specified class deep cloned from the calling 
+    object.
+
+This function deep clones the calling object, returning a new instance of the
+specified class with the same property values as the calling object. Note that
+the returned object has the same prototype as the calling object.
+
+#### <span id="clear">Instance method: Class.prototype.clear()</span>
+
+- Parameters: none.
+- Returns: 
+  - `object`: the calling object itself.
+
+This function sets all the properties of this object to their default values.
+The default value of a field is the value of the field of the default
+constructed instance of the class.
+
+#### <span id="isEmpty">Instance method: Class.prototype.isEmpty()</span>
+
+- Parameters: none.
+- Returns: 
+  - `boolean`: whether this object is empty.
+
+This function checks if this object is empty, meaning that all of its fields
+have default values. The default value of a field is the value of the field of 
+the default constructed instance of the class.
+
+#### <span id="equals">Instance method: Class.prototype.equals(other)</span>
+
+- Parameters: 
+  - `other: object`: the object to be compared with this object.
+- Returns: 
+  - `boolean`: whether this object is deeply equal to `other`.
+
+This function checks whether this object is deeply equal to `other`. Two objects 
+are deeply equal if and only if they have the same prototype, and all of their
+fields are deeply equal. Two fields are deeply equal if and only if they have
+the same value, or they are both `undefined` or `null`. If a field is an array,
+it is deeply equal to another array if and only if they have the same length,
+and all of their elements are deeply equal. If a field is an object, it is
+deeply equal to another object if and only if they have the same prototype,
+and all of their fields are deeply equal. 
+
+#### <span id="generateId">Instance method: Class.prototype.generateId()</span>
+
+- Parameters: none.
+- Returns: 
+  - `string`: the string representation of the generated globally unique ID set 
+    to the calling object.
+
+If the decorated class defines a property named `id`, this instance method
+`generateId()` is automatically added to the decorated class. Each call to this 
+method generates a globally unique ID for the current calling object 
+(represented as a string of an integer), sets the `id` field of the calling
+object to the generated ID, and returns the generated ID. Note that if a parent
+class `A` defines the `id` field, and a subclass `B` inherits the `id` field but
+does not define its own `id` field, the `generateId()` method is added only to
+class `A`, not to class `B`.
+
+#### <span id="normalizeField">Instance method: Class.prototype.normalizeField(field)</span>
+
+- Parameters:
+  - `field: string`: the name of the specified field to be normalized. 
+- Returns:
+  - `boolean`: whether the specified field was normalized.
+
+This function normalizes the specified field of this object. If the object has
+the specified field and the specified field is normalizable, the function 
+normalizes the specified field and returns `true`; otherwise, the function does
+nothing and returns `false`. Note that a field is normalizable if and only if it 
+is decorated by the `{@link Normalizable}` decorator.
+
+#### <span id="normalize">Instance method: Class.prototype.normalize(fields)</span>
+
+- Parameters:
+  - `fields: undefined | null | string | string[]`: the fields to be normalized. 
+    It can be one of the following values:
+    - `undefined`: normalizes all the normalizable fields of this object.
+    - `null`: normalizes all the normalizable fields of this object.
+    - `"*"`: normalizes all the normalizable fields of this object.
+    - `string[]`: normalizes all the normalizable fields whose names are 
+      specified in this array. 
+- Returns:
+  - `object`: the normalized calling object.
+
+This function normalizes the specified fields of this object. The `fields` 
+parameter specifies the names of fields to be normalized. If `fields` is 
+`undefined`, `null`, or the string `"*"`, it normalizes all the normalizable 
+fields of this object. If `fields` is an array of strings, it normalizes all the
+normalizable fields whose names are specified in the array. Note that a field is 
+normalizable if and only if it is decorated by the `{@link Normalizable}` 
+decorator.
+
+#### <span id="validateField">Instance method: Class.prototype.validateField(field)</span>
+
+- Parameters:
+  - `field: string`: the name of the specified field to be validated.
+- Returns:
+  - `ValidationResult | null`: the validation result.
+
+This function validates the specified field of this object. If the object has
+the specified field and the specified field is validatable, the function
+validates the specified field and returns the validation result; otherwise, the 
+function does nothing and returns `null`. Note that a field is validatable if 
+and only if it is decorated by the `{@link Validatable}` decorator.
+
+#### <span id="validate">Instance method: Class.prototype.validate(fields)</span>
+
+- Parameters:
+  - `fields: undefined | null | string | string[]`: the fields to be validated.
+    It can be one of the following values:
+    - `undefined`: validates all the validatable fields of this object.
+    - `null`: validates all the validatable fields of this object.
+    - `"*"`: validates all the validatable fields of this object.
+    - `string[]`: validates all the validatable fields whose names are
+      specified in this array.
+- Returns:
+  - `ValidationResult`: the validation result.
+
+This function validates the specified fields of this object. The `fields`
+parameter specifies the names of fields to be validated. If `fields` is
+`undefined`, `null`, or the string `"*"`, it validates all the validatable
+fields of this object. If `fields` is an array of strings, it validates all the
+validatable fields whose names are specified in the array. Note that a field is
+validatable if and only if it is decorated by the `{@link Validatable}`
+decorator.
+
+#### <span id="create">Static class method: Class.create(obj, normalized)</span>
+
+- Parameters: 
+  - `obj: object`: the data object used to create the new instance. 
+  - `normalized: boolean`: whether to normalize the returned object. Default 
+    value is `true`.
+- Returns:
+  - `object | null`: if the `obj` is `undefined` or `null`, returns `null`;
+    otherwise, returns a new instance of the model class whose fields are 
+    initialized with the data in the `obj`.
+
+This function creates a instance of the specified class from a data object, 
+whose fields are recursively initialized with properties in the `obj`. Note that
+`obj` can have a different prototype to the specified class. The `normalized`
+parameter indicates whether to normalize the returned object, with a default
+value of `true`.
+
+#### <span id="createArray">Static class method: Class.createArray(array, normalized)</span>
+
+- Parameters:
+  - `array: object[]`: the data object array used to create the new array.
+  - `normalized: boolean`: whether to normalize the objects in the returned 
+    array. Default value is `true`.
+- Returns:
+  - `object[] | null`: if the `array` is `undefined` or `null`, returns `null`; 
+    otherwise, returns a new array of instances of the model class whose 
+    fields are initialized with corresponding data object in the `array`.
+
+This function creates an array of instances of the specified class from a data 
+object array. The fields of instances in the returned array are recursively 
+initialized with corresponding properties of the corresponding data object in 
+the `array`. Note that data objects in `array` can have different prototypes to
+the specified class. The `normalized` parameter indicates whether to normalize 
+instances in the returned array, with a default value of `true`.
+
+#### <span id="createPage">Static class method: Class.createPage(page)</span>
+
+- Parameters:
+  - `page: object`: the pagination data object used to create the new `Page`
+    instance.
+- Returns:
+  - `Page | null`: if the `page` is `undefined` or `null`, returns `null`;
+    otherwise, returns a new instance of the `Page` class whose content are
+    initialized with the content of the pagination data object `page`.
+
+This function creates a `Page` object, whose content are initialized with the 
+content of the specified pagination data object. Typically, `page` is a list of 
+domain objects obtained from a server using the `GET` method, and the object 
+should conform to the `Page` class definition. This static class method returns
+a new `Page` object, with the `content` property being the result of 
+`createArray(page.content, true)`, and the other properties matching those of
+the `page` object. If `page` is not a valid `Page` object, it returns `null`.
+
+#### <span id="isNullishOrEmpty">Static class method: Class.isNullishOrEmpty(obj)</span>
+
+- Parameters:
+    - `obj: object`: the object to be checked.
+- Returns:
+    - `boolean`: whether the specified object is `undefined`, `null`, or an 
+      empty object constructed with default values.
+
+This function checks whether the specified object is `undefined`, `null`, or an
+empty object constructed with default values. An object is empty if and only if
+all of its fields have default values. The default value of a field is the value
+of the field of the default constructed instance of the class. This function is
+a convenient method to call `Class.prototype.isEmpty()`, with the handling of
+nullish values.
+
+#### <span id="model-usage-examples">Usage Examples</span>
 
 The following is the usage example of the `@Model` decorator.
 
@@ -184,26 +356,30 @@ After applying the `@Model` decorator, the following methods will be automatical
 added:
 
 - `Credential.prototype.assign(obj, normalized)`
-- `Credential.prototype.clear()`
 - `Credential.prototype.clone()`
+- `Credential.prototype.clear()`
 - `Credential.prototype.isEmpty()`
 - `Credential.prototype.equals(obj)`
+- `Credential.prototype.normalizeField(field)`
 - `Credential.prototype.normalize(fields)`
+- `Credential.prototype.validateField(field, options)`
 - `Credential.prototype.validate(fields, options)`
-- `Credential.create(obj)`
-- `Credential.createArray(array)`
-- `Credential.createPage(page)`
+- `Credential.create(obj, normalized)`
+- `Credential.createArray(array, normalized)`
+- `Credential.createPage(page, normalized)`
 - `Credential.isNullishOrEmpty(obj)`
 - `Person.prototype.assign(obj, normalized)`
-- `Person.prototype.clear()`
 - `Person.prototype.clone()`
+- `Person.prototype.clear()`
 - `Person.prototype.isEmpty()`
-- `Person.prototype.normalize(fields)`
-- `Person.prototype.validate(fields, options)`
 - `Person.prototype.generateId()`
+- `Person.prototype.normalizeField(field)`
+- `Person.prototype.normalize(fields)`
+- `Person.prototype.validateField(field, options)`
+- `Person.prototype.validate(fields, options)`
 - `Person.create(obj, normalized)`
 - `Person.createArray(array, normalized)`
-- `Person.createPage(page)`
+- `Person.createPage(page, normalized)`
 - `Person.isNullishOrEmpty(obj)`
 
 **NOTE:**

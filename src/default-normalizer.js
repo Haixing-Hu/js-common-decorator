@@ -6,37 +6,79 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata, normalize } from './impl/utils';
-import { PROPERTY_NORMALIZER } from './normalizable';
+import { kindOf } from '@haixing_hu/common-util';
 
 /**
- * 修饰类字段，指定其正则化函数为该属性对象的`normalize()`函数。
+ * A default normalizer for a class field.
  *
- * 被修饰的对象必须是类的字段。
+ * This normalizer does the following things:
+ * - If the value is `undefined` or `null`, it returns the value itself;
+ * - If the value is a string, it returns the trimmed string;
+ * - If the value is a collection, it returns the same type of collection whose
+ *   elements are normalized by the default normalizer;
+ * - If the value is an object, it returns the result of calling the `normalize()`
+ *   method of the object, if the object has such a method;
+ * - Otherwise, it returns the value itself.
  *
- * 使用示例：
- * ```js
- * class Foo {
- *   @DefaultNormalizer
- *   @Type(Credential)
- *   credential = null;
- * }
- * ```
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ * Currently, the following JavaScript build-in collection types are
+ * supported:
+ * - `Array`, `Int8Array`, `Uint8Array`, `Uint8ClampedArray`, `Int16Array`,
+ *   `Uint16Array`, `Int32Array`, `Uint32Array`, `Float32Array`, `Float64Array`,
+ *    `BigInt64Array`, `BigUint64Array`: the normalization function will be called
+ *    to normalize each element in the collection.
+ * - `Set`, `WeakSet`: the normalization function will be called to normalize
+ *    each entry in the set.
+ * - `Map`, `WeakMap`: the normalization function will be called to normalize
+ *   each value in the map.
+ *
+ *
+ * @param {any} value
+ *     The value to be normalized.
+ * @return {any}
+ *     The normalized value.
+ * @author Haixing Hu
  */
-function DefaultNormalizer(prototype, field, descriptor) {
-  const Class = prototype.constructor;
-  // normalize(obj) 函数调用其自身的 obj.normalize() 进行正则化。
-  setFieldMetadata(Class, field, PROPERTY_NORMALIZER, normalize);
-  return descriptor;
+function defaultNormalizer(value) {
+  switch (kindOf(value)) {
+    case 'undefined':
+    case 'null':
+      return value;
+    case 'string':
+      return value.trim();
+    case 'array':
+    case 'int8array':
+    case 'uint8array':
+    case 'uint8clampedarray':
+    case 'int16array':
+    case 'uint16array':
+    case 'int32array':
+    case 'uint32array':
+    case 'float32array':
+    case 'float64array':
+    case 'bigint64array':
+    case 'biguint64array':
+      return value.map((item) => defaultNormalizer(item));
+    case 'set':
+      return new Set(Array.from(value, (item) => defaultNormalizer(item)));
+    case 'weakset':
+      return new WeakSet(Array.from(value, (item) => defaultNormalizer(item)));
+    case 'map':
+      return new Map(Array.from(value, (item) => [item[0], defaultNormalizer(item[1])]));
+    case 'weakmap':
+      return new WeakMap(Array.from(value, (item) => [item[0], defaultNormalizer(item[1])]));
+    case 'arraybuffer':
+    case 'sharedarraybuffer':
+    case 'dataview':
+      return value;
+    case 'object':
+      if (typeof value.normalize === 'function') {
+        return value.normalize();
+      } else {
+        return value;
+      }
+    default:
+      return value;
+  }
 }
 
-export default DefaultNormalizer;
+export default defaultNormalizer;

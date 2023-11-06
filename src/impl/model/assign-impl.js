@@ -48,13 +48,10 @@ const Impl = {
    * @param {object} source
    *     The source object to assigned from, which can be `null` or `undefined`,
    *     or a plain old JavaScript object without class information.
-   * @param {string} path
-   *     The path of the target object in the property tree of the original root
-   *     object.
    * @param {function} type
    *     The type of the target object, i.e., the constructor of the class of
    *     the target object.
-   * @param {object} defaultObject
+   * @param {object} defaultInstance
    *     A default object that has the same prototype as the target object.
    *     If a certain attribute value of the target object does not exist in the
    *     source object or is null, the corresponding attribute value of this
@@ -67,10 +64,10 @@ const Impl = {
    *     excluding the fields owned by the parent class of the target class if
    *     the parent class has an `assign()` method.
    */
-  getAllFields(target, source, { type, defaultObject, normalized }) {
+  getAllFields(target, source, { type, defaultInstance, normalized }) {
     // Get all names of fields of the default object of the `type`
-    const fields = Object.keys(defaultObject);
-    // Get its parent class of the `type`
+    const fields = Object.keys(defaultInstance);
+    // call the `assign()` method in the parent classes of the target class
     const parentType = Object.getPrototypeOf(type);
     if (hasPrototypeFunction(parentType, 'assign')) {
       // If the parent class or its ancestor classes has an `assign()` method,
@@ -114,8 +111,12 @@ const Impl = {
    * @param {string} path
    *     The path of the target object in the property tree of the original root
    *     object.
-   * @param {object} defaultObject
-   *     The default object in the class of the target object.
+   * @param {object} defaultInstance
+   *     A default instance in the class of the target object. If a certain
+   *     attribute value of the target object does not exist in the source
+   *     object or is null, the corresponding attribute value of this default
+   *     instance is used to assign the corresponding attribute of the target
+   *     object.
    * @param {boolean} normalized
    *     Whether to normalize the cloned target object.
    * @returns
@@ -124,20 +125,20 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  cloneObjectWithoutType(source, { path, defaultObject, normalized }) {
+  cloneObjectWithoutType(source, { path, defaultInstance, normalized }) {
     // If the property value of the target object is an object, we must create
     // an object of the same prototype and copy the property values of the
     // source object
-    console.assert(defaultObject !== null && defaultObject !== undefined,
+    console.assert(defaultInstance !== null && defaultInstance !== undefined,
         'The default object cannot be `null` nor `undefined`');
-    const prototype = Object.getPrototypeOf(defaultObject);
+    const prototype = Object.getPrototypeOf(defaultInstance);
     const targetClass = prototype.constructor;
     const target = new targetClass();
     // Recursively assign each attribute value of `source` to `target`
     return this.assign(target, source, {
       path,
       type: targetClass,
-      defaultObject,
+      defaultInstance,
       normalized,
     });
   },
@@ -152,8 +153,12 @@ const Impl = {
    *     object.
    * @param {function} type
    *     The constructor of the class of the cloned target object.
-   * @param {object} defaultObject
-   *     The default object in the class of the cloned target object.
+   * @param {object} defaultInstance
+   *     A default instance in the class of the target object. If a certain
+   *     attribute value of the target object does not exist in the source
+   *     object or is null, the corresponding attribute value of this default
+   *     instance is used to assign the corresponding attribute of the target
+   *     object.
    * @param {boolean} normalized
    *     Whether to normalize the cloned target object.
    * @returns
@@ -162,7 +167,7 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  cloneObjectWithType(source, { path, type, defaultObject, normalized }) {
+  cloneObjectWithType(source, { path, type, defaultInstance, normalized }) {
     const category = getClassMetadata(type, KEY_CLASS_CATEGORY);
     switch (category) {
       case 'enum':
@@ -174,7 +179,7 @@ const Impl = {
           // The source attribute value is not a string, return the default value
           console.warn('The value of %s should be a string representation of '
               + 'the %s enumeration, but it is actually: %o', path, type.name, source);
-          return defaultObject;
+          return defaultInstance;
         }
       case 'model':
       default: {
@@ -184,7 +189,7 @@ const Impl = {
         return this.assign(target, source, {
           path,
           type,
-          defaultObject,
+          defaultInstance,
           normalized,
         });
       }
@@ -270,7 +275,7 @@ const Impl = {
           return this.assign(targetElement, sourceElement, {
             path: targetPath,
             type: elementType,
-            defaultObject: defaultElement,
+            defaultInstance: defaultElement,
             normalized,
           });
         });
@@ -292,12 +297,12 @@ const Impl = {
    * @param {function} type
    *     The type of the target object, i.e., the constructor of the class of
    *     the target object.
-   * @param {object} defaultObject
-   *     A default object that has the same prototype as the target object.
-   *     If a certain attribute value of the target object does not exist in the
-   *     source object or is null, the corresponding attribute value of this
-   *     default object is used to assign the corresponding attribute of the
-   *     target object.
+   * @param {object} defaultInstance
+   *     A default instance in the class of the target object. If a certain
+   *     attribute value of the target object does not exist in the source
+   *     object or is null, the corresponding attribute value of this default
+   *     instance is used to assign the corresponding attribute of the target
+   *     object.
    * @param {boolean} normalized
    *     Whether to normalize the copied target object.
    * @returns
@@ -305,32 +310,32 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  assign(target, source, { path, type, defaultObject, normalized }) {
+  assign(target, source, { path, type, defaultInstance, normalized }) {
     // FIXME: shall we use an option to control the name convention of JSON object?
     // console.log('AssignImpl.assign: target = ', target,
     //   ', source = ', source,
     //   ', type = ', type,
     //   ', metadata = ', metadata,
-    //   ', defaultObject = ', defaultObject,
+    //   ', defaultInstance = ', defaultInstance,
     //   ', normalizable = ', normalizable);
-    if (isUndefinedOrNull(defaultObject)) {
+    if (isUndefinedOrNull(defaultInstance)) {
       throw new Error('The default object cannot be `null` nor `undefined`.');
     }
     if (isUndefinedOrNull(source)) {
       // if source is nullish, assign the default object to the target object
-      this.copyAllProperties(target, defaultObject);
+      this.copyAllProperties(target, defaultInstance);
     } else {
-      // Get all names of fields of the default instance of the current class
-      const fields = this.getAllFields(target, source, {
-        type,
-        defaultObject,
-        normalized,
-      });
+      // Loops over all enumerable properties of the default instance,
+      // excluding those inherited from the parent class
       const metadata = ClassMetadataCache.get(type);
+      const fields = this.getAllFields(target, source, { type, defaultInstance, normalized });
       fields.forEach((field) => {
+        const defaultFieldValue = defaultInstance[field];
+        if (typeof defaultFieldValue === 'function') {
+          return;  // skip the prototype functions
+        }
         const fieldPath = `${path}.${field}`;
         const sourceFieldValue = source[field];
-        const defaultFieldValue = defaultObject[field];
         // If field of the target object is annotated with `@Type`, get the annotated type
         const annotatedFieldType = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
         // If field of the target object is annotated with `@ElementType`, get the annotated element type
@@ -350,7 +355,7 @@ const Impl = {
           target[field] = this.cloneObjectWithType(sourceFieldValue, {
             path: fieldPath,
             type: annotatedFieldType,
-            defaultObject: defaultFieldValue,
+            defaultInstance: defaultFieldValue,
             normalized,
           });
         } else if (annotatedFieldElementType) {
@@ -383,7 +388,7 @@ const Impl = {
           // and copy the property value of the source object
           target[field] = this.cloneObjectWithoutType(sourceFieldValue, {
             path: fieldPath,
-            defaultObject: defaultFieldValue,
+            defaultInstance: defaultFieldValue,
             normalized,
           });
         } else {
@@ -426,7 +431,7 @@ function assignImpl(Class, target, source, normalized) {
   return Impl.assign(target, source, {
     path: Class.name,
     type: Class,
-    defaultObject: defaultInstance,
+    defaultInstance,
     normalized,
   });
 }

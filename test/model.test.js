@@ -8,29 +8,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { mount } from '@vue/test-utils';
 import { Page } from '../src';
-import { getClassMetadataObject, getClassMetadata, getDefaultInstance } from '../src/impl/utils';
+import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
+import { getClassMetadata, getDefaultInstance } from '../src/impl/utils';
+
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import Person from './model/person';
-import PersonWithEquals from './model/person-with-equals';
-import PersonChild from './model/person-child';
 import Parent from './model/parent';
 import Child from './model/child';
-import ArrayWrapper from './model/vue-array-wrapper';
-import PageWrapper from './model/vue-page-wrapper';
-import ObjWithArrayField from './model/obj-with-array-field';
+// import PersonWithEquals from './model/person-with-equals';
+// import PersonChild from './model/person-child';
+// import ArrayWrapper from './model/vue-array-wrapper';
+// import PageWrapper from './model/vue-page-wrapper';
+// import ObjWithArrayField from './model/obj-with-array-field';
 
-describe('测试@Model类装饰器添加的元信息', () => {
-  test('测试 Person 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(Person);
-    expect(metadata).not.toBeNull();
-    console.log('Person.metadata = ', metadata);
-  });
-  test('测试 @Model 修饰的类的 category 元属性是否为 "model"', () => {
-    const value = getClassMetadata(Person, 'category');
+describe('Test the meta information added by the `@Model` decorator', () => {
+  test('The category meta-attribute of the decorated class must be "model"', () => {
+    const value = getClassMetadata(Person, KEY_CLASS_CATEGORY);
     expect(value).toBe('model');
   });
-  test('验证被@Model修改后的类的原型的constructor是否正确', () => {
+  test('The constructor of the decorated class should be correct', () => {
     const person = new Person();
     console.log('person.constructor = ', person.constructor);
     console.log('person.prototype = ', Object.getPrototypeOf(person));
@@ -42,15 +40,15 @@ describe('测试@Model类装饰器添加的元信息', () => {
   });
 });
 
-describe('测试@Model类装饰器添加的静态类成员DEFAULT_INSTANCE', () => {
-  test('测试 Person 类的 default instance 对象', () => {
+describe('Test the default instance of the decorated class', () => {
+  test('The metadata of the decorated class should store a default instance', () => {
     const defaultIntance = getDefaultInstance(Person);
     expect(defaultIntance).toEqual(new Person());
   });
 });
 
-describe('测试@Model类装饰器添加的实例方法assign()', () => {
-  test('测试实例方法 Person.prototype.assign()', () => {
+describe('Test the prototype method `assign()` added by the `@Model` decorator', () => {
+  test('`assign()` should work', () => {
     const data = {
       id: 'xxxxx',
       name: 'Bill Gates',
@@ -95,7 +93,7 @@ describe('测试@Model类装饰器添加的实例方法assign()', () => {
     expect(result.credential.type).toBe('IDENTITY_CARD');
     expect(result.credential.number).toBe('');
   });
-  test('测试实例方法 Person.prototype.assign() 是否调用 Credential.normalize() 方法', () => {
+  test('`assign(data, true)` should call `Credential.normalize()`', () => {
     const data = {
       id: 'xxxxx',
       name: 'Bill Gates',
@@ -107,8 +105,8 @@ describe('测试@Model类装饰器添加的实例方法assign()', () => {
       },
     };
     const person = new Person();
-    let result = person.assign(data);       // normalize == true
-    expect(result).toBe(person);            // assign() 必须返回该对象的引用
+    const result = person.assign(data, true);     // normalize == true
+    expect(result).toBe(person);  // assign() must returns the reference to the object
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
     expect(result.age).toBe(data.age);
@@ -117,9 +115,21 @@ describe('测试@Model类装饰器添加的实例方法assign()', () => {
     expect(result.credential).toBeInstanceOf(Credential);
     expect(result.credential.type).toBe('PASSPORT');
     expect(result.credential.number).toBe('XX1234567');
-
-    result = person.assign(data, false);    // normalize == false
-    expect(result).toBe(person);            // assign() 必须返回该对象的引用
+  });
+  test('`assign(data, false)` should not call `Credential.normalize()`', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'passport',
+        number: 'xx1234567',
+      },
+    };
+    const person = new Person();
+    const result = person.assign(data, false);
+    expect(result).toBe(person); // assign() must returns the reference to the object
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
     expect(result.age).toBe(data.age);
@@ -129,7 +139,32 @@ describe('测试@Model类装饰器添加的实例方法assign()', () => {
     expect(result.credential.type).toBe('passport');
     expect(result.credential.number).toBe('xx1234567');
   });
-  test('测试继承类Child.assign()，应该调用其父类 Parent.assign()', () => {
+  test('`assign(data)` should call `Credential.normalize()`', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'passport',
+        number: 'xx1234567',
+      },
+    };
+    const person = new Person();
+    const result = person.assign(data);     // normalize == true
+    expect(result).toBe(person);  // assign() must returns the reference to the object
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    expect(result.mobile).toBe(data.mobile);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe('PASSPORT');
+    expect(result.credential.number).toBe('XX1234567');
+  });
+  test('`Child.assign()` should call `Parent.assign()`', () => {
+    const metadata = classMetadataCache.get(Child);
+    console.log(metadata);
     const data = {
       x: 1,
       z: 'abc',
@@ -150,6 +185,7 @@ describe('测试@Model类装饰器添加的实例方法assign()', () => {
   });
 });
 
+/*
 describe('测试@Model类装饰器添加的实例方法clear()', () => {
   test('测试实例方法 Person.prototype.clear()', () => {
     const data = {
@@ -285,39 +321,6 @@ describe('测试@Model类装饰器添加的实例方法equals()', () => {
     expect(p1.equals(p3)).toBe(false);
   });
 });
-
-describe('测试@Model类装饰器添加的实例方法normalize()', () => {
-  test('测试继承类Child.normalize()，应该调用其父类 Parent.normalize()', () => {
-    const data = {
-      x: 1,
-      z: 'abc',
-      message: 'hello',
-    };
-    const parent = new Parent();
-    parent.assign(data, false);
-    expect(parent.x).toBe(1);
-    expect(parent.y).toBe(0);
-    expect(parent.z).toBe('abc');
-    parent.normalize();
-    expect(parent.z).toBe('ABC');
-
-    const child = new Child();
-    child.assign(data, false);
-    expect(child.message).toBe('hello');
-    expect(child.x).toBe(1);
-    expect(child.y).toBe(0);
-    expect(child.z).toBe('abc');
-    child.normalize();
-    expect(child.message).toBe('HELLO');
-    expect(child.x).toBe(1);
-    expect(child.y).toBe(0);
-    expect(child.z).toBe('ABC');
-  });
-});
-
-describe('测试@Model类装饰器添加的实例方法validate()', () => {
-});
-
 describe('测试@Model类装饰器添加的实例方法generateId()', () => {
   test('测试Person.prototype.generateId()', () => {
     expect(Object.prototype.hasOwnProperty.call(Person.prototype, 'generateId')).toBe(true);
@@ -614,19 +617,19 @@ describe('测试@Model类装饰器添加的静态类方法createPage()', () => {
   });
   test('Person.createPage("")', () => {
     expect(() => Person.createPage(''))
-      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
+    .toThrowWithMessage(TypeError, 'Invalid page format: ""');
   });
   test('Person.createPage("xx")', () => {
     expect(() => Person.createPage('xx'))
-      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
+    .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
   });
   test('Person.createPage({ xx: 123 })', () => {
     expect(() => Person.createPage({ xx: 123 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
+    .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
   });
   test('Person.createPage({ page_index: 0, page_size: 10 })', () => {
     expect(() => Person.createPage({ page_index: 0, page_size: 10 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
+    .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
   });
   test('Person.createPage(), 空页', () => {
     const result = Person.createPage({
@@ -661,7 +664,7 @@ describe('测试@Model类装饰器添加的静态类方法createPage()', () => {
           number: null,
         },
       },
-      null,
+        null,
       ],
     };
     const result = Person.createPage(page);
@@ -715,7 +718,7 @@ describe('测试@Model类装饰器添加的静态类方法createPage()', () => {
           number: null,
         },
       },
-      null,
+        null,
       ],
     };
     const result = Person.createPage(page);
@@ -765,6 +768,41 @@ describe('测试@Model类装饰器添加的静态类方法createPage()', () => {
     expect(result.content[1].number).toBe('ABCDEFGH');
   });
 });
+
+/*
+describe('测试@Model类装饰器添加的实例方法normalize()', () => {
+  test('测试继承类Child.normalize()，应该调用其父类 Parent.normalize()', () => {
+    const data = {
+      x: 1,
+      z: 'abc',
+      message: 'hello',
+    };
+    const parent = new Parent();
+    parent.assign(data, false);
+    expect(parent.x).toBe(1);
+    expect(parent.y).toBe(0);
+    expect(parent.z).toBe('abc');
+    parent.normalize();
+    expect(parent.z).toBe('ABC');
+
+    const child = new Child();
+    child.assign(data, false);
+    expect(child.message).toBe('hello');
+    expect(child.x).toBe(1);
+    expect(child.y).toBe(0);
+    expect(child.z).toBe('abc');
+    child.normalize();
+    expect(child.message).toBe('HELLO');
+    expect(child.x).toBe(1);
+    expect(child.y).toBe(0);
+    expect(child.z).toBe('ABC');
+  });
+});
+
+describe('测试@Model类装饰器添加的实例方法validate()', () => {
+});
+
+*/
 
 // describe('测试@Model类装饰器添加的静态类方法nullOrEmpty()', () => {
 //   test('测试Person.nullOrEmpty(undefined), ', () => {

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ClassMetadataCache from './impl/class-metadata-cache';
+import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY, KEY_CLASS_NEXT_ID } from './impl/metadata-keys';
 import {
   hasOwnClassField,
@@ -15,17 +15,17 @@ import {
   setClassMetadata,
 } from './impl/utils';
 import assignImpl from './impl/model/assign-impl';
-// import NormalizeImpl from './impl/model/normalize-impl';
-// import ValidateImpl from './impl/model/validate-impl';
 import isEmptyImpl from './impl/model/is-empty-impl';
 import equalsImpl from './impl/model/equals-impl';
 import generateIdImpl from './impl/model/generate-id-impl';
+import cloneImpl from './impl/model/clone-impl';
+import clearImpl from './impl/model/clear-impl';
+import normalizeFieldImpl from './impl/model/normalize-field-impl';
+import normalizeImpl from './impl/model/normalize-impl';
 import createImpl from './impl/model/create-impl';
 import createArrayImpl from './impl/model/create-array-impl';
 import createPageImpl from './impl/model/create-page-impl';
 import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
-import cloneImpl from './impl/model/clone-impl';
-import clearImpl from './impl/model/clear-impl';
 
 /**
  * This decorator is used to add common methods to a domain model class.
@@ -240,7 +240,7 @@ function Model(Class, context) {
     throw new TypeError('The `@Model` can only decorate a class.');
   }
   // put the context.metadata to the cache
-  ClassMetadataCache.set(Class, context.metadata);
+  classMetadataCache.set(Class, context.metadata);
   // The category of the class modified by `@Model` is set to 'model'
   setClassMetadata(Class, KEY_CLASS_CATEGORY, 'model');
   // Add the instance method `assign()`
@@ -273,12 +273,18 @@ function Model(Class, context) {
       return equalsImpl(this, obj);
     };
   }
-  // // Add the instance method `normalize()`
-  // if (!hasOwnPrototypeFunction(Class, 'normalize')) {
-  //   Class.prototype.normalize = function normalize(fields = '*') {
-  //     return NormalizeImpl.normalize(Class, this, fields);
-  //   };
-  // }
+  // Add the instance method `normalizeField()`
+  if (!hasOwnPrototypeFunction(Class, 'normalizeField')) {
+    Class.prototype.normalizeField = function normalizeField(field) {
+      return normalizeFieldImpl(Class, this, field);
+    };
+  }
+  // Add the instance method `normalize()`
+  if (!hasOwnPrototypeFunction(Class, 'normalize')) {
+    Class.prototype.normalize = function normalize(fields = '*') {
+      return normalizeImpl(Class, this, fields);
+    };
+  }
   // // Add the instance method `validate()`
   // if (!hasOwnPrototypeFunction(Class, 'validate')) {
   //   Class.prototype.validate = function validate(fields = '*', options = {}) {

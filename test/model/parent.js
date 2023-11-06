@@ -28,22 +28,14 @@ export default class Parent {
     return this;
   }
 
-  normalize(field) {
-    console.log('Parent.normalize: field = ', field);
-    if (field === undefined || field === null || field === '*') {
-      this.normalize('z');
-    } else if (typeof field !== 'string') {
-      throw new TypeError('Field name must be a string.');
-    } else {
-      switch (field) {
-        case 'z':
-          this.z = trimUppercaseString(this.z);
-          console.log('Parent.normalize: ’finished');
-          break;
-        default:
-          break;
-      }
+  normalizeField(field) {
+    switch (field) {
+      case 'z':
+        this.z = trimUppercaseString(this.z);
+        console.log('Parent.normalize: ’finished');
+        return true;
+      default:
+        return false;
     }
-    return this;
   }
 }

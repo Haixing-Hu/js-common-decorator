@@ -203,6 +203,15 @@ export function getDefaultInstance(Class) {
   } else if (!metadata[KEY_CLASS_DEFAULT_INSTANCE]) {
     metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
   }
+  const obj = metadata[KEY_CLASS_DEFAULT_INSTANCE];
+  if (! (obj instanceof Class)) {
+    // Note that the metadata of a class can inherit the metadata of its parent
+    // class. Therefore, if the parent class has a default instance stored in
+    // its metadata, it can be accessed by the child class. That's why we have
+    // to check whether the default instance is an instance of the specified
+    // class.
+    metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
+  }
   return metadata[KEY_CLASS_DEFAULT_INSTANCE];
 }
 

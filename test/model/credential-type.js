@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Enum, Label } from '../../src';
+import { Enum } from '../../src';
 
 /**
  * 此枚举表示证件类型。
@@ -15,35 +15,25 @@ import { Enum, Label } from '../../src';
  */
 @Enum
 class CredentialType {
-  @Label('身份证')
-  static IDENTITY_CARD;
+  static IDENTITY_CARD = '身份证';
 
-  @Label('护照')
-  static PASSPORT;
+  static PASSPORT = '护照';
 
-  @Label('中国人民解放军军官证')
-  static OFFICER_CARD;
+  static OFFICER_CARD = '中国人民解放军军官证';
 
-  @Label('中国人民武装警察警官证')
-  static POLICE_CARD;
+  static POLICE_CARD = '中国人民武装警察警官证';
 
-  @Label('香港特区护照/身份证明')
-  static HONGKONG_PASSPORT;
+  static HONGKONG_PASSPORT = '香港特区护照/身份证明';
 
-  @Label('澳门特区护照/身份证明')
-  static MACAO_PASSPORT;
+  static MACAO_PASSPORT = '澳门特区护照/身份证明';
 
-  @Label('台湾居民来往大陆通行证')
-  static TAIWAN_RETURN_PERMIT;
+  static TAIWAN_RETURN_PERMIT = '台湾居民来往大陆通行证';
 
-  @Label('外国人永久居住证')
-  static FOREIGNER_PERMANENT_RESIDENCE_PERMIT;
+  static FOREIGNER_PERMANENT_RESIDENCE_PERMIT = '外国人永久居住证';
 
-  @Label('港澳台居住证')
-  static HONGKONG_MACAO_TAIWAN_RESIDENCE_PERMIT;
+  static HONGKONG_MACAO_TAIWAN_RESIDENCE_PERMIT = '港澳台居住证';
 
-  @Label('其他证件')
-  static OTHER;
+  static OTHER = '其他证件';
 
   /**
    * The default credential type.
