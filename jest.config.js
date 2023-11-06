@@ -22,7 +22,7 @@ module.exports = {
   setupFilesAfterEnv: [
     'jest-extended/all',
   ],
-  // collectCoverage: true,
+  collectCoverage: true,
   coverageDirectory: './coverage',
   collectCoverageFrom: ['**/src/**/*.js'],
 };

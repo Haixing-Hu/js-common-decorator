@@ -12,7 +12,6 @@ import {
   getFieldMetadata,
   getDefaultInstance,
   hasPrototypeFunction,
-  normalize,
 } from '../utils';
 import {
   KEY_CLASS_CATEGORY,
@@ -272,12 +271,13 @@ const Impl = {
           // Recursively assign each attribute value of `sourceElement` to `targetElement`.
           // Use `defaultElement` as default instance
           const targetPath = `${path}[${index}]`;
-          return this.assign(targetElement, sourceElement, {
+          this.assign(targetElement, sourceElement, {
             path: targetPath,
             type: elementType,
             defaultInstance: defaultElement,
             normalized,
           });
+          return targetElement;
         });
       }
     }
@@ -401,7 +401,9 @@ const Impl = {
     }
     // console.log('AssignImpl.assign: target = ', target, ', normalized = ', normalized);
     if (normalized) {
-      normalize(target);
+      if (typeof target.normalize === 'function') {
+        target.normalize();
+      }
     }
     return target;
   },

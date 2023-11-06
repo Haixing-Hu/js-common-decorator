@@ -7,14 +7,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { Model, ElementType, Normalizable } from '../../src';
-import Credential from './credential';
+import CredentialWithWrongNormalizer from './credential-with-wrong-normalizer';
 
 @Model
-export default class ObjWithArrayField {
+export default class ObjWithArrayFieldsOfWrongNormalize {
   @Normalizable
-  @ElementType(Credential)
+  @ElementType(CredentialWithWrongNormalizer)
   credentials = [
-    new Credential('IDENTITY_CARD', '12345678'),
-    new Credential('PASSPORT', 'abcdefgh'),
+    new CredentialWithWrongNormalizer('IDENTITY_CARD', '12345678'),
+    new CredentialWithWrongNormalizer('PASSPORT', 'abcdefgh'),
   ];
 }

@@ -216,22 +216,6 @@ export function getDefaultInstance(Class) {
 }
 
 /**
- * Normalizes an object if possible.
- *
- * @param {object} obj
- *     The object to be normalized.
- * @returns {object}
- *     The normalized object, or the original object if it has no `normalize()`
- *     method.
- */
-export function normalize(obj) {
-  if (typeof obj.normalize === 'function') {
-    obj.normalize();
-  }
-  return obj;
-}
-
-/**
  * Tests whether the specified class has the specified field.
  *
  * @param {function} Class

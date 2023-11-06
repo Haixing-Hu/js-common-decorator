@@ -72,10 +72,11 @@ function defaultNormalizer(value) {
       return value;
     case 'object':
       if (typeof value.normalize === 'function') {
-        return value.normalize();
-      } else {
-        return value;
+        // NOTE: we CANNOT just `return value.normalize()`, because the incorrect
+        // implementation of `normalize()` method may return nothing.
+        value.normalize();
       }
+      return value;
     default:
       return value;
   }

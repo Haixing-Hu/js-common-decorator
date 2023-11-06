@@ -32,7 +32,8 @@ export default class PersonWithEquals {
       return false;
     }
     if ((this.credential === null) || (other.credential === null)) {
-    // 若两人之一无身份证信息，无法比较他们是否同一人，认为不同
+      // If one of the two people does not have ID information, it is impossible
+      // to compare whether they are the same person, so consider them different.
       return false;
     }
     return (this.credential.type === other.credential.type)

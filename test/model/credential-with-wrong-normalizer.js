@@ -10,7 +10,7 @@ import { trimUppercaseString } from '@haixing_hu/common-util';
 import { Model } from '../../src';
 
 @Model
-export default class Credential {
+export default class CredentialWithWrongNormalizer {
   type = 'IDENTITY_CARD';
 
   number = '';
@@ -25,12 +25,8 @@ export default class Credential {
   }
 
   /**
-   * Normalizes the document type and document number of this object, that is,
-   * remove leading and trailing spaces, and convert them all to uppercase letters.
-   *
-   * If the credential type is incorrectly set to a {@link CredentialType}
-   * object, this function will modify the credential type to the value attribute
-   * of the enumeration item in the {@link CredentialType} enumeration.
+   * NOTE: this normalize() function returns nothing, which is an error. But the
+   * robust implementation of `Class.prototype.normalize()` should work well.
    */
   normalize() {
     if (typeof this.type === 'string') {
@@ -39,6 +35,6 @@ export default class Credential {
       this.type = trimUppercaseString(this.type.value);
     }
     this.number = trimUppercaseString(this.number);
-    return this;
+    // It should returns this, but it returns nothing, which is an error.
   }
 }
