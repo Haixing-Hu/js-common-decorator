@@ -6,23 +6,28 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getClassMetadataObject } from '../src/impl/utils';
+import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_FIELD_TYPE } from '../src/impl/metadata-keys';
+import { getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
+import Gender from './model/gender';
 import NonDecoratedClass from './model/non-decorated-class';
-import ObjWithAnnotatedNullField from './model/obj-with-annotated-null-field';
+import ObjWithAnnotatedNullishField from './model/obj-with-annotated-nullish-field';
 
-/**
- * 单元测试 @Model 和 @Type 装饰器。
- *
- * @author 胡海星
- */
-describe('测试 @Model 类装饰器针对包含被 @Type 标注的属性的类的效果', () => {
-  test('测试 ObjWithAnnotatedNullField 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(ObjWithAnnotatedNullField);
+describe('Test the `@Type` annotated fields', () => {
+  test('Check the field metadata of `ObjWithAnnotatedNullField`', () => {
+    const metadata = classMetadataCache.get(ObjWithAnnotatedNullishField);
     expect(metadata).not.toBeNull();
     console.log('ObjWithAnnotatedNullField.metadata = ', metadata);
+    expect(getFieldMetadata(metadata, 'id', KEY_FIELD_TYPE)).toBeUndefined();
+    expect(getFieldMetadata(metadata, 'credential', KEY_FIELD_TYPE)).toBe(Credential);
+    expect(getFieldMetadata(metadata, 'undefinedCredential', KEY_FIELD_TYPE)).toBe(Credential);
+    expect(getFieldMetadata(metadata, 'nonAnnotatedCredential', KEY_FIELD_TYPE)).toBeUndefined();
+    expect(getFieldMetadata(metadata, 'nonDecoratedClass', KEY_FIELD_TYPE)).toBe(NonDecoratedClass);
+    expect(getFieldMetadata(metadata, 'genderWithDefaultEmpty', KEY_FIELD_TYPE)).toBe(Gender);
+    expect(getFieldMetadata(metadata, 'genderWithDefaultNull', KEY_FIELD_TYPE)).toBe(Gender);
   });
-  test('测试实例方法 ObjWithAnnotatedNullField.prototype.assign()', () => {
+  test('Test `ObjWithAnnotatedNullField.prototype.assign()`', () => {
     const data = {
       id: 'xxx',
       credential: {
@@ -39,7 +44,7 @@ describe('测试 @Model 类装饰器针对包含被 @Type 标注的属性的类�
       genderWithDefaultEmpty: 'MALE',
       genderWithDefaultNull: 'FEMALE',
     };
-    const obj = new ObjWithAnnotatedNullField();
+    const obj = new ObjWithAnnotatedNullishField();
     obj.assign(data);
 
     expect(obj.id).toBe('xxx');

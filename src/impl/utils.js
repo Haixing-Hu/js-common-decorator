@@ -12,9 +12,8 @@ import {
 } from './metadata-keys';
 import {
   PROPERTY_TYPE,
-  PROPERTY_FIELDS,
 } from './constants';
-import ClassMetadataCache from './class-metadata-cache';
+import classMetadataCache from './class-metadata-cache';
 
 /**
  * 判定给定的对象是否是一个属性描述符(descriptor)。
@@ -92,7 +91,7 @@ export function getDefaultValue(descriptor) {
  * @private
  */
 export function getClassMetadata(Class, key) {
-  const metadata = ClassMetadataCache.get(Class);
+  const metadata = classMetadataCache.get(Class);
   if (!metadata) {
     throw new Error(`The metadata of the class "${Class.name}" has not been cached.`);
   }
@@ -114,7 +113,7 @@ export function getClassMetadata(Class, key) {
  * @private
  */
 export function setClassMetadata(Class, key, value) {
-  const metadata = ClassMetadataCache.get(Class);
+  const metadata = classMetadataCache.get(Class);
   if (!metadata) {
     throw new Error(`The metadata of the class "${Class.name}" has not been cached.`);
   }
@@ -197,7 +196,7 @@ export function setFieldMetadata(metadata, field, key, value) {
  * @private
  */
 export function getDefaultInstance(Class) {
-  const metadata = ClassMetadataCache.get(Class);
+  const metadata = classMetadataCache.get(Class);
   if (!metadata) {
     return new Class();
   } else if (!metadata[KEY_CLASS_DEFAULT_INSTANCE]) {

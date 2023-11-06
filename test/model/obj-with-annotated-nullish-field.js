@@ -12,11 +12,14 @@ import NonDecoratedClass from './non-decorated-class';
 import Gender from './gender';
 
 @Model
-export default class ObjWithAnnotatedNullField {
+export default class ObjWithAnnotatedNullishField {
   id = '';
 
   @Type(Credential)
   credential = null;
+
+  @Type(Credential)
+  undefinedCredential;
 
   nonAnnotatedCredential = null;
 

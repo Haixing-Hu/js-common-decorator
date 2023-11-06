@@ -48,12 +48,15 @@ const classMetadataCache = {
     if (result) {
       return result;
     } else {
-      const metadata = Class[Symbol.metadata];
+      let metadata = Class[Symbol.metadata];
       if (metadata) {
-        METADATA_CACHE.put(Class, metadata);
+        METADATA_CACHE.set(Class, metadata);
         return metadata;
       } else {
-        return undefined;
+        metadata = {};
+        METADATA_CACHE.set(Class, metadata);
+        Class[Symbol.metadata] = metadata;
+        return metadata;
       }
     }
   },
