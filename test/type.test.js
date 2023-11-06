@@ -34,6 +34,10 @@ describe('Test the `@Type` annotated fields', () => {
         type: 'IDENTITY_CARD',
         number: '32010311110101X',
       },
+      undefinedCredential: {
+        type: 'PASSPORT',
+        number: 'XXXX',
+      },
       nonAnnotatedCredential: {
         type: 'IDENTITY_CARD',
         number: '32010311110101X',
@@ -52,6 +56,10 @@ describe('Test the `@Type` annotated fields', () => {
     expect(obj.credential).toBeInstanceOf(Credential);
     expect(obj.credential.type).toBe('IDENTITY_CARD');
     expect(obj.credential.number).toBe('32010311110101X');
+
+    expect(obj.undefinedCredential).toBeInstanceOf(Credential);
+    expect(obj.undefinedCredential.type).toBe('PASSPORT');
+    expect(obj.undefinedCredential.number).toBe('XXXX');
 
     expect(obj.nonAnnotatedCredential).toBeInstanceOf(Object);
     expect(obj.nonAnnotatedCredential.type).toBe('IDENTITY_CARD');

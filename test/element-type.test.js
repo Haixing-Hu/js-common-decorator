@@ -7,23 +7,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ElementType } from '../src';
-import { getClassMetadataObject } from '../src/impl/utils';
+import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_FIELD_ELEMENT_TYPE } from '../src/impl/metadata-keys';
+import { getClassMetadataObject, getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
+import Gender from './model/gender';
 import ObjWithArrayMember from './model/obj-with-array-member';
 import NonDecoratedClass from './model/non-decorated-class';
 
-/**
- * 单元测试 @Model 和 @ElementType 装饰器。
- *
- * @author 胡海星
- */
-describe('测试 @Model 类装饰器针对包含被 @ElementType 标注的数组属性的类的效果', () => {
-  test('测试 ObjWithArrayMember 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(ObjWithArrayMember);
+describe('Test `@ElementType``', () => {
+  test('Check the field metadata of `ObjWithArrayMember`', () => {
+    const metadata = classMetadataCache.get(ObjWithArrayMember);
     expect(metadata).not.toBeNull();
     console.log('ObjWithArrayMember.metadata = ', metadata);
+    expect(getFieldMetadata(metadata, 'id', KEY_FIELD_ELEMENT_TYPE)).toBeUndefined();
+    expect(getFieldMetadata(metadata, 'credentials', KEY_FIELD_ELEMENT_TYPE)).toBe(Credential);
+    expect(getFieldMetadata(metadata, 'noTypeCredentials', KEY_FIELD_ELEMENT_TYPE)).toBeUndefined();
+    expect(getFieldMetadata(metadata, 'nonDecoratedClassArray', KEY_FIELD_ELEMENT_TYPE)).toBe(NonDecoratedClass);
+    expect(getFieldMetadata(metadata, 'assignedToNonArray', KEY_FIELD_ELEMENT_TYPE)).toBeUndefined();
+    expect(getFieldMetadata(metadata, 'genders', KEY_FIELD_ELEMENT_TYPE)).toBe(Gender);
+    expect(getFieldMetadata(metadata, 'credentialsArrayDefaultNull', KEY_FIELD_ELEMENT_TYPE)).toBe(Credential);
+    expect(getFieldMetadata(metadata, 'credentialsArrayDefaultUndefined', KEY_FIELD_ELEMENT_TYPE)).toBe(Credential);
+    expect(getFieldMetadata(metadata, 'stringArray', KEY_FIELD_ELEMENT_TYPE)).toBe(String);
+    expect(getFieldMetadata(metadata, 'numberArray', KEY_FIELD_ELEMENT_TYPE)).toBe(Number);
   });
-  test('测试实例方法 ObjWithArrayMember.prototype.assign()', () => {
+  test('Test `ObjWithArrayMember.prototype.assign()`', () => {
     const data = {
       id: 'xxx',
       // genders: [ Gender.MALE, null ],
@@ -53,6 +61,15 @@ describe('测试 @Model 类装饰器针对包含被 @ElementType 标注的数组
       assignedToNonArray: 'xxx',
       genders: ['MALE', 'FEMALE', null],
       credentialsArrayDefaultNull: [{
+        type: 'IDENTITY_CARD',
+        number: '32010311110101X',
+      }, {
+        type: 'PASSPORT',
+        number: 'US1234567',
+      }, {
+        number: '320103111101333X',
+      }, null],
+      credentialsArrayDefaultUndefined: [{
         type: 'IDENTITY_CARD',
         number: '32010311110101X',
       }, {
@@ -128,6 +145,20 @@ describe('测试 @Model 类装饰器针对包含被 @ElementType 标注的数组
     expect(obj.credentialsArrayDefaultNull[3].type).toBe('IDENTITY_CARD');
     expect(obj.credentialsArrayDefaultNull[3].number).toBe('');
 
+    expect(obj.credentialsArrayDefaultUndefined).toBeArray();
+    expect(obj.credentialsArrayDefaultUndefined.length).toBe(4);
+    expect(obj.credentialsArrayDefaultUndefined[0]).toBeInstanceOf(Credential);
+    expect(obj.credentialsArrayDefaultUndefined[0].type).toBe('IDENTITY_CARD');
+    expect(obj.credentialsArrayDefaultUndefined[0].number).toBe('32010311110101X');
+    expect(obj.credentialsArrayDefaultUndefined[1]).toBeInstanceOf(Credential);
+    expect(obj.credentialsArrayDefaultUndefined[1].type).toBe('PASSPORT');
+    expect(obj.credentialsArrayDefaultUndefined[1].number).toBe('US1234567');
+    expect(obj.credentialsArrayDefaultUndefined[2]).toBeInstanceOf(Credential);
+    expect(obj.credentialsArrayDefaultUndefined[2].type).toBe('IDENTITY_CARD');
+    expect(obj.credentialsArrayDefaultUndefined[2].number).toBe('320103111101333X');
+    expect(obj.credentialsArrayDefaultUndefined[3].type).toBe('IDENTITY_CARD');
+    expect(obj.credentialsArrayDefaultUndefined[3].number).toBe('');
+
     expect(obj.stringArray).toBeArray();
     expect(obj.stringArray.length).toBe(2);
     expect(obj.stringArray[0]).toBe('abc');
@@ -138,12 +169,11 @@ describe('测试 @Model 类装饰器针对包含被 @ElementType 标注的数组
     expect(obj.numberArray[0]).toBe(123);
     expect(obj.numberArray[1]).toBe(456);
   });
-
-  test('测试 @ElementType 注解加在非数组属性上', () => {
+  test('`@ElementType` decorates non-array field should throw error', () => {
     expect(() => {
       class Foo {
         @ElementType(String)
-          nonArrayField = '';
+        nonArrayField = '';
 
         hello() {
           console.log('hello');
@@ -152,8 +182,8 @@ describe('测试 @Model 类装饰器针对包含被 @ElementType 标注的数组
       const obj = new Foo();
       obj.hello();
     }).toThrowWithMessage(
-      SyntaxError,
-      'The field "Foo.nonArrayField" decorated by @ElementType must be an array type field.',
+      TypeError,
+      'The field "nonArrayField" decorated by @ElementType must be initialized with an array.',
     );
   });
 });

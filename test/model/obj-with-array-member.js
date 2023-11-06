@@ -31,6 +31,9 @@ export default class ObjWithArrayMember {
   @ElementType(Credential)
   credentialsArrayDefaultNull = null;
 
+  @ElementType(Credential)
+  credentialsArrayDefaultUndefined;
+
   @ElementType(String)
   stringArray = [];
 
