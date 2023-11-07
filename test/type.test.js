@@ -12,11 +12,11 @@ import { getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
 import Gender from './model/gender';
 import NonDecoratedClass from './model/non-decorated-class';
-import ObjWithAnnotatedNullishField from './model/obj-with-annotated-nullish-field';
+import ObjWithTypeAnnotatedNullishField from './model/obj-with-type-annotated-nullish-field';
 
 describe('Test the `@Type` annotated fields', () => {
   test('Check the field metadata of `ObjWithAnnotatedNullField`', () => {
-    const metadata = classMetadataCache.get(ObjWithAnnotatedNullishField);
+    const metadata = classMetadataCache.get(ObjWithTypeAnnotatedNullishField);
     expect(metadata).not.toBeNull();
     console.log('ObjWithAnnotatedNullField.metadata = ', metadata);
     expect(getFieldMetadata(metadata, 'id', KEY_FIELD_TYPE)).toBeUndefined();
@@ -48,7 +48,7 @@ describe('Test the `@Type` annotated fields', () => {
       genderWithDefaultEmpty: 'MALE',
       genderWithDefaultNull: 'FEMALE',
     };
-    const obj = new ObjWithAnnotatedNullishField();
+    const obj = new ObjWithTypeAnnotatedNullishField();
     obj.assign(data);
 
     expect(obj.id).toBe('xxx');
