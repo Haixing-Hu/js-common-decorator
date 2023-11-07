@@ -31,7 +31,7 @@ import { KEY_FIELD_LABEL } from './impl/metadata-keys';
  *
  * @param {string} label
  *     The label of the field.
- * @param {string} i18nKey
+ * @param {string} i18n
  *     The i18n key of the label. If this parameter is not specified, then the
  *     label is not internationalized.
  * @returns {function}
@@ -40,18 +40,18 @@ import { KEY_FIELD_LABEL } from './impl/metadata-keys';
  * @see Model
  * @see Enum
  */
-function Label(label, i18nKey = undefined) {
+function Label(label, i18n = undefined) {
   return function decorate(field, { kind, name, metadata }) {
     if (kind !== 'field') {
-      throw new TypeError(`The decorator @Label can only decorate a class field: ${name}`);
+      throw new SyntaxError(`The decorator @Label can only decorate a class field: ${name}`);
     }
     if (typeof label !== 'string') {
       throw new TypeError(`The first argument of @Label decorated on "${name}" must be a string.`);
     }
-    if ((i18nKey !== undefined) && (typeof i18nKey !== 'string')) {
+    if ((i18n !== undefined) && (typeof i18n !== 'string')) {
       throw new TypeError(`The second argument of @Label decorated on "${name}" must be a string.`);
     }
-    setFieldMetadata(metadata, name, KEY_FIELD_LABEL, { name: label, i18n: i18nKey });
+    setFieldMetadata(metadata, name, KEY_FIELD_LABEL, { label, i18n });
   };
 }
 
