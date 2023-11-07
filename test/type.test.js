@@ -6,6 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { Model, Type } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_TYPE } from '../src/impl/metadata-keys';
 import { getFieldMetadata } from '../src/impl/utils';
@@ -70,5 +71,31 @@ describe('Test the `@Type` annotated fields', () => {
 
     expect(obj.genderWithDefaultEmpty).toBe('MALE');
     expect(obj.genderWithDefaultNull).toBe('FEMALE');
+  });
+  test('@Type decorated non-fields', () => {
+    expect(() => {
+      @Model
+      class Foo {
+        @Type(Credential)
+        bar() {
+          return 'abc';
+        }
+      }
+    }).toThrowWithMessage(
+      SyntaxError,
+      'The decorator @Type can only decorate a class field: bar',
+    );
+  });
+  test('Argument of @Type is not a function', () => {
+    expect(() => {
+      @Model
+      class Foo {
+        @Type('Credential')
+        credential = null;
+      }
+    }).toThrowWithMessage(
+      TypeError,
+      'The argument of @Type decorated on "credential" must be the constructor of a class.',
+    );
   });
 });
