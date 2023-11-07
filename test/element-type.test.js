@@ -6,10 +6,10 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ElementType } from '../src';
+import { ElementType, Model, Type } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_ELEMENT_TYPE } from '../src/impl/metadata-keys';
-import { getClassMetadataObject, getFieldMetadata } from '../src/impl/utils';
+import { getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
 import Gender from './model/gender';
 import ObjWithArrayMember from './model/obj-with-array-member';
@@ -168,6 +168,32 @@ describe('Test `@ElementType``', () => {
     expect(obj.numberArray.length).toBe(2);
     expect(obj.numberArray[0]).toBe(123);
     expect(obj.numberArray[1]).toBe(456);
+  });
+  test('@ElementType decorated non-fields', () => {
+    expect(() => {
+      @Model
+      class Foo {
+        @ElementType(Credential)
+        bar() {
+          return 'abc';
+        }
+      }
+    }).toThrowWithMessage(
+        SyntaxError,
+        'The decorator @ElementType can only decorate a class field: bar',
+    );
+  });
+  test('Argument of @ElementType is not a function', () => {
+    expect(() => {
+      @Model
+      class Foo {
+        @ElementType('Credential')
+        credentials = [];
+      }
+    }).toThrowWithMessage(
+        TypeError,
+        'The argument of @ElementType decorated on "credentials" must be the constructor of a class.',
+    );
   });
   test('`@ElementType` decorates non-array field should throw error', () => {
     expect(() => {

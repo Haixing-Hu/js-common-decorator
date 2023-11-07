@@ -34,10 +34,10 @@ import { KEY_FIELD_ELEMENT_TYPE } from './impl/metadata-keys';
 function ElementType(elementType) {
   return function decorate(field, { kind, name, metadata }) {
     if (kind !== 'field') {
-      throw new TypeError(`The decorator @ElementType can only decorate a class field: ${name}`);
+      throw new SyntaxError(`The decorator @ElementType can only decorate a class field: ${name}`);
     }
     if (typeof elementType !== 'function') {
-      throw new TypeError(`The argument of @ElementType decorated on "${name}" must be a class.`);
+      throw new TypeError(`The argument of @ElementType decorated on "${name}" must be the constructor of a class.`);
     }
     setFieldMetadata(metadata, name, KEY_FIELD_ELEMENT_TYPE, elementType);
     return function(initialValue) {
