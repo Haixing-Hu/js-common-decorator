@@ -45,7 +45,7 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  */
 function Nullable(field, { kind, name, metadata }) {
   if (kind !== 'field') {
-    throw new TypeError(`The decorator @Nullable can only decorate a class field: ${name}`);
+    throw new SyntaxError(`The decorator @Nullable can only decorate a class field: ${name}`);
   }
   setFieldMetadata(metadata, name, KEY_FIELD_NULLABLE, true);
 }
