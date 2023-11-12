@@ -6,25 +6,43 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { trimString } from '@haixing_hu/common-util';
-import { Model, Normalizer } from '../src';
-import { getClassMetadataObject } from '../src/impl/utils';
+import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
+import { Model, Normalizable, defaultNormalizer } from '../src';
+import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
+import { getFieldMetadata } from '../src/impl/utils';
 import ObjWithNormalizableField from './model/obj-with-normalizable-field';
 import ObjWithoutDecoratedField from './model/obj-without-decorated-field';
 import Credential from './model/normalizable-credential';
 
 /**
- * 单元测试 @Normalizer 装饰器。
+ * Unit test of the `@Normalizable` decorator.
  *
- * @author 胡海星
+ * @author Haixing Hu
  */
-describe('测试 @Normalizer', () => {
-  test('测试 ObjWithNormalizableField 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(ObjWithNormalizableField);
+describe('Test @Normalizable', () => {
+  test('Check the field metadata of @Normalizable decorated fields', () => {
+    @Model
+    class Foo {
+      @Normalizable
+      message = ' hello world ';
+
+      @Normalizable(trimUppercaseString)
+      name = ' bill gates ';
+
+      nonNormalizableField = '';
+    }
+    const metadata = classMetadataCache.get(Foo);
     expect(metadata).not.toBeNull();
-    console.log('ObjWithNormalizableField.metadata = ', metadata);
+    console.log('Foo.metadata = ', metadata);
+    expect(getFieldMetadata(metadata, 'message', KEY_FIELD_NORMALIZER))
+      .toBe(defaultNormalizer);
+    expect(getFieldMetadata(metadata, 'name', KEY_FIELD_NORMALIZER))
+      .toBe(trimUppercaseString);
+    expect(getFieldMetadata(metadata, 'nonNormalizableField', KEY_FIELD_NORMALIZER))
+      .toBeUndefined();
   });
-  test('测试 ObjWithNormalizableField.normalize()', () => {
+  test('Test `ObjWithNormalizableField.normalize()`', () => {
     const data = {
       number: ' 111xyz  ',
       type: ' identity_card    ',
@@ -235,11 +253,11 @@ describe('测试 @Normalizer', () => {
     expect(obj.number).toBe('');
     expect(obj.nonNormalizable).toBe(' 111xyz  ');
   });
-  test('@Normalizer参数不是函数', () => {
+  test('@Normalizable参数不是函数', () => {
     expect(() => {
       @Model
       class ObjWithInvalidNormalizer {
-        @Normalizer('xxx')
+        @Normalizable('xxx')
           number = '';
 
         hello() {
@@ -279,7 +297,7 @@ describe('测试 @Normalizer', () => {
 
   test('字段声明在父类，父类没有normalize()函数，但字段指定了normalizer', () => {
     class A {
-      @Normalizer(trimString)
+      @Normalizable(trimString)
         name = '';
     }
     @Model
@@ -291,7 +309,7 @@ describe('测试 @Normalizer', () => {
   });
   test('字段声明在祖先类，祖先类没有normalize()函数，但字段指定了normalizer', () => {
     class A {
-      @Normalizer(trimString)
+      @Normalizable(trimString)
         name = '';
     }
     class B extends A {}

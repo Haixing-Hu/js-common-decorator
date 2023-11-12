@@ -7,21 +7,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@haixing_hu/common-util';
-import { Model } from '../../src';
+import { Model, Type } from '../../src';
+import CredentialType from './credential-type';
 
 @Model
 export default class Credential {
-  type = 'IDENTITY_CARD';
+  @Type(CredentialType)
+  type = CredentialType.DEFAULT;
 
   number = '';
 
-  constructor(type = 'IDENTITY_CARD', number = '') {
+  constructor(type = CredentialType.DEFAULT, number = '') {
     this.type = type;
     this.number = number;
   }
 
   isIdentityCard() {
-    return (this.type === 'IDENTITY_CARD');
+    return (this.type === CredentialType.IDENTITY_CARD);
   }
 
   /**
@@ -34,9 +36,11 @@ export default class Credential {
    */
   normalize() {
     if (typeof this.type === 'string') {
-      this.type = trimUppercaseString(this.type);
+      this.type = CredentialType.valueOf(this.type);
     } else if (this.type.value !== undefined) {
-      this.type = trimUppercaseString(this.type.value);
+      this.type = CredentialType.valueOf(this.type.value);
+    } else if (!(this.type instanceof CredentialType)) {
+      throw new TypeError('The type must be a string or an instance of `CredentialType`.');
     }
     this.number = trimUppercaseString(this.number);
     return this;

@@ -7,6 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import {
+  KEY_CLASS_CATEGORY,
   KEY_CLASS_DEFAULT_INSTANCE,
   KEY_CLASS_FIELDS_METADATA,
 } from './metadata-keys';
@@ -353,4 +354,22 @@ export function definePrototypeProperty(Class, ...properties) {
       writable: true,
     });
   }
+}
+
+/**
+ * Tests whether the specified value is an enumerator.
+ *
+ * @param {any} value
+ *     The value to be tested.
+ * @return {boolean}
+ *     `true` if the specified value is an enumerator; otherwise, `false`.
+ */
+export function isEnumerator(value) {
+  if (value === undefined || value === null || (typeof value !== 'object')) {
+    return false;
+  }
+  const Class = Object.getPrototypeOf(value).constructor;
+  const metadata = classMetadataCache.get(Class);
+  const category = metadata[KEY_CLASS_CATEGORY];
+  return (category === 'enum');
 }

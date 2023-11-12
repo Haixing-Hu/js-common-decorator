@@ -15,23 +15,33 @@ supports the most recent (currently May 2023)
 
 - [Usage](#usage)
   - [@Model Decorator](#model)
-    - [Instance method: Class.prototype.assign(obj, normalized)](#assign)
-    - [Instance method: Class.prototype.clone()](#clone)
-    - [Instance method: Class.prototype.isEmpty()](#isEmpty)
-    - [Instance method: Class.prototype.clear()](#clear)
-    - [Instance method: Class.prototype.equals(other)](#equals)
-    - [Instance method: Class.prototype.generateId()](#generateId)
-    - [Instance method: Class.prototype.normalizeField(field)](#normalizeField)
-    - [Instance method: Class.prototype.normalize(fields)](#normalize)
-    - [Instance method: Class.prototype.validateField(field)](#validateField)
-    - [Instance method: Class.prototype.validate(fields)](#validate)
-    - [Static class method: Class.create(obj, normalized)](#create)
-    - [Static class method: Class.createArray(array, normalized)](#createArray)
-    - [Static class method: Class.createPage(page)](#createPage)
-    - [Static class method: Class.isNullishOrEmpty()](#isNullishOrEmpty)
+    - [Instance method: Class.prototype.assign(obj, normalized)](#model-assign)
+    - [Instance method: Class.prototype.clone()](#model-clone)
+    - [Instance method: Class.prototype.isEmpty()](#model-isEmpty)
+    - [Instance method: Class.prototype.clear()](#model-clear)
+    - [Instance method: Class.prototype.equals(other)](#model-equals)
+    - [Instance method: Class.prototype.generateId()](#model-generateId)
+    - [Instance method: Class.prototype.normalizeField(field)](#model-normalizeField)
+    - [Instance method: Class.prototype.normalize(fields)](#model-normalize)
+    - [Instance method: Class.prototype.validateField(field)](#model-validateField)
+    - [Instance method: Class.prototype.validate(fields)](#model-validate)
+    - [Class method: Class.create(obj, normalized)](#model-create)
+    - [Class method: Class.createArray(array, normalized)](#model-createArray)
+    - [Class method: Class.createPage(page)](#model-createPage)
+    - [Class method: Class.isNullishOrEmpty()](#model-isNullishOrEmpty)
     - [Usage Examples](#model-usage-examples)
   - [@Enum Decorator](#enum)
-- [Usage Example](#example)
+    - [Enumerator Fields](#enum-fields)
+    - [Instance method: Class.prototype.toString()](#enum-toString)
+    - [Instance method: Class.prototype.toJSON()](#enum-toJSON)
+    - [Class method: Class.values()](#enum-values)
+    - [Class method: Class.valueOf(value)](#enum-valueOf)
+    - [Class method: Class.hasValue(value)](#enum-hasValue)
+    - [Class method: Class.nameOf(name)](#enum-nameOf)
+    - [Class method: Class.hasName(name)](#enum-hasName)
+    - [Class method: Class.codeOf(code)](#enum-codeOf)
+    - [Class method: Class.hasCode(code)](#enum-hasCode)
+    - [Usage Example](#enum-usage-example)
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
   - [Bundling with vite](#vite)
@@ -49,7 +59,7 @@ following instance and class methods to the decorated class.
 this decorator will not override the methods already implemented by the decorated 
 class.
 
-#### <span id="assign">Instance method: Class.prototype.assign(obj, normalized)</span>
+#### <span id="model-assign">Instance method: Class.prototype.assign(obj, normalized)</span>
 
 - Parameters:
   - `obj: object`: the object whose fields will be copied to this object,
@@ -66,7 +76,7 @@ fields defined in this object's class. If a field in the `obj` object is
 indicates whether to normalize this object after copying properties, with a 
 default value of `true`.
 
-#### <span id="clone">Instance method: Class.prototype.clone()</span>
+#### <span id="model-clone">Instance method: Class.prototype.clone()</span>
 
 - Parameters: none.
 - Returns: 
@@ -77,7 +87,7 @@ This function deep clones the calling object, returning a new instance of the
 specified class with the same property values as the calling object. Note that
 the returned object has the same prototype as the calling object.
 
-#### <span id="clear">Instance method: Class.prototype.clear()</span>
+#### <span id="model-clear">Instance method: Class.prototype.clear()</span>
 
 - Parameters: none.
 - Returns: 
@@ -87,7 +97,7 @@ This function sets all the properties of this object to their default values.
 The default value of a field is the value of the field of the default
 constructed instance of the class.
 
-#### <span id="isEmpty">Instance method: Class.prototype.isEmpty()</span>
+#### <span id="model-isEmpty">Instance method: Class.prototype.isEmpty()</span>
 
 - Parameters: none.
 - Returns: 
@@ -97,7 +107,7 @@ This function checks if this object is empty, meaning that all of its fields
 have default values. The default value of a field is the value of the field of 
 the default constructed instance of the class.
 
-#### <span id="equals">Instance method: Class.prototype.equals(other)</span>
+#### <span id="model-equals">Instance method: Class.prototype.equals(other)</span>
 
 - Parameters: 
   - `other: object`: the object to be compared with this object.
@@ -113,7 +123,7 @@ and all of their elements are deeply equal. If a field is an object, it is
 deeply equal to another object if and only if they have the same prototype,
 and all of their fields are deeply equal. 
 
-#### <span id="generateId">Instance method: Class.prototype.generateId()</span>
+#### <span id="model-generateId">Instance method: Class.prototype.generateId()</span>
 
 - Parameters: none.
 - Returns: 
@@ -129,7 +139,7 @@ class `A` defines the `id` field, and a subclass `B` inherits the `id` field but
 does not define its own `id` field, the `generateId()` method is added only to
 class `A`, not to class `B`.
 
-#### <span id="normalizeField">Instance method: Class.prototype.normalizeField(field)</span>
+#### <span id="model-normalizeField">Instance method: Class.prototype.normalizeField(field)</span>
 
 - Parameters:
   - `field: string`: the name of the specified field to be normalized. 
@@ -142,7 +152,7 @@ normalizes the specified field and returns `true`; otherwise, the function does
 nothing and returns `false`. Note that a field is normalizable if and only if it 
 is decorated by the `{@link Normalizable}` decorator.
 
-#### <span id="normalize">Instance method: Class.prototype.normalize(fields)</span>
+#### <span id="model-normalize">Instance method: Class.prototype.normalize(fields)</span>
 
 - Parameters:
   - `fields: undefined | null | string | string[]`: the fields to be normalized. 
@@ -163,7 +173,7 @@ normalizable fields whose names are specified in the array. Note that a field is
 normalizable if and only if it is decorated by the `{@link Normalizable}` 
 decorator.
 
-#### <span id="validateField">Instance method: Class.prototype.validateField(field)</span>
+#### <span id="model-validateField">Instance method: Class.prototype.validateField(field)</span>
 
 - Parameters:
   - `field: string`: the name of the specified field to be validated.
@@ -176,7 +186,7 @@ validates the specified field and returns the validation result; otherwise, the
 function does nothing and returns `null`. Note that a field is validatable if 
 and only if it is decorated by the `{@link Validatable}` decorator.
 
-#### <span id="validate">Instance method: Class.prototype.validate(fields)</span>
+#### <span id="model-validate">Instance method: Class.prototype.validate(fields)</span>
 
 - Parameters:
   - `fields: undefined | null | string | string[]`: the fields to be validated.
@@ -197,7 +207,7 @@ validatable fields whose names are specified in the array. Note that a field is
 validatable if and only if it is decorated by the `{@link Validatable}`
 decorator.
 
-#### <span id="create">Static class method: Class.create(obj, normalized)</span>
+#### <span id="model-create">Class method: Class.create(obj, normalized)</span>
 
 - Parameters: 
   - `obj: object`: the data object used to create the new instance. 
@@ -214,7 +224,7 @@ whose fields are recursively initialized with properties in the `obj`. Note that
 parameter indicates whether to normalize the returned object, with a default
 value of `true`.
 
-#### <span id="createArray">Static class method: Class.createArray(array, normalized)</span>
+#### <span id="model-createArray">Class method: Class.createArray(array, normalized)</span>
 
 - Parameters:
   - `array: object[]`: the data object array used to create the new array.
@@ -232,7 +242,7 @@ the `array`. Note that data objects in `array` can have different prototypes to
 the specified class. The `normalized` parameter indicates whether to normalize 
 instances in the returned array, with a default value of `true`.
 
-#### <span id="createPage">Static class method: Class.createPage(page)</span>
+#### <span id="model-createPage">Class method: Class.createPage(page)</span>
 
 - Parameters:
   - `page: object`: the pagination data object used to create the new `Page`
@@ -245,12 +255,12 @@ instances in the returned array, with a default value of `true`.
 This function creates a `Page` object, whose content are initialized with the 
 content of the specified pagination data object. Typically, `page` is a list of 
 domain objects obtained from a server using the `GET` method, and the object 
-should conform to the `Page` class definition. This static class method returns
+should conform to the `Page` class definition. This class method returns
 a new `Page` object, with the `content` property being the result of 
 `createArray(page.content, true)`, and the other properties matching those of
 the `page` object. If `page` is not a valid `Page` object, it returns `null`.
 
-#### <span id="isNullishOrEmpty">Static class method: Class.isNullishOrEmpty(obj)</span>
+#### <span id="model-isNullishOrEmpty">Class method: Class.isNullishOrEmpty(obj)</span>
 
 - Parameters:
     - `obj: object`: the object to be checked.
@@ -394,6 +404,8 @@ added:
 
 This decorator is used to decorate an enumeration class.
 
+#### <span id="enum-fields">Enumerator Fields</span>
+
 An enumeration class is a class whose instances are enumerators. An enumerator
 is an object with the following properties:
 - `value`：the value of the enumerator, which is exactly the name of the
@@ -414,26 +426,99 @@ is an object with the following properties:
   by the default object value of the static field of the enumeration class
   that corresponds to the enumerator.
 
-An enumerator also has the following prototype method:
-- `toString()`: returns the value of the enumerator.
-- `toJSON()`: also returns the value of the enumerator.
+#### <span id="enum-toString">Instance method: Class.prototype.toString()</span>
 
-The enumeration class will have the following static methods:
-- `values()`: returns the array of all enumerators of this enumeration class.
-- `valueOf(value): returns the enumerator whose value is `value`, or
-  `undefined` if no such enumerator exists.
-- `hasValue(value): returns `true` if there is an enumerator whose value is
-  `value`, or `false` otherwise.
-- `nameOf(name): returns the enumerator whose name is `name`, or
-  `undefined` if no such enumerator exists.
-- `hasName(name): returns `true` if there is an enumerator whose name is
-  `name`, or `false` otherwise.
-- `codeOf(code): returns the enumerator whose code is `code`, or
-  `undefined` if no such enumerator exists.
-- `hasCode(code): returns `true` if there is an enumerator whose code is
-  `code`, or `false` otherwise.
+- Parameters: none.
+- Returns:
+  - `string`: the string representation of this enumerator, which is the 
+    `value` of this enumerator.
 
-Usage example:
+This function returns the string representation of this enumerator, which is
+the `value` of this enumerator.
+
+#### <span id="enum-toJSON">Instance method: Class.prototype.toJSON()</span>
+
+- Parameters: none.
+- Returns:
+  - `string`: the JSON representation of this enumerator, which is the JSON
+    string representation of the `value` of this enumerator, i.e., the double
+    quoted string of the `value`.
+
+This function returns the JSON representation of this enumerator.
+
+#### <span id="enum-values">Class method: Class.values()</span>
+
+- Parameters: none.
+- Returns:
+  - `Class[]`: the array of all enumerators of this enumeration class.
+
+This function returns the array of all enumerators of this enumeration class.
+
+#### <span id="enum-valueOf">Class method: Class.valueOf(value)</span>
+
+- Parameters: 
+  - `value: string`: the value of the enumerator to be returned. Note that this
+    argument will be trimmed and uppercased to get the actual value of the 
+    enumerator.
+- Returns:
+  - `Class`: the enumerator in this enumeration class with the specified value,
+    or `undefined` if no such enumerator exists.
+
+This function returns the enumerator with the specified value.
+
+#### <span id="enum-hasValue">Class method: Class.hasValue(value)</span>
+
+- Parameters:
+    - `value: string`: the value of the enumerator to be tested. Note that this
+      argument will be trimmed and uppercased to get the actual value of the
+      enumerator.
+- Returns:
+    - `boolean`: returns `true` if there is an enumerator in this enumeration
+      class with the specified value, or `false` otherwise.
+
+This function tests whether there is an enumerator with the specified value.
+
+#### <span id="enum-nameOf">Class method: Class.nameOf(name)</span>
+
+- Parameters:
+    - `name: string`: the name of the enumerator to be returned.
+- Returns:
+    - `Class`: the enumerator in this enumeration class with the specified name,
+      or `undefined` if no such enumerator exists.
+
+This function returns the enumerator with the specified name.
+
+#### <span id="enum-hasName">Class method: Class.hasName(name)</span>
+
+- Parameters:
+    - `name: string`: the name of the enumerator to be tested. 
+- Returns:
+    - `boolean`: returns `true` if there is an enumerator in this enumeration
+      class with the specified name, or `false` otherwise.
+
+This function tests whether there is an enumerator with the specified name.
+
+#### <span id="enum-codeOf">Class method: Class.codeOf(code)</span>
+
+- Parameters:
+    - `code: string`: the code of the enumerator to be returned. 
+- Returns:
+    - `Class`: the enumerator in this enumeration class with the specified code,
+      or `undefined` if no such enumerator exists.
+
+This function returns the enumerator with the specified value.
+
+#### <span id="enum-hasCode">Class method: Class.hasCode(code)</span>
+- Parameters:
+    - `code: string`: the code of the enumerator to be tested. 
+- Returns:
+    - `boolean`: returns `true` if there is an enumerator in this enumeration
+      class with the specified code, or `false` otherwise.
+
+This function tests whether there is an enumerator with the specified code.
+
+#### <span id="enum-usage-example">Usage Example</span>
+
 ```js
 @Enum
 class Gender {

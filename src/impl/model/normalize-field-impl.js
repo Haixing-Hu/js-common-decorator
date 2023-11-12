@@ -7,7 +7,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import classMetadataCache from '../class-metadata-cache';
-import { KEY_FIELD_NORMALIZER } from '../metadata-keys';
+import {
+  KEY_FIELD_ELEMENT_TYPE,
+  KEY_FIELD_NORMALIZER,
+  KEY_FIELD_TYPE,
+} from '../metadata-keys';
 import {
   getFieldMetadata,
   getDefaultInstance,

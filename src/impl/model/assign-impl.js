@@ -11,7 +11,7 @@ import {
   getClassMetadata,
   getFieldMetadata,
   getDefaultInstance,
-  hasPrototypeFunction,
+  hasPrototypeFunction, isEnumerator,
 } from '../utils';
 import {
   KEY_CLASS_CATEGORY,
@@ -94,7 +94,14 @@ const Impl = {
       // console.log('copyAllProperties: key = ', key);
       if (Object.hasOwn(source, key)) {
         const value = source[key];
-        target[key] = clone(value, CLONE_OPTIONS);
+        if (isEnumerator(value)) {
+          // do NOT copy enumerators, since all enumerators with the same values
+          //  should be equal
+          target[key] = value;
+        } else {
+          // FIXME
+          target[key] = clone(value, CLONE_OPTIONS);
+        }
       }
     });
   },
@@ -176,15 +183,20 @@ const Impl = {
     const category = getClassMetadata(type, KEY_CLASS_CATEGORY);
     switch (category) {
       case 'enum':
-        // For enumeration classes, because enumeration types are always
-        // expressed in string form, we only need to copy the source string.
         if (typeof source === 'string') {
+          if (source.trim().length === 0) {
+            return null;
+          }
+          // convert the string representation to the enumerator
+          const e = type.valueOf(source);
+          if (e === undefined) {
+            throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
+          }
+          return e;
+        } else if (source instanceof type) {
           return source;
         } else {
-          // The source attribute value is not a string, return the default value
-          console.warn('The value of %s should be a string representation of '
-              + 'the %s enumeration, but it is actually: %o', path, type.name, source);
-          return defaultInstance;
+          throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
         }
       case 'model':
       default: {

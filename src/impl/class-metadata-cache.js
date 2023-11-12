@@ -40,8 +40,9 @@ const classMetadataCache = {
    * @param {Function} Class
    *     A class, i.e., the constructor function of a class.
    * @returns {Object}
-   *     The metadata associated with the class. Note that the returned value
-   *     could be `undefined` if the class has no metadata defined yet.
+   *     The metadata associated with the class. If the class has no metadata
+   *     defined yet, this function will create an empty metadata and return it.
+   *     Therefore, the returned value will never be `undefined` nor `null`.
    */
   get(Class) {
     const result = METADATA_CACHE.get(Class);
