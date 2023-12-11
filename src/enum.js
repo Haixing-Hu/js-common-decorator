@@ -217,6 +217,8 @@ function Enum(Class, context) {
         defineEnumerator(Class, field);
       }
     });
+    // freeze the enumeration class
+    Object.freeze(Class);
   });
   // Add prototype method toString()
   Class.prototype.toString = function toString() {
@@ -256,23 +258,12 @@ function Enum(Class, context) {
   };
 }
 
-/**
- * Register the clone hook of enumerators.
- *
- * @author Haixing Hu
- * @see registerCloneHook
- * @private
- */
-function registerEnumeratorCloneHook() {
-  registerCloneHook((info, obj) => {
-    if (isEnumerator(obj)) {
-      return obj;     // the enumerator should not be cloned
-    }
-    return null;
-  });
-}
-
 // Globally register the clone hook of enumerators.
-registerEnumeratorCloneHook();
+registerCloneHook((info, obj) => {
+  if (isEnumerator(obj)) {
+    return obj;     // the enumerator should not be cloned
+  }
+  return null;
+});
 
 export default Enum;

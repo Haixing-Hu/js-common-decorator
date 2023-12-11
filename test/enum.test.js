@@ -344,9 +344,9 @@ describe('Test the `@Enum` class decorator', () => {
     });
     expect(copy).toEqual(male);
   });
-  // test('`@Enum` decorated class should be unmodifiable', () => {
-  //   expect(() => {
-  //     Gender.XX = '';
-  //   }).toThrowWithMessage(TypeError, 'Cannot add property XX, object is not extensible');
-  // });
+  test('`@Enum` decorated class should be unmodifiable', () => {
+    expect(() => {
+      Gender.XX = '';
+    }).toThrowWithMessage(TypeError, 'Cannot add property XX, object is not extensible');
+  });
 });
