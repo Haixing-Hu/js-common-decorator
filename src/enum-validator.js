@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata, ensureEnumField, isNullishOrEmpty } from './impl/utils';
 import { PROPERTY_VALIDATOR } from './validatable';
-import ValidationResult from './models/ValidationResult';
+import ValidationResult from './models/validation-result';
 
 /**
  * 校验某个字符串字段值是否是指定的枚举类的枚举子的值。

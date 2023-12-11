@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import Page from '../../models/Page';
+import Page from '../../models/page';
 import createArrayImpl from './create-array-impl';
 
 /**

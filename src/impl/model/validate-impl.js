@@ -18,7 +18,7 @@ import {
   hasOwnPrototypeFunction,
   isNullishOrEmpty,
 } from '../utils';
-import ValidationResult from '../../models/ValidationResult';
+import ValidationResult from '../../models/validation-result';
 
 const ValidateImpl = {
 
