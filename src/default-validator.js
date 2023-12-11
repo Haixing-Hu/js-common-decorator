@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { setFieldMetadata, isNullishOrEmpty } from './impl/utils';
 import { PROPERTY_VALIDATOR } from './validatable';
-import ValidationResult from './models/validation-result';
+import ValidationResult from './model/validation-result';
 
 function defaultValidate(value, options) {
   if (isNullishOrEmpty(value)) {

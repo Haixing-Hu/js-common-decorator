@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ValidationResult from './models/validation-result';
-import Page from './models/page';
+import ValidationResult from './model/validation-result';
+import Page from './model/page';
 import Model from './model';
 import Type from './type';
 import ElementType from './element-type';
