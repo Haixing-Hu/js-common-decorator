@@ -6,7 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-const metadataSymbol = Symbol('metadata');
+import classMetadataCache from '../src/impl/class-metadata-cache';
+
+const metadataSymbol = Symbol.for('metadata');
 
 describe('Test the feature of the stage 3 decorator', () => {
   test('The Symbol.metadata must exist', () => {
@@ -31,6 +33,7 @@ describe('Test the feature of the stage 3 decorator', () => {
     class C {
       m() {}
     }
+    expect(classMetadataCache.get(C)).toBe(C[metadataSymbol]);
     expect(C[metadataSymbol].a).toBe('x');
     @meta('a', 'z')
     class D extends C {

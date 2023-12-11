@@ -102,10 +102,12 @@ import { KEY_FIELD_VALIDATABLE } from './impl/metadata-keys';
 function Validatable(validator, options = {}) {
   return function decorate(field, { kind, name, metadata }) {
     if (kind !== 'field') {
-      throw new TypeError(`The decorator @Validator can only decorate a class field: ${name}`);
+      throw new TypeError(`The @Validatable must decorate a non-static class field: ${name}`);
     }
     if (typeof validator !== 'function') {
-      throw new TypeError(`The first argument of @Validator decorated on "${name}" must a function.`);
+      throw new TypeError(
+        `The first argument of @Validatable decorated on the "${name}" field must a function.`
+      );
     }
     setFieldMetadata(metadata, name, KEY_FIELD_VALIDATABLE, { validator, options });
   };
