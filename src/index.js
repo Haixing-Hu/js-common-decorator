@@ -12,8 +12,6 @@ import Model from './model';
 import Type from './type';
 import ElementType from './element-type';
 import Normalizable from './normalizable';
-import defaultNormalizer from './default-normalizer';
-import EnumNormalizer from './enum-normalizer';
 import Validatable from './validatable';
 import DefaultValidator from './default-validator';
 import Nullable from './nullable';
@@ -31,7 +29,6 @@ export {
   Type,
   ElementType,
   Normalizable,
-  defaultNormalizer,
   Validatable,
   DefaultValidator,
   EnumValidator,
@@ -42,5 +39,4 @@ export {
   Enum,
   isEnumClass,
   isEnumerator,
-  EnumNormalizer,
 };

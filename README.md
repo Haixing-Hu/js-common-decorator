@@ -283,7 +283,7 @@ The following is the usage example of the `@Model` decorator.
 @Model 
 class Credential {
 
-  @EnumNormalizer
+  @Normalizable
   @Validator(validateCredentialTypeField)
   @Type(CredentialType)
   @Label('证件类型')
@@ -316,13 +316,13 @@ class Person {
   @Label('姓名')
   name = '';
 
-  @DefaultNormalizer
+  @Normalizable
   @DefaultValidator
   @Type(Credential)
   @Label('证件')
   credential = null;
 
-  @EnumNormalizer
+  @Normalizable
   @Validator(validatePersonGenderField)
   @Type(Gender)
   @Label('性别')

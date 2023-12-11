@@ -7,30 +7,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Type, Normalizer, DefaultNormalizer, EnumNormalizer } from '../../src';
+import { Model, Type, Normalizable } from '../../src';
 import Credential from './credential';
 import CredentialType from './credential-type';
 import NonDecoratedClass from './non-decorated-class';
 
 @Model
 export default class ObjWithNormalizableField {
-  @Normalizer(trimUppercaseString)
+  @Normalizable(trimUppercaseString)
   number = '';
 
-  @EnumNormalizer
+  @Normalizable
   @Type(CredentialType)
   type = null;
 
   nonNormalizable = '';
 
-  @DefaultNormalizer
+  @Normalizable
   @Type(Credential)
   credential = null;
 
-  @DefaultNormalizer
+  @Normalizable
   @Type(NonDecoratedClass)
   noNormalizeField = null;
 
-  @DefaultNormalizer
+  @Normalizable
   credentialDefaultNonNull = new Credential();
 }

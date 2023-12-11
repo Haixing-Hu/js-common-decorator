@@ -105,13 +105,13 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * &#064;Model
  * class Credential {
  *
- *   &#064;EnumNormalizer
+ *   &#064;Normalizable
  *   &#064;Validator(validateCredentialTypeField)
  *   &#064;Type(CredentialType)
  *   &#064;Label('证件类型')
- *   type = 'IDENTITY_CARD';
+ *   type = CredentialType.IDENTITY_CARD;
  *
- *   &#064;Normalizer(trimUppercaseString)
+ *   &#064;Normalizable(trimUppercaseString)
  *   &#064;Validator(validateCredentialNumberField)
  *   &#064;Label('证件号码')
  *   number = '';
@@ -138,7 +138,7 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  *   &#064;Label('姓名')
  *   name = '';
  *
- *   &#064;DefaultNormalizer
+ *   &#064;Normalizable
  *   &#064;DefaultValidator
  *   &#064;Type(Credential)
  *   &#064;Label('证件')
