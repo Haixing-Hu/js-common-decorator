@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { clone } from '@haixing_hu/common-util';
+import clone from '@haixing_hu/clone';
 import { getClassMetadata } from '../src/impl/utils';
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
 import Gender from './model/gender';
