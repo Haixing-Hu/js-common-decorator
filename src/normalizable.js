@@ -23,10 +23,14 @@ import { KEY_FIELD_NORMALIZER } from './impl/metadata-keys';
  */
 function setNormalizer(normalizer, field, context) {
   if (context.kind !== 'field' || context.static) {
-    throw new TypeError(`The @Normalizable must decorate a non-static class field: ${context.name}`);
+    throw new TypeError(
+      `The @Normalizable must decorate a non-static class field: ${context.name}`,
+    );
   }
   if (typeof normalizer !== 'function') {
-    throw new TypeError(`The argument of @Normalizable must a function: ${context.name}`);
+    throw new TypeError(
+      `The argument of @Normalizable decorated on the "${context.name}" field must a function.`,
+    );
   }
   setFieldMetadata(context.metadata, context.name, KEY_FIELD_NORMALIZER, normalizer);
 }

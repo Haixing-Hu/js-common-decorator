@@ -24,19 +24,19 @@ describe('Test static method `createPage()`', () => {
   });
   test('Test `Person.createPage("")`', () => {
     expect(() => Person.createPage(''))
-    .toThrowWithMessage(TypeError, 'Invalid page format: ""');
+      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
   });
   test('Test `Person.createPage("xx")`', () => {
     expect(() => Person.createPage('xx'))
-    .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
+      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
   });
   test('Test `Person.createPage({ xx: 123 })`', () => {
     expect(() => Person.createPage({ xx: 123 }))
-    .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
   });
   test('Test `Person.createPage({ page_index: 0, page_size: 10 })`', () => {
     expect(() => Person.createPage({ page_index: 0, page_size: 10 }))
-    .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
   });
   test('Test `Person.createPage(emptyPage)`', () => {
     const result = Person.createPage({
@@ -71,7 +71,7 @@ describe('Test static method `createPage()`', () => {
           number: null,
         },
       },
-        null,
+      null,
       ],
     };
     const result = Person.createPage(page);
@@ -125,7 +125,7 @@ describe('Test static method `createPage()`', () => {
           number: null,
         },
       },
-        null,
+      null,
       ],
     };
     const result = Person.createPage(page);

@@ -27,7 +27,7 @@ describe('Test the static method isNullishOrEmpty()', () => {
   });
   test('Test Person.isNullishOrEmpty(non-empty-person)', () => {
     const person = new Person();
-    person.name = '张三'
+    person.name = '张三';
     const result = Person.isNullishOrEmpty(person);
     expect(result).toBe(false);
   });

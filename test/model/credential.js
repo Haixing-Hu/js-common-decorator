@@ -42,7 +42,8 @@ export default class Credential {
         this.type = CredentialType.valueOf(this.type.value);
       } else if (!(this.type instanceof CredentialType)) {
         throw new TypeError(
-          'The type must be a string or an instance of `CredentialType`.');
+          'The type must be a string or an instance of `CredentialType`.',
+        );
       }
     }
     this.number = trimUppercaseString(this.number);

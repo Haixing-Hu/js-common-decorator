@@ -7,19 +7,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Type, EnumNormalizer, Normalizer } from '../../src';
+import { Model, Type, Normalizable } from '../../src';
 import CredentialType from './credential-type';
 
 @Model
 export default class Credential {
-  @EnumNormalizer
+  @Normalizable
   @Type(CredentialType)
-  type = 'IDENTITY_CARD';
+  type = CredentialType.IDENTITY_CARD;
 
-  @Normalizer(trimUppercaseString)
+  @Normalizable(trimUppercaseString)
   number = '';
 
-  constructor(type = 'IDENTITY_CARD', number = '') {
+  constructor(type = CredentialType.IDENTITY_CARD, number = '') {
     this.type = type;
     this.number = number;
   }
