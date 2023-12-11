@@ -11,6 +11,7 @@ import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_TYPE } from '../src/impl/metadata-keys';
 import { getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
+import CredentialType from './model/credential-type';
 import Gender from './model/gender';
 import NonDecoratedClass from './model/non-decorated-class';
 import ObjWithTypeAnnotatedNullishField from './model/obj-with-type-annotated-nullish-field';
@@ -55,11 +56,11 @@ describe('Test the `@Type` annotated fields', () => {
     expect(obj.id).toBe('xxx');
 
     expect(obj.credential).toBeInstanceOf(Credential);
-    expect(obj.credential.type).toBe('IDENTITY_CARD');
+    expect(obj.credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credential.number).toBe('32010311110101X');
 
     expect(obj.undefinedCredential).toBeInstanceOf(Credential);
-    expect(obj.undefinedCredential.type).toBe('PASSPORT');
+    expect(obj.undefinedCredential.type).toBe(CredentialType.PASSPORT);
     expect(obj.undefinedCredential.number).toBe('XXXX');
 
     expect(obj.nonAnnotatedCredential).toBeInstanceOf(Object);
@@ -69,8 +70,8 @@ describe('Test the `@Type` annotated fields', () => {
     expect(obj.nonDecoratedClass).toBeInstanceOf(NonDecoratedClass);
     expect(obj.nonDecoratedClass.value).toBe('abc');
 
-    expect(obj.genderWithDefaultEmpty).toBe('MALE');
-    expect(obj.genderWithDefaultNull).toBe('FEMALE');
+    expect(obj.genderWithDefaultEmpty).toBe(Gender.MALE);
+    expect(obj.genderWithDefaultNull).toBe(Gender.FEMALE);
   });
   test('@Type decorated non-fields', () => {
     expect(() => {
