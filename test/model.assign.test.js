@@ -31,7 +31,7 @@ describe('Test the prototype method `assign()`', () => {
       },
     };
     const person = new Person();
-    let result = person.assign(data);
+    const result = person.assign(data);
     expect(result).toBe(person);
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
@@ -153,7 +153,6 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.credential.type).toBe(CredentialType.DEFAULT);
     expect(result.credential.number).toBe('');
   });
-  /*
   test('`assign(null) should set the object to default', () => {
     const person = new Person();
     person.id = 'xxxx';
@@ -192,5 +191,4 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.credential.type).toBe(CredentialType.DEFAULT);
     expect(result.credential.number).toBe('');
   });
-   */
 });

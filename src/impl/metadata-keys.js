@@ -19,7 +19,7 @@ const KEY_CLASS_FIELDS_METADATA = '__cd_fields_metadata__';
 
 const KEY_FIELD_TYPE = '__type__';
 
-const KEY_FIELD_ELEMENT_TYPE = '__element_type__'
+const KEY_FIELD_ELEMENT_TYPE = '__element_type__';
 
 const KEY_FIELD_NULLABLE = '__nullable__';
 

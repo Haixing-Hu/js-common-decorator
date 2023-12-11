@@ -72,7 +72,7 @@ const classMetadataCache = {
    */
   set(Class, metadata) {
     METADATA_CACHE.set(Class, metadata);
-  }
+  },
 };
 
 export default classMetadataCache;

@@ -45,7 +45,7 @@ describe('Test the feature of the stage 3 decorator', () => {
       context.metadata[context.name] = 'ok';
       return function initializer(initialValue) {
         console.log(`Initialize the ${context.name} with initial value ${initialValue}`);
-      }
+      };
     }
     class A {
       @foo

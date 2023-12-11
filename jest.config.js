@@ -14,7 +14,8 @@ module.exports = {
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],
   },
-  moduleFileExtensions: ['js', 'vue'],
+  moduleFileExtensions: ['js'],
+  moduleDirectories: ['node_modules'],
   transform: {
     '\\.js$': 'babel-jest',
     // '^.+\\.vue$': '@vue/vue3-jest',

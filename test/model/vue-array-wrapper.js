@@ -23,7 +23,7 @@ const ArrayWrapper = defineComponent({
   template: '<div>length = {{array.length}}</div>',
   mounted() {
     this.obj.credentials = this.array;
-  }
+  },
 });
 
 export default ArrayWrapper;

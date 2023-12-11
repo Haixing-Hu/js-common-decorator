@@ -35,6 +35,6 @@ export default class CredentialWithWrongNormalizer {
       this.type = trimUppercaseString(this.type.value);
     }
     this.number = trimUppercaseString(this.number);
-    // It should returns this, but it returns nothing, which is an error.
+    // It should return this, but it returns nothing, which is an error.
   }
 }

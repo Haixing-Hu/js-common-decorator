@@ -35,12 +35,15 @@ export default class Credential {
    * of the enumeration item in the {@link CredentialType} enumeration.
    */
   normalize() {
-    if (typeof this.type === 'string') {
-      this.type = CredentialType.valueOf(this.type);
-    } else if (this.type.value !== undefined) {
-      this.type = CredentialType.valueOf(this.type.value);
-    } else if (!(this.type instanceof CredentialType)) {
-      throw new TypeError('The type must be a string or an instance of `CredentialType`.');
+    if (this.type !== undefined && this.type !== null) {
+      if (typeof this.type === 'string') {
+        this.type = CredentialType.valueOf(this.type);
+      } else if (this.type.value !== undefined) {
+        this.type = CredentialType.valueOf(this.type.value);
+      } else if (!(this.type instanceof CredentialType)) {
+        throw new TypeError(
+          'The type must be a string or an instance of `CredentialType`.');
+      }
     }
     this.number = trimUppercaseString(this.number);
     return this;

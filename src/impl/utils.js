@@ -204,7 +204,7 @@ export function getDefaultInstance(Class) {
     metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
   }
   const obj = metadata[KEY_CLASS_DEFAULT_INSTANCE];
-  if (! (obj instanceof Class)) {
+  if (!(obj instanceof Class)) {
     // Note that the metadata of a class can inherit the metadata of its parent
     // class. Therefore, if the parent class has a default instance stored in
     // its metadata, it can be accessed by the child class. That's why we have
@@ -357,19 +357,40 @@ export function definePrototypeProperty(Class, ...properties) {
 }
 
 /**
- * Tests whether the specified value is an enumerator.
+ * Tests whether a specified class is an enumeration class decorated by `@Enum`.
+ *
+ * @param {function} Class
+ *     The constructor function of a class.
+ * @return {boolean}
+ *     `true` if the specified class is an enumeration class decorated by
+ *     `@Enum`; `false` otherwise.
+ * @author Haixing Hu
+ */
+export function isEnumClass(Class) {
+  if (typeof Class !== 'function') {
+    return false;
+  }
+  const category = getClassMetadata(Class, KEY_CLASS_CATEGORY);
+  return category === 'enum';
+}
+
+/**
+ * Tests whether a specified value is an enumerator of an enumeration class,
+ * i.e., the static constants of a class decorated by `@Enum`.
  *
  * @param {any} value
- *     The value to be tested.
+ *     The specified value.
  * @return {boolean}
- *     `true` if the specified value is an enumerator; otherwise, `false`.
+ *     `true` if the specified value is an enumerator of an enumeration class,
+ *     i.e., the static constants of a class decorated by `@Enum`; `false`
+ *     otherwise.
+ * @author Haixing Hu
  */
 export function isEnumerator(value) {
   if (value === undefined || value === null || (typeof value !== 'object')) {
     return false;
   }
   const Class = Object.getPrototypeOf(value).constructor;
-  const metadata = classMetadataCache.get(Class);
-  const category = metadata[KEY_CLASS_CATEGORY];
-  return (category === 'enum');
+  const category = getClassMetadata(Class, KEY_CLASS_CATEGORY);
+  return category === 'enum';
 }

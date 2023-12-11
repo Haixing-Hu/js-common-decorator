@@ -72,8 +72,8 @@ describe('Test @Label', () => {
         bar = 'abc';
       }
     }).toThrowWithMessage(
-        TypeError,
-        'The second argument of @Label decorated on "bar" must be a string.',
+      TypeError,
+      'The second argument of @Label decorated on "bar" must be a string.',
     );
   });
 });

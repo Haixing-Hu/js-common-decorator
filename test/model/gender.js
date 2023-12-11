@@ -10,7 +10,6 @@ import { Enum } from '../../src';
 
 @Enum
 class Gender {
-
   static MALE = '男';
 
   static FEMALE = '女';

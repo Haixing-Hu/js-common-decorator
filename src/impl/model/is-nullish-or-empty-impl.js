@@ -30,6 +30,9 @@ function isNullishOrEmptyImpl(Class, obj) {
   if (obj === null || obj === undefined) {
     return true;
   }
+  if (!(obj instanceof Class)) {
+    throw new TypeError('The object must be an instance of the class ' + Class.name + '.');
+  }
   return obj.isEmpty();
 }
 

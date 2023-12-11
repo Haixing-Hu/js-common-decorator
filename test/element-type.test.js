@@ -179,8 +179,8 @@ describe('Test `@ElementType``', () => {
         }
       }
     }).toThrowWithMessage(
-        SyntaxError,
-        'The decorator @ElementType can only decorate a class field: bar',
+      SyntaxError,
+      'The decorator @ElementType can only decorate a class field: bar',
     );
   });
   test('Argument of @ElementType is not a function', () => {
@@ -191,8 +191,8 @@ describe('Test `@ElementType``', () => {
         credentials = [];
       }
     }).toThrowWithMessage(
-        TypeError,
-        'The argument of @ElementType decorated on "credentials" must be the constructor of a class.',
+      TypeError,
+      'The argument of @ElementType decorated on "credentials" must be the constructor of a class.',
     );
   });
   test('`@ElementType` decorates non-array field should throw error', () => {

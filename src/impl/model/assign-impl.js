@@ -6,17 +6,18 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isUndefinedOrNull, isBuiltInClass, clone } from '@haixing_hu/common-util';
+import clone from '@haixing_hu/clone';
+import { isUndefinedOrNull, isBuiltInClass } from '@haixing_hu/common-util';
 import {
   getClassMetadata,
   getFieldMetadata,
   getDefaultInstance,
-  hasPrototypeFunction, isEnumerator,
+  hasPrototypeFunction,
 } from '../utils';
 import {
   KEY_CLASS_CATEGORY,
   KEY_FIELD_ELEMENT_TYPE,
-  KEY_FIELD_TYPE
+  KEY_FIELD_TYPE,
 } from '../metadata-keys';
 import ClassMetadataCache from '../class-metadata-cache';
 
@@ -91,17 +92,8 @@ const Impl = {
       return;
     }
     Object.keys(target).forEach((key) => {
-      // console.log('copyAllProperties: key = ', key);
       if (Object.hasOwn(source, key)) {
-        const value = source[key];
-        if (isEnumerator(value)) {
-          // do NOT copy enumerators, since all enumerators with the same values
-          //  should be equal
-          target[key] = value;
-        } else {
-          // FIXME
-          target[key] = clone(value, CLONE_OPTIONS);
-        }
+        target[key] = clone(source[key], CLONE_OPTIONS);
       }
     });
   },
@@ -136,12 +128,12 @@ const Impl = {
     // If the property value of the target object is an object, we must create
     // an object of the same prototype and copy the property values of the
     // source object
-    const type = Object.getPrototypeOf(defaultInstance).constructor;
-    const target = new type();
+    const Class = Object.getPrototypeOf(defaultInstance).constructor;
+    const target = new Class();
     // Recursively assign each attribute value of `source` to `target`
     return this.assign(target, source, {
       path,
-      type,
+      type: Class,
       defaultInstance,
       normalized,
     });

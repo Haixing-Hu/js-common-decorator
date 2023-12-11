@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import nameOfImpl from './impl/enum/name-of-impl';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -7,16 +6,15 @@ import nameOfImpl from './impl/enum/name-of-impl';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import {
-  definePrototypeProperty,
-  setClassMetadata,
-} from './impl/utils';
+import { registerCloneHook } from '@haixing_hu/clone';
+import { isEnumerator, setClassMetadata } from './impl/utils';
 import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
 import defineEnumerator from './impl/enum/define-enumerator';
 import valueOfImpl from './impl/enum/value-of-impl';
 import valuesImpl from './impl/enum/values-impl';
 import codeOfImpl from './impl/enum/code-of-impl';
+import nameOfImpl from './impl/enum/name-of-impl';
 
 /**
  * This decorator is used to decorate an enumeration class.
@@ -223,11 +221,11 @@ function Enum(Class, context) {
   // Add prototype method toString()
   Class.prototype.toString = function toString() {
     return this.value;
-  }
+  };
   // Add prototype method toJSON()
   Class.prototype.toJSON = function toJSON() {
     return this.value;
-  }
+  };
   // Add static method values()
   Class.values = function values() {
     return valuesImpl(Class);
@@ -257,5 +255,24 @@ function Enum(Class, context) {
     return (codeOfImpl(Class, code) !== undefined);
   };
 }
+
+/**
+ * Register the clone hook of enumerators.
+ *
+ * @author Haixing Hu
+ * @see registerCloneHook
+ * @private
+ */
+function registerEnumeratorCloneHook() {
+  registerCloneHook((info, obj) => {
+    if (isEnumerator(obj)) {
+      return obj;     // the enumerator should not be cloned
+    }
+    return null;
+  });
+}
+
+// Globally register the clone hook of enumerators.
+registerEnumeratorCloneHook();
 
 export default Enum;

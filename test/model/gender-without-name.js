@@ -10,7 +10,6 @@ import { Enum } from '../../src';
 
 @Enum
 class GenderWithoutName {
-
   static MALE;
 
   static FEMALE;

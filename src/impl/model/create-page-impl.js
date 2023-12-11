@@ -28,11 +28,11 @@ function createPageImpl(Class, page) {
   } else if (Page.isValid(page)) {
     // FIXME: shall we use an option to control the name convention of JSON object?
     return new Page(
-        page.total_count,
-        page.total_pages,
-        page.page_index,
-        page.page_size,
-        createArrayImpl(Class, page.content, true),
+      page.total_count,
+      page.total_pages,
+      page.page_index,
+      page.page_size,
+      createArrayImpl(Class, page.content, true),
     );
   } else {
     throw new TypeError(`Invalid page format: ${JSON.stringify(page)}`);

@@ -10,7 +10,6 @@ import { Enum } from '../../src';
 
 @Enum
 class GenderWithOptions {
-
   static MALE = { name: '男', i18n: 'i18n.gender.male' };
 
   static FEMALE = { name: '女', i18n: 'i18n.gender.female' };

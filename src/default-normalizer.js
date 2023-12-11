@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { kindOf } from '@haixing_hu/common-util';
+import typeInfo from '@haixing_hu/typeinfo';
 
 /**
  * A default normalizer for a class field.
@@ -31,7 +31,6 @@ import { kindOf } from '@haixing_hu/common-util';
  * - `Map`, `WeakMap`: the normalization function will be called to normalize
  *   each value in the map.
  *
- *
  * @param {any} value
  *     The value to be normalized.
  * @return {any}
@@ -39,45 +38,38 @@ import { kindOf } from '@haixing_hu/common-util';
  * @author Haixing Hu
  */
 function defaultNormalizer(value) {
-  switch (kindOf(value)) {
-    case 'undefined':
-    case 'null':
-      return value;
+  const info = typeInfo(value);
+  switch (info.type) {
     case 'string':
       return value.trim();
-    case 'array':
-    case 'int8array':
-    case 'uint8array':
-    case 'uint8clampedarray':
-    case 'int16array':
-    case 'uint16array':
-    case 'int32array':
-    case 'uint32array':
-    case 'float32array':
-    case 'float64array':
-    case 'bigint64array':
-    case 'biguint64array':
-      return value.map((item) => defaultNormalizer(item));
-    case 'set':
-      return new Set(Array.from(value, (item) => defaultNormalizer(item)));
-    case 'weakset':
-      return new WeakSet(Array.from(value, (item) => defaultNormalizer(item)));
-    case 'map':
-      return new Map(Array.from(value, (item) => [item[0], defaultNormalizer(item[1])]));
-    case 'weakmap':
-      return new WeakMap(Array.from(value, (item) => [item[0], defaultNormalizer(item[1])]));
-    case 'arraybuffer':
-    case 'sharedarraybuffer':
-    case 'dataview':
+    case 'undefined':
+    case 'null':
+    case 'boolean':
+    case 'number':
+    case 'bigint':
+    case 'symbol':
+    case 'function':
       return value;
     case 'object':
+    default:
+      break;
+  }
+  switch (info.subtype) {
+    case 'Array':
+      return value.map((item) => defaultNormalizer(item));
+    case 'Map':
+      return new Map(Array.from(value, ([k, v]) => [k, defaultNormalizer(v)]));
+    case 'Set':
+      return new Set(Array.from(value, (v) => defaultNormalizer(v)));
+    default:
+      if (info.isBuiltIn) {
+        return value;
+      }
       if (typeof value.normalize === 'function') {
         // NOTE: we CANNOT just `return value.normalize()`, because the incorrect
         // implementation of `normalize()` method may return nothing.
         value.normalize();
       }
-      return value;
-    default:
       return value;
   }
 }

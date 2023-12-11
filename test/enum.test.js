@@ -34,11 +34,11 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       male.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     const female = Gender.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -48,11 +48,11 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       female.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
   });
   test('Enumerators without names', () => {
     const male = GenderWithoutName.MALE;
@@ -64,11 +64,11 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       male.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     const female = GenderWithoutName.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -78,11 +78,11 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       female.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
   });
   test('Enumerators with name and i18n options', () => {
     const male = GenderWithOptions.MALE;
@@ -95,15 +95,15 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       male.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     expect(() => {
       male.i18n = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'i18n' of object '[^']+'/);
+      /^Cannot assign to read only property 'i18n' of object '[^']+'/);
     const female = GenderWithOptions.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -114,15 +114,15 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       female.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     expect(() => {
       female.i18n = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'i18n' of object '[^']+'/);
+      /^Cannot assign to read only property 'i18n' of object '[^']+'/);
   });
   test('Enumerators with more payload options', () => {
     const male = GenderWithPayload.MALE;
@@ -137,19 +137,19 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       male.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       male.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     expect(() => {
       male.code = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'code' of object '[^']+'/);
+      /^Cannot assign to read only property 'code' of object '[^']+'/);
     expect(() => {
       male.data = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'data' of object '[^']+'/);
+      /^Cannot assign to read only property 'data' of object '[^']+'/);
     const female = GenderWithPayload.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -162,19 +162,19 @@ describe('Test the `@Enum` class decorator', () => {
     expect(() => {
       female.value = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'value' of object '[^']+'/);
+      /^Cannot assign to read only property 'value' of object '[^']+'/);
     expect(() => {
       female.name = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'name' of object '[^']+'/);
+      /^Cannot assign to read only property 'name' of object '[^']+'/);
     expect(() => {
       female.code = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'code' of object '[^']+'/);
+      /^Cannot assign to read only property 'code' of object '[^']+'/);
     expect(() => {
       female.data = 'XX';
     }).toThrowWithMessage(TypeError,
-        /^Cannot assign to read only property 'data' of object '[^']+'/);
+      /^Cannot assign to read only property 'data' of object '[^']+'/);
   });
   test('Enumerators should have `toString()` method', () => {
     const male = GenderWithPayload.MALE;

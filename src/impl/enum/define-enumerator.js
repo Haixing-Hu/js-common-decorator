@@ -36,7 +36,7 @@ function defineEnumerator(Class, field) {
     }
   } else {
     throw new TypeError('The default value of the enumerator'
-      + `${Class.name}.${field} should be either a string or an object.`)
+      + `${Class.name}.${field} should be either a string or an object.`);
   }
   Object.freeze(enumerator);
   Class[field] = enumerator;

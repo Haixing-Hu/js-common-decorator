@@ -22,6 +22,7 @@ import Payload from './payload';
 import NameField from './name-field';
 import Enum from './enum';
 import EnumValidator from './enum-validator';
+import { isEnumClass, isEnumerator } from './impl/utils';
 
 export {
   ValidationResult,
@@ -39,5 +40,7 @@ export {
   Payload,
   NameField,
   Enum,
+  isEnumClass,
+  isEnumerator,
   EnumNormalizer,
 };
