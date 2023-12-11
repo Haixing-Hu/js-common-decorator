@@ -47,6 +47,7 @@ describe('Test @Label', () => {
           return 'abc';
         }
       }
+      new Foo();
     }).toThrowWithMessage(
       SyntaxError,
       'The decorator @Label can only decorate a class field: bar',
@@ -59,6 +60,7 @@ describe('Test @Label', () => {
         @Label(123)
         bar = 'abc';
       }
+      new Foo();
     }).toThrowWithMessage(
       TypeError,
       'The first argument of @Label decorated on "bar" must be a string.',
@@ -71,6 +73,7 @@ describe('Test @Label', () => {
         @Label('bar', 123)
         bar = 'abc';
       }
+      new Foo();
     }).toThrowWithMessage(
       TypeError,
       'The second argument of @Label decorated on "bar" must be a string.',

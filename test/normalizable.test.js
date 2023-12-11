@@ -7,7 +7,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Normalizable, defaultNormalizer } from '../src';
+import { Model, Normalizable } from '../src';
+import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
 import { getFieldMetadata } from '../src/impl/utils';

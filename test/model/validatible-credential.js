@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validator, Type, EnumValidator, Label } from '../../src';
+import { Model, Validatable, Type, EnumValidator, Label } from '../../src';
 import CredentialType from './credential-type';
 import validateCredentialNumber from './rules/validate-credential-number';
 
@@ -17,7 +17,7 @@ export default class Credential {
   @Label('证件类型')
   type = 'IDENTITY_CARD';
 
-  @Validator(validateCredentialNumber)
+  @Validatable(validateCredentialNumber)
   @Label('证件号码')
   number = '';
 

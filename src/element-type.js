@@ -40,7 +40,7 @@ function ElementType(elementType) {
       throw new TypeError(`The argument of @ElementType decorated on "${name}" must be the constructor of a class.`);
     }
     setFieldMetadata(metadata, name, KEY_FIELD_ELEMENT_TYPE, elementType);
-    return function (initialValue) {
+    return (initialValue) => {
       if ((initialValue !== undefined) && (initialValue !== null) && (!Array.isArray(initialValue))) {
         throw new TypeError(`The field "${name}" decorated by @ElementType must be initialized with an array.`);
       }

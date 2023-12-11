@@ -195,6 +195,7 @@ const Impl = {
       case 'model':
       default: {
         // Construct a target value based on the source type
+        /* eslint-disable-next-line new-cap */
         const target = new type();
         // Recursively assign each attribute value of `source` to `target`
         return this.assign(target, source, {
@@ -279,6 +280,7 @@ const Impl = {
         const defaultElement = getDefaultInstance(elementType);
         return sourceArray.map((sourceElement, index) => {
           // Create an element from the target array
+          /* eslint-disable-next-line new-cap */
           const targetElement = new elementType();
           // Recursively assign each attribute value of `sourceElement` to `targetElement`.
           // Use `defaultElement` as default instance

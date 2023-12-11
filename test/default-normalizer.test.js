@@ -13,7 +13,6 @@ import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-f
 import NonDecoratedClass from './model/non-decorated-class';
 import ObjWithArrayField from './model/obj-with-array-field';
 
-
 /**
  * 单元测试 @DefaultNormalizer 装饰器。
  *

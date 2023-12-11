@@ -44,6 +44,7 @@ describe('Test @Nullable', () => {
           return 'abc';
         }
       }
+      new Foo();
     }).toThrowWithMessage(SyntaxError, 'The decorator @Nullable can only decorate a class field: bar');
   });
 });

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ElementType, Model, Type } from '../src';
+import { ElementType, Model } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_ELEMENT_TYPE } from '../src/impl/metadata-keys';
 import { getFieldMetadata } from '../src/impl/utils';
@@ -179,6 +179,7 @@ describe('Test `@ElementType``', () => {
           return 'abc';
         }
       }
+      new Foo();
     }).toThrowWithMessage(
       SyntaxError,
       'The decorator @ElementType can only decorate a class field: bar',
@@ -191,6 +192,7 @@ describe('Test `@ElementType``', () => {
         @ElementType('Credential')
         credentials = [];
       }
+      new Foo();
     }).toThrowWithMessage(
       TypeError,
       'The argument of @ElementType decorated on "credentials" must be the constructor of a class.',

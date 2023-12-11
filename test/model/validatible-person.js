@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import {
   Model,
-  Validator,
+  Validatable,
   Label,
   DefaultValidator,
   Nullable,
@@ -27,7 +27,7 @@ export default class Person {
   @Label('ID')
   id = '';
 
-  @Validator(validatePersonName)
+  @Validatable(validatePersonName)
   @Label('姓名')
   name = '';
 
@@ -36,21 +36,21 @@ export default class Person {
   @Label('证件')
   credential = new Credential();
 
-  @Validator(validatePersonGender)
+  @Validatable(validatePersonGender)
   @Type(Gender)
   @Label('性别')
   gender = '';
 
-  @Validator(validatePersonBirthday)
+  @Validatable(validatePersonBirthday)
   @Label('出生日期')
   birthday = '';
 
-  @Validator(validatePersonMobile)
+  @Validatable(validatePersonMobile)
   @Label('手机号码')
   @Nullable
   mobile = '';
 
-  @Validator(validatePersonEmail)
+  @Validatable(validatePersonEmail)
   @Label('电子邮件地址')
   @Nullable
   email = '';

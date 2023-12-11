@@ -106,7 +106,7 @@ function Validatable(validator, options = {}) {
     }
     if (typeof validator !== 'function') {
       throw new TypeError(
-        `The first argument of @Validatable decorated on the "${name}" field must a function.`
+        `The first argument of @Validatable decorated on the "${name}" field must a function.`,
       );
     }
     setFieldMetadata(metadata, name, KEY_FIELD_VALIDATABLE, { validator, options });

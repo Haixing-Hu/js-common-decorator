@@ -82,6 +82,7 @@ describe('Test the `@Type` annotated fields', () => {
           return 'abc';
         }
       }
+      new Foo();
     }).toThrowWithMessage(
       SyntaxError,
       'The decorator @Type can only decorate a class field: bar',
@@ -94,6 +95,7 @@ describe('Test the `@Type` annotated fields', () => {
         @Type('Credential')
         credential = null;
       }
+      new Foo();
     }).toThrowWithMessage(
       TypeError,
       'The argument of @Type decorated on "credential" must be the constructor of a class.',
