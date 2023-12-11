@@ -28,7 +28,9 @@ import {
  * @param {string} field
  *     The name of the specified field to be normalized.
  * @return {boolean}
- *     `true` if the specified field is normalized; otherwise, `false` otherwise.
+ *     `true` if the specified field exists and is normalizable; `false` otherwise.
+ * @author Haixing Hu
+ * @private
  */
 function normalizeFieldImpl(Class, obj, field) {
   // console.log('normalizeFieldImpl:', Class, obj, field);

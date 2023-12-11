@@ -18,6 +18,8 @@ import { deepEqual } from '@haixing_hu/common-util';
  * @return {boolean}
  *     Whether the objects on the left hand side and right hand side are
  *     logically equal.
+ * @author Haixing Hu
+ * @private
  */
 function equalsImpl(lhs, rhs) {
   if (lhs === rhs) {

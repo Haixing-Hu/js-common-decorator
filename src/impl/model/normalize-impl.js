@@ -21,6 +21,8 @@
  *     specified object whose names in this array will be normalized.
  * @return {object}
  *     The normalized object.
+ * @author Haixing Hu
+ * @private
  */
 function normalizeImpl(Class, obj, fields) {
   if (fields === undefined || fields === null || fields === '*') {

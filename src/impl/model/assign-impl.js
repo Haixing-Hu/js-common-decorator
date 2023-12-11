@@ -57,6 +57,8 @@ const Impl = {
    *     The names of all fields of the default instance of the target class,
    *     excluding the fields owned by the parent class of the target class if
    *     the parent class has an `assign()` method.
+   * @author Haixing Hu
+   * @private
    */
   getAllFields(target, source, { type, normalized }) {
     // Get all names of fields of the default object of the `type`

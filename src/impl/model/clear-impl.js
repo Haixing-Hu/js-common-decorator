@@ -17,6 +17,8 @@ import { getDefaultInstance, requirePrototypeMethod } from '../utils';
  *     An object in the specified model class.
  * @returns {Class}
  *     The cleared object.
+ * @author Haixing Hu
+ * @private
  */
 function clearImpl(Class, obj) {
   requirePrototypeMethod(Class, 'assign');

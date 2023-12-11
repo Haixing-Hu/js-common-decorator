@@ -18,6 +18,8 @@ import { getDefaultInstance } from '../utils';
  *     The specified object in the specified model class.
  * @return {boolean}
  *     `true` if the specified object is empty; otherwise, `false`.
+ * @author Haixing Hu
+ * @private
  */
 function isEmptyImpl(Class, obj) {
   const defaultInstance = getDefaultInstance(Class);

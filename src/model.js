@@ -35,10 +35,10 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * It adds the following methods to the decorated class:
  *
  * - Instance method `assign(obj, normalized)`: Copies the properties of the object
- *   `obj` to this object, only copying properties defined in this object's class.
- *   If a property in the `obj` object is `undefined` or `null`, it sets the
- *   property's value to the default value. The function returns the object itself.
- *   Note that `obj` can have a different prototype than this object.
+ *   `obj` to this object, only copying properties defined in the class of this
+ *   object. If a property in the `obj` object is `undefined` or `null`, it sets
+ *   the property of this object to the default value. The function returns this
+ *   object itself. Note that `obj` can have a different prototype than this object.
  *   The `normalized` parameter indicates whether to normalize this object after
  *   copying properties, with a default value of `true`.
  * - Instance method `clear()`: Sets all the properties of this object to their
@@ -48,13 +48,18 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  *   of its properties have default values.
  * - Instance method `equals(obj)`: Determines if this object is deeply equal
  *   to `obj`.
- * - Instance method `normalize(fields)`: Normalizes a specified field of this
+ * - Instance method `normalize(fields)`: Normalizes specified fields of this
  *   object. The `fields` parameter specifies the names of fields to be normalized.
  *   If `fields` is `undefined`, `null`, or the string `"*"`, it normalizes all
  *   the fields that can be normalized for this object. If `fields` is an array of
  *   strings, it normalizes all the fields specified in the array. Note that a
- *   field must be specified as normalized using the `@{@link Normalizable}`
- *   decorator.
+ *   field is normalizable if and only if it is decorated with the
+ *   `@{@link Normalizable}` decorator.
+ * - Instance method `normalizeField(field)`: Normalizes the specified field of
+ *   this object. The `field` parameter specifies the name of the field to be
+ *   normalized. If the specified exists and is normalizable, the function
+ *   normalizes it and returns `true`; otherwise, the function does nothing and
+ *   returns `false`.
  * - Instance method `validate(fields, options)`: Validates the specified fields of
  *   this object. The `fields` parameter is the names of the fields to be validated.
  *   If `fields` is `undefined`, `null`, or the string `"*"`, it validates all the
@@ -66,11 +71,12 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  *   Refer to the documentation of `@{@link Validatable}` for more details.
  * - Instance method `generateId()`: If the decorated class defines a property
  *   named `id`, this decorator automatically adds a `generateId()` instance method.
- *   Each call to this method generates a globally unique ID for the current
- *   calling object (represented as a string of an integer) and returns it. Note
- *   that if a parent class `A` defines the `id` field, and a subclass `B` inherits
- *   the `id` field but does not define its own `id` field, the `generateId()`
- *   method is added only to class `A`, not to class `B`.
+ *   Each call to this method generates a globally unique ID (represented as an
+ *   integer) for the class of this object, sets it to this object and returns
+ *   the generated ID. Note that if a parent class `A` defines the `id` field,
+ *   and a subclass `B` inherits  the `id` field but does not define its own
+ *   `id` field, the `generateId()` method is only added to class `A`, not to
+ *   class `B`.
  * - Static class method `create(obj, normalized)`: Creates a new instance object
  *   based on the `obj` object. It copies the property values from the corresponding
  *   properties of `obj`, maintaining the same prototype and class definition. This
@@ -245,44 +251,122 @@ function Model(Class, context) {
   setClassMetadata(Class, KEY_CLASS_CATEGORY, 'model');
   // Add the instance method `assign()`
   if (!hasOwnPrototypeFunction(Class, 'assign')) {
+    /**
+     * Copies the properties from a specified data object to this object, only
+     * copying properties defined in the class of this object.
+     *
+     * If a property in the data object is `undefined` or `null`, the function
+     * sets the property of this object to the default value.
+     *
+     * Note that the data object may have a different prototype than this object.
+     *
+     * @param {object} obj
+     *     the data object, which may have a different prototype than this object.
+     * @param {boolean} normalized
+     *     indicates whether to normalize this object after assignment. Default
+     *     value is `true`.
+     * @returns {object}
+     *     the reference to this object.
+     */
     Class.prototype.assign = function assign(obj, normalized = true) {
       return assignImpl(Class, this, obj, normalized);
     };
   }
   // Add the instance method `clear()`
   if (!hasOwnPrototypeFunction(Class, 'clear')) {
+    /**
+     * Sets all the properties of this object to their default values.
+     *
+     * @returns {object}
+     *     the reference to this object.
+     */
     Class.prototype.clear = function clear() {
       return clearImpl(Class, this);
     };
   }
   // Add the instance method `clone()`
   if (!hasOwnPrototypeFunction(Class, 'clone')) {
+    /**
+     * Clones this object.
+     *
+     * @returns {object}
+     *     the cloned copy of this object.
+     */
     Class.prototype.clone = function clone() {
       return cloneImpl(this);
     };
   }
   // Add the instance method `isEmpty()`
   if (!hasOwnPrototypeFunction(Class, 'isEmpty')) {
+    /**
+     * Checks whether this object is empty, i.e., whether all of its properties
+     * have default values.
+     *
+     * @returns {boolean}
+     *     `true` if this object is empty; `false` otherwise.
+     */
     Class.prototype.isEmpty = function isEmpty() {
       return isEmptyImpl(Class, this);
     };
   }
   // Add the instance method `equals()`
   if (!hasOwnPrototypeFunction(Class, 'equals')) {
+    /**
+     * Determines whether this object is deeply equal to the other object.
+     *
+     * @param {object} obj
+     *     the other object.
+     * @returns {boolean}
+     *     `true` if this object is deeply equal to the other object; `false`
+     *     otherwise.
+     */
     Class.prototype.equals = function equals(obj) {
       return equalsImpl(this, obj);
     };
   }
-  // Add the instance method `normalizeField()`
-  if (!hasOwnPrototypeFunction(Class, 'normalizeField')) {
-    Class.prototype.normalizeField = function normalizeField(field) {
-      return normalizeFieldImpl(Class, this, field);
-    };
-  }
   // Add the instance method `normalize()`
   if (!hasOwnPrototypeFunction(Class, 'normalize')) {
+    /**
+     * Normalizes all normalizable fields or specified normalizable fields of
+     * this object.
+     *
+     * A field is normalizable if and only if it is decorated with the
+     * `@{@link Normalizable}` decorator.
+     *
+     * @param {undefined|string|array} fields
+     *     the names of fields to be normalized. If this argument is not specified,
+     *     or `undefined`, or `null`, or a string `'*'`, this function normalizes
+     *     all normalizable fields of this object; If this argument is an array of
+     *     strings, this function normalizes all normalizable fields specified
+     *     in the array. If this argument is a string other than `'*'`, this
+     *     function normalizes the field with the name equals to this argument;
+     *     if the specified field does not exist nor non-normalizable, this
+     *     function does nothing.
+     * @returns {object}
+     *     the reference to this object.
+     */
     Class.prototype.normalize = function normalize(fields = '*') {
       return normalizeImpl(Class, this, fields);
+    };
+  }
+  // Add the instance method `normalizeField()`
+  if (!hasOwnPrototypeFunction(Class, 'normalizeField')) {
+    /**
+     * Normalizes the specified normalizable fields of this object.
+     *
+     * A field is normalizable if and only if it is decorated with the
+     * `@{@link Normalizable}` decorator.
+     *
+     * @param {string} field
+     *     the names of fields to be normalized. If the specified field does not
+     *     exist nor non-normalizable, this function does nothing and returns
+     *     `false`.
+     * @returns {boolean}
+     *     `true` if the specified field exists and is normalizable; `false`
+     *     otherwise.
+     */
+    Class.prototype.normalizeField = function normalizeField(field) {
+      return normalizeFieldImpl(Class, this, field);
     };
   }
   // // Add the instance method `validate()`
@@ -296,30 +380,116 @@ function Model(Class, context) {
     // If its own instance has an `id` field, and there is no `generateId()`
     // method on itself or its parent class prototype
     setClassMetadata(Class, KEY_CLASS_NEXT_ID, 0);
+    /**
+     * Generates the next unique identifier for instances of this class and set
+     * it to this object.
+     *
+     * Each call to this method generates a globally unique ID (represented as
+     * an integer) for the class of this object, sets it to this object and
+     * returns the generated ID.
+     *
+     * Note hat if a parent class `A` defines the `id` field, and a subclass `B`
+     * inherits the `id` field but does not define its own `id` field, the
+     * `generateId()` method is only added to class `A`, not to class `B`.
+     *
+     * @returns {number}
+     *     the generated unique ID.
+     */
     Class.prototype.generateId = function generateId() {
       return generateIdImpl(Class, this);
     };
   }
   // Add the class method `create()`
   if (!Object.hasOwn(Class, 'create')) {
+    /**
+     * Creates a new instance of this class based on the specified data object.
+     *
+     * It copies the property values from the corresponding properties of the
+     * specified data object maintaining the same prototype and class definition.
+     *
+     * If a property in the data object is `undefined` or `null`, the function
+     * sets the property of the created instance to the default value.
+     *
+     * This method is usually used to transform a plain JSON object into the
+     * specified domain object.
+     *
+     * @param {object} obj
+     *     the specified data object.
+     * @param {boolean} normalized
+     *     indicates whether to normalize the created object. The default value
+     *     is `true`.
+     * @returns {Class|null}
+     *     the new instance of this class created from the specified data object,
+     *     or `null` if the specified object is `null` or `undefined`.
+     */
     Class.create = function create(obj, normalized = true) {
       return createImpl(Class, obj, normalized);
     };
   }
   // Add the class method `createArray()`
   if (!Object.hasOwn(Class, 'createArray')) {
+    /**
+     * Creates a new array of instances of this class based on an array of data
+     * objects.
+     *
+     * The property values of each element in the created instances array are
+     * copied from the corresponding elements in the data object array,
+     * maintaining the same prototype and class definition.
+     *
+     * This method is usually used to transform an array of plain JSON objects
+     * into an array of specified domain objects.
+     *
+     * @param {Array<object>}  array
+     *     the specified array of data objects.
+     * @param {boolean} normalized
+     *     indicates whether to normalize the created objects. The default value
+     *     is `true`.
+     * @returns {Array<Class>|null}
+     *     the new array of instances of this class created from the specified
+     *     data object array, or `null` if the specified data object array is
+     *     `null` or `undefined`.
+     */
     Class.createArray = function createArray(array, normalized = true) {
       return createArrayImpl(Class, array, normalized);
     };
   }
   // Add the class method `createPage()`
   if (!Object.hasOwn(Class, 'createPage')) {
+    /**
+     *  Creates a new page object based on the specified pagination data object.
+     *
+     *  Typically, the pagination data object is the JSON representation of a
+     *  list of domain objects obtained from a server using the GET method, and
+     *  the object should conform to the `Page` class definition.
+     *
+     * @param {object} page
+     *     the specified pagination data object, which must conform to the
+     *     `Page` class definition.
+     * @returns {Page|null}
+     *     A new `Page` object, whose `content` property is the result of
+     *     `this.createArray(page.content, true)`, and the other properties
+     *     matching those of the `page` object. If the argument `page` is not a
+     *     valid `Page` object, this function returns `null`.
+     */
     Class.createPage = function createPage(page) {
       return createPageImpl(Class, page);
     };
   }
   // Add the class method `isNullishOrEmpty()`
   if (!Object.hasOwn(Class, 'isNullishOrEmpty')) {
+    /**
+     * Determines whether the given instance of this class is `undefined`,
+     * `null`, or an empty object constructed with default values.
+     *
+     * @param {object} obj
+     *     the specified object.
+     * @returns {boolean}
+     *     `true` if the specified object is `undefined`, or `null` or an empty
+     *     instance of this class; `false` otherwise.
+     * @throws TypeError
+     *     if the specified object is not nullish and is not a instance of this
+     *     class.
+     */
     Class.isNullishOrEmpty = function isNullishOrEmpty(obj) {
       return isNullishOrEmptyImpl(Class, obj);
     };
