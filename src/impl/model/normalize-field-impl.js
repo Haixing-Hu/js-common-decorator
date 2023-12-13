@@ -34,7 +34,7 @@ function normalizeFieldImpl(Class, obj, field) {
     // the field does not exist
     return false;
   }
-  // If the class has a parent class, call the normalizer of the parent class
+  // If the class has a parent class, call the normalizeField of the parent class
   // to normalize the field.
   const Parent = Object.getPrototypeOf(Class);
   if (hasOwnPrototypeFunction(Parent, 'normalizeField')) {

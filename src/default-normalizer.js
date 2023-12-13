@@ -9,7 +9,7 @@
 import typeInfo from '@haixing_hu/typeinfo';
 
 /**
- * A default normalizer for a class field.
+ * A default normalizer for a non-static class field.
  *
  * This normalizer does the following things:
  * - If the value is `undefined` or `null`, it returns the value itself;

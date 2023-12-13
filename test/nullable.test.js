@@ -45,6 +45,7 @@ describe('Test @Nullable', () => {
         }
       }
       new Foo();
-    }).toThrowWithMessage(SyntaxError, 'The decorator @Nullable can only decorate a class field: bar');
+    }).toThrowWithMessage(SyntaxError,
+      'The decorator @Nullable can only decorate a class field: bar');
   });
 });

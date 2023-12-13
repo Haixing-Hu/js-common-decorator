@@ -18,11 +18,11 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  *
  * ```js
  * class Employee {
- *   @Validator(nameValidator)
+ *   @Validatable(nameValidator)
  *   @Label('Name', 'i18n.field.name')
  *   name = '';
  *
- *   @Validator(integerValidator)
+ *   @Validatable(integerValidator)
  *   @Label('Level', 'i18n.field.level')
  *   @Nullable
  *   level = 0;
@@ -41,6 +41,7 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  * @param {object} metadata
  *     The metadata associated to the class the decorated target belongs to.
  * @author Haixing Hu
+ * @see Validatable
  * @see Model
  */
 function Nullable(field, { kind, name, metadata }) {
