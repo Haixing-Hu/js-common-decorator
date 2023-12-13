@@ -51,7 +51,7 @@ import { KEY_CLASS_NAME_FIELD } from './impl/metadata-keys';
  */
 function NameField(field, { kind, name, metadata }) {
   if (kind !== 'field') {
-    throw new TypeError(`The decorator @NameField can only decorate a class field: ${name}`);
+    throw new SyntaxError(`The decorator @NameField can only decorate a class field: ${name}`);
   }
   // Set the name of the decorated field as the name field of the class
   if (metadata[KEY_CLASS_NAME_FIELD]) {
