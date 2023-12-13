@@ -54,8 +54,9 @@ function NameField(field, { kind, name, metadata }) {
     throw new SyntaxError(`The decorator @NameField can only decorate a class field: ${name}`);
   }
   // Set the name of the decorated field as the name field of the class
-  if (metadata[KEY_CLASS_NAME_FIELD]) {
-    throw new Error(`There is already a name field for the class: ${metadata[KEY_CLASS_NAME_FIELD]}`);
+  const oldField = metadata[KEY_CLASS_NAME_FIELD];
+  if (oldField) {
+    throw new SyntaxError(`@NameField cannot decorate on "${name}", since it has already decorated on "${oldField}".`);
   }
   metadata[KEY_CLASS_NAME_FIELD] = name;
 }

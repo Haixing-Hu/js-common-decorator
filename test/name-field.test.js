@@ -44,4 +44,20 @@ describe('Test @NameField', () => {
       'The decorator @NameField can only decorate a class field: bar',
     );
   });
+  test('@NameField decorated on more than one fields', () => {
+    expect(() => {
+      @Model
+      class Foo {
+        @NameField
+        name1 = 'Bill Gates';
+
+        @NameField
+        name2 = 'Bill Gates';
+      }
+      new Foo();
+    }).toThrowWithMessage(
+      SyntaxError,
+      '@NameField cannot decorate on "name2", since it has already decorated on "name1".',
+    );
+  });
 });
