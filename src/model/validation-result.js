@@ -8,20 +8,30 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 此模型表示校验结果。
+ * The model of validation result.
  *
- * @author 胡海星
+ * @author Haixing Hu
  */
 class ValidationResult {
   /**
-   * 校验结果是否正确。
+   * Indicates whether the validation is successful.
    */
   success = true;
 
   /**
-   * 对校验结果的描述。
+   * The description of the validation result.
    */
   description = '';
+
+  /**
+   * Next validation result.
+   *
+   * If the validation has multiple failed results, the next failed result will
+   * be chained to this field.
+   *
+   * @type {ValidationResult | null}
+   */
+  next = null;
 
   /**
    * 创建一个新的{@link ValidationResult}对象。
@@ -34,6 +44,7 @@ class ValidationResult {
   constructor(success = true, description = '') {
     this.success = success ?? true;
     this.description = description ?? '';
+    this.next = null;
   }
 
   /**
@@ -56,23 +67,39 @@ class ValidationResult {
   }
 
   /**
-   * 合并多个{@link ValidationResult}对象。
+   * Merge multiple {@link ValidationResult} objects.
+   *
+   * If all {@link ValidationResult} objects to be merged are successful,
+   * the merging result is a single successful {@link ValidationResult} object;
+   * otherwise, the merging result is the chain of all failed
+   * {@link ValidationResult} objects.
    *
    * @param  {Array} results
-   *     多个{@link ValidationResult}对象构成的数组。
+   *     An array of multiple {@link ValidationResult} objects.
    * @return {ValidationResult}
-   *     指定的{@link ValidationResult}对象数组中所有的对象合并的结果，作为一个
-   *     新的{@link ValidationResult}对象返回。
+   *     Returns the result of merging all objects in the specified
+   *     {@link ValidationResult} object array as a new {@link ValidationResult}
+   *     object.
    */
   static merge(results) {
-    if (results) {
+    if (Array.isArray(results) && (results.length > 0)) {
+      const first = new ValidationResult(true);
+      let last = first;
       for (let i = 0; i < results.length; ++i) {
         const result = results[i];
         if (result && !result.success) {
-          return result;  // 返回第一个失败结果
+          last.next = result;
+          last = result;
         }
       }
-      return new ValidationResult(true);
+      last.next = null;
+      if (first.next) {
+        last = first.next;
+        first.next = null;
+        return last;
+      } else {
+        return first;
+      }
     } else {
       return new ValidationResult(true);
     }
