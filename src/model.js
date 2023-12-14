@@ -411,8 +411,9 @@ function Model(Class, context) {
      *     The validation context. If this argument is not specified, an empty
      *     context is used.
      * @returns {ValidationResult|null}
-     *     the validation result if the specified field exists and is validatable;
-     *     `null` otherwise.
+     *     The validation result if the specified field exists; `null` otherwise.
+     *     If the specified field exist but is non-validatable, returns the success
+     *     validation result.
      */
     Class.prototype.validateField = function validateField(field, context = {}) {
       return validateFieldImpl(Class, this, field, context);

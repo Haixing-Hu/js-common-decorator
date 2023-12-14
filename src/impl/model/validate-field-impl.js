@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '../../index';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -31,8 +32,9 @@ import validateSetField from './validate-set-field';
  * @param {object} context
  *     The validation context.
  * @returns {ValidationResult|null}
- *     The validation result if the specified field exists and is validatable;
- *     `null` otherwise.
+ *     The validation result if the specified field exists; `null` otherwise.
+ *     If the specified field exist but is non-validatable, returns the success
+ *     validation result.
  * @author Haixing Hu
  * @private
  */
@@ -60,7 +62,7 @@ function validateFieldImpl(Class, obj, field, context) {
   const validator = getFieldMetadata(metadata, field, KEY_FIELD_VALIDATOR);
   if (validator === undefined) {
     // the field is not decorated with @Validatable
-    return null;
+    return new ValidationResult(true);
   }
   const value = obj[field];
   return validateNullishField(metadata, obj, field, value)
