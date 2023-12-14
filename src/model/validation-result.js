@@ -34,36 +34,19 @@ class ValidationResult {
   next = null;
 
   /**
-   * 创建一个新的{@link ValidationResult}对象。
+   * Create a new {@link ValidationResult} object.
    *
    * @param {boolean} success
-   *     新的{@link ValidationResult}对象的验证正确与否标记，如不提供则使用默认值 true。
+   *     The validation correctness flag of the new object. If not provided, the
+   *     default value `true` is used.
    * @param {string} description
-   *     新的{@link ValidationResult}对象的对验证结果的描述，如不提供则使用默认值空字符串。
+   *     Description of the validation result of the new object. If not provided,
+   *     the default value is an empty string.
    */
   constructor(success = true, description = '') {
     this.success = success ?? true;
     this.description = description ?? '';
     this.next = null;
-  }
-
-  /**
-   * 合并另一个{@link ValidationResult}对象。
-   *
-   * @param  {ValidationResult} other
-   *     多个{@link ValidationResult}对象构成的数组。
-   * @return {ValidationResult}
-   *     当前{@link ValidationResult}对象和指定的另一个{@link ValidationResult}
-   *     对象合并的结果，作为一个新的{@link ValidationResult}对象返回。
-   */
-  join(other) {
-    if (!this.success) {
-      return this.clone();
-    } else if (other && !other.success) {
-      return other.clone();
-    } else {
-      return new ValidationResult(true);
-    }
   }
 
   /**
