@@ -385,13 +385,14 @@ function Model(Class, context) {
      *     function validates the field with the name equals to this argument;
      *     if the specified field does not exist nor non-validatable, this
      *     function does nothing.
-     * @param {object} options
-     *     the options of validation.
+     * @param {object} context
+     *     The validation context. If this argument is not specified, an empty
+     *     context is used.
      * @returns {ValidationResult}
      *     The result of validation.
      */
-    Class.prototype.validate = function validate(fields = '*', options = {}) {
-      return validateImpl(Class, this, fields, options);
+    Class.prototype.validate = function validate(fields = '*', context = {}) {
+      return validateImpl(Class, this, fields, context);
     };
   }
   // Add the instance method `validateField()`
@@ -406,14 +407,15 @@ function Model(Class, context) {
      *     the names of fields to be validated. If the specified field does not
      *     exist nor non-validatable, this function does nothing and returns
      *     `null`.
-     * @param {object} options
-     *     the options of validation.
+     * @param {object} context
+     *     The validation context. If this argument is not specified, an empty
+     *     context is used.
      * @returns {ValidationResult|null}
      *     the validation result if the specified field exists and is validatable;
      *     `null` otherwise.
      */
-    Class.prototype.validateField = function validateField(field, options) {
-      return validateFieldImpl(Class, this, field, options);
+    Class.prototype.validateField = function validateField(field, context = {}) {
+      return validateFieldImpl(Class, this, field, context);
     };
   }
   // Add the instance method `generateId()` to the class containing the `id` field

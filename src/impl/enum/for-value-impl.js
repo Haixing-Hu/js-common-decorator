@@ -21,7 +21,7 @@
  * @author Haixing Hu
  * @private
  */
-function valueOfImpl(Class, value) {
+function forValueImpl(Class, value) {
   if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
     return undefined;
   }
@@ -30,4 +30,4 @@ function valueOfImpl(Class, value) {
   return (e instanceof Class ? e : undefined);
 }
 
-export default valueOfImpl;
+export default forValueImpl;

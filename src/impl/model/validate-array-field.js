@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { isTypedArray } from '@haixing_hu/typeinfo';
 import ValidationResult from '../../model/validation-result';
-import getElementValidationOptions from './get-element-validation-options';
+import getElementValidationContext from './get-element-validation-context';
 
 /**
  * Validates the specified array field of the specified object.
@@ -20,37 +20,33 @@ import getElementValidationOptions from './get-element-validation-options';
  * This function assumes that the field exists, and is validatable, not nullish
  * nor empty.
  *
- * @param {function} Class
- *     The class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
- *     The object to be validated, which must be an instance of the `Class` class.
+ *     The object to be validated.
  * @param {string} field
  *     The name of the specified field to be validated. This function assumes
  *     that the field exists and is validatable, and is non-nullish.
  * @param {any} value
  *     The value of the specified field of the specified object.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {function} validator
+ *     The validator function
+ * @param {object} context
+ *     The validation context.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field is an array or a typed array;
  *     `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateArrayField(Class, metadata, obj, field, value, config, options) {
+function validateArrayField(metadata, obj, field, value, validator, context) {
   if (Array.isArray(value) || isTypedArray(value)) {
-    // get the validator
-    const validator = config.validator;
     // get the validation options
-    const opts = getElementValidationOptions(metadata, obj, field, config, options);
+    const ctx = getElementValidationContext(metadata, obj, field, context);
     // validate each element of the array
     const results = value.map((e, i) => {
-      opts.index = i;
-      return validator(e, opts);
+      ctx.index = i;
+      return validator(e, ctx);
     });
     return ValidationResult.merge(results);
   }

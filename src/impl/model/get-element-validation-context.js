@@ -10,7 +10,7 @@ import { getFieldElementType, getFieldLabel } from '../field-utils';
 import { getInstanceName } from '../utils';
 
 /**
- * Gets the validation options of elements in the specified collection field.
+ * Gets the validation context of elements in the specified collection field.
  *
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
@@ -19,30 +19,30 @@ import { getInstanceName } from '../utils';
  * @param {string} field
  *     The name of the specified field to be validated. This function assumes
  *     that the field exists and is an array, set, or map.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {object} context
+ *     The current context of validation.
  * @returns {object}
- *     The validation options of the elements in the specified collection field.
+ *     The validation context of the elements in the specified collection field.
+ * @author Haixing Hu
+ * @private
  */
-function getElementValidationOptions(metadata, obj, field, config, options) {
+function getElementValidationContext(metadata, obj, field, context) {
   // get the element type of the field
-  const elementType = options.type ?? getFieldElementType(metadata, field);
+  const elementType = context.type ?? getFieldElementType(metadata, field);
   // get the label of the field
-  const label = options.label ?? getFieldLabel(metadata, field);
+  const label = context.label ?? getFieldLabel(metadata, field);
   // get the name of the instance
-  const name = options.name ?? getInstanceName(metadata, obj);
+  const owner = context.owner ?? getInstanceName(metadata, obj);
   // constructs the validation options
-  const defaultOptions = {
+  const ctx = {
     instance: obj,
     field,
     type: elementType,
     label,
-    name,
+    owner,
   };
-  // combine the options
-  return Object.assign(defaultOptions, config.options, options);
+  // merge the context
+  return Object.assign(ctx, context);
 }
 
-export default getElementValidationOptions;
+export default getElementValidationContext;

@@ -29,8 +29,6 @@ import ValidationResult from '../../model/validation-result';
  * This function assumes that the field exists and is validatable, and is
  * non-nullish.
  *
- * @param {function} Class
- *     The class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
@@ -40,27 +38,25 @@ import ValidationResult from '../../model/validation-result';
  *     that the field exists and is validatable, and is non-nullish.
  * @param {any} value
  *     The value of the specified field of the specified object.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {object} context
+ *     The validation context.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field is empty; `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateEmptyField(Class, metadata, obj, field, value, config, options) {
+function validateEmptyField(metadata, obj, field, value, context) {
   if (isEmpty(value)) {
     if (isFieldNonEmpty(metadata, field)) {
-      return new ValidationResult(true);
-    } else {
-      const label = options.label ?? getFieldLabel(metadata, field);
-      const name = options.name ?? getInstanceName(metadata, obj);
+      const label = context.label ?? getFieldLabel(metadata, field);
+      const owner = context.owner ?? getInstanceName(metadata, obj);
       // TODO: make the message i18n
-      const message = name
-        ? `The ${label} of ${name} cannot be empty.`
+      const message = owner
+        ? `The ${label} of ${owner} cannot be empty.`
         : `The ${label} cannot be empty.`;
       return new ValidationResult(false, message);
+    } else {
+      return new ValidationResult(true);
     }
   }
   return null;

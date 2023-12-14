@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validatable, Type, Label } from '../../src';
+import { Model, Validatable, Type, Label, NonEmpty } from '../../src';
 import CredentialType from './credential-type';
 import validateCredentialNumber from './rules/validate-credential-number';
 
@@ -15,15 +15,16 @@ export default class Credential {
   @Validatable
   @Type(CredentialType)
   @Label('证件类型')
-  type = 'IDENTITY_CARD';
+  type = CredentialType.IDENTITY_CARD;
 
   @Validatable(validateCredentialNumber)
   @Label('证件号码')
+  @NonEmpty
   number = '';
 
-  nonValidable = '';
+  nonValidatable = '';
 
-  constructor(type = 'IDENTITY_CARD', number = '') {
+  constructor(type = CredentialType.IDENTITY_CARD, number = '') {
     this.type = type;
     this.number = number;
   }

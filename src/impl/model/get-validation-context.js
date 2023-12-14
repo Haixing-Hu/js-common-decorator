@@ -10,7 +10,7 @@ import { getFieldType, getFieldLabel } from '../field-utils';
 import { getInstanceName } from '../utils';
 
 /**
- * Gets the validation options of the value of the specified field.
+ * Gets the validation context of the value of the specified field.
  *
  * @param {function} Class
  *     The constructor of the class of the object to be validated.
@@ -21,30 +21,30 @@ import { getInstanceName } from '../utils';
  * @param {string} field
  *     The name of the specified field to be validated. This function assumes
  *     that the field exists and is an array, set, or map.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {object} context
+ *     The current context of validation.
  * @returns {object}
- *     The validation options of the value of the specified field.
+ *     The validation context of the value of the specified field.
+ * @author Haixing Hu
+ * @private
  */
-function getValidationOptions(Class, metadata, obj, field, config, options) {
+function getValidationContext(Class, metadata, obj, field, context) {
   // get the element type of the field
-  const type = options.type ?? getFieldType(Class, metadata, field);
+  const type = context.type ?? getFieldType(Class, metadata, field);
   // get the label of the field
-  const label = options.label ?? getFieldLabel(metadata, field);
+  const label = context.label ?? getFieldLabel(metadata, field);
   // get the name of the instance
-  const name = options.name ?? getInstanceName(metadata, obj);
-  // constructs the validation options
-  const defaultOptions = {
+  const owner = context.owner ?? getInstanceName(metadata, obj);
+  // constructs the validation context
+  const ctx = {
     instance: obj,
     field,
     type,
     label,
-    name,
+    owner,
   };
-  // combine the options
-  return Object.assign(defaultOptions, config.options, options);
+  // merge the context
+  return Object.assign(ctx, context);
 }
 
-export default getValidationOptions;
+export default getValidationContext;

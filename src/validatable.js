@@ -25,22 +25,17 @@ import defaultValidator from './default-validator';
  *     The name of the decorated target.
  * @param {function} validator
  *     The validator to set.
- * @param {object} options
- *     The validation options.
  * @author Haixing Hu
  * @private
  */
-function setValidator(field, { metadata, kind, name }, validator, options) {
+function setValidator(field, { metadata, kind, name }, validator) {
   if (kind !== 'field') {
     throw new TypeError(`The @Validatable must decorate a class field: ${name}`);
   }
   if (typeof validator !== 'function') {
     throw new TypeError(`The first argument of @Validatable decorated on the "${name}" field must a function.`);
   }
-  if (typeof options !== 'object') {
-    throw new TypeError(`The second argument of @Validatable decorated on the "${name}" field must an object.`);
-  }
-  setFieldMetadata(metadata, name, KEY_FIELD_VALIDATOR, { validator, options });
+  setFieldMetadata(metadata, name, KEY_FIELD_VALIDATOR, validator);
 }
 
 /**
@@ -124,32 +119,23 @@ function setValidator(field, { metadata, kind, name }, validator, options) {
  *     The array of arguments for calling this decorator. If it has only one
  *     argument, the only argument is the specified validator of this
  *     decorator, and this function should return another function which is the
- *     decorator of a class; If it has two arguments, and the second argument is
- *     the decorator context object, the function will set the validator of the
- *     decorated field to the default validator; If it has two arguments, and the
- *     second argument is not the decorator context object, the first argument is
- *     considered to be the specified validator of this decorator, and the second
- *     argument is considered to be the options of the validator, and the function
- *     should return another function which is the decorator of a field.
+ *     decorator of a class; If it has two arguments, the first argument is the
+ *     decorated target (in the case of decorating a class field, this argument
+ *     should always be `undefined`), and the second argument is the context
+ *     object containing information about the decorated target.
  * @return {Function|undefined}
- *     If this function has only one argument, or has two arguments and the
- *     second argument is the context object of the decorator, this function
- *     returns another function which is the decorator of a field; otherwise,
- *     this function sets the validator and validation of the decorated field
- *     and returns nothing.
+ *     If this function has only one argument, this function returns another
+ *     function which is the decorator of a field; otherwise, this function
+ *     sets the normalizer of the decorated field and returns nothing.
  * @author Haixing Hu
  * @see defaultValidator
  * @see Model
  */
 function Validatable(...args) {
   if (args.length === 1) {
-    return (field, context) => setValidator(field, context, args[0], {});
-  } else if (args.length === 2) {
-    if (isDecoratorContext(args[1])) {
-      setValidator(args[0], args[1], defaultValidator, {});
-    } else {
-      return (field, context) => setValidator(field, context, args[0], args[1]);
-    }
+    return (field, context) => setValidator(field, context, args[0]);
+  } else if ((args.length === 2) && isDecoratorContext(args[1])) {
+    setValidator(args[0], args[1], defaultValidator);
   } else {
     throw new TypeError('Invalid use of @Normalizable decorator.');
   }

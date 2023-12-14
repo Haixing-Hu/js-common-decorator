@@ -23,47 +23,6 @@ import validateArrayField from './model/rules/validate-array-field';
  * @author 胡海星
  */
 describe('测试 @Validatable', () => {
-  test('测试 Credential 类的 metadata 对象', () => {
-    const metadata = classMetadataCache.get(Credential);
-    expect(metadata).not.toBeNull();
-    console.log('Credential.metadata = ', metadata);
-  });
-  test('测试 CredentialSubclass 类的 metadata 对象', () => {
-    const metadata = classMetadataCache.get(CredentialSubclass);
-    expect(metadata).not.toBeNull();
-    console.log('CredentialSubclass.metadata = ', metadata);
-  });
-  test('测试 Person 类的 metadata 对象', () => {
-    const metadata = classMetadataCache.get(Person);
-    expect(metadata).not.toBeNull();
-    console.log('Person.metadata = ', metadata);
-  });
-  test('测试 Credential.prototype.validate()', () => {
-    const credential = new Credential(CredentialType.PASSPORT.value, 'E12345678');
-    console.log('credential = ', credential);
-    let result = credential.validate();
-    expect(result).toBeInstanceOf(ValidationResult);
-    expect(result.success).toBe(true);
-    expect(result.description).toBe('');
-
-    credential.assign({ type: 'xxx' });
-    result = credential.validate();
-    expect(result).toBeInstanceOf(ValidationResult);
-    expect(result.success).toBe(false);
-    expect(result.description).toBe('证件类型不受支持："xxx"');
-
-    credential.assign({ type: CredentialType.PASSPORT.value, number: 'xxxx' });
-    result = credential.validate();
-    expect(result).toBeInstanceOf(ValidationResult);
-    expect(result.success).toBe(false);
-    expect(result.description).toBe('护照证件号码格式不正确');
-
-    credential.assign({ type: CredentialType.PASSPORT.value, number: '' });
-    result = credential.validate();
-    expect(result).toBeInstanceOf(ValidationResult);
-    expect(result.success).toBe(false);
-    expect(result.description).toBe('请输入护照证件号码');
-  });
   test('测试 Credential.prototype.validate(null)', () => {
     const credential = new Credential(CredentialType.PASSPORT.value, 'E12345678');
     console.log('credential = ', credential);

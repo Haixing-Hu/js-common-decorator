@@ -111,7 +111,7 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
  *     decorated target (in the case of decorating a class field, this argument
  *     should always be `undefined`), and the second argument is the context
  *     object containing information about the decorated target.
- * @return {Function}
+ * @return {Function|undefined}
  *     If this function has only one argument, this function returns another
  *     function which is the decorator of a field; otherwise, this function
  *     sets the normalizer of the decorated field and returns nothing.
@@ -123,7 +123,7 @@ function Normalizable(...args) {
   if (args.length === 1) {
     return (field, context) => setNormalizer(field, context, args[0]);
   } else if ((args.length === 2) && isDecoratorContext(args[1])) {
-    return setNormalizer(args[0], args[1], defaultNormalizer);
+    setNormalizer(args[0], args[1], defaultNormalizer);
   } else {
     throw new TypeError('Invalid use of @Normalizable decorator.');
   }

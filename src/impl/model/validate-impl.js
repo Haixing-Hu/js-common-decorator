@@ -20,25 +20,25 @@ import ValidationResult from '../../model/validation-result';
  *     the string `"*"`, all validatable fields of the specified object will be
  *     validated; if it is an array of strings, all validatable fields of the
  *     specified object whose names in this array will be validated.
- * @param {object} options
- *     The validation options.
+ * @param {object} context
+ *     The validation context.
  * @return {object}
  *     The validated object.
  * @author Haixing Hu
  * @private
  */
-function validateImpl(Class, obj, fields, options) {
+function validateImpl(Class, obj, fields, context) {
   if (fields === undefined || fields === null || fields === '*') {
-    const results = Object.keys(obj).map((f) => obj.validateField(f, options));
+    const results = Object.keys(obj).map((f) => obj.validateField(f, context));
     return ValidationResult.merge(results);
   } else if (Array.isArray(fields)) {
-    const results = fields.map((f) => obj.validateField(f, options));
+    const results = fields.map((f) => obj.validateField(f, context));
     return ValidationResult.merge(results);
   } else if (typeof fields === 'string') {
-    const result = obj.validateField(fields, options);
+    const result = obj.validateField(fields, context);
     return result ?? new ValidationResult(true);
   } else {
-    throw new TypeError(`The argument ${Class.name}.validate() must be a string or an array of strings.`);
+    throw new TypeError(`The argument of ${Class.name}.validate() must be a string or an array of strings.`);
   }
 }
 

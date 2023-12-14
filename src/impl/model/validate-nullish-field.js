@@ -21,33 +21,27 @@ import ValidationResult from '../../model/validation-result';
  *
  * This function assumes that the field exists and is validatable.
  *
- * @param {function} Class
- *     The class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
- *     The object to be validated, which must be an instance of the `Class` class.
+ *     The object to be validated.
  * @param {string} field
  *     The name of the specified field to be validated. This function assumes
  *     that the field exists and is validatable.
  * @param {any} value
  *     The value of the specified field of the specified object.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field is nullish; `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateNullishField(Class, metadata, obj, field, value, config, options) {
+function validateNullishField(metadata, obj, field, value) {
   if (value === undefined || value === null) {
     if (isFieldNullable(metadata, field)) {
       return new ValidationResult(true);
     } else {
-      const label = options.label ?? getFieldLabel(metadata, field);
-      const name = options.name ?? getInstanceName(metadata, obj);
+      const label = getFieldLabel(metadata, field);
+      const name = getInstanceName(metadata, obj);
       // TODO: make the message i18n
       const message = name
         ? `The ${label} of ${name} must be specified.`

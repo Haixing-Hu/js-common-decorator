@@ -7,6 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import ValidationResult from './model/validation-result';
+import { isEnumClass } from './impl/utils';
 
 /**
  * A default validator for a non-static class field.
@@ -32,28 +33,42 @@ import ValidationResult from './model/validation-result';
  * @param {any} value
  *     the value to be validated, which is assumed to be non-nullish, non-empty,
  *     non-collection.
- * @param {object} options
- *     the validation options.
+ * @param {object} context
+ *     the validation context.
  * @returns {ValidationResult}
  *     the validation result.
+ * @author Haixing Hu
+ * @see Model
  * @see Validatable
+ * @see ValidationResult
  */
-function defaultValidator(value, options) {
-  if (options.type) {
-    // validate the type
+function defaultValidator(value, context) {
+  if (context.type) {   // validate the type
+    // special deal with the case that the type is an enumeration class
+    if (isEnumClass(context.type) && (typeof value === 'string')) {
+      if (context.type.hasValue(value)) {
+        return new ValidationResult(true);
+      } else {
+        // TODO: i18n the following message
+        const message = context.owner
+          ? `The ${context.label} of ${context.owner} is not supported: ${value}`
+          : `The ${context.label} is not supported: ${value}`;
+        return new ValidationResult(false, message);
+      }
+    }
     // note that the following test also covers the case that the value is a primitive
-    if (value.constructor !== options.type) {
-      // TODO: make the following message i18n
-      const message = options.name
-        ? `The ${options.label} of ${options.name} must be of the type ${options.type.name}`
-        : `The ${options.label} must be of the type ${options.type.name}`
+    if (value.constructor !== context.type) {
+      // TODO: i18n the following message
+      const message = context.owner
+        ? `The ${context.label} of ${context.owner} must be of the type ${context.type.name}.`
+        : `The ${context.label} must be of the type ${context.type.name}.`;
       return new ValidationResult(false, message);
     }
   }
   if ((typeof value === 'object') && (typeof value.validate === 'function')) {
-    // validate the value itself, and set the current instance as the parent of the value
-    return value.validate('*', { parent: options.instance });
+    return value.validate('*', { owner: context.owner });
   }
+  return new ValidationResult(true);
 }
 
 export default defaultValidator;

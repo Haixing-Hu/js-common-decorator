@@ -11,10 +11,10 @@ import { isEnumerator, setClassMetadata } from './impl/utils';
 import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
 import defineEnumerator from './impl/enum/define-enumerator';
-import valueOfImpl from './impl/enum/value-of-impl';
+import forValueImpl from './impl/enum/for-value-impl';
 import valuesImpl from './impl/enum/values-impl';
-import codeOfImpl from './impl/enum/code-of-impl';
-import nameOfImpl from './impl/enum/name-of-impl';
+import forCodeImpl from './impl/enum/for-code-impl';
+import forNameImpl from './impl/enum/for-name-impl';
 
 /**
  * This decorator is used to decorate an enumeration class.
@@ -47,15 +47,15 @@ import nameOfImpl from './impl/enum/name-of-impl';
  *
  * The enumeration class will have the following static methods:
  * - `values()`: returns the array of all enumerators of this enumeration class.
- * - `valueOf(value): returns the enumerator whose value is `value`, or
+ * - `forValue(value): returns the enumerator whose value is `value`, or
  *   `undefined` if no such enumerator exists.
  * - `hasValue(value): returns `true` if there is an enumerator whose value is
  *   `value`, or `false` otherwise.
- * - `nameOf(name): returns the enumerator whose name is `name`, or
+ * - `forName(name): returns the enumerator whose name is `name`, or
  *   `undefined` if no such enumerator exists.
  * - `hasName(name): returns `true` if there is an enumerator whose name is
  *   `name`, or `false` otherwise.
- * - `codeOf(code): returns the enumerator whose code is `code`, or
+ * - `forCode(code): returns the enumerator whose code is `code`, or
  *   `undefined` if no such enumerator exists.
  * - `hasCode(code): returns `true` if there is an enumerator whose code is
  *   `code`, or `false` otherwise.
@@ -79,7 +79,7 @@ import nameOfImpl from './impl/enum/name-of-impl';
  *     return [ Gender.MALE, Gender.FEMALE ];
  *   }
  *
- *   static valueOf(value) {
+ *   static forValue(value) {
  *     switch (value) {
  *     case 'MALE':
  *       return Gender.MALE;
@@ -94,7 +94,7 @@ import nameOfImpl from './impl/enum/name-of-impl';
  *     return Gender.valueOf(value) !== undefined;
  *   }
  *
- *   static nameOf(name) {
+ *   static forName(name) {
  *     return Gender.values().find((e) => e.name === name);
  *   }
  *
@@ -102,7 +102,7 @@ import nameOfImpl from './impl/enum/name-of-impl';
  *     return Gender.nameOf(name) !== undefined;
  *   }
  *
- *   static codeOf(code) {
+ *   static forCode(code) {
  *     return Gender.values().find((e) => e.code === code);
  *   }
  *
@@ -232,29 +232,29 @@ function Enum(Class, context) {
   Class.values = function values() {
     return valuesImpl(Class);
   };
-  // Add static method valueOf()
-  Class.valueOf = function valueOf(value) {
-    return valueOfImpl(Class, value);
+  // Add static method forValue()
+  Class.forValue = function forValue(value) {
+    return forValueImpl(Class, value);
   };
   // Add static method hasValue()
   Class.hasValue = function hasValue(value) {
-    return (valueOfImpl(Class, value) !== undefined);
+    return (forValueImpl(Class, value) !== undefined);
   };
-  // Add static method nameOf()
-  Class.nameOf = function nameOf(name) {
-    return nameOfImpl(Class, name);
+  // Add static method forName()
+  Class.forName = function forName(name) {
+    return forNameImpl(Class, name);
   };
   // Add static method hasName()
   Class.hasName = function hasName(name) {
-    return (nameOfImpl(Class, name) !== undefined);
+    return (forNameImpl(Class, name) !== undefined);
   };
   // Add static method forCode()
-  Class.codeOf = function codeOf(code) {
-    return codeOfImpl(Class, code);
+  Class.forCode = function forCode(code) {
+    return forCodeImpl(Class, code);
   };
   // Add static method hasCode()
   Class.hasCode = function hasCode(code) {
-    return (codeOfImpl(Class, code) !== undefined);
+    return (forCodeImpl(Class, code) !== undefined);
   };
 }
 

@@ -7,12 +7,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import {
-  Model,
-  Validatable,
   Label,
-  DefaultValidator,
+  Model,
+  NameField,
   Nullable,
   Type,
+  Validatable,
 } from '../../src';
 import Credential from './validatible-credential';
 import Gender from './gender';
@@ -29,9 +29,10 @@ export default class Person {
 
   @Validatable(validatePersonName)
   @Label('姓名')
+  @NameField
   name = '';
 
-  @DefaultValidator
+  @Validatable
   @Type(Credential)
   @Label('证件')
   credential = new Credential();

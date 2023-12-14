@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getValidationOptions from './get-validation-options';
+import getValidationContext from './get-validation-context';
 
 /**
  * Validates the specified field of the specified object.
@@ -28,23 +28,21 @@ import getValidationOptions from './get-validation-options';
  *     that the field exists and is validatable, and is non-nullish.
  * @param {any} value
  *     The value of the specified field of the specified object.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {function} validator
+ *     The validator function
+ * @param {object} context
+ *     The validation context.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field is an array or a typed array;
  *     `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateNormalField(Class, metadata, obj, field, value, config, options) {
-  // get the validator
-  const validator = config.validator;
-  // get the validation options
-  const opts = getValidationOptions(Class, metadata, obj, field, config, options);
+function validateNormalField(Class, metadata, obj, field, value, validator, context) {
+  // get the validation context
+  const ctx = getValidationContext(Class, metadata, obj, field, context);
   // call the validator
-  return validator(value, opts);
+  return validator(value, ctx);
 }
 
 export default validateNormalField;

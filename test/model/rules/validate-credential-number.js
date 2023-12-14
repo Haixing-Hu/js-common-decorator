@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
+import CredentialType from '../credential-type';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -10,38 +11,34 @@ import IdentityCard from './identity-card';
 import Passport from './passport';
 import OfficerCard from './officer-card';
 import OtherCredential from './other-credential';
-import CredentialType from '../credential-type';
 import { ValidationResult } from '../../../src';
 
-export default function validateCredentialNumber(number, { instance, label, parent }) {
-  let credentialName = '';
-  if (instance && instance.type) {
-    credentialName = CredentialType.nameOfValue(instance.type) || '';
-  }
-  const whose = (parent && parent.name ? `${parent.name}的` : '');
+export default function validateCredentialNumber(number, { instance, label, owner }) {
+  let credentialType = instance?.type?.name || '';
+  const whose = (owner ? `${owner}的` : '');
   if ((number === undefined)
       || (number === null)
       || (number === '')) {
-    return new ValidationResult(false, `请输入${whose}${credentialName}${label}`);
+    return new ValidationResult(false, `请输入${whose}${credentialType}${label}`);
   }
-  // console.log('validateCredentialNumber: number = ', number, ', instance = ', instance);
-  let valid = true;
-  if ((instance.type === IdentityCard.type)
-      && (!IdentityCard.isValid(number))) {      // 检查身份证号码是否合法
-    valid = false;
-  } else if ((instance.type === Passport.type)
-      && (!Passport.isValid(number))) {          // 检查护照号码是否合法
-    valid = false;
-  } else if ((instance.type === OfficerCard.type)
-      && (!OfficerCard.isValid(number))) {       // 检查军官证号码是否合法
-    valid = false;
-  } else if (!OtherCredential.isValid(number)) { // 检查其他证件号码是否合法
-    // console.log('validateCredentialNumber: number = ', number);
-    valid = false;
+  let valid;
+  switch (instance.type) {
+    case CredentialType.IDENTITY_CARD:
+      valid = IdentityCard.isValid(number);
+      break;
+    case CredentialType.PASSPORT:
+      valid = Passport.isValid(number);
+      break;
+    case CredentialType.OFFICER_CARD:
+      valid = OfficerCard.isValid(number);
+      break;
+    default:
+      valid = OtherCredential.isValid(number);
+      break;
   }
   if (valid) {
     return new ValidationResult(true);
   } else {
-    return new ValidationResult(false, `${whose}${credentialName}${label}格式不正确`);
+    return new ValidationResult(false, `${whose}${credentialType}${label}格式不正确`);
   }
 }

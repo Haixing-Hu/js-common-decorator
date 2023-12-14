@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import ValidationResult from '../../model/validation-result';
-import getElementValidationOptions from './get-element-validation-options';
+import getElementValidationContext from './get-element-validation-context';
 
 /**
  * Validates the specified map field of the specified object.
@@ -22,8 +22,6 @@ import getElementValidationOptions from './get-element-validation-options';
  * This function assumes that the field exists, and is validatable, not nullish
  * nor empty.
  *
- * @param {function} Class
- *     The class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
@@ -33,25 +31,23 @@ import getElementValidationOptions from './get-element-validation-options';
  *     that the field exists and is validatable, and is non-nullish.
  * @param {any} value
  *     The value of the specified field of the specified object.
- * @param {object} config
- *     The configuration of the `@Validatable` decorator.
- * @param {object} options
- *     The options of validation.
+ * @param {function} validator
+ *     The validator function
+ * @param {object} context
+ *     The validation context.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field is a map; `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateMapField(Class, metadata, obj, field, value, config, options) {
+function validateMapField(metadata, obj, field, value, validator, context) {
   if (value instanceof Map) {
-    // get the validator
-    const validator = config.validator;
     // get the validation options
-    const opts = getElementValidationOptions(metadata, obj, field, config, options);
+    const ctx = getElementValidationContext(metadata, obj, field, context);
     // validate each element of the set
     const results = Array.from(value, (e, i) => {
-      opts.index = i;
-      return validator(e[1], opts);   // only validate the value, not the key
+      ctx.index = i;
+      return validator(e[1], ctx);   // only validate the value, not the key
     });
     return ValidationResult.merge(results);
   }

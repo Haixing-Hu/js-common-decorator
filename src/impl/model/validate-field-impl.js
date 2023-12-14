@@ -28,15 +28,15 @@ import validateSetField from './validate-set-field';
  *     The object to be validated, which must be an instance of the `Class` class.
  * @param {string} field
  *     The name of the specified field to be validated.
- * @param {object} options
- *     the options of validation.
+ * @param {object} context
+ *     The validation context.
  * @returns {ValidationResult|null}
  *     The validation result if the specified field exists and is validatable;
  *     `null` otherwise.
  * @author Haixing Hu
  * @private
  */
-function validateFieldImpl(Class, obj, field, options) {
+function validateFieldImpl(Class, obj, field, context) {
   if (!Object.hasOwn(obj, field)) {
     // the field does not exist
     return null;
@@ -45,7 +45,7 @@ function validateFieldImpl(Class, obj, field, options) {
   // to validate the field.
   const Parent = Object.getPrototypeOf(Class);
   if (hasOwnPrototypeFunction(Parent, 'validateField')) {
-    const result = Parent.prototype.validateField.call(obj, field, options);
+    const result = Parent.prototype.validateField.call(obj, field, context);
     if (result !== null) {
       // the field is validated by its parent class
       return result;
@@ -57,18 +57,18 @@ function validateFieldImpl(Class, obj, field, options) {
   // classes, therefore, we can use the metadata of the current class to get the
   // validator function.
   const metadata = classMetadataCache.get(Class);
-  const config = getFieldMetadata(metadata, field, KEY_FIELD_VALIDATOR);
-  if (config === undefined) {
+  const validator = getFieldMetadata(metadata, field, KEY_FIELD_VALIDATOR);
+  if (validator === undefined) {
     // the field is not decorated with @Validatable
     return null;
   }
   const value = obj[field];
-  return validateNullishField(Class, metadata, obj, field, value, config, options)
-    ?? validateEmptyField(Class, metadata, obj, field, value, config, options)
-    ?? validateArrayField(Class, metadata, obj, field, value, config, options)
-    ?? validateSetField(Class, metadata, obj, field, value, config, options)
-    ?? validateMapField(Class, metadata, obj, field, value, config, options)
-    ?? validateNormalField(Class, metadata, obj, field, value, config, options);
+  return validateNullishField(metadata, obj, field, value)
+    ?? validateEmptyField(metadata, obj, field, value, context)
+    ?? validateArrayField(metadata, obj, field, value, validator, context)
+    ?? validateSetField(metadata, obj, field, value, validator, context)
+    ?? validateMapField(metadata, obj, field, value, validator, context)
+    ?? validateNormalField(Class, metadata, obj, field, value, validator, context);
 }
 
 export default validateFieldImpl;
