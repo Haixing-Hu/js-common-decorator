@@ -23,13 +23,15 @@ const KEY_FIELD_ELEMENT_TYPE = '__element_type__';
 
 const KEY_FIELD_NULLABLE = '__nullable__';
 
+const KEY_FIELD_NON_EMPTY = '__empty__';
+
 const KEY_FIELD_LABEL = '__label__';
 
 const KEY_FIELD_PAYLOAD = '__payload__';
 
 const KEY_FIELD_NORMALIZER = '__normalizer__';
 
-const KEY_FIELD_VALIDATABLE = '__validatable__';
+const KEY_FIELD_VALIDATOR = '__validator__';
 
 export {
   KEY_CLASS_CATEGORY,
@@ -40,8 +42,9 @@ export {
   KEY_FIELD_TYPE,
   KEY_FIELD_ELEMENT_TYPE,
   KEY_FIELD_NULLABLE,
+  KEY_FIELD_NON_EMPTY,
   KEY_FIELD_LABEL,
   KEY_FIELD_PAYLOAD,
   KEY_FIELD_NORMALIZER,
-  KEY_FIELD_VALIDATABLE,
+  KEY_FIELD_VALIDATOR,
 };

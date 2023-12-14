@@ -7,9 +7,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import {
-  Model, Validator, ValidationResult, ElementType, Nullable,
+  Model, Validatable, ValidationResult, ElementType, Nullable,
 } from '../src';
-import { getClassMetadataObject } from '../src/impl/utils';
+import classMetadataCache from '../src/impl/class-metadata-cache';
 import CredentialType from './model/credential-type';
 import Credential from './model/validatible-credential';
 import CredentialSubclass from './model/validatible-credential-subclass';
@@ -18,23 +18,23 @@ import ObjWithArrayField from './model/validatible-obj-with-array-field';
 import validateArrayField from './model/rules/validate-array-field';
 
 /**
- * 单元测试 @Validator 装饰器。
+ * 单元测试 @Validatable 装饰器。
  *
  * @author 胡海星
  */
-describe('测试 @Validator', () => {
+describe('测试 @Validatable', () => {
   test('测试 Credential 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(Credential);
+    const metadata = classMetadataCache.get(Credential);
     expect(metadata).not.toBeNull();
     console.log('Credential.metadata = ', metadata);
   });
   test('测试 CredentialSubclass 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(CredentialSubclass);
+    const metadata = classMetadataCache.get(CredentialSubclass);
     expect(metadata).not.toBeNull();
     console.log('CredentialSubclass.metadata = ', metadata);
   });
   test('测试 Person 类的 metadata 对象', () => {
-    const metadata = getClassMetadataObject(Person);
+    const metadata = classMetadataCache.get(Person);
     expect(metadata).not.toBeNull();
     console.log('Person.metadata = ', metadata);
   });
@@ -190,12 +190,12 @@ describe('测试 @Validator', () => {
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
   });
-  test('@Validator参数不是函数', () => {
+  test('@Validatable 参数不是函数', () => {
     expect(() => {
       @Model
       class Obj {
-        @Validator('xxx')
-          number = '';
+        @Validatable('xxx')
+        number = '';
 
         hello() {
           console.log('hello');

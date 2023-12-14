@@ -13,16 +13,16 @@ import OtherCredential from './other-credential';
 import CredentialType from '../credential-type';
 import { ValidationResult } from '../../../src';
 
-export default function validateCredentialNumber(number, { instance, displayName, parentInstance }) {
+export default function validateCredentialNumber(number, { instance, label, parent }) {
   let credentialName = '';
   if (instance && instance.type) {
     credentialName = CredentialType.nameOfValue(instance.type) || '';
   }
-  const whose = (parentInstance && parentInstance.name ? `${parentInstance.name}的` : '');
+  const whose = (parent && parent.name ? `${parent.name}的` : '');
   if ((number === undefined)
       || (number === null)
       || (number === '')) {
-    return new ValidationResult(false, `请输入${whose}${credentialName}${displayName}`);
+    return new ValidationResult(false, `请输入${whose}${credentialName}${label}`);
   }
   // console.log('validateCredentialNumber: number = ', number, ', instance = ', instance);
   let valid = true;
@@ -42,6 +42,6 @@ export default function validateCredentialNumber(number, { instance, displayName
   if (valid) {
     return new ValidationResult(true);
   } else {
-    return new ValidationResult(false, `${whose}${credentialName}${displayName}格式不正确`);
+    return new ValidationResult(false, `${whose}${credentialName}${label}格式不正确`);
   }
 }

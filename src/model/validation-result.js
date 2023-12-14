@@ -65,7 +65,6 @@ class ValidationResult {
    *     新的{@link ValidationResult}对象返回。
    */
   static merge(results) {
-    // console.log('ValidationResult.merge: ', results);
     if (results) {
       for (let i = 0; i < results.length; ++i) {
         const result = results[i];

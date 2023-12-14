@@ -10,6 +10,11 @@ import {
   KEY_CLASS_CATEGORY,
   KEY_CLASS_DEFAULT_INSTANCE,
   KEY_CLASS_FIELDS_METADATA,
+  KEY_CLASS_NAME_FIELD,
+  KEY_FIELD_LABEL,
+  KEY_FIELD_NON_EMPTY,
+  KEY_FIELD_NULLABLE,
+  KEY_FIELD_TYPE,
 } from './metadata-keys';
 import {
   PROPERTY_TYPE,
@@ -189,7 +194,7 @@ export function setFieldMetadata(metadata, field, key, value) {
  * it does not exist.
  *
  * @param {function} Class
- *     The constructor of the class being decorated.
+ *     The constructor of the specified class.
  * @returns {object}
  *     The default instance of the specified class, or a new instance will be
  *     created if it does not exist.
@@ -198,21 +203,17 @@ export function setFieldMetadata(metadata, field, key, value) {
  */
 export function getDefaultInstance(Class) {
   const metadata = classMetadataCache.get(Class);
-  if (!metadata) {
-    return new Class();
-  } else if (!metadata[KEY_CLASS_DEFAULT_INSTANCE]) {
-    metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
-  }
-  const obj = metadata[KEY_CLASS_DEFAULT_INSTANCE];
+  let obj = metadata[KEY_CLASS_DEFAULT_INSTANCE];
   if (!(obj instanceof Class)) {
     // Note that the metadata of a class can inherit the metadata of its parent
     // class. Therefore, if the parent class has a default instance stored in
     // its metadata, it can be accessed by the child class. That's why we have
     // to check whether the default instance is an instance of the specified
     // class.
-    metadata[KEY_CLASS_DEFAULT_INSTANCE] = new Class();
+    obj = new Class();
+    metadata[KEY_CLASS_DEFAULT_INSTANCE] = obj;
   }
-  return metadata[KEY_CLASS_DEFAULT_INSTANCE];
+  return obj;
 }
 
 /**
@@ -393,4 +394,27 @@ export function isEnumerator(value) {
   const Class = Object.getPrototypeOf(value).constructor;
   const category = getClassMetadata(Class, KEY_CLASS_CATEGORY);
   return category === 'enum';
+}
+
+/**
+ * Gets the name of a instance.
+ *
+ * The name of an instance is the value of the field decorated by the `@NameField`
+ * decorator.
+ *
+ * @param {object} metadata
+ *     the metadata of the class.
+ * @param {object} instance
+ *     the instance of the class.
+ * @return {string}
+ *     the name of the instance, or `undefined` if the instance has no field
+ *     decorated by the `@NameField` decorator.
+ */
+export function getInstanceName(metadata, instance) {
+  const field = metadata[KEY_CLASS_NAME_FIELD];
+  if (field) {
+    return instance[field];
+  } else {
+    return undefined;
+  }
 }

@@ -6,56 +6,54 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata, isNullishOrEmpty } from './impl/utils';
-import { PROPERTY_VALIDATOR } from './validatable';
 import ValidationResult from './model/validation-result';
 
-function defaultValidate(value, options) {
-  if (isNullishOrEmpty(value)) {
-    if (options.nullable === true) {
-      return new ValidationResult(true);
-    } else {
-      const whose = (options.instance?.name ? `${options.instance.name}的` : '');
-      return new ValidationResult(false, `${whose}${options.displayName}不能为空`);
-    }
-  } else if ((typeof value === 'object') && (typeof value.validate === 'function')) {
-    // 调用该字段值本身的validate()方法，将当前对象作为其父对象实例，以额外选项的形式传递
-    return value.validate('*', { parentInstance: options.instance });
-  }
-  return new ValidationResult(true);
-}
-
 /**
- * 修饰类字段，指定其校验函数为该属性对象的`validate()`函数。
+ * A default validator for a non-static class field.
  *
- * 被修饰的对象必须是类的字段。
+ * This validator does the following things:
+ * - If the field value is `undefined` or `null`, and the field is not decorated
+ *   with `@Nullable`, an error is reported.
+ * - If the field value is an empty string or an empty collection, and the field
+ *   is decorated with `@NonEmpty`, an error is reported.
+ * - If the field value is a collection, it recursively validates each element
+ *   in the collection.
+ * - If the field value has an initial value, it validates whether the field
+ *   value has the same type with its initial value.
+ * - If the field is decorated with `@Type`, it validates whether the field
+ *   value has the type specified by the `@Type`.
+ * - If the field is a collection and is decorated with `@ElementType`, it
+ *   validates whether each element of the field value has the type specified by
+ *   the `@ElementType`.
+ * - If the value is an object with the `validate()` method, it returns the
+ *   result of calling the `validate()`  method of the object.
+ * - Otherwise, it does nothing and returns a success validation result.
  *
- * 使用示例：
- * ```js
- * class Foo {
- *   @DefaultValidator
- *   @Type(Credential)
- *   credential = null;
- * }
- * ```
- * @param {Function} prototype
- *     目标字段所属的类的原型。
- * @param {String} field
- *     目标字段的名称。
- * @param {Object} descriptor
- *     目标字段原来的属性描述符。
- * @returns
- *     目标字段被修饰后的属性描述符。
- * @author 胡海星
+ * @param {any} value
+ *     the value to be validated, which is assumed to be non-nullish, non-empty,
+ *     non-collection.
+ * @param {object} options
+ *     the validation options.
+ * @returns {ValidationResult}
+ *     the validation result.
+ * @see Validatable
  */
-function DefaultValidator(prototype, field, descriptor) {
-  const Class = prototype.constructor;
-  // validate(obj) 函数调用其自身的 obj.validate() 进行校验。
-  setFieldMetadata(Class, field, PROPERTY_VALIDATOR, {
-    validator: defaultValidate,
-    options: {},
-  });
-  return descriptor;
+function defaultValidator(value, options) {
+  if (options.type) {
+    // validate the type
+    // note that the following test also covers the case that the value is a primitive
+    if (value.constructor !== options.type) {
+      // TODO: make the following message i18n
+      const message = options.name
+        ? `The ${options.label} of ${options.name} must be of the type ${options.type.name}`
+        : `The ${options.label} must be of the type ${options.type.name}`
+      return new ValidationResult(false, message);
+    }
+  }
+  if ((typeof value === 'object') && (typeof value.validate === 'function')) {
+    // validate the value itself, and set the current instance as the parent of the value
+    return value.validate('*', { parent: options.instance });
+  }
 }
 
-export default DefaultValidator;
+export default defaultValidator;

@@ -10,9 +10,13 @@ import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../metadata-keys';
 import {
   getFieldMetadata,
-  getDefaultInstance,
   hasOwnPrototypeFunction,
 } from '../utils';
+import normalizeArrayField from './normalize-array-field';
+import normalizeMapField from './normalize-map-field';
+import normalizeNormalField from './normalize-normal-field';
+import normalizeNullishField from './normalize-nullish-field';
+import normalizeSetField from './normalize-set-field';
 
 /**
  * Normalizes the specified field of the specified object.
@@ -29,7 +33,6 @@ import {
  * @private
  */
 function normalizeFieldImpl(Class, obj, field) {
-  // console.log('normalizeFieldImpl:', Class, obj, field);
   if (!Object.hasOwn(obj, field)) {
     // the field does not exist
     return false;
@@ -50,27 +53,16 @@ function normalizeFieldImpl(Class, obj, field) {
   // normalizer function.
   const metadata = classMetadataCache.get(Class);
   const normalizer = getFieldMetadata(metadata, field, KEY_FIELD_NORMALIZER);
-  // console.log('Get the normalizer: ', normalizer);
-  if (typeof normalizer === 'function') {
-    const value = obj[field];
-    // console.log('Use normalizer to normalize: ', value);
-    if (value === undefined || value === null) {
-      // For field values that are `undefined` or `null`, the normalized value
-      // should be the default value of the field.
-      const defaultInstance = getDefaultInstance(Class);
-      obj[field] = defaultInstance[field];
-    } else if (Array.isArray(value)) {
-      // If it is an array, call the normalizer function to normalize each
-      // element in the array.
-      obj[field] = value.map((v) => normalizer(v));
-    } else {
-      // Otherwise, call the normalizer function to normalize the field value.
-      obj[field] = normalizer(value);
-    }
-    return true;
+  if (normalizer === undefined) {
+    // the field is not decorated with @Normalizable
+    return false;
   }
-  // the field is not normalized
-  return false;
+  const value = obj[field];
+  return normalizeNullishField(Class, obj, field, value)
+      || normalizeArrayField(obj, field, value, normalizer)
+      || normalizeSetField(obj, field, value, normalizer)
+      || normalizeMapField(obj, field, value, normalizer)
+      || normalizeNormalField(obj, field, value, normalizer);
 }
 
 export default normalizeFieldImpl;

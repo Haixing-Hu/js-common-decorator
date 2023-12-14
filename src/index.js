@@ -15,6 +15,7 @@ import Normalizable from './normalizable';
 import Validatable from './validatable';
 import DefaultValidator from './default-validator';
 import Nullable from './nullable';
+import NonEmpty from './non-empty';
 import Label from './label';
 import Payload from './payload';
 import NameField from './name-field';
@@ -33,6 +34,7 @@ export {
   DefaultValidator,
   EnumValidator,
   Nullable,
+  NonEmpty,
   Label,
   Payload,
   NameField,

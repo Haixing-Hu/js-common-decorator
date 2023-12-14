@@ -22,6 +22,8 @@ import generateIdImpl from './impl/model/generate-id-impl';
 import clearImpl from './impl/model/clear-impl';
 import normalizeFieldImpl from './impl/model/normalize-field-impl';
 import normalizeImpl from './impl/model/normalize-impl';
+import validateFieldImpl from './impl/model/validate-field-impl';
+import validateImpl from './impl/model/validate-impl';
 import createImpl from './impl/model/create-impl';
 import createArrayImpl from './impl/model/create-array-impl';
 import createPageImpl from './impl/model/create-page-impl';
@@ -369,12 +371,51 @@ function Model(Class, context) {
       return normalizeFieldImpl(Class, this, field);
     };
   }
-  // // Add the instance method `validate()`
-  // if (!hasOwnPrototypeFunction(Class, 'validate')) {
-  //   Class.prototype.validate = function validate(fields = '*', options = {}) {
-  //     return ValidateImpl.validate(Class, this, fields, options);
-  //   };
-  // }
+  // Add the instance method `validate()`
+  if (!hasOwnPrototypeFunction(Class, 'validate')) {
+    /**
+     * Validates this object.
+     *
+     * @param {undefined|string|array} fields
+     *     the names of fields to be validated. If this argument is not specified,
+     *     or `undefined`, or `null`, or a string `'*'`, this function validates
+     *     all validatable fields of this object; If this argument is an array of
+     *     strings, this function validates all validatable fields specified
+     *     in the array. If this argument is a string other than `'*'`, this
+     *     function validates the field with the name equals to this argument;
+     *     if the specified field does not exist nor non-validatable, this
+     *     function does nothing.
+     * @param {object} options
+     *     the options of validation.
+     * @returns {ValidationResult}
+     *     The result of validation.
+     */
+    Class.prototype.validate = function validate(fields = '*', options = {}) {
+      return validateImpl(Class, this, fields, options);
+    };
+  }
+  // Add the instance method `validateField()`
+  if (!hasOwnPrototypeFunction(Class, 'validateField')) {
+    /**
+     * Validates the specified validatable fields of this object.
+     *
+     * A field is validatable if and only if it is decorated with the
+     * `@{@link Validatable}` decorator.
+     *
+     * @param {string} field
+     *     the names of fields to be validated. If the specified field does not
+     *     exist nor non-validatable, this function does nothing and returns
+     *     `null`.
+     * @param {object} options
+     *     the options of validation.
+     * @returns {ValidationResult|null}
+     *     the validation result if the specified field exists and is validatable;
+     *     `null` otherwise.
+     */
+    Class.prototype.validateField = function validateField(field, options) {
+      return validateFieldImpl(Class, this, field, options);
+    };
+  }
   // Add the instance method `generateId()` to the class containing the `id` field
   if (hasOwnClassField(Class, 'id') && !hasPrototypeFunction(Class, 'generateId')) {
     // If its own instance has an `id` field, and there is no `generateId()`

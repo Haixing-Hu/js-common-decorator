@@ -7,32 +7,37 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import defaultNormalizer from './default-normalizer';
+import isDecoratorContext from './impl/is-decorator-context';
 import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_NORMALIZER } from './impl/metadata-keys';
 
 /**
  * Sets the normalizer of a decorated field.
  *
- * @param {function} normalizer
- *     The normalizer to set.
  * @param {undefined} field
  *     The decorated target. In the case of decorating a class field, this
  *     argument is always `undefined` and is ignored.
- * @param {object} context
- *     The context object containing information about the decorated target.
+ * @param {object} metadata
+ *     The metadata in the context of the decorated target.
+ * @param {string} kind
+ *     The kind of the decorated target.
+ * @param {string} name
+ *     The name of the decorated target.
+ * @param {function} normalizer
+ *     The normalizer to set.
+ * @author Haixing Hu
+ * @private
  */
-function setNormalizer(normalizer, field, context) {
-  if (context.kind !== 'field' || context.static) {
-    throw new TypeError(
-      `The @Normalizable must decorate a non-static class field: ${context.name}`,
-    );
+function setNormalizer(field, { metadata, kind, name }, normalizer) {
+  if (kind !== 'field') {
+    throw new TypeError(`The @Normalizable must decorate a class field: ${name}`);
   }
   if (typeof normalizer !== 'function') {
     throw new TypeError(
-      `The argument of @Normalizable decorated on the "${context.name}" field must a function.`,
+      `The argument of @Normalizable decorated on the "${name}" field must a function.`,
     );
   }
-  setFieldMetadata(context.metadata, context.name, KEY_FIELD_NORMALIZER, normalizer);
+  setFieldMetadata(metadata, name, KEY_FIELD_NORMALIZER, normalizer);
 }
 
 /**
@@ -66,25 +71,14 @@ function setNormalizer(normalizer, field, context) {
  * the normalization function will be called to normalize each element in the
  * collection. Currently, the following JavaScript build-in collection types are
  * supported:
- * - `Array`
- * - `Set`, `WeakSet`: the normalization function will be called to normalize
- *    each entry in the set.
- * - `Map`, `WeakMap`: the normalization function will be called to normalize
- *   each value in the map.
- * - `ArrayBuffer`
- * - `SharedArrayBuffer`
- * - `DataView`
- * - `Int8Array`
- * - `Uint8Array`
- * - `Uint8ClampedArray`
- * - `Int16Array`
- * - `Uint16Array`
- * - `Int32Array`
- * - `Uint32Array`
- * - `Float32Array`
- * - `Float64Array`
- * - `BigInt64Array`
- * - `BigUint64Array`
+ * - `Array`, `Int8Array`, `Uint8Array`, `Uint8ClampedArray`, `Int16Array`,
+ *   `Uint16Array`, `Int32Array`, `Uint32Array`, `Float32Array`, `Float64Array`,
+ *   `BigInt64Array`, `BigUint64Array`: the normalization function will be
+ *   called to normalize each element in the array.
+ * - `Set`: the normalization function will be called to normalize each entry in
+ *   the set.
+ * - `Map`: the normalization function will be called to normalize each value in
+ *   the map.
  *
  * The decorator can also be used without any arguments, in which case the
  * {@link defaultNormalizer} function will be used. For example,
@@ -119,17 +113,17 @@ function setNormalizer(normalizer, field, context) {
  *     object containing information about the decorated target.
  * @return {Function}
  *     If this function has only one argument, this function returns another
- *     function which is the decorator of a class; otherwise, this function
- *     returns nothing.
+ *     function which is the decorator of a field; otherwise, this function
+ *     sets the normalizer of the decorated field and returns nothing.
  * @author Haixing Hu
  * @see defaultNormalizer
  * @see Model
  */
 function Normalizable(...args) {
   if (args.length === 1) {
-    return (field, context) => setNormalizer(args[0], field, context);
-  } else if (args.length === 2) {
-    return setNormalizer(defaultNormalizer, args[0], args[1]);
+    return (field, context) => setNormalizer(field, context, args[0]);
+  } else if ((args.length === 2) && isDecoratorContext(args[1])) {
+    return setNormalizer(args[0], args[1], defaultNormalizer);
   } else {
     throw new TypeError('Invalid use of @Normalizable decorator.');
   }
