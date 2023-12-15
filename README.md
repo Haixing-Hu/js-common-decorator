@@ -35,11 +35,11 @@ supports the most recent (currently May 2023)
     - [Instance method: Class.prototype.toString()](#enum-toString)
     - [Instance method: Class.prototype.toJSON()](#enum-toJSON)
     - [Class method: Class.values()](#enum-values)
-    - [Class method: Class.valueOf(value)](#enum-valueOf)
+    - [Class method: Class.forValue(value)](#enum-forValue)
     - [Class method: Class.hasValue(value)](#enum-hasValue)
-    - [Class method: Class.nameOf(name)](#enum-nameOf)
+    - [Class method: Class.forName(name)](#enum-forName)
     - [Class method: Class.hasName(name)](#enum-hasName)
-    - [Class method: Class.codeOf(code)](#enum-codeOf)
+    - [Class method: Class.forCode(code)](#enum-forCode)
     - [Class method: Class.hasCode(code)](#enum-hasCode)
     - [Usage Example](#enum-usage-example)
 - [Configuration](#configuration)
@@ -454,7 +454,7 @@ This function returns the JSON representation of this enumerator.
 
 This function returns the array of all enumerators of this enumeration class.
 
-#### <span id="enum-valueOf">Class method: Class.valueOf(value)</span>
+#### <span id="enum-forValue">Class method: Class.forValue(value)</span>
 
 - Parameters: 
   - `value: string`: the value of the enumerator to be returned. Note that this
@@ -478,7 +478,7 @@ This function returns the enumerator with the specified value.
 
 This function tests whether there is an enumerator with the specified value.
 
-#### <span id="enum-nameOf">Class method: Class.nameOf(name)</span>
+#### <span id="enum-forName">Class method: Class.forName(name)</span>
 
 - Parameters:
     - `name: string`: the name of the enumerator to be returned.
@@ -498,7 +498,7 @@ This function returns the enumerator with the specified name.
 
 This function tests whether there is an enumerator with the specified name.
 
-#### <span id="enum-codeOf">Class method: Class.codeOf(code)</span>
+#### <span id="enum-forCode">Class method: Class.forCode(code)</span>
 
 - Parameters:
     - `code: string`: the code of the enumerator to be returned. 
@@ -537,7 +537,7 @@ class Gender {
     return [ Gender.MALE, Gender.FEMALE ];
   }
 
-  static valueOf(value) {
+  static forValue(value) {
     switch (value) {
     case 'MALE':
       return Gender.MALE;
@@ -549,23 +549,23 @@ class Gender {
   }
 
   static hasValue(value) {
-    return Gender.valueOf(value) !== undefined;
+    return Gender.forValue(value) !== undefined;
   }
 
-  static nameOf(name) {
+  static forName(name) {
     return Gender.values().find((e) => e.name === name);
   }
 
   static hasName(name) {
-    return Gender.nameOf(name) !== undefined;
+    return Gender.forName(name) !== undefined;
   }
 
-  static codeOf(code) {
+  static forCode(code) {
     return Gender.values().find((e) => e.code === code);
   }
 
   static hasCode(code) {
-    return Gender.codeOf(code) !== undefined;
+    return Gender.forCode(code) !== undefined;
   }
 
   constructor(value, name) {
