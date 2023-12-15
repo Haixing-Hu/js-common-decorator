@@ -30,7 +30,7 @@ import { KEY_FIELD_NORMALIZER } from './impl/metadata-keys';
  */
 function setNormalizer(field, { metadata, kind, name }, normalizer) {
   if (kind !== 'field') {
-    throw new TypeError(`The @Normalizable must decorate a class field: ${name}`);
+    throw new SyntaxError(`The @Normalizable must decorate a class field: ${name}`);
   }
   if (typeof normalizer !== 'function') {
     throw new TypeError(
@@ -125,7 +125,7 @@ function Normalizable(...args) {
   } else if ((args.length === 2) && isDecoratorContext(args[1])) {
     setNormalizer(args[0], args[1], defaultNormalizer);
   } else {
-    throw new TypeError('Invalid use of @Normalizable decorator.');
+    throw new SyntaxError('Invalid use of @Normalizable decorator.');
   }
 }
 

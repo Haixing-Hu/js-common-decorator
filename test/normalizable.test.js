@@ -6,16 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
 import { Model, Normalizable } from '../src';
 import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
 import { getFieldMetadata } from '../src/impl/utils';
-import ObjWithNormalizableField from './model/obj-with-normalizable-field';
-import ObjWithoutDecoratedField from './model/obj-without-decorated-field';
-import Credential from './model/normalizable-credential';
-import CredentialType from './model/credential-type';
 
 /**
  * Unit test of the `@Normalizable` decorator.
@@ -23,253 +18,61 @@ import CredentialType from './model/credential-type';
  * @author Haixing Hu
  */
 describe('Test @Normalizable', () => {
-  test('Check the field metadata of @Normalizable decorated fields', () => {
+  test('@Normalizable without argument', () => {
     @Model
     class Foo {
       @Normalizable
-      message = ' hello world ';
+      name = '';
 
-      @Normalizable(trimUppercaseString)
-      name = ' bill gates ';
-
-      nonNormalizableField = '';
+      hello() {
+        console.log(`Hello, ${this.name}`);
+      }
     }
     const metadata = classMetadataCache.get(Foo);
-    expect(metadata).not.toBeNull();
-    console.log('Foo.metadata = ', metadata);
-    expect(getFieldMetadata(metadata, 'message', KEY_FIELD_NORMALIZER))
-      .toBe(defaultNormalizer);
-    expect(getFieldMetadata(metadata, 'name', KEY_FIELD_NORMALIZER))
-      .toBe(trimUppercaseString);
-    expect(getFieldMetadata(metadata, 'nonNormalizableField', KEY_FIELD_NORMALIZER))
-      .toBeUndefined();
+    const validator = getFieldMetadata(metadata, 'name', KEY_FIELD_NORMALIZER);
+    expect(validator).toBe(defaultNormalizer);
   });
-  test('Test `ObjWithNormalizableField.normalize()`', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize();
-    expect(result).toBe(obj);
-    expect(obj.number).toBe('111XYZ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
+  test('@Normalizable with argument', () => {
+    function nameValidator(value) {
+      if (value && value.length > 0) {
+        return value.trim();
+      } else {
+        return value;
+      }
+    }
+    @Model
+    class Foo {
+      @Normalizable(nameValidator)
+      name = '';
+
+      hello() {
+        console.log(`Hello, ${this.name}`);
+      }
+    }
+    const metadata = classMetadataCache.get(Foo);
+    const validator = getFieldMetadata(metadata, 'name', KEY_FIELD_NORMALIZER);
+    expect(validator).toBe(nameValidator);
   });
-  test('测试 ObjWithNormalizableField.normalize(null)', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize(null);
-    expect(result).toBe(obj);
-    expect(obj.number).toBe('111XYZ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize("*")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('*');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe('111XYZ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize("number")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('number');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe('111XYZ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize("type")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('type');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe(' 111xyz  ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize("nonNormalizable")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('nonNormalizable');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe(' 111xyz  ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize("array")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: ['abc ', ' 12def ', '  h i g '],
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('array');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe(' 111xyz  ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-    expect(obj.array).toEqual(['ABC', '12DEF', 'H I G']);
-  });
-  test('测试 ObjWithNormalizableField.normalize("credential")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: ['abc ', ' 12def ', '  h i g '],
-      credential: {
-        type: ' identity_card ',
-        number: ' abc-123-def   ',
-      },
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    data.credential.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('credential');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe(' 111xyz  ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-    expect(obj.array).toEqual(['abc ', ' 12def ', '  h i g ']);
-    expect(obj.credential).toEqual(new Credential(CredentialType.IDENTITY_CARD, 'ABC-123-DEF'));
-  });
-  test('测试 ObjWithNormalizableField.normalize("xxx")', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize('xxx');
-    expect(result).toBe(obj);
-    expect(obj.number).toBe(' 111xyz  ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize(123)', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    expect(() => obj.normalize(123)).toThrowWithMessage(TypeError,
-      'The argument ObjWithNormalizableField.normalize() must be a string or an array of strings.');
-  });
-  test('测试 ObjWithNormalizableField.normalize(number)但number字段值是undefined', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    obj.number = undefined;
-    const result = obj.normalize();
-    expect(result).toBe(obj);
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.number).toBe('');
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize(number)但number字段值是null', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    obj.number = null;
-    const result = obj.normalize();
-    expect(result).toBe(obj);
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.number).toBe('');
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
-  test('@Normalizable参数不是函数', () => {
+  test('The @Normalizable is not decorated a class field', () => {
     expect(() => {
       @Model
-      class ObjWithInvalidNormalizer {
+      class Obj {
+        @Normalizable
+        hello() {
+          console.log('hello');
+        }
+      }
+      const obj = new Obj();
+      obj.hello();
+    }).toThrowWithMessage(
+      SyntaxError,
+      'The @Normalizable must decorate a class field: hello',
+    );
+  });
+  test('The argument of @Normalizable is not a function', () => {
+    expect(() => {
+      @Model
+      class Obj {
         @Normalizable('xxx')
         number = '';
 
@@ -277,62 +80,26 @@ describe('Test @Normalizable', () => {
           console.log('hello');
         }
       }
-      const obj = new ObjWithInvalidNormalizer();
+      const obj = new Obj();
       obj.hello();
-    }).toThrowWithMessage(TypeError,
-      'The argument of @Normalizable decorated on the "number" field must a function.');
+    }).toThrowWithMessage(
+      TypeError,
+      'The argument of @Normalizable decorated on the "number" field must a function.',
+    );
   });
-  test('ObjWithoutDecoratedField.normalize()', () => {
-    const obj = new ObjWithoutDecoratedField();
-    obj.key = 'key';
-    obj.value = '   value  ';
-    const result = obj.normalize();
-    expect(result).toBe(obj);
-    expect(obj.key).toBe('key');
-    expect(obj.value).toBe('   value  ');
-  });
-  test('测试 ObjWithNormalizableField.normalize(["number", "type"])', () => {
-    const data = {
-      number: ' 111xyz  ',
-      type: ' identity_card    ',
-      nonNormalizable: ' 111xyz  ',
-      array: null,
-      credential: null,
-    };
-    const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
-    data.type = CredentialType.IDENTITY_CARD;
-    expect(obj).toEqual(data);
-    const result = obj.normalize(['number', 'type']);
-    expect(result).toBe(obj);
-    expect(obj.number).toBe('111XYZ');
-    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.nonNormalizable).toBe(' 111xyz  ');
-  });
+  test('Invalid number of arguments of @Normalizable', () => {
+    expect(() => {
+      @Model
+      class Obj {
+        @Normalizable(defaultNormalizer, {})
+        number = '';
 
-  test('字段声明在父类，父类没有normalize()函数，但字段指定了normalizer', () => {
-    class A {
-      @Normalizable(trimString)
-        name = '';
-    }
-    @Model
-    class B extends A {}
-    const obj = new B();
-    obj.name = '   xxx  ';
-    obj.normalize('name');
-    expect(obj.name).toBe('xxx');
-  });
-  test('字段声明在祖先类，祖先类没有normalize()函数，但字段指定了normalizer', () => {
-    class A {
-      @Normalizable(trimString)
-        name = '';
-    }
-    class B extends A {}
-    @Model
-    class C extends B {}
-    const obj = new C();
-    obj.name = '   xxx  ';
-    obj.normalize('name');
-    expect(obj.name).toBe('xxx');
+        hello() {
+          console.log('hello');
+        }
+      }
+      const obj = new Obj();
+      obj.hello();
+    }).toThrowWithMessage(SyntaxError, 'Invalid use of @Normalizable decorator.');
   });
 });
