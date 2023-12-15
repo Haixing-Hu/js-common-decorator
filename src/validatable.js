@@ -30,10 +30,10 @@ import defaultValidator from './default-validator';
  */
 function setValidator(field, { metadata, kind, name }, validator) {
   if (kind !== 'field') {
-    throw new TypeError(`The @Validatable must decorate a class field: ${name}`);
+    throw new SyntaxError(`The @Validatable must decorate a class field: ${name}`);
   }
   if (typeof validator !== 'function') {
-    throw new TypeError(`The first argument of @Validatable decorated on the "${name}" field must a function.`);
+    throw new TypeError(`The argument of @Validatable decorated on the "${name}" field must a function.`);
   }
   setFieldMetadata(metadata, name, KEY_FIELD_VALIDATOR, validator);
 }
@@ -137,7 +137,7 @@ function Validatable(...args) {
   } else if ((args.length === 2) && isDecoratorContext(args[1])) {
     setValidator(args[0], args[1], defaultValidator);
   } else {
-    throw new TypeError('Invalid use of @Normalizable decorator.');
+    throw new SyntaxError('Invalid use of @Validatable decorator.');
   }
 }
 
