@@ -7,7 +7,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import clone from '@haixing_hu/clone';
-import { isUndefinedOrNull, isBuiltInClass } from '@haixing_hu/common-util';
+import { isBuiltInClass } from '@haixing_hu/typeinfo';
+import { isUndefinedOrNull } from '@haixing_hu/common-util';
 import {
   getClassMetadata,
   getFieldMetadata,
@@ -182,7 +183,7 @@ const Impl = {
             return null;
           }
           // convert the string representation to the enumerator
-          const e = type.valueOf(source);
+          const e = type.forValue(source);
           if (e === undefined) {
             throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
           }
