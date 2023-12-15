@@ -91,7 +91,7 @@ import forNameImpl from './impl/enum/for-name-impl';
  *   }
  *
  *   static hasValue(value) {
- *     return Gender.valueOf(value) !== undefined;
+ *     return Gender.forValue(value) !== undefined;
  *   }
  *
  *   static forName(name) {
@@ -99,7 +99,7 @@ import forNameImpl from './impl/enum/for-name-impl';
  *   }
  *
  *   static hasName(name) {
- *     return Gender.nameOf(name) !== undefined;
+ *     return Gender.forName(name) !== undefined;
  *   }
  *
  *   static forCode(code) {
@@ -107,7 +107,7 @@ import forNameImpl from './impl/enum/for-name-impl';
  *   }
  *
  *   static hasCode(code) {
- *     return Gender.codeOf(code) !== undefined;
+ *     return Gender.forCode(code) !== undefined;
  *   }
  *
  *   constructor(value, name) {

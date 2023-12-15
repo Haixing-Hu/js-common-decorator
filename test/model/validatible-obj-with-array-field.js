@@ -7,17 +7,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { Model, Validatable, ElementType, Nullable } from '../../src';
-import validateArrayField from './rules/validate-array-field';
 import validateIntegerField from './rules/validate-integer-field';
 
 @Model
 export default class ObjWithArrayField {
-  @Validatable(validateArrayField, { elementValidator: validateIntegerField })
+  @Validatable(validateIntegerField)
   @ElementType(Number)
   @Nullable
   array = [];
 
-  @Validatable(validateArrayField, { elementValidator: validateIntegerField })
+  @Validatable(validateIntegerField)
   @ElementType(Number)
   nonNullableArray = [];
 }

@@ -12,6 +12,7 @@ import validateCredentialNumber from './rules/validate-credential-number';
 
 @Model
 export default class CredentialSubclass extends Credential {
-  @Validatable(validateCredentialNumber, { label: '证件子号码' })
+  @Validatable(validateCredentialNumber)
+  @Label('证件子号码')
   childNumber = '';
 }
