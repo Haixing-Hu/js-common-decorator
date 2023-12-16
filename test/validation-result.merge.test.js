@@ -85,7 +85,7 @@ describe('ValidationResult.merge', () => {
   test('merge multiple successful or failed validation results', () => {
     const r0 = new ValidationResult(true);
     const r1 = new ValidationResult(false, 'Reason 1');
-    const r2= new ValidationResult(true);
+    const r2 = new ValidationResult(true);
     const r3 = new ValidationResult(false, 'Reason 3');
     const merged = ValidationResult.merge([r0, r1, r2, r3]);
     expect(merged.success).toBe(false);

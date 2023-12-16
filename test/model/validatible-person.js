@@ -10,7 +10,6 @@ import {
   Label,
   Model,
   NameField,
-  NonEmpty,
   Nullable,
   Type,
   Validatable,

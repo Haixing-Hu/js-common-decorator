@@ -6,9 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ElementType, Model, Nullable, ValidationResult } from '../src';
+import { ValidationResult } from '../src';
 import CredentialType from './model/credential-type';
-import validateArrayField from './model/rules/validate-array-field';
 import Credential from './model/validatible-credential';
 import CredentialSubclass from './model/validatible-credential-subclass';
 import ObjWithArrayField from './model/validatible-obj-with-array-field';
@@ -386,8 +385,8 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "number"]), invalid type and number', () => {
-    let obj = new Credential('xxx', '');
-    let result = obj.validate(['type', 'number']);
+    const obj = new Credential('xxx', '');
+    const result = obj.validate(['type', 'number']);
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
@@ -442,8 +441,8 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "nonValidatable", "xxx", "number"]), invalid type and number', () => {
-    let obj = new Credential('xxx', '');
-    let result = obj.validate(['type', 'nonValidatable', 'xxx', 'number']);
+    const obj = new Credential('xxx', '');
+    const result = obj.validate(['type', 'nonValidatable', 'xxx', 'number']);
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);

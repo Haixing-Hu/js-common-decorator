@@ -350,7 +350,7 @@ function Enum(Class, context) {
    */
   Class.of = function of(value) {
     return ofImpl(Class, value);
-  }
+  };
 
   /**
    * Tests whether there is an enumerator of this enumeration class corresponding
@@ -370,7 +370,7 @@ function Enum(Class, context) {
    */
   Class.has = function has(value) {
     return (ofImpl(Class, value) !== undefined);
-  }
+  };
 }
 
 // Globally register the clone hook of enumerators.

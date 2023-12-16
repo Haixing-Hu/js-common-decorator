@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../index';
+import ValidationResult from '../../model/validation-result';
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../metadata-keys';
 import {

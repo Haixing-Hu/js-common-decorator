@@ -148,7 +148,7 @@ describe('Test the prototype method `validateField()`', () => {
   });
   test('Credential.validateField("nonValidatable")', () => {
     const obj = new Credential(CredentialType.IDENTITY_CARD, '');
-    obj.nonValidatable = 'xxx'
+    obj.nonValidatable = 'xxx';
     const result = obj.validateField('nonValidatable');
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);

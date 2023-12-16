@@ -20,7 +20,7 @@
 function isDecoratorContext(obj) {
   return (obj !== null)
     && (typeof obj === 'object')
-    && (typeof obj.metadata !== null)
+    && (obj.metadata !== null)
     && (typeof obj.metadata === 'object')
     && (typeof obj.kind === 'string')
     && (typeof obj.name === 'string');

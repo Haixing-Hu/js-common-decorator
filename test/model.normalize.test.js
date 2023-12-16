@@ -62,11 +62,11 @@ describe('Test the prototype method `normalize()`', () => {
     expect(metadata).not.toBeNull();
     console.log('Foo.metadata = ', metadata);
     expect(getFieldMetadata(metadata, 'message', KEY_FIELD_NORMALIZER))
-    .toBe(defaultNormalizer);
+      .toBe(defaultNormalizer);
     expect(getFieldMetadata(metadata, 'name', KEY_FIELD_NORMALIZER))
-    .toBe(trimUppercaseString);
+      .toBe(trimUppercaseString);
     expect(getFieldMetadata(metadata, 'nonNormalizableField', KEY_FIELD_NORMALIZER))
-    .toBeUndefined();
+      .toBeUndefined();
   });
   test('Test `ObjWithNormalizableField.normalize()`', () => {
     const data = {

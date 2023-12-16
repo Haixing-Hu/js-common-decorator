@@ -14,7 +14,7 @@ import OtherCredential from './other-credential';
 import { ValidationResult } from '../../../src';
 
 export default function validateCredentialNumber(number, { instance, label, owner }) {
-  let credentialType = instance?.type?.name || '';
+  const credentialType = instance?.type?.name || '';
   const whose = (owner ? `${owner}的` : '');
   if ((number === undefined)
       || (number === null)
