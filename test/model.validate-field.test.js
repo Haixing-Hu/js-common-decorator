@@ -53,7 +53,7 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入身份证证件号码');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("number"), type === IDENTITY_CARD, invalid number format', () => {
@@ -143,7 +143,7 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 of Bill Gates cannot be empty.');
+    expect(result.description).toBe('请输入Bill Gates的身份证证件号码');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("nonValidatable")', () => {
