@@ -11,10 +11,11 @@ import { isEnumerator, setClassMetadata } from './impl/utils';
 import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
 import defineEnumerator from './impl/enum/define-enumerator';
-import forValueImpl from './impl/enum/for-value-impl';
+import ofValueImpl from './impl/enum/of-value-impl';
 import valuesImpl from './impl/enum/values-impl';
-import forCodeImpl from './impl/enum/for-code-impl';
-import forNameImpl from './impl/enum/for-name-impl';
+import ofCodeImpl from './impl/enum/of-code-impl';
+import ofNameImpl from './impl/enum/of-name-impl';
+import ofImpl from './impl/enum/of-impl';
 
 /**
  * This decorator is used to decorate an enumeration class.
@@ -47,16 +48,16 @@ import forNameImpl from './impl/enum/for-name-impl';
  *
  * The enumeration class will have the following static methods:
  * - `values()`: returns the array of all enumerators of this enumeration class.
- * - `forValue(value): returns the enumerator whose value is `value`, or
+ * - `ofValue(value): returns the enumerator whose value is `value`, or
  *   `undefined` if no such enumerator exists.
  * - `hasValue(value): returns `true` if there is an enumerator whose value is
  *   `value`, or `false` otherwise.
- * - `forName(name): returns the enumerator whose name is `name`, or
- *   `undefined` if no such enumerator exists.
+ * - `ofName(name): returns the enumerator whose name is `name`, or `undefined`
+ *   if no such enumerator exists.
  * - `hasName(name): returns `true` if there is an enumerator whose name is
  *   `name`, or `false` otherwise.
- * - `forCode(code): returns the enumerator whose code is `code`, or
- *   `undefined` if no such enumerator exists.
+ * - `ofCode(code): returns the enumerator whose code is `code`, or `undefined`
+ *   if no such enumerator exists.
  * - `hasCode(code): returns `true` if there is an enumerator whose code is
  *   `code`, or `false` otherwise.
  *
@@ -79,7 +80,7 @@ import forNameImpl from './impl/enum/for-name-impl';
  *     return [ Gender.MALE, Gender.FEMALE ];
  *   }
  *
- *   static forValue(value) {
+ *   static ofValue(value) {
  *     switch (value) {
  *     case 'MALE':
  *       return Gender.MALE;
@@ -91,23 +92,23 @@ import forNameImpl from './impl/enum/for-name-impl';
  *   }
  *
  *   static hasValue(value) {
- *     return Gender.forValue(value) !== undefined;
+ *     return Gender.ofValue(value) !== undefined;
  *   }
  *
- *   static forName(name) {
+ *   static ofName(name) {
  *     return Gender.values().find((e) => e.name === name);
  *   }
  *
  *   static hasName(name) {
- *     return Gender.forName(name) !== undefined;
+ *     return Gender.ofName(name) !== undefined;
  *   }
  *
- *   static forCode(code) {
+ *   static ofCode(code) {
  *     return Gender.values().find((e) => e.code === code);
  *   }
  *
  *   static hasCode(code) {
- *     return Gender.forCode(code) !== undefined;
+ *     return Gender.ofCode(code) !== undefined;
  *   }
  *
  *   constructor(value, name) {
@@ -228,34 +229,148 @@ function Enum(Class, context) {
   Class.prototype.toJSON = function toJSON() {
     return this.value;
   };
-  // Add static method values()
+
+  /**
+   * Returns the array of all enumerators of this enumeration class.
+   *
+   * @returns {Array<object>}
+   *     The array of all enumerators of this enumeration class.
+   */
   Class.values = function values() {
     return valuesImpl(Class);
   };
-  // Add static method forValue()
-  Class.forValue = function forValue(value) {
-    return forValueImpl(Class, value);
+
+  /**
+   * Returns the enumerator of this enumeration class which has the specified
+   * value.
+   *
+   * @param {string} value
+   *     The value of the enumerator to be returned. Note that the value will be
+   *     trimmed and upper-cased to get the field name of the enumerator.
+   * @returns {undefined|Class}
+   *     The enumerator of this enumeration class which has the specified value;
+   *     or `undefined` if there is no such enumerator.
+   * @author Haixing Hu
+   */
+  Class.ofValue = function ofValue(value) {
+    return ofValueImpl(Class, value);
   };
-  // Add static method hasValue()
+
+  /**
+   * Tests whether there is an enumerator of this enumeration class which has
+   * the specified value.
+   *
+   * @param {string} value
+   *     The specified value.
+   * @returns {boolean}
+   *     `true` if there is an enumerator of this enumeration class which has
+   *     the specified value; `false` otherwise.
+   * @author Haixing Hu
+   */
   Class.hasValue = function hasValue(value) {
-    return (forValueImpl(Class, value) !== undefined);
+    return (ofValueImpl(Class, value) !== undefined);
   };
-  // Add static method forName()
-  Class.forName = function forName(name) {
-    return forNameImpl(Class, name);
+
+  /**
+   * Returns the enumerator of this enumeration class which has the specified
+   * name.
+   *
+   * @param {string} name
+   *     The name of the enumerator to be returned.
+   * @returns {undefined|Class}
+   *     The enumerator of this enumeration class which has the specified name;
+   *     or `undefined` if there is no such enumerator.
+   * @author Haixing Hu
+   */
+  Class.ofName = function ofName(name) {
+    return ofNameImpl(Class, name);
   };
-  // Add static method hasName()
+
+  /**
+   * Tests whether there is an enumerator of this enumeration class which has
+   * the specified name.
+   *
+   * @param {string} name
+   *     The specified name.
+   * @returns {boolean}
+   *     `true` if there is an enumerator of this enumeration class which has
+   *     the specified name; `false` otherwise.
+   * @author Haixing Hu
+   */
   Class.hasName = function hasName(name) {
-    return (forNameImpl(Class, name) !== undefined);
+    return (ofNameImpl(Class, name) !== undefined);
   };
-  // Add static method forCode()
-  Class.forCode = function forCode(code) {
-    return forCodeImpl(Class, code);
+
+  /**
+   * Returns the enumerator of this enumeration class which has the specified
+   * code.
+   *
+   * @param {string} code
+   *     The code of the enumerator to be returned.
+   * @returns {undefined|Class}
+   *     The enumerator of this enumeration class which has the specified code;
+   *     or `undefined` if there is no such enumerator.
+   * @author Haixing Hu
+   * @private
+   */
+  Class.ofCode = function ofCode(code) {
+    return ofCodeImpl(Class, code);
   };
-  // Add static method hasCode()
+
+  /**
+   * Tests whether there is an enumerator of this enumeration class which has
+   * the specified code.
+   *
+   * @param {string} code
+   *     The specified code.
+   * @returns {boolean}
+   *     `true` if there is an enumerator of this enumeration class which has
+   *     the specified code; `false` otherwise.
+   * @author Haixing Hu
+   */
   Class.hasCode = function hasCode(code) {
-    return (forCodeImpl(Class, code) !== undefined);
+    return (ofCodeImpl(Class, code) !== undefined);
   };
+
+  /**
+   * Returns the enumerator of this enumeration class corresponding to the
+   * specified value.
+   *
+   * The value could be an enumerator of this enumeration class, or the value of
+   * an enumerator of this enumeration class, or the name of an enumerator of
+   * this enumeration class, or the code of an enumerator of this enumeration
+   * class.
+   *
+   * @param {object|string} value
+   *     The specified value.
+   * @returns {undefined|object}
+   *     The enumerator corresponding to the specified value.; or `undefined` if
+   *     there is no such enumerator.
+   * @author Haixing Hu
+   */
+  Class.of = function of(value) {
+    return ofImpl(Class, value);
+  }
+
+  /**
+   * Tests whether there is an enumerator of this enumeration class corresponding
+   * to the specified value.
+   *
+   * The value could be an enumerator of this enumeration class, or the value of
+   * an enumerator of this enumeration class, or the name of an enumerator of
+   * this enumeration class, or the code of an enumerator of this enumeration
+   * class.
+   *
+   * @param {object|string} value
+   *     The specified value.
+   * @returns {boolean}
+   *     `true` if there is an enumerator corresponding to the specified value;
+   *     `false` otherwise.
+   * @author Haixing Hu
+   */
+  Class.has = function has(value) {
+    return (ofImpl(Class, value) !== undefined);
+  }
 }
 
 // Globally register the clone hook of enumerators.

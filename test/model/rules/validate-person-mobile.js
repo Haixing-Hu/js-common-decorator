@@ -10,17 +10,17 @@ import { ValidationResult } from '../../../src';
 import { isNullishOrEmpty } from '../../../src/impl/utils';
 import Mobile from './mobile';
 
-export default function validatePersonMobile(mobile, { instance, displayName, nullable }) {
-  const whose = (instance.name ? `${instance.name}的` : '');
+export default function validatePersonMobile(mobile, { owner, label, nullable }) {
+  const whose = (owner ? `${owner}的` : '');
   if (isNullishOrEmpty(mobile)) {
     if (nullable) {
       return new ValidationResult(true);
     } else {
-      return new ValidationResult(false, `请输入${whose}${displayName}`);
+      return new ValidationResult(false, `请输入${whose}${label}`);
     }
   } else if (Mobile.isValid(mobile)) {
     return new ValidationResult(true);
   } else {
-    return new ValidationResult(false, `${whose}${displayName}格式不正确`);
+    return new ValidationResult(false, `${whose}${label}格式不正确`);
   }
 }

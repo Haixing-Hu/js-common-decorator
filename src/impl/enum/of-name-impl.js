@@ -8,26 +8,26 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns the enumerator of an enumeration class which has the specified code.
+ * Returns the enumerator of an enumeration class which has the specified name.
  *
  * @param {function} Class
  *     The constructor of the specified enumeration class.
- * @param {string} code
- *     The code of the enumerator to be returned.
+ * @param {string} name
+ *     The name of the enumerator to be returned.
  * @returns {undefined|Class}
  *     The enumerator of the specified enumeration class which has the specified
- *     code; or `undefined` if there is no such enumerator.
+ *     name; or `undefined` if there is no such enumerator.
  * @author Haixing Hu
  * @private
  */
-function forCodeImpl(Class, code) {
-  if ((code === undefined) || (code === null) || (typeof code !== 'string')) {
+function ofNameImpl(Class, name) {
+  if ((name === undefined) || (name === null) || (typeof name !== 'string')) {
     return undefined;
   }
   const item = Object.keys(Class)
     .filter((key) => (Class[key] instanceof Class))
-    .find((key) => Class[key]?.code === code);
+    .find((key) => Class[key]?.name === name);
   return (item ? Class[item] : undefined);
 }
 
-export default forCodeImpl;
+export default ofNameImpl;

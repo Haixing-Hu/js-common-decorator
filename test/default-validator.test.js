@@ -16,6 +16,56 @@ import CredentialType from './model/credential-type';
  * @author Haixing Hu
  */
 describe('Test `defaultValidator()` function', () => {
+  test('value is undefined, context.nullable is true', () => {
+    const context = { type: String, label: 'name', nullable: true };
+    const result = defaultValidator(undefined, context);
+    expect(result.success).toBe(true);
+  });
+  test('value is undefined, context.nullable is false', () => {
+    let context = { type: String, label: 'name', nullable: false };
+    let result = defaultValidator(undefined, context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name must be specified.');
+
+    context = { owner: 'Bill Gates', type: String, label: 'name', nullable: false };
+    result = defaultValidator(undefined, context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name of Bill Gates must be specified.');
+  });
+  test('value is null, context.nullable is true', () => {
+    const context = { type: String, label: 'name', nullable: true };
+    const result = defaultValidator(null, context);
+    expect(result.success).toBe(true);
+  });
+  test('value is null, context.nullable is false', () => {
+    let context = { type: String, label: 'name', nullable: false };
+    let result = defaultValidator(null, context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name must be specified.');
+
+    context = { owner: 'Bill Gates', type: String, label: 'name', nullable: false };
+    result = defaultValidator(null, context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name of Bill Gates must be specified.');
+  });
+
+  test('value is an empty string, context.nonEmpty is true', () => {
+    let context = { type: String, label: 'name', nonEmpty: true };
+    let result = defaultValidator('', context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name cannot be empty.');
+
+    context = { owner: 'Bill Gates', type: String, label: 'name', nonEmpty: true };
+    result = defaultValidator('', context);
+    expect(result.success).toBe(false);
+    expect(result.description).toBe('The name of Bill Gates cannot be empty.');
+  });
+  test('value is an empty string, context.nonEmpty is false', () => {
+    const context = { type: String, label: 'name', nonEmpty: false };
+    const result = defaultValidator('', context);
+    expect(result.success).toBe(true);
+  });
+
   test('value is a primitive type with the corresponding built-in class in context.type', () => {
     const context = { type: String };
     const result = defaultValidator('test', context);

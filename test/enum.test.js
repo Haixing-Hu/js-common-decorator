@@ -217,29 +217,29 @@ describe('Test the `@Enum` class decorator', () => {
     expect(values[1].name).toBe('女');
     expect(values[1].value).toBe('FEMALE');
   });
-  test('Enumeration class should have static method `forValue()`', () => {
-    const male = Gender.forValue('MALE');
+  test('Enumeration class should have static method `ofValue()`', () => {
+    const male = Gender.ofValue('MALE');
     // console.dir(male);
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
-    const female = Gender.forValue('FEMALE');
+    const female = Gender.ofValue('FEMALE');
     // console.dir(female);
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
     expect(female.name).toBe('女');
     expect(female.value).toBe('FEMALE');
     // console.dir(female);
-    let nonExist = Gender.forValue('xxx');
+    let nonExist = Gender.ofValue('xxx');
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(undefined);
+    nonExist = Gender.ofValue(undefined);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(null);
+    nonExist = Gender.ofValue(null);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue(123);
+    nonExist = Gender.ofValue(123);
     expect(nonExist).toBeUndefined();
-    nonExist = Gender.forValue('forValue');
+    nonExist = Gender.ofValue('ofValue');
     expect(nonExist).toBeUndefined();
   });
   test('Enumeration class should have static method `hasValue()`', () => {
@@ -247,21 +247,21 @@ describe('Test the `@Enum` class decorator', () => {
     expect(Gender.hasValue('FEMALE')).toBe(true);
     expect(Gender.hasValue('xxx')).toBe(false);
     expect(Gender.hasValue('has')).toBe(false);
-    expect(Gender.hasValue('forNameValue')).toBe(false);
-    expect(Gender.hasValue('forValue')).toBe(false);
+    expect(Gender.hasValue('ofNameValue')).toBe(false);
+    expect(Gender.hasValue('ofValue')).toBe(false);
     expect(Gender.hasValue(undefined)).toBe(false);
     expect(Gender.hasValue(null)).toBe(false);
     expect(Gender.hasValue(123)).toBe(false);
   });
-  test('Enumeration class should have static method `forName()`', () => {
-    const male = GenderWithPayload.forName('男');
+  test('Enumeration class should have static method `ofName()`', () => {
+    const male = GenderWithPayload.ofName('男');
     // console.dir(male);
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
     expect(male.code).toBe('001');
-    const female = GenderWithPayload.forName('女');
+    const female = GenderWithPayload.ofName('女');
     // console.dir(female);
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -269,15 +269,15 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female.value).toBe('FEMALE');
     expect(female.code).toBe('002');
     // console.dir(female);
-    let nonExist = GenderWithPayload.forName('xx');
+    let nonExist = GenderWithPayload.ofName('xx');
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forName(undefined);
+    nonExist = GenderWithPayload.ofName(undefined);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forName(null);
+    nonExist = GenderWithPayload.ofName(null);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forName(123);
+    nonExist = GenderWithPayload.ofName(123);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forName('forValue');
+    nonExist = GenderWithPayload.ofName('ofValue');
     expect(nonExist).toBeUndefined();
   });
   test('Enumeration class should have static method `hasName()`', () => {
@@ -288,15 +288,15 @@ describe('Test the `@Enum` class decorator', () => {
     expect(GenderWithPayload.hasName(null)).toBe(false);
     expect(GenderWithPayload.hasName(123)).toBe(false);
   });
-  test('Enumeration class should have static method `forCode()`', () => {
-    const male = GenderWithPayload.forCode('001');
+  test('Enumeration class should have static method `ofCode()`', () => {
+    const male = GenderWithPayload.ofCode('001');
     // console.dir(male);
     expect(male).toBeDefined();
     expect(male).not.toBeNull();
     expect(male.name).toBe('男');
     expect(male.value).toBe('MALE');
     expect(male.code).toBe('001');
-    const female = GenderWithPayload.forCode('002');
+    const female = GenderWithPayload.ofCode('002');
     // console.dir(female);
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -304,15 +304,15 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female.value).toBe('FEMALE');
     expect(female.code).toBe('002');
     // console.dir(female);
-    let nonExist = GenderWithPayload.forCode('003');
+    let nonExist = GenderWithPayload.ofCode('003');
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forCode(undefined);
+    nonExist = GenderWithPayload.ofCode(undefined);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forCode(null);
+    nonExist = GenderWithPayload.ofCode(null);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forCode(123);
+    nonExist = GenderWithPayload.ofCode(123);
     expect(nonExist).toBeUndefined();
-    nonExist = GenderWithPayload.forCode('forValue');
+    nonExist = GenderWithPayload.ofCode('ofValue');
     expect(nonExist).toBeUndefined();
   });
   test('Enumeration class should have static method `hasCode()`', () => {
@@ -320,8 +320,8 @@ describe('Test the `@Enum` class decorator', () => {
     expect(GenderWithPayload.hasCode('002')).toBe(true);
     expect(GenderWithPayload.hasCode('003')).toBe(false);
     expect(GenderWithPayload.hasCode('has')).toBe(false);
-    expect(GenderWithPayload.hasCode('forNameValue')).toBe(false);
-    expect(GenderWithPayload.hasCode('forValue')).toBe(false);
+    expect(GenderWithPayload.hasCode('ofNameValue')).toBe(false);
+    expect(GenderWithPayload.hasCode('ofValue')).toBe(false);
     expect(GenderWithPayload.hasCode(undefined)).toBe(false);
     expect(GenderWithPayload.hasCode(null)).toBe(false);
     expect(GenderWithPayload.hasCode('123')).toBe(false);

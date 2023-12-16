@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../index';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -7,6 +6,7 @@ import { ValidationResult } from '../../index';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '../../index';
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../metadata-keys';
 import {
@@ -14,10 +14,8 @@ import {
   hasOwnPrototypeFunction,
 } from '../utils';
 import validateArrayField from './validate-array-field';
-import validateEmptyField from './validate-empty-field';
 import validateMapField from './validate-map-field';
 import validateNormalField from './validate-normal-field';
-import validateNullishField from './validate-nullish-field';
 import validateSetField from './validate-set-field';
 
 /**
@@ -65,9 +63,7 @@ function validateFieldImpl(Class, obj, field, context) {
     return new ValidationResult(true);
   }
   const value = obj[field];
-  return validateNullishField(metadata, obj, field, value)
-    ?? validateEmptyField(metadata, obj, field, value, context)
-    ?? validateArrayField(metadata, obj, field, value, validator, context)
+  return validateArrayField(metadata, obj, field, value, validator, context)
     ?? validateSetField(metadata, obj, field, value, validator, context)
     ?? validateMapField(metadata, obj, field, value, validator, context)
     ?? validateNormalField(Class, metadata, obj, field, value, validator, context);

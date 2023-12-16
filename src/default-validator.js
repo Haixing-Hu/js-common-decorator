@@ -6,6 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { isEmpty } from '@haixing_hu/common-util';
 import ValidationResult from './model/validation-result';
 import { isEnumClass } from './impl/utils';
 
@@ -31,8 +32,7 @@ import { isEnumClass } from './impl/utils';
  * - Otherwise, it does nothing and returns a success validation result.
  *
  * @param {any} value
- *     the value to be validated, which is assumed to be non-nullish, non-empty,
- *     non-collection.
+ *     the value to be validated.
  * @param {object} context
  *     the validation context.
  * @returns {ValidationResult}
@@ -42,31 +42,53 @@ import { isEnumClass } from './impl/utils';
  * @see Validatable
  * @see ValidationResult
  */
-function defaultValidator(value, context) {
-  if (context.type) {   // validate the type
+function defaultValidator(value, { owner, type, label, nullable, nonEmpty }) {
+  if (value === undefined || value === null) {
+    if (nullable) {
+      return new ValidationResult(true);
+    } else {
+      // TODO: make the message i18n
+      const message = owner
+        ? `The ${label} of ${owner} must be specified.`
+        : `The ${label} must be specified.`;
+      return new ValidationResult(false, message);
+    }
+  }
+  if (isEmpty(value)) {
+    if (nonEmpty) {
+      // TODO: make the message i18n
+      const message = owner
+        ? `The ${label} of ${owner} cannot be empty.`
+        : `The ${label} cannot be empty.`;
+      return new ValidationResult(false, message);
+    } else {
+      return new ValidationResult(true);
+    }
+  }
+  if (type) {   // validate the type
     // special deal with the case that the type is an enumeration class
-    if (isEnumClass(context.type) && (typeof value === 'string')) {
-      if (context.type.hasValue(value)) {
+    if (isEnumClass(type) && (typeof value === 'string')) {
+      if (type.hasValue(value)) {
         return new ValidationResult(true);
       } else {
         // TODO: i18n the following message
-        const message = context.owner
-          ? `The ${context.label} of ${context.owner} is not supported: ${value}`
-          : `The ${context.label} is not supported: ${value}`;
+        const message = owner
+          ? `The ${label} of ${owner} is not supported: ${value}`
+          : `The ${label} is not supported: ${value}`;
         return new ValidationResult(false, message);
       }
     }
     // note that the following test also covers the case that the value is a primitive
-    if (value.constructor !== context.type) {
+    if (value.constructor !== type) {
       // TODO: i18n the following message
-      const message = context.owner
-        ? `The ${context.label} of ${context.owner} must be of the type ${context.type.name}.`
-        : `The ${context.label} must be of the type ${context.type.name}.`;
+      const message = owner
+        ? `The ${label} of ${owner} must be of the type ${type.name}.`
+        : `The ${label} must be of the type ${type.name}.`;
       return new ValidationResult(false, message);
     }
   }
   if ((typeof value === 'object') && (typeof value.validate === 'function')) {
-    return value.validate('*', { owner: context.owner });
+    return value.validate('*', { owner });
   }
   return new ValidationResult(true);
 }

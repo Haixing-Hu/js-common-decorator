@@ -9,16 +9,16 @@
 import { ValidationResult } from '../../../src';
 import Name from './name';
 
-export default function validatePersonName(name, { displayName }) {
-  if (name === undefined
-      || name === null
+export default function validatePersonName(name, { label }) {
+  if ((name === undefined)
+      || (name === null)
       || (typeof name !== 'string')
-      || name.trim() === '') {
-    return new ValidationResult(false, `请输入${displayName}`);
+      || (name.trim() === '')) {
+    return new ValidationResult(false, `请输入${label}`);
   }
   if (Name.isValid(name)) {
     return new ValidationResult(true);
   } else {
-    return new ValidationResult(false, `${displayName}格式不正确`);
+    return new ValidationResult(false, `${label}格式不正确`);
   }
 }

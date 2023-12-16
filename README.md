@@ -35,11 +35,11 @@ supports the most recent (currently May 2023)
     - [Instance method: Class.prototype.toString()](#enum-toString)
     - [Instance method: Class.prototype.toJSON()](#enum-toJSON)
     - [Class method: Class.values()](#enum-values)
-    - [Class method: Class.forValue(value)](#enum-forValue)
+    - [Class method: Class.ofValue(value)](#enum-ofValue)
     - [Class method: Class.hasValue(value)](#enum-hasValue)
-    - [Class method: Class.forName(name)](#enum-forName)
+    - [Class method: Class.ofName(name)](#enum-ofName)
     - [Class method: Class.hasName(name)](#enum-hasName)
-    - [Class method: Class.forCode(code)](#enum-forCode)
+    - [Class method: Class.ofCode(code)](#enum-forCode)
     - [Class method: Class.hasCode(code)](#enum-hasCode)
     - [Usage Example](#enum-usage-example)
 - [Configuration](#configuration)
@@ -349,7 +349,7 @@ class Person {
       return false;
     }
     if ((this.credential === null) || (other.credential === null)) {
-      // If one of the two people does not have ID information, it is impossible
+      // If one of the two people does not have ID inofmation, it is impossible
       // to compare whether they are the same person thus they will be considered 
       // different.
       return false;
@@ -454,7 +454,7 @@ This function returns the JSON representation of this enumerator.
 
 This function returns the array of all enumerators of this enumeration class.
 
-#### <span id="enum-forValue">Class method: Class.forValue(value)</span>
+#### <span id="enum-ofValue">Class method: Class.ofValue(value)</span>
 
 - Parameters: 
   - `value: string`: the value of the enumerator to be returned. Note that this
@@ -478,7 +478,7 @@ This function returns the enumerator with the specified value.
 
 This function tests whether there is an enumerator with the specified value.
 
-#### <span id="enum-forName">Class method: Class.forName(name)</span>
+#### <span id="enum-ofName">Class method: Class.ofName(name)</span>
 
 - Parameters:
     - `name: string`: the name of the enumerator to be returned.
@@ -498,7 +498,7 @@ This function returns the enumerator with the specified name.
 
 This function tests whether there is an enumerator with the specified name.
 
-#### <span id="enum-forCode">Class method: Class.forCode(code)</span>
+#### <span id="enum-ofCode">Class method: Class.ofCode(code)</span>
 
 - Parameters:
     - `code: string`: the code of the enumerator to be returned. 
@@ -537,7 +537,7 @@ class Gender {
     return [ Gender.MALE, Gender.FEMALE ];
   }
 
-  static forValue(value) {
+  static ofValue(value) {
     switch (value) {
     case 'MALE':
       return Gender.MALE;
@@ -549,23 +549,23 @@ class Gender {
   }
 
   static hasValue(value) {
-    return Gender.forValue(value) !== undefined;
+    return Gender.ofValue(value) !== undefined;
   }
 
-  static forName(name) {
+  static ofName(name) {
     return Gender.values().find((e) => e.name === name);
   }
 
   static hasName(name) {
-    return Gender.forName(name) !== undefined;
+    return Gender.ofName(name) !== undefined;
   }
 
-  static forCode(code) {
+  static ofCode(code) {
     return Gender.values().find((e) => e.code === code);
   }
 
   static hasCode(code) {
-    return Gender.forCode(code) !== undefined;
+    return Gender.ofCode(code) !== undefined;
   }
 
   constructor(value, name) {

@@ -6,7 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getFieldElementType, getFieldLabel } from '../field-utils';
+import {
+  getFieldElementType,
+  getFieldLabel, isFieldNonEmpty,
+  isFieldNullable,
+} from '../field-utils';
 import { getInstanceName } from '../utils';
 
 /**
@@ -27,19 +31,25 @@ import { getInstanceName } from '../utils';
  * @private
  */
 function getElementValidationContext(metadata, obj, field, context) {
+  // get the name of the instance as the owner of the field
+  const owner = context.owner ?? getInstanceName(metadata, obj);
   // get the element type of the field
   const elementType = context.type ?? getFieldElementType(metadata, field);
   // get the label of the field
   const label = context.label ?? getFieldLabel(metadata, field);
-  // get the name of the instance
-  const owner = context.owner ?? getInstanceName(metadata, obj);
+  // get the nullable flag of the field
+  const nullable = context.nullable ?? isFieldNullable(metadata, field);
+  // get the non-empty flag of the field
+  const nonEmpty = context.nonEmpty ?? isFieldNonEmpty(metadata, field);
   // constructs the validation options
   const ctx = {
     instance: obj,
+    owner,
     field,
     type: elementType,
     label,
-    owner,
+    nullable,
+    nonEmpty,
   };
   // merge the context
   return Object.assign(ctx, context);

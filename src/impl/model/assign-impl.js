@@ -183,7 +183,7 @@ const Impl = {
             return null;
           }
           // convert the string representation to the enumerator
-          const e = type.forValue(source);
+          const e = type.ofValue(source);
           if (e === undefined) {
             throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
           }

@@ -12,7 +12,7 @@
  *
  * @param {function} Class
  *     The constructor of the specified enumeration class.
- * @return {array<Class>}
+ * @return {Array<object>}
  *     The array of all enumerators of the specified enumeration class.
  * @author Haixing Hu
  * @private

@@ -209,7 +209,7 @@ export function getIdCardBirthday(number) {
  *
  * @param {String} number
  *     给定的身份证号码。
- * @return {String}
+ * @return {Gender}
  *     从给定的身份证号码中提取出的性别，表示为Gender枚举的值。如果无法提取，则
  *     返回null。
  */
@@ -218,5 +218,5 @@ export function getIdCardGender(number) {
     return null;
   }
   const digit = number.charCodeAt(GENDER_INDEX) - ASCII_0_CHAR_CODE;
-  return (digit % 2 === 1 ? Gender.MALE.value : Gender.FEMALE.value);
+  return (digit % 2 === 1 ? Gender.MALE : Gender.FEMALE);
 }

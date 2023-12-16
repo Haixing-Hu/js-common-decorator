@@ -37,13 +37,11 @@ export default class Credential {
   normalize() {
     if (this.type !== undefined && this.type !== null) {
       if (typeof this.type === 'string') {
-        this.type = CredentialType.forValue(this.type);
+        this.type = CredentialType.ofValue(this.type);
       } else if (this.type.value !== undefined) {
-        this.type = CredentialType.forValue(this.type.value);
+        this.type = CredentialType.ofValue(this.type.value);
       } else if (!(this.type instanceof CredentialType)) {
-        throw new TypeError(
-          'The type must be a string or an instance of `CredentialType`.',
-        );
+        throw new TypeError('The type must be a string or an instance of `CredentialType`.');
       }
     }
     this.number = trimUppercaseString(this.number);

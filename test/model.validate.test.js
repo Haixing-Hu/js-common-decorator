@@ -493,15 +493,17 @@ describe('Test the prototype method `validate()`', () => {
     mobile: '13574937629',
     email: 'i@i.com',
   };
-  test('测试 Person.prototype.validate()，各属性均正确', () => {
+
+  test('Test Person.validate()', () => {
     const person = new Person();
     person.assign(personData);
     const result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
+    expect(result.next).toBeNull();
   });
-  test('测试 Person.prototype.validate()，姓名为空', () => {
+  test('Test Person.validate(), name is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.name = '';
@@ -510,7 +512,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('请输入姓名');
   });
-  test('测试 Person.prototype.validate()，姓名不正确', () => {
+  test('Test Person.validate(), name is incorrect', () => {
     const person = new Person();
     person.assign(personData);
     person.name = '张s';
@@ -519,7 +521,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('姓名格式不正确');
   });
-  test('测试 Person.prototype.validate()，证件为空', () => {
+  test('Test Person.validate(), credential is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.credential = null;
@@ -536,6 +538,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('证件不能为空');
   });
+
   test('测试 Person.prototype.validate()，证件类型为空', () => {
     const person = new Person();
     person.assign(personData);
