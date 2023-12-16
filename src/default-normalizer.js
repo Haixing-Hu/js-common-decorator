@@ -54,12 +54,13 @@ function defaultNormalizer(value) {
     default:
       break;
   }
-  switch (info.subtype) {
-    case 'Array':
+  switch (info.category) {
+    case 'array':
+    case 'typed-array':
       return value.map((item) => defaultNormalizer(item));
-    case 'Map':
+    case 'map':
       return new Map(Array.from(value, ([k, v]) => [k, defaultNormalizer(v)]));
-    case 'Set':
+    case 'set':
       return new Set(Array.from(value, (v) => defaultNormalizer(v)));
     default:
       if (info.isBuiltIn) {
