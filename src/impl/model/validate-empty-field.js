@@ -47,7 +47,7 @@ import ValidationResult from '../../model/validation-result';
  */
 function validateEmptyField(metadata, obj, field, value, context) {
   if (isEmpty(value)) {
-    if (isFieldNonEmpty(metadata, field)) {
+    if (context.nonEmpty || isFieldNonEmpty(metadata, field)) {
       const label = context.label ?? getFieldLabel(metadata, field);
       const owner = context.owner ?? getInstanceName(metadata, obj);
       // TODO: make the message i18n

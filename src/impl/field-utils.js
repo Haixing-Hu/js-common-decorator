@@ -74,11 +74,11 @@ export function getFieldElementType(metadata, field) {
  */
 export function getFieldLabel(metadata, field) {
   const config = getFieldMetadata(metadata, field, KEY_FIELD_LABEL);
-  if (config === null) {
-    return field;
+  if (config) {
+    // TODO: i18n the label
+    return config.label;
   }
-  // TODO: i18n the label
-  return config.label;
+  return field;
 }
 
 /**

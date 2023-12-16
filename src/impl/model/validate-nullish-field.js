@@ -37,7 +37,7 @@ import ValidationResult from '../../model/validation-result';
  */
 function validateNullishField(metadata, obj, field, value) {
   if (value === undefined || value === null) {
-    if (isFieldNullable(metadata, field)) {
+    if (context.nullable || isFieldNullable(metadata, field)) {
       return new ValidationResult(true);
     } else {
       const label = getFieldLabel(metadata, field);

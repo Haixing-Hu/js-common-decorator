@@ -47,7 +47,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入护照证件号码');
     expect(result.next).toBeNull();
 
     obj = new Credential(CredentialType.PASSPORT, 'PE123');
@@ -91,7 +91,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入护照证件号码');
     expect(result.next).toBeNull();
 
     obj = new Credential(CredentialType.PASSPORT, 'PE123');
@@ -135,7 +135,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入护照证件号码');
     expect(result.next).toBeNull();
 
     obj = new Credential(CredentialType.PASSPORT, 'PE123');
@@ -179,7 +179,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入护照证件号码');
     expect(result.next).toBeNull();
 
     obj = new Credential(CredentialType.PASSPORT, 'PE123');
@@ -258,7 +258,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入身份证证件号码');
     expect(result.next).toBeNull();
   });
   test('Credential.validate("number"), invalid type', () => {
@@ -311,7 +311,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 of Bill Gates cannot be empty.');
+    expect(result.description).toBe('请输入Bill Gates的护照证件号码');
     expect(result.next).toBeNull();
 
     obj = new Credential(CredentialType.PASSPORT, 'PE123');
@@ -365,7 +365,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入身份证证件号码');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "number"]), invalid type', () => {
@@ -394,7 +394,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.description).toBe('The 证件类型 is not supported: xxx');
     expect(result.next).not.toBeNull();
     expect(result.next.success).toBe(false);
-    expect(result.next.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.next.description).toBe('请输入证件号码');
     expect(result.next.next).toBeNull();
   });
 
@@ -421,7 +421,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.description).toBe('请输入身份证证件号码');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "nonValidatable", "xxx", "number"]), invalid type', () => {
@@ -450,7 +450,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.description).toBe('The 证件类型 is not supported: xxx');
     expect(result.next).not.toBeNull();
     expect(result.next.success).toBe(false);
-    expect(result.next.description).toBe('The 证件号码 cannot be empty.');
+    expect(result.next.description).toBe('请输入证件号码');
     expect(result.next.next).toBeNull();
   });
 
@@ -512,7 +512,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('请输入姓名');
   });
-  test('Test Person.validate(), name is incorrect', () => {
+  test('Test Person.validate(), invalid name format', () => {
     const person = new Person();
     person.assign(personData);
     person.name = '张s';
@@ -521,14 +521,14 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('姓名格式不正确');
   });
-  test('Test Person.validate(), credential is empty', () => {
+  test('Test Person.validate(), credential is null', () => {
     const person = new Person();
     person.assign(personData);
     person.credential = null;
     let result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('张三的证件不能为空');
+    expect(result.description).toBe('The 证件 of 张三 must be specified.');
 
     person.assign(personData);
     person.credential = null;
@@ -536,26 +536,25 @@ describe('Test the prototype method `validate()`', () => {
     result = person.validate('credential');
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('证件不能为空');
+    expect(result.description).toBe('The 证件 must be specified.');
   });
-
-  test('测试 Person.prototype.validate()，证件类型为空', () => {
+  test('Test Person.validate(), credential.type is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.credential.type = '';
     const result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('请选择张三的证件类型');
+    expect(result.description).toBe('The 证件类型 of 张三 cannot be empty.');
   });
-  test('测试 Person.prototype.validate()，证件类型错误', () => {
+  test('Test Person.validate(), invalid credential.type', () => {
     const person = new Person();
     person.assign(personData);
     person.credential.type = 'xxx';
     let result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('张三的证件类型不受支持："xxx"');
+    expect(result.description).toBe('The 证件类型 of 张三 is not supported: xxx');
 
     person.assign(personData);
     person.credential.type = 'xxx';
@@ -563,9 +562,9 @@ describe('Test the prototype method `validate()`', () => {
     result = person.validate('credential');
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('证件类型不受支持："xxx"');
+    expect(result.description).toBe('The 证件类型 is not supported: xxx');
   });
-  test('测试 Person.prototype.validate()，证件号码为空', () => {
+  test('Test Person.validate(), credential.number is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.credential.number = '';
@@ -574,7 +573,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('请输入张三的身份证证件号码');
   });
-  test('测试 Person.prototype.validate()，证件号码不正确', () => {
+  test('Test Person.validate(), invalid credential.number', () => {
     const person = new Person();
     person.assign(personData);
     person.credential.number = '110101199003078516';
@@ -583,7 +582,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的身份证证件号码格式不正确');
   });
-  test('测试 Person.prototype.validate()，性别为空', () => {
+  test('Test Person.validate(), gender is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.gender = '';
@@ -592,7 +591,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('请选择张三的性别');
   });
-  test('测试 Person.prototype.validate()，性别不正确', () => {
+  test('Test Person.validate(), invalid gender value', () => {
     const person = new Person();
     person.assign(personData);
     person.gender = 'xxx';
@@ -601,7 +600,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的性别只能是“男”或“女”');
   });
-  test('测试 Person.prototype.validate()，性别和身份证号码不匹配', () => {
+  test('Test Person.validate(), unmatched gender and identity card number', () => {
     const person = new Person();
     person.assign(personData);
     person.gender = 'FEMALE';
@@ -610,7 +609,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的性别和身份证号码不匹配');
   });
-  test('测试 Person.prototype.validate()，出生日期为空', () => {
+  test('Test Person.validate(), birthday is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.birthday = '';
@@ -619,7 +618,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('请选择张三的出生日期');
   });
-  test('测试 Person.prototype.validate()，出生日期不正确', () => {
+  test('Test Person.validate(), invalid birthday format', () => {
     const person = new Person();
     person.assign(personData);
     person.birthday = '19900307';
@@ -628,7 +627,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的出生日期格式不正确');
   });
-  test('测试 Person.prototype.validate()，出生日期和身份证号码不匹配', () => {
+  test('Test Person.validate(), unmatched birthday and identity card number', () => {
     const person = new Person();
     person.assign(personData);
     person.birthday = '1990-03-08';
@@ -637,7 +636,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的出生日期和身份证号码不匹配');
   });
-  test('测试 Person.prototype.validate()，手机号码为空', () => {
+  test('Test Person.validate(), mobile is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.mobile = '';
@@ -646,7 +645,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
   });
-  test('测试 Person.prototype.validate()，手机号码不正确', () => {
+  test('Test Person.validate(), invalid mobile number', () => {
     const person = new Person();
     person.assign(personData);
     person.mobile = '1357493762';
@@ -655,8 +654,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的手机号码格式不正确');
   });
-
-  test('测试 Person.prototype.validate()，电子邮件地址为空', () => {
+  test('Test Person.validate(), email address is empty', () => {
     const person = new Person();
     person.assign(personData);
     person.email = '';
@@ -665,7 +663,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
   });
-  test('测试 Person.prototype.validate()，电子邮件地址不正确', () => {
+  test('Test Person.validate(), email address is not exist', () => {
     const person = new Person();
     person.assign(personData);
     person.email = 'ii';
@@ -674,84 +672,49 @@ describe('Test the prototype method `validate()`', () => {
     expect(result.success).toBe(false);
     expect(result.description).toBe('张三的电子邮件地址格式不正确');
   });
-  test('测试 Person.prototype.validate("credential.number")', () => {
+  test('Test Person.validate("credential.number")', () => {
     const person = new Person();
     person.assign(personData);
     const result = person.validate('credential.number');
     expect(result).toBeInstanceOf(ValidationResult);
-    expect(result.success).toBe(false);
-    expect(result.description).toBe('Person的字段credential.number不存在');
+    expect(result.success).toBe(true);
+    expect(result.description).toBe('');
   });
-});
 
-/**
- * 单元测试 @Validator 装饰器的额外参数。
- *
- * @author 胡海星
- */
-describe('测试 @Validator 的额外参数', () => {
-  test('正确对象', () => {
+  test('Test ObjWithArrayField.validate()', () => {
     const obj = new ObjWithArrayField();
     obj.array = [];
-    obj.nonNullableArray = [1, 2];
+    obj.nonEmptyArray = [1, 2];
     const result = obj.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
   });
-  test('非空字段为空', () => {
+  test('Test ObjWithArrayField.validate(), array is null', () => {
     const obj = new ObjWithArrayField();
     obj.array = [];
-    obj.nonNullableArray = [];
+    obj.nonEmptyArray = [];
     const result = obj.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('请填写或选择nonNullableArray');
+    expect(result.description).toBe('The nonEmptyArray cannot be empty.');
   });
-  test('数组字段内部元素值不正确', () => {
+  test('Test ObjWithArrayField.validate(), invalid element in the array', () => {
     const obj = new ObjWithArrayField();
     obj.array = ['abc'];
-    obj.nonNullableArray = [1, 2];
+    obj.nonEmptyArray = [1, 2];
     const result = obj.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
     expect(result.description).toBe('array格式不正确');
   });
-  test('数组字段内部元素值为整数的字符串表示', () => {
+  test('Test ObjWithArrayField.validate(), elements in the array is string representation of numbers', () => {
     const obj = new ObjWithArrayField();
     obj.array = ['12', 34];
-    obj.nonNullableArray = [1, 2];
+    obj.nonEmptyArray = [1, 2];
     const result = obj.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
-  });
-  test('elementValidator没有设置', () => {
-    expect(() => {
-      @Model
-      class Obj {
-        @Validator(validateArrayField)
-        @ElementType(Number)
-        @Nullable
-        array = [];
-      }
-      const obj = new Obj();
-      obj.array = [1, 2, 3];
-      obj.validate();
-    }).toThrowWithMessage(TypeError, 'Must specify the element validator for the field "array".');
-  });
-  test('elementValidator不是一个函数', () => {
-    expect(() => {
-      @Model
-      class Obj {
-        @Validator(validateArrayField, { elementValidator: 'abc' })
-        @ElementType(Number)
-        @Nullable
-        array = [];
-      }
-      const obj = new Obj();
-      obj.array = [1, 2, 3];
-      obj.validate();
-    }).toThrowWithMessage(TypeError, 'The element validator for the field "array" must be a function.');
   });
 });

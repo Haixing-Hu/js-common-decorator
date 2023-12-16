@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validatable, ElementType, Nullable } from '../../src';
+import { Model, Validatable, ElementType, Nullable, NonEmpty } from '../../src';
 import validateIntegerField from './rules/validate-integer-field';
 
 @Model
@@ -18,5 +18,6 @@ export default class ObjWithArrayField {
 
   @Validatable(validateIntegerField)
   @ElementType(Number)
-  nonNullableArray = [];
+  @NonEmpty
+  nonEmptyArray = [];
 }

@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import ValidationResult from '../../model/validation-result';
 import getElementValidationContext from './get-element-validation-context';
+import validateEmptyField from './validate-empty-field';
 
 /**
  * Validates the specified map field of the specified object.
@@ -42,6 +43,11 @@ import getElementValidationContext from './get-element-validation-context';
  */
 function validateMapField(metadata, obj, field, value, validator, context) {
   if (value instanceof Map) {
+    // check the empty map
+    const result = validateEmptyField(metadata, obj, field, value, context);
+    if (result) {
+      return result;
+    }
     // get the validation options
     const ctx = getElementValidationContext(metadata, obj, field, context);
     // validate each element of the set

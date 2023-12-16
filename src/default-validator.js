@@ -61,8 +61,6 @@ function defaultValidator(value, { owner, type, label, nullable, nonEmpty }) {
         ? `The ${label} of ${owner} cannot be empty.`
         : `The ${label} cannot be empty.`;
       return new ValidationResult(false, message);
-    } else {
-      return new ValidationResult(true);
     }
   }
   if (type) {   // validate the type

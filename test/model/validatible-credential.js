@@ -15,6 +15,7 @@ export default class Credential {
   @Validatable
   @Type(CredentialType)
   @Label('证件类型')
+  @NonEmpty
   type = CredentialType.IDENTITY_CARD;
 
   @Validatable(validateCredentialNumber)

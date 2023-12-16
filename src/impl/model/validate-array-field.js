@@ -9,6 +9,7 @@
 import { isTypedArray } from '@haixing_hu/typeinfo';
 import ValidationResult from '../../model/validation-result';
 import getElementValidationContext from './get-element-validation-context';
+import validateEmptyField from './validate-empty-field';
 
 /**
  * Validates the specified array field of the specified object.
@@ -41,6 +42,11 @@ import getElementValidationContext from './get-element-validation-context';
  */
 function validateArrayField(metadata, obj, field, value, validator, context) {
   if (Array.isArray(value) || isTypedArray(value)) {
+    // check the empty array
+    const result = validateEmptyField(metadata, obj, field, value, context);
+    if (result) {
+      return result;
+    }
     // get the validation options
     const ctx = getElementValidationContext(metadata, obj, field, context);
     // validate each element of the array
