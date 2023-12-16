@@ -62,7 +62,7 @@ describe('Test defaultNormalizer() function', () => {
       normalize() {
         this.message = this.message.trim();
         return this;
-      }
+      },
     };
     const normalized = defaultNormalizer(objWithNormalize);
     expect(normalized.message).toBe('hello world');
@@ -87,24 +87,18 @@ describe('Test defaultNormalizer() function', () => {
 
   test('Test the metadata of the ObjWithDefaultNormalizerField class', () => {
     const metadata = classMetadataCache.get(ObjWithDefaultNormalizerField);
-    const numberValidator =
-      getFieldMetadata(metadata, 'number', KEY_FIELD_NORMALIZER);
-    expect(numberValidator).toBe(trimUppercaseString);
-    const typeValidator =
-      getFieldMetadata(metadata, 'type', KEY_FIELD_NORMALIZER);
-    expect(typeValidator).toBe(defaultNormalizer);
-    const nonNormalizableValidator =
-      getFieldMetadata(metadata, 'nonNormalizable', KEY_FIELD_NORMALIZER);
-    expect(nonNormalizableValidator).toBeUndefined();
-    const credentialValidator =
-      getFieldMetadata(metadata, 'credential', KEY_FIELD_NORMALIZER);
-    expect(credentialValidator).toBe(defaultNormalizer);
-    const noNormalizeFieldValidator =
-      getFieldMetadata(metadata, 'noNormalizeField', KEY_FIELD_NORMALIZER);
-    expect(noNormalizeFieldValidator).toBe(defaultNormalizer);
-    const credentialDefaultNonNullValidator =
-      getFieldMetadata(metadata, 'credentialDefaultNonNull', KEY_FIELD_NORMALIZER);
-    expect(credentialDefaultNonNullValidator).toBe(defaultNormalizer);
+    const v1 = getFieldMetadata(metadata, 'number', KEY_FIELD_NORMALIZER);
+    expect(v1).toBe(trimUppercaseString);
+    const v2 = getFieldMetadata(metadata, 'type', KEY_FIELD_NORMALIZER);
+    expect(v2).toBe(defaultNormalizer);
+    const v3 = getFieldMetadata(metadata, 'nonNormalizable', KEY_FIELD_NORMALIZER);
+    expect(v3).toBeUndefined();
+    const v4 = getFieldMetadata(metadata, 'credential', KEY_FIELD_NORMALIZER);
+    expect(v4).toBe(defaultNormalizer);
+    const v5 = getFieldMetadata(metadata, 'noNormalizeField', KEY_FIELD_NORMALIZER);
+    expect(v5).toBe(defaultNormalizer);
+    const v6 = getFieldMetadata(metadata, 'credentialDefaultNonNull', KEY_FIELD_NORMALIZER);
+    expect(v6).toBe(defaultNormalizer);
   });
   test('Test ObjWithDefaultNormalizerField.normalize()', () => {
     const data = {
