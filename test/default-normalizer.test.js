@@ -6,7 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { trimUppercaseString } from '@haixing_hu/common-util';
+import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
+import { getFieldMetadata } from '../src/impl/utils';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-field';
@@ -14,17 +18,95 @@ import NonDecoratedClass from './model/non-decorated-class';
 import ObjWithArrayField from './model/obj-with-array-field';
 
 /**
- * 单元测试 @DefaultNormalizer 装饰器。
+ * Unit test of the `defaultNormalizer()` function.
  *
- * @author 胡海星
+ * @author Haixing Hu
  */
-describe('测试 @DefaultNormalizer', () => {
-  test('测试 ObjWithDefaultNormalizerField 类的 metadata 对象', () => {
-    const metadata = classMetadataCache.get(ObjWithDefaultNormalizerField);
-    expect(metadata).not.toBeNull();
-    console.log('ObjWithDefaultNormalizerField.metadata = ', metadata);
+describe('Test defaultNormalizer() function', () => {
+  test('should return undefined and null as-is', () => {
+    expect(defaultNormalizer(undefined)).toBeUndefined();
+    expect(defaultNormalizer(null)).toBeNull();
   });
-  test('测试 ObjWithDefaultNormalizerField.normalize()', () => {
+  test('should trim and return strings', () => {
+    expect(defaultNormalizer('  Hello World  ')).toBe('Hello World');
+  });
+  test('should return non-string primitives as-is', () => {
+    expect(defaultNormalizer(true)).toBe(true);
+    expect(defaultNormalizer(123)).toBe(123);
+    expect(defaultNormalizer(123n)).toBe(123n);
+    expect(defaultNormalizer(Symbol.for('symbol'))).toBe(Symbol.for('symbol'));
+    const testFunction = () => {};
+    expect(defaultNormalizer(testFunction)).toBe(testFunction);
+  });
+  test('should normalize standard arrays', () => {
+    expect(defaultNormalizer([' foo ', ' bar '])).toEqual(['foo', 'bar']);
+  });
+  // Additional tests for typed arrays can be added here
+  test('should normalize Sets', () => {
+    const set = new Set([' foo ', ' bar ']);
+    const normalizedSet = defaultNormalizer(set);
+    expect(Array.from(normalizedSet)).toEqual(['foo', 'bar']);
+  });
+  test('should normalize Maps', () => {
+    const map = new Map([['key1', ' foo '], ['key2', ' bar ']]);
+    const normalizedMap = defaultNormalizer(map);
+    expect(Array.from(normalizedMap.values())).toEqual(['foo', 'bar']);
+  });
+  test('should return non-built-in objects as-is', () => {
+    const obj = { a: 1 };
+    expect(defaultNormalizer(obj)).toBe(obj);
+  });
+  test('should call and use normalize method if available', () => {
+    const objWithNormalize = {
+      message: ' hello world ',
+      normalize() {
+        this.message = this.message.trim();
+        return this;
+      }
+    };
+    const normalized = defaultNormalizer(objWithNormalize);
+    expect(normalized.message).toBe('hello world');
+  });
+  // test('should handle nested collections and objects', () => {
+  //   const complexObject = {
+  //     array: [' foo ', ' bar '],
+  //     set: new Set([' baz ', ' qux ']),
+  //     object: {
+  //       message: ' hello world ',
+  //       normalize() {
+  //         this.message = this.message.trim();
+  //         return this;
+  //       }
+  //     },
+  //   };
+  //   const normalized = defaultNormalizer(complexObject);
+  //   expect(normalized.array).toEqual(['foo', 'bar']);
+  //   expect(Array.from(normalized.set)).toEqual(['baz', 'qux']);
+  //   expect(normalized.object.message).toBe('hello world');
+  // });
+
+  test('Test the metadata of the ObjWithDefaultNormalizerField class', () => {
+    const metadata = classMetadataCache.get(ObjWithDefaultNormalizerField);
+    const numberValidator =
+      getFieldMetadata(metadata, 'number', KEY_FIELD_NORMALIZER);
+    expect(numberValidator).toBe(trimUppercaseString);
+    const typeValidator =
+      getFieldMetadata(metadata, 'type', KEY_FIELD_NORMALIZER);
+    expect(typeValidator).toBe(defaultNormalizer);
+    const nonNormalizableValidator =
+      getFieldMetadata(metadata, 'nonNormalizable', KEY_FIELD_NORMALIZER);
+    expect(nonNormalizableValidator).toBeUndefined();
+    const credentialValidator =
+      getFieldMetadata(metadata, 'credential', KEY_FIELD_NORMALIZER);
+    expect(credentialValidator).toBe(defaultNormalizer);
+    const noNormalizeFieldValidator =
+      getFieldMetadata(metadata, 'noNormalizeField', KEY_FIELD_NORMALIZER);
+    expect(noNormalizeFieldValidator).toBe(defaultNormalizer);
+    const credentialDefaultNonNullValidator =
+      getFieldMetadata(metadata, 'credentialDefaultNonNull', KEY_FIELD_NORMALIZER);
+    expect(credentialDefaultNonNullValidator).toBe(defaultNormalizer);
+  });
+  test('Test ObjWithDefaultNormalizerField.normalize()', () => {
     const data = {
       number: ' 111xyz  ',
       type: ' identity_card    ',
@@ -74,7 +156,7 @@ describe('测试 @DefaultNormalizer', () => {
     expect(obj.credentialDefaultNonNull.type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credentialDefaultNonNull.number).toBe('');
   });
-  test('测试 DefaultNormalizer 对数组字段是否生效', () => {
+  test('Test whether DefaultNormalizer takes effect on array fields', () => {
     const obj = new ObjWithArrayField();
     obj.normalize();
     expect(obj.credentials).toBeArray();
