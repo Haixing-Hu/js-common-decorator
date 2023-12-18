@@ -19,7 +19,7 @@ jobs:
           command: yarn lint
       - run:
           name: Test the Library
-          command: yarn test
+          command: yarn test --runInBand
       - run:
           name: Generate the API Documents
           command: yarn doc
