@@ -1464,13 +1464,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/clone@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@haixing_hu/clone@npm:1.4.0"
+"@haixing_hu/clone@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@haixing_hu/clone@npm:1.4.1"
   peerDependencies:
     "@babel/runtime": ^7.23.0
-    "@haixing_hu/typeinfo": ^1.3.0
-  checksum: b39d79ab2916fe4762313d4f070d3cb9b5b19f51eabafdeef5663acface2ef8dafc831f52f2e4f18aa44587ecf51da2821440c474b620c65a2041158457e3e3d
+    "@haixing_hu/typeinfo": ^2.3.0
+  checksum: 1ac66f4d6b2bc3f3e94ddd3c6c3e070a7ef61b8678a942b9bfc4784c3accac239068c73b692220359bf6585fb00634b91fbb39a60fce9d274599bcbbf969b316
   languageName: node
   linkType: hard
 
@@ -1485,8 +1485,8 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.23.2"
     "@babel/preset-env": "npm:^7.23.2"
     "@babel/runtime": "npm:^7.23.2"
-    "@haixing_hu/clone": "npm:^1.4.0"
-    "@haixing_hu/common-util": "npm:^4.2.1"
+    "@haixing_hu/clone": "npm:^1.4.1"
+    "@haixing_hu/common-util": "npm:^4.2.2"
     "@haixing_hu/eslint-config": "npm:^1.3.1"
     "@haixing_hu/jsdoc-minami": "npm:^1.5.1"
     "@haixing_hu/logging": "npm:^1.2.1"
@@ -1520,26 +1520,26 @@ __metadata:
     vue: "npm:^3.3.7"
   peerDependencies:
     "@babel/runtime": ^7.23.2
-    "@haixing_hu/clone": ^1.4.0
-    "@haixing_hu/common-util": ^4.2.1
+    "@haixing_hu/clone": ^1.4.1
+    "@haixing_hu/common-util": ^4.2.2
     "@haixing_hu/logging": ^1.2.1
     "@haixing_hu/typeinfo": ^2.3.0
   languageName: unknown
   linkType: soft
 
-"@haixing_hu/common-util@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "@haixing_hu/common-util@npm:4.2.1"
+"@haixing_hu/common-util@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "@haixing_hu/common-util@npm:4.2.2"
   dependencies:
     deep-equal: "npm:^2.0.5"
     json-beautify: "npm:^1.1.1"
     qs: "npm:^6.11.0"
   peerDependencies:
     "@babel/runtime": ^7.23.2
-    "@haixing_hu/clone": ^1.4.0
+    "@haixing_hu/clone": ^1.4.1
     "@haixing_hu/logging": ^1.2.1
     "@haixing_hu/typeinfo": ^2.3.0
-  checksum: 85769800b029082e2b06d83aca557f2413a8736ed432351a982dda23100f99faba866dd9875ebb5e150aad91ce609e4b464a0436b28f379e2c32bc4577ddf9f4
+  checksum: d363900f3462e73a01dc09dae91fa2d879aecedc25e8c344a217c26d3a2eb7a0d2ddd8d62b793e47cf4475dd5eaa0f079784c3669db62453e7ae2a3d11f42727
   languageName: node
   linkType: hard
 
