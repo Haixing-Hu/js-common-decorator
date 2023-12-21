@@ -38,7 +38,8 @@ function validateImpl(Class, obj, fields, context) {
     const result = obj.validateField(fields, context);
     return result ?? new ValidationResult(true);
   } else {
-    throw new TypeError(`The argument of ${Class.name}.validate() must be a string or an array of strings.`);
+    throw new TypeError(`The argument of ${Class.name}.validate()`
+        + ' must be a string or an array of strings.');
   }
 }
 

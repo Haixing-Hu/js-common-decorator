@@ -27,7 +27,19 @@ import { getInstanceName } from '../utils';
  *     The name of the specified field to be validated. This function assumes
  *     that the field exists and is an array, set, or map.
  * @param {object} context
- *     The current context of validation.
+ *     The current context of validation. It may have the following properties:
+ *     - `instance: object`: the object to which the field belongs.
+ *     - `owner: string|undefined`: the name of the owner (a person) of the field.
+ *     - `field: string`: the name of the field to be validated.
+ *     - `type: function`: the constructor of the field to be validated. If the
+ *        field is decorated by the `@Type` decorator, this property is the
+ *        argument of the decorator, otherwise it is the constructor of the
+ *        default value of the field. If the default value of the field is
+ *        `null` or `undefined`, this property is set to `undefined`.
+ *     - `label: string`: the display label of the field to be validated.
+ *     - `nullable: boolean`: whether the field to be validated is nullable.
+ *     - `nonEmpty: boolean`: whether the field to be validated is non-empty.
+ *     - `extraMessage: string`: extra error message.
  * @returns {object}
  *     The validation context of the value of the specified field.
  * @author Haixing Hu
