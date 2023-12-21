@@ -6,10 +6,10 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '@haixing_hu/common-validator';
 import {
   Model,
   Validatable,
-  ValidationResult,
 } from '../src';
 import defaultValidator from '../src/default-validator';
 import classMetadataCache from '../src/impl/class-metadata-cache';

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import CredentialType from './model/credential-type';
 import Credential from './model/validatible-credential';
 import CredentialSubclass from './model/validatible-credential-subclass';

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import CredentialType from '../credential-type';
 import IdentityCard from './identity-card';
 

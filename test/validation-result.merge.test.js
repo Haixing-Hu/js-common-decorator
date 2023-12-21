@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 
 /**
  * Unit test of the {@link ValidationResult#merge}.

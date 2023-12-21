@@ -6,7 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ValidationResult from './model/validation-result';
 import Page from './model/page';
 import Model from './model';
 import Type from './type';
@@ -22,7 +21,6 @@ import Enum from './enum';
 import { isEnumClass, isEnumerator } from './impl/utils';
 
 export {
-  ValidationResult,
   Page,
   Model,
   Type,

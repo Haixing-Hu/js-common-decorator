@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ValidationResult from '../../model/validation-result';
+import { ValidationResult } from '@haixing_hu/common-validator';
 
 /**
  * Validates the specified fields of the specified object。

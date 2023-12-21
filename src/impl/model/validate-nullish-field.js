@@ -6,9 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '@haixing_hu/common-validator';
 import { getFieldLabel, isFieldNullable } from '../field-utils';
 import { getInstanceName } from '../utils';
-import ValidationResult from '../../model/validation-result';
 
 /**
  * Validates the specified nullish field of the specified object.

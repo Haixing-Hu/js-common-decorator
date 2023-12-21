@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import CredentialType from '../credential-type';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -7,11 +6,12 @@ import CredentialType from '../credential-type';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '@haixing_hu/common-validator';
 import IdentityCard from './identity-card';
+import CredentialType from '../credential-type';
 import Passport from './passport';
 import OfficerCard from './officer-card';
 import OtherCredential from './other-credential';
-import { ValidationResult } from '../../../src';
 
 export default function validateCredentialNumber(number, { instance, label, owner }) {
   const credentialType = instance?.type?.name || '';

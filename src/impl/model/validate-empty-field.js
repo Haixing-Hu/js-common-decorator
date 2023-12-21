@@ -7,12 +7,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@haixing_hu/common-util';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import {
   getFieldLabel,
   isFieldNonEmpty,
 } from '../field-utils';
 import { getInstanceName } from '../utils';
-import ValidationResult from '../../model/validation-result';
 
 /**
  * Validates the specified empty field of the specified object.

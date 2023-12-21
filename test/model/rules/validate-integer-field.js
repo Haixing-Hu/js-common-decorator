@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isUndefinedOrNullOrEmptyString } from '@haixing_hu/common-util';
-import { ValidationResult } from '../../../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import Integer from './integer';
 
 /**

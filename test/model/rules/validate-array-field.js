@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isUndefinedOrNullOrEmptyArray } from '@haixing_hu/common-util';
-import { ValidationResult } from '../../../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 
 /**
  * 校验某个对象的一个数组类型的字段值中每个元素是否合法。

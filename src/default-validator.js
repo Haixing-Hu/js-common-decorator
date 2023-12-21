@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@haixing_hu/common-util';
-import ValidationResult from './model/validation-result';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import { isEnumClass } from './impl/utils';
 
 /**

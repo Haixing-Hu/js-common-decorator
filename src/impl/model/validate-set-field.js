@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import ValidationResult from '../../model/validation-result';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import getElementValidationContext from './get-element-validation-context';
 import validateEmptyField from './validate-empty-field';
 

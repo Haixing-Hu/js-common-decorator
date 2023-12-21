@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '../../../src';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import Name from './name';
 
 export default function validatePersonName(name, { label }) {

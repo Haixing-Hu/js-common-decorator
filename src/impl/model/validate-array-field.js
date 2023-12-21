@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isTypedArray } from '@haixing_hu/typeinfo';
-import ValidationResult from '../../model/validation-result';
+import { ValidationResult } from '@haixing_hu/common-validator';
 import getElementValidationContext from './get-element-validation-context';
 import validateEmptyField from './validate-empty-field';
 
