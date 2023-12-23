@@ -26,7 +26,7 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("type"), invalid enum value', () => {
@@ -35,7 +35,7 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("number"), success', () => {
@@ -98,7 +98,7 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The credential type must be of the type CredentialType.');
+    expect(result.description).toBe('credential type必须是 CredentialType 类型');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("type", { label: "credential type" }), invalid enum value', () => {
@@ -107,25 +107,25 @@ describe('Test the prototype method `validateField()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The credential type is not supported: xxx');
+    expect(result.description).toBe('credential type的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("type", { label, owner }), invalid field type', () => {
     const obj = new Credential(0, 'E12345678');
-    const result = obj.validateField('type', { label: 'credential type', owner: 'Bill Gates' });
+    const result = obj.validateField('type', { label: '证件类型', owner: '张三' });
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The credential type of Bill Gates must be of the type CredentialType.');
+    expect(result.description).toBe('张三的证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("type", { label, owner }), invalid enum value', () => {
     const obj = new Credential('xxx', 'E12345678');
-    const result = obj.validateField('type', { label: 'credential type', owner: 'Bill Gates' });
+    const result = obj.validateField('type', { label: '证件类型', owner: '张三' });
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The credential type of Bill Gates is not supported: xxx');
+    expect(result.description).toBe('张三的证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validateField("number", { label, owner }), invalid number format', () => {

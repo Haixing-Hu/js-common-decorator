@@ -48,18 +48,24 @@ function defaultValidator(value, { owner, type, label, nullable, nonEmpty }) {
       return new ValidationResult(true);
     } else {
       // TODO: make the message i18n
+      // const message = owner
+      //   ? `The ${label} of ${owner} must be specified.`
+      //   : `The ${label} must be specified.`;
       const message = owner
-        ? `The ${label} of ${owner} must be specified.`
-        : `The ${label} must be specified.`;
+        ? `必须设置${owner}的${label}的值`
+        : `必须设置${label}的值`;
       return new ValidationResult(false, message);
     }
   }
   if (isEmpty(value)) {
     if (nonEmpty) {
       // TODO: make the message i18n
+      // const message = owner
+      //   ? `The ${label} of ${owner} cannot be empty.`
+      //   : `The ${label} cannot be empty.`;
       const message = owner
-        ? `The ${label} of ${owner} cannot be empty.`
-        : `The ${label} cannot be empty.`;
+        ? `${owner}的${label}不能为空`
+        : `${label}不能为空`;
       return new ValidationResult(false, message);
     }
   }
@@ -70,18 +76,24 @@ function defaultValidator(value, { owner, type, label, nullable, nonEmpty }) {
         return new ValidationResult(true);
       } else {
         // TODO: i18n the following message
+        // const message = owner
+        //   ? `The ${label} of ${owner} is not supported: ${value}`
+        //   : `The ${label} is not supported: ${value}`;
         const message = owner
-          ? `The ${label} of ${owner} is not supported: ${value}`
-          : `The ${label} is not supported: ${value}`;
+          ? `${owner}的${label}的值不受支持: ${value}`
+          : `${label}的值不受支持: ${value}`;
         return new ValidationResult(false, message);
       }
     }
     // note that the following test also covers the case that the value is a primitive
     if (value.constructor !== type) {
       // TODO: i18n the following message
+      // const message = owner
+      //   ? `The ${label} of ${owner} must be of the type ${type.name}.`
+      //   : `The ${label} must be of the type ${type.name}.`;
       const message = owner
-        ? `The ${label} of ${owner} must be of the type ${type.name}.`
-        : `The ${label} must be of the type ${type.name}.`;
+        ? `${owner}的${label}必须是 ${type.name} 类型`
+        : `${label}必须是 ${type.name} 类型`;
       return new ValidationResult(false, message);
     }
   }

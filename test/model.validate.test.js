@@ -29,7 +29,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -37,7 +37,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(), invalid number', () => {
@@ -73,7 +73,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -81,7 +81,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(undefined), invalid number', () => {
@@ -117,7 +117,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -125,7 +125,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(null), invalid number', () => {
@@ -161,7 +161,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -169,7 +169,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate("*"), invalid number', () => {
@@ -222,7 +222,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -230,7 +230,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
 
@@ -289,19 +289,19 @@ describe('Test the prototype method `validate()`', () => {
   });
   test('Credential.validate("*", { owner }), invalid type', () => {
     let obj = new Credential(0, 'E12345678');
-    let result = obj.validate('*', { owner: 'Bill Gates' });
+    let result = obj.validate('*', { owner: '张三' });
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 of Bill Gates must be of the type CredentialType.');
+    expect(result.description).toBe('张三的证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
-    result = obj.validate('*', { owner: 'Bill Gates' });
+    result = obj.validate('*', { owner: '张三' });
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 of Bill Gates is not supported: xxx');
+    expect(result.description).toBe('张三的证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate("*", { owner }), invalid number', () => {
@@ -373,7 +373,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -381,7 +381,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "number"]), invalid type and number', () => {
@@ -390,7 +390,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).not.toBeNull();
     expect(result.next.success).toBe(false);
     expect(result.next.description).toBe('请输入证件号码');
@@ -429,7 +429,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 must be of the type CredentialType.');
+    expect(result.description).toBe('证件类型必须是 CredentialType 类型');
     expect(result.next).toBeNull();
 
     obj = new Credential('xxx', 'E12345678');
@@ -437,7 +437,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).toBeNull();
   });
   test('Credential.validate(["type", "nonValidatable", "xxx", "number"]), invalid type and number', () => {
@@ -446,7 +446,7 @@ describe('Test the prototype method `validate()`', () => {
     expect(result).not.toBeNull();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
     expect(result.next).not.toBeNull();
     expect(result.next.success).toBe(false);
     expect(result.next.description).toBe('请输入证件号码');
@@ -527,7 +527,7 @@ describe('Test the prototype method `validate()`', () => {
     let result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件 of 张三 must be specified.');
+    expect(result.description).toBe('必须设置张三的证件的值');
 
     person.assign(personData);
     person.credential = null;
@@ -535,7 +535,7 @@ describe('Test the prototype method `validate()`', () => {
     result = person.validate('credential');
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件 must be specified.');
+    expect(result.description).toBe('必须设置证件的值');
   });
   test('Test Person.validate(), credential.type is empty', () => {
     const person = new Person();
@@ -544,7 +544,7 @@ describe('Test the prototype method `validate()`', () => {
     const result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 of 张三 cannot be empty.');
+    expect(result.description).toBe('张三的证件类型不能为空');
   });
   test('Test Person.validate(), invalid credential.type', () => {
     const person = new Person();
@@ -553,7 +553,7 @@ describe('Test the prototype method `validate()`', () => {
     let result = person.validate();
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 of 张三 is not supported: xxx');
+    expect(result.description).toBe('张三的证件类型的值不受支持: xxx');
 
     person.assign(personData);
     person.credential.type = 'xxx';
@@ -561,7 +561,7 @@ describe('Test the prototype method `validate()`', () => {
     result = person.validate('credential');
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(false);
-    expect(result.description).toBe('The 证件类型 is not supported: xxx');
+    expect(result.description).toBe('证件类型的值不受支持: xxx');
   });
   test('Test Person.validate(), credential.number is empty', () => {
     const person = new Person();

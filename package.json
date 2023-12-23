@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",
@@ -42,7 +42,7 @@
     ]
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.23.2",
+    "@babel/runtime": "^7.23.0",
     "@haixing_hu/clone": "^1.4.1",
     "@haixing_hu/common-util": "^4.4.0",
     "@haixing_hu/common-validator": "^3.0.1",
@@ -50,13 +50,12 @@
     "@haixing_hu/typeinfo": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/plugin-proposal-decorators": "^7.23.2",
-    "@babel/plugin-transform-class-properties": "^7.22.5",
-    "@babel/plugin-transform-runtime": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/runtime": "^7.23.2",
+    "@babel/core": "^7.23.6",
+    "@babel/eslint-parser": "^7.23.3",
+    "@babel/plugin-proposal-decorators": "^7.23.6",
+    "@babel/plugin-transform-runtime": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "@babel/runtime": "^7.23.6",
     "@haixing_hu/clone": "^1.4.1",
     "@haixing_hu/common-util": "^4.4.0",
     "@haixing_hu/common-validator": "^3.0.1",
@@ -75,7 +74,6 @@
     "@vue/server-renderer": "^3.3.7",
     "@vue/test-utils": "^2.4.1",
     "babel-jest": "^29.7.0",
-    "babel-plugin-transform-object-hasown": "^1.1.0",
     "check-es-version": "^1.4.2",
     "core-js": "^3.33.0",
     "cross-env": "^7.0.3",
@@ -92,5 +90,9 @@
     "rollup-plugin-analyzer": "^4.0.0",
     "vue": "^3.3.7"
   },
+  "resolutions": {
+    "@babel/helpers": "7.23.0"
+  },
+  "_comment": "There is a bug in @babel/helpers > 7.23.0. See #16179, #16180",
   "packageManager": "yarn@4.0.0"
 }
