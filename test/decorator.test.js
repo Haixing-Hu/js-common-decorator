@@ -2,6 +2,11 @@
 
 const kind = {};
 
+/**
+ * This is used for testing the bug in `@babel/helpers` > 7.23.0. See #16179, #16180.
+ *
+ * @author Haixing Hu
+ */
 describe('Test the context.kind', () => {
   test('Test class decorator', () => {
     function ClassDecorator(target, context) {
