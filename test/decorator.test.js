@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const kind = {};
 
 describe('Test the context.kind', () => {
@@ -45,6 +47,7 @@ describe('Test the context.kind', () => {
     }
     class Foo {
       _x = 0;
+
       @SetterDecorator
       set x(v) { this._x = v; }
     }
