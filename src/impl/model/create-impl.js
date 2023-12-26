@@ -25,8 +25,6 @@ import { requirePrototypeMethod } from '../utils';
  * @private
  */
 function createImpl(Class, obj, normalized) {
-  console.log('CreateImpl:', Class.name, obj);
-  console.dir(obj, { depth: null });
   requirePrototypeMethod(Class, 'assign');
   if (obj === undefined || obj === null) {
     return null;
