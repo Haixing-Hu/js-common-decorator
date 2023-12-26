@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",

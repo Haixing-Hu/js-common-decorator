@@ -25,10 +25,12 @@ import { requirePrototypeMethod } from '../utils';
  * @private
  */
 function createImpl(Class, obj, normalized) {
+  console.log('CreateImpl:', Class.name, obj);
+  console.dir(obj, { depth: null });
   requirePrototypeMethod(Class, 'assign');
   if (obj === undefined || obj === null) {
     return null;
-  } else if (!(obj instanceof Object)) {
+  } else if (typeof obj !== 'object') {
     throw new TypeError(`The first argument of ${Class.name}.create() must be an object.`);
   } else {
     return new Class().assign(obj, normalized);
