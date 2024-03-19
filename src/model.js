@@ -444,7 +444,7 @@ function Model(Class, context) {
     };
   }
   // Add the class method `create()`
-  if (!Object.hasOwn(Class, 'create')) {
+  if (!Object.prototype.hasOwnProperty.call(Class, 'create')) {
     /**
      * Creates a new instance of this class based on the specified data object.
      *
@@ -471,7 +471,7 @@ function Model(Class, context) {
     };
   }
   // Add the class method `createArray()`
-  if (!Object.hasOwn(Class, 'createArray')) {
+  if (!Object.prototype.hasOwnProperty.call(Class, 'createArray')) {
     /**
      * Creates a new array of instances of this class based on an array of data
      * objects.
@@ -498,7 +498,7 @@ function Model(Class, context) {
     };
   }
   // Add the class method `createPage()`
-  if (!Object.hasOwn(Class, 'createPage')) {
+  if (!Object.prototype.hasOwnProperty.call(Class, 'createPage')) {
     /**
      *  Creates a new page object based on the specified pagination data object.
      *
@@ -520,7 +520,7 @@ function Model(Class, context) {
     };
   }
   // Add the class method `isNullishOrEmpty()`
-  if (!Object.hasOwn(Class, 'isNullishOrEmpty')) {
+  if (!Object.prototype.hasOwnProperty.call(Class, 'isNullishOrEmpty')) {
     /**
      * Determines whether the given instance of this class is `undefined`,
      * `null`, or an empty object constructed with default values.

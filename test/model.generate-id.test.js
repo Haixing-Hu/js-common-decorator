@@ -28,11 +28,11 @@ describe('Test the prototype method `generateId()`', () => {
     expect(id1).not.toBe(id2);
   });
   test('`Credential` classes should not have a `generateId()` prototype method', () => {
-    expect(Object.hasOwn(Credential.prototype, 'generateId'))
+    expect(Object.prototype.hasOwnProperty.call(Credential.prototype, 'generateId'))
       .toBe(false);
   });
   test('The `PersonChild` class that inherits from `Person` should not redefine the `generateId()`', () => {
-    expect(Object.hasOwn(PersonChild.prototype, 'generateId'))
+    expect(Object.prototype.hasOwnProperty.call(PersonChild.prototype, 'generateId'))
       .toBe(false);
   });
   test('`PersonChild` class should inherit the `generateId()` from `Person`', () => {

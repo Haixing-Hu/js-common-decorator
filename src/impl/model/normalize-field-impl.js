@@ -33,7 +33,7 @@ import normalizeSetField from './normalize-set-field';
  * @private
  */
 function normalizeFieldImpl(Class, obj, field) {
-  if (!Object.hasOwn(obj, field)) {
+  if (!Object.prototype.hasOwnProperty.call(obj, field)) {
     // the field does not exist
     return false;
   }

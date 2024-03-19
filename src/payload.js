@@ -48,13 +48,13 @@ function Payload(payload) {
     if (payload === null || typeof payload !== 'object') {
       throw new TypeError(`The argument of @Payload decorated on "${name}" must be a non-null object.`);
     }
-    if (Object.hasOwn(payload, 'name')) {
+    if (Object.prototype.hasOwnProperty.call(payload, 'name')) {
       throw new TypeError(`The argument of @Payload decorated on "${name}" cannot contain the reserved property "name".`);
     }
-    if (Object.hasOwn(payload, 'label')) {
+    if (Object.prototype.hasOwnProperty.call(payload, 'label')) {
       throw new TypeError(`The argument of @Payload decorated on "${name}" cannot contain the reserved property "label".`);
     }
-    if (Object.hasOwn(payload, 'i18n')) {
+    if (Object.prototype.hasOwnProperty.call(payload, 'i18n')) {
       throw new TypeError(`The argument of @Payload decorated on "${name}" cannot contain the reserved property "i18n".`);
     }
     setFieldMetadata(metadata, name, KEY_FIELD_PAYLOAD, payload);

@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",
@@ -44,9 +44,9 @@
   "peerDependencies": {
     "@babel/runtime": "^7.23.0",
     "@haixing_hu/clone": "^1.4.1",
-    "@haixing_hu/common-util": "^4.5.0",
+    "@haixing_hu/common-util": "^4.5.1",
     "@haixing_hu/common-validator": "^3.0.1",
-    "@haixing_hu/logging": "^1.2.1",
+    "@haixing_hu/logging": "^1.2.4",
     "@haixing_hu/typeinfo": "^2.3.0"
   },
   "devDependencies": {

@@ -95,7 +95,7 @@ const Impl = {
       return;
     }
     Object.keys(target).forEach((key) => {
-      if (Object.hasOwn(source, key)) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
         target[key] = clone(source[key], CLONE_OPTIONS);
       }
     });

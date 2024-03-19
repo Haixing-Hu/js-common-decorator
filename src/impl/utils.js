@@ -227,11 +227,11 @@ export function hasOwnClassField(Class, field) {
   if (!Class || !Class.prototype) {
     return false;
   }
-  if (Object.hasOwn(Class.prototype, field)) {
+  if (Object.prototype.hasOwnProperty.call(Class.prototype, field)) {
     return true;
   } else {
     const defaultInstance = getDefaultInstance(Class);
-    return Object.hasOwn(defaultInstance, field);
+    return Object.prototype.hasOwnProperty.call(defaultInstance, field);
   }
 }
 
@@ -251,7 +251,7 @@ export function hasOwnClassField(Class, field) {
 export function hasOwnPrototypeFunction(Class, name) {
   return (Class !== null)
     && (Class.prototype)
-    && Object.hasOwn(Class.prototype, name)
+    && Object.prototype.hasOwnProperty.call(Class.prototype, name)
     && (typeof Class.prototype[name] === 'function');
 }
 
