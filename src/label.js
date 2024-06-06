@@ -19,12 +19,12 @@ import { KEY_FIELD_LABEL } from './impl/metadata-keys';
  *
  * ```js
  * class Foo {
- *   @Validator(nameValidator)
- *   @Label('Foo name')
+ *   &#064;Validator(nameValidator)
+ *   &#064;Label('Foo name')
  *   name = '';
  *
- *   @Validator(integerValidator)
- *   @Label('number', 'i18n.foo.number')
+ *   &#064;Validator(integerValidator)
+ *   &#064;Label('number', 'i18n.foo.number')
  *   number = 0;
  * }
  * ```

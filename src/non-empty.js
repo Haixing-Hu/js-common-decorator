@@ -21,14 +21,14 @@ import { KEY_FIELD_NON_EMPTY } from './impl/metadata-keys';
  *
  * ```js
  * class Employee {
- *   @Validatable
- *   @Label('Name', 'i18n.field.name')
- *   @NonEmpty
+ *   &#064;Validatable
+ *   &#064;Label('Name', 'i18n.field.name')
+ *   &#064;NonEmpty
  *   name = '';
  *
- *   @Validatable
- *   @Label('Titles', 'i18n.field.titles')
- *   @NonEmpty
+ *   &#064;Validatable
+ *   &#064;Label('Titles', 'i18n.field.titles')
+ *   &#064;NonEmpty
  *   titles = [];
  * }
  * ```

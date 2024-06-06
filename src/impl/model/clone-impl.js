@@ -17,6 +17,8 @@ import { requirePrototypeMethod } from '../utils';
  *     The specified object in the specified model class.
  * @return {Class}
  *     A clone of the specified object.
+ * @author Haixing Hu
+ * @private
  */
 function cloneImpl(Class, obj) {
   requirePrototypeMethod(Class, 'assign');

@@ -47,20 +47,20 @@ function setValidator(field, { metadata, kind, name }, validator) {
  *
  * ```js
  * class Foo {
- *   @Validatable(validateNameField)
- *   @Label('Name', 'i18n.field.name')
+ *   &#064;Validatable(validateNameField)
+ *   &#064;Label('Name', 'i18n.field.name')
  *   name = '';
  *
- *   @Validatable(validateIntegerField)
- *   @Label('Number', 'i18n.field.number')
+ *   &#064;Validatable(validateIntegerField)
+ *   &#064;Label('Number', 'i18n.field.number')
  *   number = 0;
  *
- *   @Validatable(validateIntegerField)
- *   @Label('Series', 'i18n.field.series')
- *   @ElementType(Number)
+ *   &#064;Validatable(validateIntegerField)
+ *   &#064;Label('Series', 'i18n.field.series')
+ *   &#064;ElementType(Number)
  *   series = [12, 13, 14];
  *
- *   @Validatable
+ *   &#064;Validatable
  *   bar = new Bar();
  * }
  * ```

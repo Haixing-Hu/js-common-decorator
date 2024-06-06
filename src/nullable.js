@@ -18,13 +18,13 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  *
  * ```js
  * class Employee {
- *   @Validatable(nameValidator)
- *   @Label('Name', 'i18n.field.name')
+ *   &#064;Validatable(nameValidator)
+ *   &#064;Label('Name', 'i18n.field.name')
  *   name = '';
  *
- *   @Validatable(integerValidator)
- *   @Label('Level', 'i18n.field.level')
- *   @Nullable
+ *   &#064;Validatable(integerValidator)
+ *   &#064;Label('Level', 'i18n.field.level')
+ *   &#064;Nullable
  *   level = 0;
  * }
  * ```

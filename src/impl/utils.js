@@ -18,13 +18,14 @@ import {
 import classMetadataCache from './class-metadata-cache';
 
 /**
- * 判定给定的对象是否是一个属性描述符(descriptor)。
+ * Tests whether the given object is a property descriptor.
  *
  * @param {object} desc
- *     给定的对象。
+ *     the given object to be tested.
  * @returns
- *     该对象是否是一个属性描述符。
- * @author 胡海星
+ *     `true` if the given object is a property descriptor; `false` otherwise.
+ * @author Haixing Hu
+ * @private
  */
 export function isDescriptor(desc) {
   if (!desc || (typeof desc !== 'object') || !desc.hasOwnProperty) {
@@ -35,20 +36,22 @@ export function isDescriptor(desc) {
 }
 
 /**
- * 返回被修饰的目标对象的属性描述符。
+ * Gets the property descriptor of the decorated target.
  *
- * 此函数的目的是为了能够统一处理针对类、方法和字段的修饰符。
+ * The purpose of this function is to unify the handling of decorators for
+ * classes, methods, and fields.
  *
  * @param {function} handleDescriptor
- *     目标对象的属性描述符修改函数。
+ *     The property descriptor modification function of the decorated target.
  * @param {array} entryArgs
- *     修饰器输入的参数。
+ *     The arguments of the decorator.
  * @returns
- *     修饰后的目标对象的新的属性描述符。
- * @author 胡海星
+ *     The new property descriptor of the decorated target.
+ * @author Haixing Hu
+ * @private
  */
 export function decorate(handleDescriptor, entryArgs) {
-  if (isDescriptor(entryArgs[entryArgs.lengh - 1])) {
+  if ((entryArgs.length > 0) && isDescriptor(entryArgs[entryArgs.length - 1])) {
     return handleDescriptor(...entryArgs, []);
   } else {
     return (...args) => handleDescriptor(...args, entryArgs);
@@ -56,13 +59,15 @@ export function decorate(handleDescriptor, entryArgs) {
 }
 
 /**
- * 返回一个属性的默认值。
+ * Gets the default value of a property.
  *
  * @param {object} descriptor
- *     该属性的描述符。
+ *     the property descriptor.
  * @returns
- *     该属性的默认值，或`undefined`如果没有定义默认值。
- * @author 胡海星
+ *     the default value of the property, or `undefined` if no default value is
+ *     defined.
+ * @author Haixing Hu
+ * @private
  */
 export function getDefaultValue(descriptor) {
   if (descriptor.value !== undefined) {
@@ -222,6 +227,8 @@ export function getDefaultInstance(Class) {
  * @returns {boolean}
  *     Whether the specified class has the specified field defined in its
  *     prototype or its default instance.
+ * @author Haixing Hu
+ * @private
  */
 export function hasOwnClassField(Class, field) {
   if (!Class || !Class.prototype) {
@@ -247,6 +254,8 @@ export function hasOwnClassField(Class, field) {
  *     Whether the specified prototype function is defined in the prototype of
  *     the specified class.
  * @see hasPrototypeFunction
+ * @author Haixing Hu
+ * @private
  */
 export function hasOwnPrototypeFunction(Class, name) {
   return (Class !== null)
@@ -269,6 +278,8 @@ export function hasOwnPrototypeFunction(Class, name) {
  *     Whether the prototype of the specified class has the specified prototype
  *     function. Note that the function may be inherited from its parent class.
  * @see hasOwnPrototypeFunction
+ * @author Haixing Hu
+ * @private
  */
 export function hasPrototypeFunction(Class, name) {
   return (Class !== null)
@@ -278,14 +289,21 @@ export function hasPrototypeFunction(Class, name) {
 }
 
 /**
- * 检查并确保指定类的指定字段的类型是被`@Enum`修饰的枚举类。
+ * Ensure that the type of the field of a specified class
+ * is an enumeration type decorated by the `@Enum` decorator.
  *
  * @param {function} Class
- *     指定的类的构造器。
+ *     The constructor of the specified class.
  * @param {string} field
- *     指定的字段的名称。
+ *     The name of the specified field.
  * @return {function}
- *     指定字段的枚举类的构造器。
+ *     The constructor of the enumeration type of the specified field.
+ * @throws TypeError
+ *     If the specified field is not decorated by the `@Type` decorator, or the
+ *     type of the specified field is not an enumeration class decorated by the
+ *     `@Enum` decorator.
+ * @author Haixing Hu
+ * @private
  */
 export function ensureEnumField(Class, field) {
   // 获取被修饰字段的枚举类型
@@ -308,6 +326,8 @@ export function ensureEnumField(Class, field) {
  * @returns
  *     Whether the given value is `undefined` or `null` or an empty string or
  *     an empty array.
+ * @author Haixing Hu
+ * @private
  */
 export function isNullishOrEmpty(value) {
   return (value === undefined
@@ -327,6 +347,8 @@ export function isNullishOrEmpty(value) {
  * @throws TypeError
  *     If the specified class and its parent classes do not have a prototype
  *     method with the specified name.
+ * @author Haixing Hu
+ * @private
  */
 export function requirePrototypeMethod(Class, func) {
   if (!hasPrototypeFunction(Class, func)) {
@@ -341,6 +363,8 @@ export function requirePrototypeMethod(Class, func) {
  *     The constructor of the specified class.
  * @param {string} properties
  *     The array of names of the specified properties.
+ * @author Haixing Hu
+ * @private
  */
 export function definePrototypeProperty(Class, ...properties) {
   for (const property of properties) {
@@ -362,6 +386,7 @@ export function definePrototypeProperty(Class, ...properties) {
  *     `true` if the specified class is an enumeration class decorated by
  *     `@Enum`; `false` otherwise.
  * @author Haixing Hu
+ * @private
  */
 export function isEnumClass(Class) {
   if (typeof Class !== 'function') {
@@ -382,6 +407,7 @@ export function isEnumClass(Class) {
  *     i.e., the static constants of a class decorated by `@Enum`; `false`
  *     otherwise.
  * @author Haixing Hu
+ * @private
  */
 export function isEnumerator(value) {
   if (value === undefined || value === null || (typeof value !== 'object')) {
@@ -405,6 +431,8 @@ export function isEnumerator(value) {
  * @return {string}
  *     the name of the instance, or `undefined` if the instance has no field
  *     decorated by the `@NameField` decorator.
+ * @author Haixing Hu
+ * @private
  */
 export function getInstanceName(metadata, instance) {
   const field = metadata[KEY_CLASS_NAME_FIELD];

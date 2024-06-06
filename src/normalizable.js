@@ -49,7 +49,7 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
  *
  * ```js
  * class Foo {
- *   @Normalizable(trimUppercaseString)
+ *   &#064;Normalizable(trimUppercaseString)
  *   number = '';
  * }
  * ```
@@ -84,13 +84,13 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
  * {@link defaultNormalizer} function will be used. For example,
  * ```js
  * class Foo {
- *   @Normalizable
+ *   &#064;Normalizable
  *   code = '';
  *
- *   @Normalizable
+ *   &#064;Normalizable
  *   names = [];
  *
- *   @Normalizable
+ *   &#064;Normalizable
  *   person = new Person();
  * }
  * ```

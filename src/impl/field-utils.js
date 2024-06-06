@@ -32,6 +32,8 @@ import { getDefaultInstance, getFieldMetadata } from './utils';
  *     the constructor of the type of the field, or `undefined` if the field is
  *     not decorated with `@Type` decorator and its default value is `undefined`
  *     or `null`.
+ * @author Haixing Hu
+ * @private
  */
 export function getFieldType(Class, metadata, field) {
   const result = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
@@ -56,6 +58,8 @@ export function getFieldType(Class, metadata, field) {
  * @return {function}
  *     the constructor of the element type of the field, or `undefined` if the
  *     field is not decorated with `@ElementType` decorator.
+ * @author Haixing Hu
+ * @private
  */
 export function getFieldElementType(metadata, field) {
   return getFieldMetadata(metadata, field, KEY_FIELD_ELEMENT_TYPE);
@@ -71,6 +75,8 @@ export function getFieldElementType(metadata, field) {
  * @return {string}
  *     the i18n label of the field, or the name of the field if it is not
  *     decorated with `@Label`.
+ * @author Haixing Hu
+ * @private
  */
 export function getFieldLabel(metadata, field) {
   const config = getFieldMetadata(metadata, field, KEY_FIELD_LABEL);
@@ -91,6 +97,8 @@ export function getFieldLabel(metadata, field) {
  * @returns {boolean}
  *     `true` if the specified field is nullable, i.e., it is decorated with
  *     `@Nullable` decorator; `false` otherwise.
+ * @author Haixing Hu
+ * @private
  */
 export function isFieldNullable(metadata, field) {
   const nullable = getFieldMetadata(metadata, field, KEY_FIELD_NULLABLE);
@@ -107,6 +115,8 @@ export function isFieldNullable(metadata, field) {
  * @returns {boolean}
  *     `true` if the specified field should be non-empty, i.e., it is decorated
  *     with `@NonEmpty` decorator; `false` otherwise.
+ * @author Haixing Hu
+ * @private
  */
 export function isFieldNonEmpty(metadata, field) {
   const nonEmpty = getFieldMetadata(metadata, field, KEY_FIELD_NON_EMPTY);
