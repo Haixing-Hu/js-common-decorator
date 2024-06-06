@@ -8,23 +8,24 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 用于控制一个函数延时执行的修饰器。
+ * The decorator which delays the execution of a function.
  *
- * 使用示例：
+ * Usage example:
  * ```js
  * &#064;Timeout(1000)
  * function doSomething() {
  *   console.log('do something.');
  * }
  *
- * doSomething();     // 将会延迟1秒再打印日志
+ * doSomething();     // will print 'do something.' after 1 second.
  *
  * ```
  *
  * @param {Number} milliseconds
- *     延时的时间，单位为毫秒，默认值为0。
+ *     The time to delay, in milliseconds. The default value is 0.
  * @returns
- *     被修饰的函数修饰后的描述器。
+ *     The descriptor of the decorated function.
+ * @author Haixing Hu
  */
 export function Timeout(milliseconds = 0) {
   return (target, key, descriptor) => {

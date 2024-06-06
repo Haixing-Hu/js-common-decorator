@@ -8,11 +8,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 修饰目标对象，将其设置为只读。
+ * Decorates a class field to mark it as read-only.
  *
- * 被修饰的对象必须是类成员，可以是类属性或类方法。
+ * The decorated object must be a class member, which can be a class property or
+ * a class method.
  *
- * 使用示例：
+ * Usage example:
  * ```js
  * Class Meal {
  *   &#064;Readonly
@@ -25,14 +26,14 @@
  * ```
  *
  * @param {Function} target
- *     目标对象所属的类的原型。
+ *     The constructor function of the class to which the decorated method belongs.
  * @param {String} name
- *     目标对象的名称。
+ *     The name of the decorated method.
  * @param {Object} descriptor
- *     目标对象原来的属性描述符。
+ *     The original property descriptor of the decorated method.
  * @returns
- *     目标对象被修饰后的属性描述符。
- * @author 胡海星
+ *     The property descriptor of the decorated method.
+ * @author Haixing Hu
  */
 export function Readonly(target, name, descriptor) {
   descriptor.writable = false;

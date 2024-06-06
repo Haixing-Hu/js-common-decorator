@@ -8,12 +8,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 修饰目标对象，将其设置为不可枚举的。
+ * Decorates a class field to make it non-enumerable.
  *
- * 被修饰的对象必须是类成员。注意类方法本身就是不可枚举的，所以此修饰符只对类属性
- * 有意义。
+ * The decorated target must be a class member. Note that class methods are
+ * non-enumerable by default, so this decorator only makes sense for class
+ * properties.
  *
- * 使用示例：
+ * Usage example：
  * ```js
  * class Meal {
  *    entree = 'steak';
@@ -28,14 +29,14 @@
  * ```
  *
  * @param {Function} target
- *     目标对象所属的类的原型。
+ *     The constructor function of the class to which the decorated method belongs.
  * @param {String} name
- *     目标对象的名称。
+ *     The name of the decorated method.
  * @param {Object} descriptor
- *     目标对象原来的属性描述符。
+ *     The original property descriptor of the decorated method.
  * @returns
- *     目标对象被修饰后的属性描述符。
- * @author 胡海星
+ *     The property descriptor of the decorated method.
+ * @author Haixing Hu
  */
 export function NonEnumerable(target, name, descriptor) {
   descriptor.enumerable = false;

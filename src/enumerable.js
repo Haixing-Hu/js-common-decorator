@@ -8,12 +8,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 修饰目标对象，将其设置为可枚举的。
+ * Decorates a class method to make it enumerable.
  *
- * 被修饰的对象必须是类成员。注意类属性本身就是可枚举的，所以此修饰符只对类方法
- * 有意义。
+ * The decorated target must be a class member. Note that class properties are
+ * enumerable by default, so this decorator only makes sense for class methods.
  *
- * 使用示例：
+ * Usage example:
  * ```js
  * class Meal {
  *   pay() {}
@@ -28,14 +28,14 @@
  * ```
  *
  * @param {Function} target
- *     目标对象所属的类的原型。
+ *     The constructor function of the class to which the decorated method belongs.
  * @param {String} name
- *     目标对象的名称。
+ *     The name of the decorated method.
  * @param {Object} descriptor
- *     目标对象原来的属性描述符。
+ *     The original property descriptor of the decorated method.
  * @returns
- *     目标对象被修饰后的属性描述符。
- * @author 胡海星
+ *     The property descriptor of the decorated method.
+ * @author Haixing Hu
  */
 export function Enumerable(target, name, descriptor) {
   descriptor.enumerable = true;
