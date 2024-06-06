@@ -35,29 +35,6 @@ function getNamingStyle(style) {
 }
 
 /**
- * Gets the key of the target object from the corresponding key of the source
- * object.
- *
- * @param {string} sourceKey
- *     The key of the source object.
- * @param {object} options
- *     The options of the cloning algorithm.
- * @return {string}
- *     The corresponding key of the target object.
- * @author Haixing Hu
- * @private
- */
-export function getTargetKey(sourceKey, options) {
-  if (options && (options.convertNaming === true)) {
-    const sourceNamingStyle = getNamingStyle(options.sourceNamingStyle);
-    const targetNamingStyle = getNamingStyle(options.targetNamingStyle);
-    return sourceNamingStyle.to(targetNamingStyle, sourceKey);
-  } else {
-    return sourceKey;
-  }
-}
-
-/**
  * Gets the key of the source object from the corresponding key of the target
  * object.
  *
@@ -70,7 +47,7 @@ export function getTargetKey(sourceKey, options) {
  * @author Haixing Hu
  * @private
  */
-export function getSourceKey(targetKey, options) {
+function getSourceKey(targetKey, options) {
   if (options && (options.convertNaming === true)) {
     const sourceNamingStyle = getNamingStyle(options.sourceNamingStyle);
     const targetNamingStyle = getNamingStyle(options.targetNamingStyle);
@@ -79,3 +56,5 @@ export function getSourceKey(targetKey, options) {
     return targetKey;
   }
 }
+
+export default getSourceKey;

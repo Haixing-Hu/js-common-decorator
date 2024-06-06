@@ -24,7 +24,7 @@ import ClassMetadataCache from '../class-metadata-cache';
 import DefaultOptions from '../../default-options';
 import defaultNormalizer from '../../default-normalizer';
 import ofValueImpl from '../enum/of-value-impl';
-import { getSourceKey } from '../get-key';
+import getSourceKey from './get-source-key';
 
 /**
  * Parameters used when calling the `clone()` function to copy attributes.
