@@ -60,7 +60,7 @@ describe('Test the static method `create()`', () => {
     expect(result.credential.type).toBe(CredentialType.PASSPORT);
     expect(result.credential.number).toBe('XX1234567');
 
-    result = Person.create(data, false);      // normalize == false
+    result = Person.create(data, { normalize: false });      // normalize == false
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
     expect(result.age).toBe(data.age);
@@ -72,7 +72,7 @@ describe('Test the static method `create()`', () => {
   });
   test('`create()` should work with enumerator field in data object', () => {
     const data = { type: CredentialType.PASSPORT, number: '12345' };
-    const credential = Credential.create(data, true);
+    const credential = Credential.create(data, { normalize: true });
     expect(credential.type).toBe(CredentialType.PASSPORT);
     expect(credential.number).toBe('12345');
   });

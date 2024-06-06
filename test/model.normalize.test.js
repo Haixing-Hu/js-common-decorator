@@ -1,10 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
-import { Model, Normalizable } from '../src';
-import defaultNormalizer from '../src/default-normalizer';
-import classMetadataCache from '../src/impl/class-metadata-cache';
-import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
-import { getFieldMetadata } from '../src/impl/utils';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -12,6 +6,12 @@ import { getFieldMetadata } from '../src/impl/utils';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
+import { Model, Normalizable } from '../src';
+import defaultNormalizer from '../src/default-normalizer';
+import classMetadataCache from '../src/impl/class-metadata-cache';
+import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
+import { getFieldMetadata } from '../src/impl/utils';
 import Child from './model/child';
 import CredentialType from './model/credential-type';
 import Credential from './model/normalizable-credential';
@@ -27,7 +27,7 @@ describe('Test the prototype method `normalize()`', () => {
       message: 'hello',
     };
     const parent = new Parent();
-    parent.assign(data, false);
+    parent.assign(data, { normalize: false });
     expect(parent.x).toBe(1);
     expect(parent.y).toBe(0);
     expect(parent.z).toBe('abc');
@@ -35,7 +35,7 @@ describe('Test the prototype method `normalize()`', () => {
     expect(parent.z).toBe('ABC');
 
     const child = new Child();
-    child.assign(data, false);
+    child.assign(data, { normalize: false });
     expect(child.message).toBe('hello');
     expect(child.x).toBe(1);
     expect(child.y).toBe(0);
@@ -77,7 +77,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize();
@@ -95,7 +95,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize(null);
@@ -113,7 +113,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('*');
@@ -131,7 +131,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('number');
@@ -149,7 +149,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('type');
@@ -167,7 +167,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('nonNormalizable');
@@ -185,7 +185,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('array');
@@ -207,7 +207,7 @@ describe('Test the prototype method `normalize()`', () => {
       },
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     data.credential.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
@@ -228,7 +228,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize('xxx');
@@ -246,7 +246,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     expect(() => obj.normalize(123)).toThrowWithMessage(TypeError,
@@ -261,7 +261,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     obj.number = undefined;
@@ -280,7 +280,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     obj.number = null;
@@ -324,7 +324,7 @@ describe('Test the prototype method `normalize()`', () => {
       credential: null,
     };
     const obj = new ObjWithNormalizableField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
     const result = obj.normalize(['number', 'type']);

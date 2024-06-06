@@ -21,6 +21,10 @@ import {
   KEY_FIELD_TYPE,
 } from '../metadata-keys';
 import ClassMetadataCache from '../class-metadata-cache';
+import DefaultOptions from '../../default-options';
+import defaultNormalizer from '../../default-normalizer';
+import ofValueImpl from '../enum/of-value-impl';
+import { getSourceKey } from '../get-key';
 
 /**
  * Parameters used when calling the `clone()` function to copy attributes.
@@ -36,7 +40,6 @@ const CLONE_OPTIONS = {
 };
 
 const Impl = {
-
   /**
    * Gets the names of all fields of the default instance of target class.
    *
@@ -52,8 +55,8 @@ const Impl = {
    * @param {function} type
    *     The type of the target object, i.e., the constructor of the class of
    *     the target object.
-   * @param {boolean} normalized
-   *     Whether to regularize the copied target object.
+   * @param {object} options
+   *     the additional options for the assignment.
    * @returns {string[]}
    *     The names of all fields of the default instance of the target class,
    *     excluding the fields owned by the parent class of the target class if
@@ -61,7 +64,7 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  getAllFields(target, source, { type, normalized }) {
+  getAllFields(target, source, { type, options }) {
     // Get all names of fields of the default object of the `type`
     const fields = Object.keys(target);
     // call the `assign()` method in the parent classes of the target class
@@ -69,7 +72,7 @@ const Impl = {
     if (hasPrototypeFunction(parentType, 'assign')) {
       // If the parent class or its ancestor classes has an `assign()` method,
       // call the `assign()` method of the parent class.
-      parentType.prototype.assign.call(target, source, normalized);
+      parentType.prototype.assign.call(target, source, options);
       // then exclude fields owned by the parent class
       const parentInstance = getDefaultInstance(parentType);
       const parentFields = Object.keys(parentInstance);
@@ -81,7 +84,7 @@ const Impl = {
 
   /**
    * Copies all configurable, enumerable, and non-read-only properties of the
-   * source object to the target object.
+   * source object to the target object without naming conversion.
    *
    * @param {object} target
    *     The target object.
@@ -90,7 +93,7 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  copyAllProperties(target, source) {
+  copyAllPropertiesWithoutNamingConversion(target, source) {
     if (isUndefinedOrNull(source)) {
       return;
     }
@@ -102,44 +105,46 @@ const Impl = {
   },
 
   /**
-   * Clones an object of an unknown type.
+   * Clones an enumeration value.
    *
-   * @param {object} source
-   *     The source object being cloned.
+   * @param {string|any} source
+   *    The source value being cloned.
    * @param {string} path
-   *     The path of the target object in the property tree of the original root
-   *     object.
-   * @param {object} defaultInstance
-   *     A default instance in the class of the target object. If a certain
-   *     attribute value of the target object does not exist in the source
-   *     object or is null, the corresponding attribute value of this default
-   *     instance is used to assign the corresponding attribute of the target
-   *     object. Note that this argument may be `null` or `undefined`.
-   * @param {boolean} normalized
-   *     Whether to normalize the cloned target object.
-   * @returns
-   *     A target object deeply cloned from the source object, whose type is
-   *     exactly the same as the default object.
+   *    The path of the target value in the property tree of the original root.
+   * @param {Function} type
+   *    The constructor of the enumeration class of the target value. Note that
+   *    this enumeration class **must** be decorated by `@Enum`.
+   * @param {undefined|null|type} defaultInstance
+   *    The default value of the target value. If the source value is an invalid
+   *    enumeration value, this default value is used to assign the target value.
+   * @return {type|*|null}
+   *    The target value deeply cloned from the source value, whose type is
+   *    exactly the same as the specified type.
    * @author Haixing Hu
    * @private
    */
-  cloneWithoutTypeInfo(source, { path, defaultInstance, normalized }) {
-    // If the default instance is nullish, directly deep clone the source object
-    if (isUndefinedOrNull(defaultInstance)) {
-      return clone(source, CLONE_OPTIONS);
+  cloneEnumValue(source, { path, type, defaultInstance }) {
+    if (source === null || source === undefined) {
+      return null;
+    } else if (typeof source === 'string') {
+      // the blank string is treated as null enumerator
+      if (source.trim().length === 0) {
+        return null;
+      }
+      // convert the string representation to the enumerator
+      const e = ofValueImpl(type, source);
+      if (e === undefined) {
+        console.error(`The value of ${path} is not a valid enumeration value:`, source);
+        return defaultInstance;
+      } else {
+        return e;
+      }
+    } else if (source instanceof type) {
+      return source;
+    } else {
+      console.error(`The value of ${path} is not a valid enumeration value:`, source);
+      return defaultInstance;
     }
-    // If the property value of the target object is an object, we must create
-    // an object of the same prototype and copy the property values of the
-    // source object
-    const Class = Object.getPrototypeOf(defaultInstance).constructor;
-    const target = new Class();
-    // Recursively assign each attribute value of `source` to `target`
-    return this.assign(target, source, {
-      path,
-      type: Class,
-      defaultInstance,
-      normalized,
-    });
   },
 
   /**
@@ -158,82 +163,47 @@ const Impl = {
    *     object or is null, the corresponding attribute value of this default
    *     instance is used to assign the corresponding attribute of the target
    *     object. Note that this argument may be `null` or `undefined`.
-   * @param {boolean} normalized
-   *     Whether to normalize the cloned target object.
+   * @param {object} options
+   *     the additional options for the assignment.
    * @returns
    *     A target object deeply cloned from the source object, whose type is
    *     exactly the same as the specified type.
    * @author Haixing Hu
    * @private
    */
-  cloneWithTypeInfo(source, { path, type, defaultInstance, normalized }) {
-    if (isBuiltInClass(type)) {
-      // For JS built-in standard types, directly deep clone the source object
-      return clone(source, CLONE_OPTIONS);
-    }
+  cloneWithTypeInfo(source, { path, type, defaultInstance, options }) {
     if (isUndefinedOrNull(source)) {
       // If the source object is nullish, directly deep clone the default object
+      // without naming conversion
       return clone(defaultInstance, CLONE_OPTIONS);
+    }
+    if (isBuiltInClass(type)) {
+      // For JS built-in standard types, directly deep clone the source object
+      // without naming conversion
+      return clone(source, CLONE_OPTIONS);
     }
     const category = getClassMetadata(type, KEY_CLASS_CATEGORY);
     switch (category) {
       case 'enum':
-        if (typeof source === 'string') {
-          if (source.trim().length === 0) {
-            return null;
-          }
-          // convert the string representation to the enumerator
-          const e = type.ofValue(source);
-          if (e === undefined) {
-            throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
-          }
-          return e;
-        } else if (source instanceof type) {
-          return source;
-        } else {
-          throw new Error(`The value of ${path} is not a valid enumeration value: ${source}`);
-        }
+        return this.cloneEnumValue(source, {
+          path,
+          type,
+          defaultInstance,
+        });
       case 'model':
       default: {
         // Construct a target value based on the source type
         /* eslint-disable-next-line new-cap */
         const target = new type();
         // Recursively assign each attribute value of `source` to `target`
-        return this.assign(target, source, {
+        return this.doAssign(target, source, {
           path,
           type,
           defaultInstance,
-          normalized,
+          options,
         });
       }
     }
-  },
-
-  /**
-   * Clones an array whose element type is unknown.
-   *
-   * @param {array} sourceArray
-   *     The source array being cloned.
-   * @param {string} path
-   *     The path of the target array in the property tree of the original root
-   *     object.
-   * @param {array} defaultArray
-   *     The default array, which may be `undefined` or `null`.
-   * @returns
-   *     A target array deeply cloned from the source array, whose element type
-   *     is exactly the same as the element type of the default array.
-   * @author Haixing Hu
-   * @private
-   */
-  cloneArrayWithoutElementTypeInfo(sourceArray, { path, defaultArray }) {
-    // TODO: If there is type information in its default field value, we can
-    //  construct an array of the same type based on the type information in
-    //  the default field value.
-    if (!Array.isArray(sourceArray)) {
-      console.warn('The value of %s should be an array: %o', path, sourceArray);
-      return clone(defaultArray, CLONE_OPTIONS);
-    }
-    return clone(sourceArray, CLONE_OPTIONS);
   },
 
   /**
@@ -248,21 +218,23 @@ const Impl = {
    *     The constructor of the class of the target array elements to be cloned.
    * @param {object} defaultArray
    *     The default array, which may be `undefined` or `null`.
-   * @param {boolean} normalized
-   *     Whether to normalize the cloned target array.
+   * @param {object} options
+   *     the additional options for the assignment.
    * @returns
    *     A target array deeply cloned from the source array, whose element type
    *     is exactly the same as the specified element type.
    * @author Haixing Hu
    * @private
    */
-  cloneArrayWithElementTypeInfo(sourceArray, { path, elementType, defaultArray, normalized }) {
+  cloneArrayWithElementTypeInfo(sourceArray, { path, elementType, defaultArray, options }) {
     if (!Array.isArray(sourceArray)) {
-      console.warn('The value of %s should be an array: %o', path, sourceArray);
+      console.error(`The value of ${path} should be an array:`, sourceArray);
+      // clone the default array without naming conversion
       return clone(defaultArray, CLONE_OPTIONS);
     }
     if (isBuiltInClass(elementType)) {
       // For JS built-in standard element types, directly deep clone the array
+      // without naming conversion
       return clone(sourceArray, CLONE_OPTIONS);
     }
     const elementTypeCategory = getClassMetadata(elementType, KEY_CLASS_CATEGORY);
@@ -270,9 +242,11 @@ const Impl = {
       case 'enum':
         // For enumeration classes, because enumeration types are always
         // expressed in string form, we only need to copy the source string array.
-        // TODO: Tests whether `sourceArray` is full of strings or `null`.
-        //  If not, `defaultArray` should be returned and a warning log should be output.
-        return clone(sourceArray, CLONE_OPTIONS);
+        return sourceArray.map((sourceElement, index) => this.cloneEnumValue(sourceElement, {
+          path: `${path}[${index}]`,
+          type: elementType,
+          defaultInstance: (defaultArray ? defaultArray[index] : undefined),
+        }));
       case 'model':
       default: {
         // For non-enumerated element classes, create a target array of the same
@@ -286,15 +260,101 @@ const Impl = {
           // Recursively assign each attribute value of `sourceElement` to `targetElement`.
           // Use `defaultElement` as default instance
           const targetPath = `${path}[${index}]`;
-          this.assign(targetElement, sourceElement, {
+          const defaultInstance = ((defaultArray && defaultArray[index]) ? defaultArray[index] : defaultElement);
+          // Recursively assign each element of `sourceArray` to `targetArray`
+          this.doAssign(targetElement, sourceElement, {
             path: targetPath,
             type: elementType,
-            defaultInstance: defaultElement,
-            normalized,
+            defaultInstance,
+            options,
           });
           return targetElement;
         });
       }
+    }
+  },
+
+  /**
+   * Clones an object of an unknown type.
+   *
+   * @param {object} source
+   *     The source object being cloned.
+   * @param {string} path
+   *     The path of the target object in the property tree of the original root
+   *     object.
+   * @param {object} defaultInstance
+   *     A default instance in the class of the target object. If a certain
+   *     attribute value of the target object does not exist in the source
+   *     object or is null, the corresponding attribute value of this default
+   *     instance is used to assign the corresponding attribute of the target
+   *     object. Note that this argument may be `null` or `undefined`.
+   * @param {object} options
+   *     the additional options for the assignment.
+   * @returns
+   *     A target object deeply cloned from the source object, whose type is
+   *     exactly the same as the default object.
+   * @author Haixing Hu
+   * @private
+   */
+  cloneWithoutTypeInfo(source, { path, defaultInstance, options }) {
+    // If the default instance is nullish, directly deep clone the source object
+    if (isUndefinedOrNull(defaultInstance)) {
+      // clone the source with naming conversion options
+      return clone(source, {
+        ...CLONE_OPTIONS,
+        convertNaming: options.convertNaming,
+        sourceNamingStyle: options.sourceNamingStyle,
+        targetNamingStyle: options.targetNamingStyle,
+      });
+    }
+    // If the property value of the target object is an object, we must create
+    // an object of the same prototype and copy the property values of the
+    // source object
+    const Class = Object.getPrototypeOf(defaultInstance).constructor;
+    const target = new Class();
+    // Recursively assign each attribute value of `source` to `target`
+    return this.doAssign(target, source, {
+      path,
+      type: Class,
+      defaultInstance,
+      options,
+    });
+  },
+
+  /**
+   * Clones an array whose element type is unknown.
+   *
+   * @param {array} sourceArray
+   *     The source array being cloned.
+   * @param {string} path
+   *     The path of the target array in the property tree of the original root
+   *     object.
+   * @param {array} defaultArray
+   *     The default array, which may be `undefined` or `null`.
+   * @param {object} options
+   *     the additional options for the assignment.
+   * @returns
+   *     A target array deeply cloned from the source array, whose element type
+   *     is exactly the same as the element type of the default array.
+   * @author Haixing Hu
+   * @private
+   */
+  cloneArrayWithoutElementTypeInfo(sourceArray, { path, defaultArray, options }) {
+    // TODO: If there is type information in its default field value, we can
+    //  construct an array of the same type based on the type information in
+    //  the default field value.
+    if (Array.isArray(sourceArray)) {
+      // clone the source array with naming conversion options
+      return clone(sourceArray, {
+        ...CLONE_OPTIONS,
+        convertNaming: options.convertNaming,
+        sourceNamingStyle: options.sourceNamingStyle,
+        targetNamingStyle: options.targetNamingStyle,
+      });
+    } else {
+      console.error(`The value of ${path} should be an array:`, sourceArray);
+      // clone the default array without naming conversion
+      return clone(defaultArray, CLONE_OPTIONS);
     }
   },
 
@@ -318,63 +378,51 @@ const Impl = {
    *     object or is null, the corresponding attribute value of this default
    *     instance is used to assign the corresponding attribute of the target
    *     object. Note that this argument may be `null` or `undefined`.
-   * @param {boolean} normalized
-   *     Whether to normalize the copied target object.
+   * @param {object} options
+   *     the additional options for the assignment.
    * @returns
    *     The target object after assignment.
    * @author Haixing Hu
    * @private
    */
-  assign(target, source, { path, type, defaultInstance, normalized }) {
-    // FIXME: shall we use an option to control the name convention of JSON object?
-    // console.log('AssignImpl.assign: target = ', target,
-    //   ', source = ', source,
-    //   ', type = ', type,
-    //   ', metadata = ', metadata,
-    //   ', defaultInstance = ', defaultInstance,
-    //   ', normalizable = ', normalizable);
+  doAssign(target, source, { path, type, defaultInstance, options }) {
     if (isUndefinedOrNull(source)) {
       // if source is nullish, assign the default object to the target object
-      this.copyAllProperties(target, defaultInstance);
+      this.copyAllPropertiesWithoutNamingConversion(target, defaultInstance);
     } else {
       // Loops over all enumerable properties of the default instance,
       // excluding those inherited from the parent class
       const metadata = ClassMetadataCache.get(type);
-      const fields = this.getAllFields(target, source, { type, normalized });
       const theDefaultInstance = defaultInstance ?? {}; // defaultInstance may be null or undefined
-      fields.forEach((field) => {
-        const defaultFieldValue = theDefaultInstance[field];
-        const fieldPath = `${path}.${field}`;
-        const sourceFieldValue = source[field];
+      const targetKeys = this.getAllFields(target, source, { type, options });
+      targetKeys.forEach((targetKey) => {
+        const defaultFieldValue = theDefaultInstance[targetKey];
+        const fieldPath = `${path}.${targetKey}`;
+        const sourceKey = getSourceKey(targetKey, options);
+        const sourceFieldValue = source[sourceKey];
         // If field of the target object is annotated with `@Type`, get the annotated type
-        const annotatedFieldType = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
+        const annotatedFieldType = getFieldMetadata(metadata, targetKey, KEY_FIELD_TYPE);
         // If field of the target object is annotated with `@ElementType`, get the annotated element type
-        const annotatedFieldElementType = getFieldMetadata(metadata, field, KEY_FIELD_ELEMENT_TYPE);
-        // console.log('field = ', field,
-        //   ', fieldPath = ', fieldPath,
-        //   ', sourceFieldValue = ', sourceFieldValue,
-        //   ', defaultFieldValue = ', defaultFieldValue,
-        //   ', fieldType = ', fieldType,
-        //   ', fieldElementType = ', fieldElementType);
+        const annotatedFieldElementType = getFieldMetadata(metadata, targetKey, KEY_FIELD_ELEMENT_TYPE);
         if (isUndefinedOrNull(sourceFieldValue)) {
           // If the source object field value is nullish, copy the default field
           // value directly.
-          target[field] = clone(defaultFieldValue, CLONE_OPTIONS);
+          target[targetKey] = clone(defaultFieldValue, CLONE_OPTIONS);
         } else if (annotatedFieldType) {
           // If the field of the target object is annotated with `@Type`
-          target[field] = this.cloneWithTypeInfo(sourceFieldValue, {
+          target[targetKey] = this.cloneWithTypeInfo(sourceFieldValue, {
             path: fieldPath,
             type: annotatedFieldType,
             defaultInstance: defaultFieldValue,
-            normalized,
+            options,
           });
         } else if (annotatedFieldElementType) {
           // If the field of the target object is annotated with `@ElementType`
-          target[field] = this.cloneArrayWithElementTypeInfo(sourceFieldValue, {
+          target[targetKey] = this.cloneArrayWithElementTypeInfo(sourceFieldValue, {
             path: fieldPath,
             elementType: annotatedFieldElementType,
             defaultArray: defaultFieldValue,
-            normalized,
+            options,
           });
         } else if (isUndefinedOrNull(defaultFieldValue)) {
           // If the field value of the default instance is nullish, but the
@@ -382,40 +430,50 @@ const Impl = {
           // decorated with `@Type`, it is impossible to determine the type of
           // the attribute, therefore we directly clone the source object field
           // value.
-          // TODO: shall we give a warning logging message here?
-          target[field] = clone(sourceFieldValue, CLONE_OPTIONS);
+          console.warn(`There is no type information for the field ${fieldPath}.`);
+          // clone the source field value with the naming conversion options
+          target[targetKey] = clone(sourceFieldValue, {
+            ...CLONE_OPTIONS,
+            convertNaming: options.convertNaming,
+            sourceNamingStyle: options.sourceNamingStyle,
+            targetNamingStyle: options.targetNamingStyle,
+          });
         } else if (Array.isArray(defaultFieldValue)) {
           // If the field value of the target object is an array but has not
           // been annotated with `@ElementType`
-          // TODO: shall we give a warning logging message here?
-          target[field] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
+          console.warn(`There is no element type information for the array field ${fieldPath}.`);
+          target[targetKey] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
             path: fieldPath,
             defaultArray: defaultFieldValue,
+            options,
           });
         } else if ((typeof defaultFieldValue) === 'object') {
           // If the property value of the target object is a non-null and
           // non-array object, we must create an object of the same prototype
           // and copy the property value of the source object
-          target[field] = this.cloneWithoutTypeInfo(sourceFieldValue, {
+          target[targetKey] = this.cloneWithoutTypeInfo(sourceFieldValue, {
             path: fieldPath,
             defaultInstance: defaultFieldValue,
-            normalized,
+            options,
           });
         } else {
           // If the attribute value of the target object is not an object,
           // directly clone the attribute value of the source object and assign
           // it to the target object.
-          target[field] = clone(sourceFieldValue, CLONE_OPTIONS);
+          target[targetKey] = clone(sourceFieldValue, {
+            ...CLONE_OPTIONS,
+            convertNaming: options.convertNaming,
+            sourceNamingStyle: options.sourceNamingStyle,
+            targetNamingStyle: options.targetNamingStyle,
+          });
         }
       });
     }
-    // console.log('AssignImpl.assign: target = ', target, ', normalized = ', normalized);
-    if (normalized) {
-      if (typeof target.normalize === 'function') {
-        target.normalize();
-      }
+    if (options.normalize) {
+      return defaultNormalizer(target);
+    } else {
+      return target;
     }
-    return target;
   },
 };
 
@@ -431,20 +489,38 @@ const Impl = {
  * @param {object} source
  *     The source object which will be assigned from. This object may be any
  *     plain old JavaScript object without class information.
- * @param {boolean} normalized
- *     Indicates whether to normalize the target object after assignment.
+ * @param {object} options
+ *     the additional options for the assignment. If this argument is
+ *     `undefined` or `null`, the default options will be used. The default
+ *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+ *     Available options are:
+ *     - `normalize: boolean`, indicates whether to normalize this object
+ *       after the assignment. The default value is `true`.
+ *     - `convertNaming: boolean`, indicates whether to convert the naming
+ *       style of the target object. The default value is `false`.
+ *     - `sourceNamingStyle: NamingStyle`, the naming style of the source
+ *       object. The default value is {@link LOWER_UNDERSCORE}.
+ *     - `targetNamingStyle: NamingStyle`, the naming style of the target
+ *       object. The default value is {@link LOWER_CAMEL}.
  * @return {Class}
  *     The target object after assignment.
  * @author Haixing Hu
  * @private
  */
-function assignImpl(Class, target, source, normalized) {
+function assignImpl(Class, target, source, options) {
   const defaultInstance = getDefaultInstance(Class);
-  return Impl.assign(target, source, {
+  let opt;
+  if (options === undefined || options === null) {
+    opt = { ...DefaultOptions.get('assign') };
+  } else {
+    // merge the default options with the specified options
+    opt = { ...DefaultOptions.get('assign'), ...options };
+  }
+  return Impl.doAssign(target, source, {
     path: Class.name,
     type: Class,
     defaultInstance,
-    normalized,
+    options: opt,
   });
 }
 

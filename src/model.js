@@ -36,13 +36,15 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  *
  * It adds the following methods to the decorated class:
  *
- * - Instance method `assign(obj, normalized)`: Copies the properties of the object
+ * - Instance method `assign(obj, options)`: Copies the properties of the object
  *   `obj` to this object, only copying properties defined in the class of this
  *   object. If a property in the `obj` object is `undefined` or `null`, it sets
  *   the property of this object to the default value. The function returns this
  *   object itself. Note that `obj` can have a different prototype than this object.
- *   The `normalized` parameter indicates whether to normalize this object after
- *   copying properties, with a default value of `true`.
+ *   The `options` parameter is the additional options for the assignment.
+ *   Available options will be explained below. If the `options` parameter is
+ *   `undefined` or `null`, the default options will be used. The default
+ *   options can be retrieved by calling `DefaultOptions.get('assign')`.
  * - Instance method `clear()`: Sets all the properties of this object to their
  *   default values.
  * - Instance method `clone()`: Returns a deep clone of this object.
@@ -79,27 +81,28 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  *   and a subclass `B` inherits  the `id` field but does not define its own
  *   `id` field, the `generateId()` method is only added to class `A`, not to
  *   class `B`.
- * - Static class method `create(obj, normalized)`: Creates a new instance object
+ * - Static class method `create(obj, options)`: Creates a new instance object
  *   based on the `obj` object. It copies the property values from the corresponding
  *   properties of `obj`, maintaining the same prototype and class definition. This
  *   method is used to transform a plain JSON object into the specified domain
- *   object. The `normalized` parameter indicates whether to normalize the returned
- *   object, with a default value of `true`.
- * - Static class method `createArray(array, normalized)`: Creates a new instance
+ *   object. The `options` parameter is the additional options for the creation,
+ *   which is the same as the `options` parameter of the `create()` method.
+ * - Static class method `createArray(array, options)`: Creates a new instance
  *   array based on an object array `array`, where each element's property values
  *   are copied from the corresponding elements in `array`, maintaining the same
  *   prototype and class definition. This method is used to transform an array of
- *   plain JSON objects into an array of specified domain objects. The `normalized`
- *   parameter indicates whether to normalize each object in the returned array,
- *   with a default value of `true`.
- * - Static class method `createPage(page)`: Creates a new page object based on a
- *   `page` pagination object. Typically, `page` is a list of domain objects
- *   obtained from a server using the GET method, and the object should conform to
- *   the `Page` class definition. This static class method returns a new `Page`
- *   object, with the `content` property being the result of
- *   `createArray(page.content, true)`, and the other properties matching those of
- *   the `page` object. If the input is not a valid `Page` object, it
- *   returns `null`.
+ *   plain JSON objects into an array of specified domain objects. The `options`
+ *   parameter is the additional options for the creation, which is the same
+ *   as the `options` parameter of the `create()` method.
+ * - Static class method `createPage(page, options)`: Creates a new page object
+ *   based on a `page` pagination object. Typically, `page` is a list of domain
+ *   objects obtained from a server using the GET method, and the object should
+ *   conform to the `Page` class definition. This static class method returns a
+ *   new `Page` object, with the `content` property being the result of
+ *   `createArray(page.content, options)`, and the other properties matching
+ *   those of the `page` object. If the input is not a valid `Page` object, it
+ *   returns `null`. The `options` parameter is the additional options for the
+ *   creation, which is the same as the `options` parameter of the `create()` method.
  * - Static class method `isNullishOrEmpty(obj)`: Determines if the given instance
  *   is `undefined`, `null`, or an empty object constructed with default values.
  *
@@ -195,7 +198,7 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * After applying the `@Model` decorator, the following methods will be
  * automatically added:
  *
- * - `Credential.prototype.assign(obj, normalized)`
+ * - `Credential.prototype.assign(obj, options = undefined)`
  * - `Credential.prototype.clear()`
  * - `Credential.prototype.clone()`
  * - `Credential.prototype.isEmpty()`
@@ -213,9 +216,9 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * - `Person.prototype.normalize(fields)`
  * - `Person.prototype.validate(fields, options)`
  * - `Person.prototype.generateId()`
- * - `Person.create(obj, normalized)`
- * - `Person.createArray(array, normalized)`
- * - `Person.createPage(page)`
+ * - `Person.create(obj, options = undefined)`
+ * - `Person.createArray(array, options = undefined)`
+ * - `Person.createPage(page, options = undefined)`
  * - `Person.isNullishOrEmpty(obj)`
  *
  * **NOTE:**
@@ -264,14 +267,24 @@ function Model(Class, context) {
      *
      * @param {object} obj
      *     the data object, which may have a different prototype than this object.
-     * @param {boolean} normalized
-     *     indicates whether to normalize this object after assignment. Default
-     *     value is `true`.
+     * @param {object} options
+     *     the additional options for the assignment. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       after the assignment. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       style of the target object. The default value is `false`.
+     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
+     *       source object. The default value is {@link LOWER_UNDERSCORE}.
+     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
+     *       target object. The default value is {@link LOWER_CAMEL}.
      * @returns {object}
      *     the reference to this object.
      */
-    Class.prototype.assign = function assign(obj, normalized = true) {
-      return assignImpl(Class, this, obj, normalized);
+    Class.prototype.assign = function assign(obj, options = undefined) {
+      return assignImpl(Class, this, obj, options);
     };
   }
   // Add the instance method `clear()`
@@ -459,15 +472,25 @@ function Model(Class, context) {
      *
      * @param {object} obj
      *     the specified data object.
-     * @param {boolean} normalized
-     *     indicates whether to normalize the created object. The default value
-     *     is `true`.
+     * @param {object} options
+     *     the additional options for the creation. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       after the assignment. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       style of the target object. The default value is `false`.
+     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
+     *       source object. The default value is {@link LOWER_UNDERSCORE}.
+     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
+     *       target object. The default value is {@link LOWER_CAMEL}.
      * @returns {Class|null}
      *     the new instance of this class created from the specified data object,
      *     or `null` if the specified object is `null` or `undefined`.
      */
-    Class.create = function create(obj, normalized = true) {
-      return createImpl(Class, obj, normalized);
+    Class.create = function create(obj, options = undefined) {
+      return createImpl(Class, obj, options);
     };
   }
   // Add the class method `createArray()`
@@ -485,16 +508,26 @@ function Model(Class, context) {
      *
      * @param {Array<object>}  array
      *     the specified array of data objects.
-     * @param {boolean} normalized
-     *     indicates whether to normalize the created objects. The default value
-     *     is `true`.
+     * @param {object} options
+     *     the additional options for the creation. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       after the assignment. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       style of the target object. The default value is `false`.
+     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
+     *       source object. The default value is {@link LOWER_UNDERSCORE}.
+     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
+     *       target object. The default value is {@link LOWER_CAMEL}.
      * @returns {Array<Class>|null}
      *     the new array of instances of this class created from the specified
      *     data object array, or `null` if the specified data object array is
      *     `null` or `undefined`.
      */
-    Class.createArray = function createArray(array, normalized = true) {
-      return createArrayImpl(Class, array, normalized);
+    Class.createArray = function createArray(array, options = undefined) {
+      return createArrayImpl(Class, array, options);
     };
   }
   // Add the class method `createPage()`
@@ -509,14 +542,27 @@ function Model(Class, context) {
      * @param {object} page
      *     the specified pagination data object, which must conform to the
      *     `Page` class definition.
+     * @param {object} options
+     *     the additional options for the creation. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       after the assignment. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       style of the target object. The default value is `false`.
+     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
+     *       source object. The default value is {@link LOWER_UNDERSCORE}.
+     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
+     *       target object. The default value is {@link LOWER_CAMEL}.
      * @returns {Page|null}
      *     A new `Page` object, whose `content` property is the result of
      *     `this.createArray(page.content, true)`, and the other properties
      *     matching those of the `page` object. If the argument `page` is not a
      *     valid `Page` object, this function returns `null`.
      */
-    Class.createPage = function createPage(page) {
-      return createPageImpl(Class, page);
+    Class.createPage = function createPage(page, options = undefined) {
+      return createPageImpl(Class, page, options);
     };
   }
   // Add the class method `isNullishOrEmpty()`

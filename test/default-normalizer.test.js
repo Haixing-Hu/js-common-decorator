@@ -118,7 +118,7 @@ describe('Test defaultNormalizer() function', () => {
       },
     };
     const obj = new ObjWithDefaultNormalizerField();
-    obj.assign(data, false);
+    obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     data.credential.type = CredentialType.IDENTITY_CARD;
     data.credentialDefaultNonNull.type = CredentialType.PASSPORT;

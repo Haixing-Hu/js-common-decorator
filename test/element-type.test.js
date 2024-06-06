@@ -128,8 +128,8 @@ describe('Test `@ElementType``', () => {
 
     expect(obj.genders).toBeArray();
     expect(obj.genders.length).toBe(3);
-    expect(obj.genders[0]).toBe('MALE');
-    expect(obj.genders[1]).toBe('FEMALE');
+    expect(obj.genders[0]).toBe(Gender.MALE);
+    expect(obj.genders[1]).toBe(Gender.FEMALE);
     expect(obj.genders[2]).toBeNull();
 
     expect(obj.credentialsArrayDefaultNull).toBeArray();

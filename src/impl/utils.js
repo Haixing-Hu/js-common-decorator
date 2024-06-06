@@ -442,3 +442,21 @@ export function getInstanceName(metadata, instance) {
     return undefined;
   }
 }
+
+/**
+ * Checks the type of an object.
+ *
+ * @param {string} name
+ *     the name of the object.
+ * @param {object} obj
+ *     the object.
+ * @param {function} type
+ *     the constructor of the type.
+ * @throws TypeError
+ *     if the object is not an instance of the specified type.
+ */
+export function checkType(name, obj, type) {
+  if (!(obj instanceof type)) {
+    throw new TypeError(`The ${name} must be an object of the type ${type.name}`);
+  }
+}

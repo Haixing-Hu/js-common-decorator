@@ -120,7 +120,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
 
-    result = Person.createArray(array, true);
+    result = Person.createArray(array, { normalize: true });
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(3);
     expect(result[0]).toBeInstanceOf(Person);
@@ -143,7 +143,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
 
-    result = Person.createArray(array, false);
+    result = Person.createArray(array, { normalize: false });
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(3);
     expect(result[0]).toBeInstanceOf(Person);

@@ -42,7 +42,7 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.credential.type).toBe(CredentialType.PASSPORT);
     expect(result.credential.number).toBe(data.credential.number);
   });
-  test('`assign(data, true)` should call `Credential.normalize()`', () => {
+  test('`assign(data, { normalize: true })` should call `Credential.normalize()`', () => {
     const data = {
       id: 'xxxxx',
       name: 'Bill Gates',
@@ -54,7 +54,7 @@ describe('Test the prototype method `assign()`', () => {
       },
     };
     const person = new Person();
-    const result = person.assign(data, true);     // normalize == true
+    const result = person.assign(data, { normalize: true });     // normalize == true
     expect(result).toBe(person);  // assign() must returns the reference to the object
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
@@ -65,7 +65,7 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.credential.type).toBe(CredentialType.PASSPORT);
     expect(result.credential.number).toBe('XX1234567');
   });
-  test('`assign(data, false)` should not call `Credential.normalize()`', () => {
+  test('`assign(data, { normalize: false })` should not call `Credential.normalize()`', () => {
     const data = {
       id: 'xxxxx',
       name: 'Bill Gates',
@@ -77,7 +77,7 @@ describe('Test the prototype method `assign()`', () => {
       },
     };
     const person = new Person();
-    const result = person.assign(data, false);
+    const result = person.assign(data, { normalize: false });
     expect(result).toBe(person); // assign() must returns the reference to the object
     expect(result.id).toBe(data.id);
     expect(result.name).toBe(data.name);
@@ -120,13 +120,13 @@ describe('Test the prototype method `assign()`', () => {
       message: 'hello',
     };
     const parent = new Parent();
-    parent.assign(data, true);
+    parent.assign(data, { normalize: true });
     expect(parent.x).toBe(1);
     expect(parent.y).toBe(0);
     expect(parent.z).toBe('ABC');
 
     const child = new Child();
-    child.assign(data, true);
+    child.assign(data, { normalize: true });
     expect(child.message).toBe('HELLO');
     expect(child.x).toBe(1);
     expect(child.y).toBe(0);

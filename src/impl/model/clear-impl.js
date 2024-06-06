@@ -25,7 +25,7 @@ function clearImpl(Class, obj) {
   const defaultInstance = getDefaultInstance(Class);
   // note that the following statement must NOT normalize the object after
   // assignment, since the default instance may be un-normalized.
-  return obj.assign(defaultInstance, false);
+  return obj.assign(defaultInstance, { normalize: false, convertNaming: false });
 }
 
 export default clearImpl;

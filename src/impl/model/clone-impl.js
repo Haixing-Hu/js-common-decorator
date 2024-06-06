@@ -24,7 +24,7 @@ function cloneImpl(Class, obj) {
   requirePrototypeMethod(Class, 'assign');
   // note that the following statement must NOT normalize the object after
   // assignment, since the default instance may be un-normalized.
-  return new Class().assign(obj, false);
+  return new Class().assign(obj, { normalize: false, convertNaming: false });
 }
 
 export default cloneImpl;

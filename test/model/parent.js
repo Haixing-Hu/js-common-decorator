@@ -17,12 +17,12 @@ export default class Parent {
 
   z = '';
 
-  assign(obj, normalizable) {
-    console.log('Parent.assign: this = ', this, ', obj = ', obj, ', normalizable = ', normalizable);
+  assign(obj, options) {
+    console.log('Parent.assign: this = ', this, ', obj = ', obj, ', options = ', options);
     this.x = obj.x ?? 0;
     this.y = obj.y ?? 0;
     this.z = obj.z ?? 0;
-    if (normalizable === true) {
+    if (options?.normalize === true) {
       Parent.prototype.normalize.call(this);
     }
     return this;

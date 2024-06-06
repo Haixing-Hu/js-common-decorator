@@ -102,7 +102,7 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[1].credential.number).toBe('');
     expect(result.content[2]).toBeNull();
   });
-  test('`Person.createArray()` should call `Credential.normalize()`', () => {
+  test('`Person.createPage()` should call `Credential.normalize()`', () => {
     const page = {
       total_count: 3,
       total_pages: 1,
@@ -156,7 +156,7 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[1].credential.number).toBe('');
     expect(result.content[2]).toBeNull();
   });
-  test('`Credential.createArray()` should handle the page managed by Vue', () => {
+  test('`Credential.createPage()` should handle the page managed by Vue', () => {
     const wrapper = mount(PageWrapper);
     expect(wrapper.vm.page).toBeDefined();
     expect(wrapper.vm.page).not.toBeNull();

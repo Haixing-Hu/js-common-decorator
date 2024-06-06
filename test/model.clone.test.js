@@ -23,7 +23,7 @@ describe('Test the prototype method `clone()`', () => {
       },
     };
     const person = new Person();
-    person.assign(data, false);
+    person.assign(data, { normalize: false });
     const result = person.clone();
     expect(result).toBeInstanceOf(Person);
     expect(result.id).toBe(data.id);
