@@ -10,7 +10,8 @@
 /**
  * The decorator which delays the execution of a function.
  *
- * Usage example:
+ * ##### Usage example:
+ *
  * ```js
  * &#064;Timeout(1000)
  * function doSomething() {

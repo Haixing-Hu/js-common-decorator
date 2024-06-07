@@ -13,7 +13,7 @@ import { KEY_CLASS_NAME_FIELD } from './impl/metadata-keys';
  *
  * The decorated target must be a field of a class.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * class Foo {

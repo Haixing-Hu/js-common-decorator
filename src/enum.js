@@ -61,7 +61,8 @@ import ofImpl from './impl/enum/of-impl';
  * - `hasCode(code): returns `true` if there is an enumerator whose code is
  *   `code`, or `false` otherwise.
  *
- * Usage example:
+ * ##### Usage example:
+ *
  * ```js
  * &#064;Enum
  * class Gender {

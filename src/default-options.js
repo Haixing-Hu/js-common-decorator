@@ -6,7 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { LOWER_UNDERSCORE, LOWER_CAMEL } from '@haixing_hu/naming-style';
+import clone from '@haixing_hu/clone';
+import DefaultAssignmentOptions from './impl/default-options/default-assignment-options';
+import DefaultToJsonOptions from './impl/default-options/default-to-json-options';
 
 /**
  * The map storing the default values of options of different aspects.
@@ -36,8 +38,11 @@ const DEFAULT_OPTIONS_MAP = new Map();
  * method.
  *
  * Currently, the following aspects are supported:
- * - `assign`: the default options of the `assign()` method of the class decorated
- *   by `@Model`.
+ * - `assign`: the default options of the `Class.prototype.assign()`,
+ *   `Class.create()`, `Class.createArray()`, `Class.createPage()`,
+ *   `Class.parseJsonString()` methods of  the class decorated by `@Model`.
+ * - `toJSON`: the default options of the `Class.prototype.toJSON()`,
+ *   `Class.prototype.toJsonString()` methods of the class decorated by `@Model`.
  *
  * @author Haixing Hu
  */
@@ -45,62 +50,111 @@ class DefaultOptions {
   /**
    * Gets the default options of the specified aspect.
    *
+   * ##### Usage example:
+   *
+   * ```js
+   * const opt1 = DefaultOptions.get('assign');
+   * expect(opt1.convertNaming).toBe(false);
+   * opt1.convertNaming = true;
+   * const opt2 = DefaultOptions.get('assign');
+   * expect(opt2.convertNaming).toBe(false);
+   * ```
+   *
    * @param {string} aspect
    *     the name of the aspect.
    * @return {object}
    *     the object representing the default options of the aspect, or `undefined`
-   *     if the aspect does not exist. Note that the returned object is exactly
-   *     the same object stored in the internal map, so the caller can modify
-   *     the object directly to change the default options.
+   *     if the aspect does not exist. Note that the returned object is a deep
+   *     cloned copy of the object stored in the internal map, so that the
+   *     modification of the returned object will not affect the default options
+   *     stored in the internal map.
+   * @see DefaultOptions.merge
+   * @see DefaultOptions.set
+   * @author Haixing Hu
    */
   static get(aspect) {
-    return DEFAULT_OPTIONS_MAP.get(aspect);
+    const result = DEFAULT_OPTIONS_MAP.get(aspect);
+    return result ? clone(result) : undefined;
+  }
+
+  /**
+   * Gets the default options of the specified aspect, merging the provided
+   * default options into the returned object.
+   *
+   * ##### Usage example:
+   *
+   * ```js
+   * const opt1 = DefaultOptions.get('assign');
+   * expect(opt1.convertNaming).toBe(false);
+   * const opt2 = DefaultOptions.merge('assign', { convertNaming: true });
+   * expect(opt2.convertNaming).toBe(true);
+   * expect(opt1.convertNaming).toBe(false);
+   * const opt3 = DefaultOptions.merge('assign', null);
+   * expect(opt3.convertNaming).toBe(false);
+   * ```
+   *
+   * @param {string} aspect
+   *     the name of the aspect.
+   * @param {undefined|null|object} options
+   *     the provided options of the aspect.
+   * @return {object}
+   *     the default options of the specified aspect, merging the provided
+   *     options into the returned object.
+   * @see DefaultOptions.get
+   * @see DefaultOptions.set
+   * @author Haixing Hu
+   */
+  static merge(aspect, options) {
+    const result = DEFAULT_OPTIONS_MAP.get(aspect);
+    if (result === undefined) {
+      return clone(options);
+    } else {
+      return clone({ ...result, ...options });
+    }
   }
 
   /**
    * Sets the default options of the specified aspect.
    *
+   * ##### Usage example:
+   *
+   * ```js
+   * const opt1 = DefaultOptions.get('assign');
+   * expect(opt1.convertNaming).toBe(false);
+   * DefaultOptions.set('assign', { convertNaming: true });
+   * const opt2 = DefaultOptions.get('assign');
+   * expect(opt2.convertNaming).toBe(true);
+   * expect(opt1.convertNaming).toBe(false);
+   * ```
+   *
    * @param {string} aspect
    *     the name of the aspect.
    * @param {object} options
    *     the new default options of the aspect to be set. This function will
-   *     store the exactly same object in the internal map, so the caller can
-   *     modify the object directly to change the default options.
+   *     merge the new options into the old default options of the aspect. If
+   *     the new options have the same property as the old default options stored
+   *     in the internal map, the value of the new options will override the
+   *     value of the old default options; otherwise, the new property will be
+   *     added to the old default options.
+   * @see DefaultOptions.get
+   * @see DefaultOptions.merge
+   * @author Haixing Hu
    */
   static set(aspect, options) {
-    DEFAULT_OPTIONS_MAP.set(aspect, options);
+    const newOptions = clone(options);
+    const oldOptions = DEFAULT_OPTIONS_MAP.get(aspect);
+    if (oldOptions === undefined) {
+      DEFAULT_OPTIONS_MAP.set(aspect, newOptions);
+    } else {
+      DEFAULT_OPTIONS_MAP.set(aspect, { ...oldOptions, ...newOptions });
+    }
   }
 }
 
 // setting up default options of the `assign()` methods of the class decorated by `@Model`
-DEFAULT_OPTIONS_MAP.set('assign', {
-  /**
-   * Indicates whether to normalize this object after the assignment.
-   *
-   * The default value is `true`.
-   */
-  normalize: true,
+DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
 
-  /**
-   * Indicates whether to convert the naming style of the target object.
-   *
-   * The default value is `false`.
-   */
-  convertNaming: false,
-
-  /**
-   * The naming style of the source object.
-   *
-   * The default value is {@link LOWER_UNDERSCORE}.
-   */
-  sourceNamingStyle: LOWER_UNDERSCORE,
-
-  /**
-   * The naming style of the target object.
-   *
-   * The default value is {@link LOWER_CAMEL}.
-   */
-  targetNamingStyle: LOWER_CAMEL,
-});
+// setting up default options of the `toJSON()` methods of the class decorated by `@Model`
+DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
 
 export default DefaultOptions;

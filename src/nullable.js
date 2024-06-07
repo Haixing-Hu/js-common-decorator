@@ -14,7 +14,7 @@ import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
  *
  * The decorated target must be a field of a class.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * class Employee {

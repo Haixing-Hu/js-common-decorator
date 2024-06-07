@@ -13,7 +13,8 @@
  * The decorated object must be a class member, which can be a class property or
  * a class method.
  *
- * Usage example:
+ * ##### Usage example:
+ *
  * ```js
  * Class Meal {
  *   &#064;Readonly

@@ -43,7 +43,7 @@ function setValidator(field, { metadata, kind, name }, validator) {
  *
  * The decorated target must be a field of a class.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * class Foo {

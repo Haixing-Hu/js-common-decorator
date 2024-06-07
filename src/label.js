@@ -15,7 +15,7 @@ import { KEY_FIELD_LABEL } from './impl/metadata-keys';
  *
  * The decorated target must be a field of a class.
  *
- * Usage example：
+ * ##### Usage example：
  *
  * ```js
  * class Foo {

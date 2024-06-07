@@ -17,7 +17,7 @@ import { KEY_FIELD_NON_EMPTY } from './impl/metadata-keys';
  * The decorator can decorate string fields, array fields, map fields, or set
  * fields. Decorating other non-string, non-collection fields has no effect.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * class Employee {

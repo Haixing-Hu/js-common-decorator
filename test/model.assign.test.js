@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { DefaultOptions } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
+import assignImpl from '../src/impl/model/assign-impl';
 import Child from './model/child';
 import ChildObj from './model/child-obj';
 import Credential from './model/credential';
@@ -244,8 +245,7 @@ describe('Test the prototype method `assign()`', () => {
       },
     };
     const result = new ObjWithNamingConversion();
-    const defaultOptions = DefaultOptions.get('assign');
-    defaultOptions.convertNaming = true;
+    DefaultOptions.set('assign', { convertNaming: true });
     result.assign(obj);
     expect(result.firstField).toBe('first-field');
     expect(result.secondField).toBeInstanceOf(ChildObj);
@@ -254,6 +254,6 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
     expect(result.secondField.secondChildField.thePerson).toEqual(person);
     expect(result.secondField.secondChildField.thePerson).not.toBe(person);
-    defaultOptions.convertNaming = false;
+    DefaultOptions.set('assign', { convertNaming: false });
   });
 });

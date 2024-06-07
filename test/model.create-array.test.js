@@ -268,8 +268,7 @@ describe('Test static method `createArray()`', () => {
         },
       },
     };
-    const defaultOptions = DefaultOptions.get('assign');
-    defaultOptions.convertNaming = true;
+    DefaultOptions.set('assign', { convertNaming: true });
     const result = ObjWithNamingConversion.createArray([obj]);
     expect(result).toBeArray();
     expect(result.length).toBe(1);
@@ -280,6 +279,6 @@ describe('Test static method `createArray()`', () => {
     expect(result[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
     expect(result[0].secondField.secondChildField.thePerson).toEqual(person);
     expect(result[0].secondField.secondChildField.thePerson).not.toBe(person);
-    defaultOptions.convertNaming = false;
+    DefaultOptions.set('assign', { convertNaming: false });
   });
 });

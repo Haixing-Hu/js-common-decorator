@@ -16,7 +16,7 @@ import { KEY_FIELD_PAYLOAD } from './impl/metadata-keys';
  *
  * The decorated target must be a static field of a class.
  *
- * Usage example：
+ * ##### Usage example：
  *
  * ```js
  * &#064;Enum

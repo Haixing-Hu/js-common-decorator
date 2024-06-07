@@ -13,7 +13,8 @@
  * The decorated target must be a class member. Note that class properties are
  * enumerable by default, so this decorator only makes sense for class methods.
  *
- * Usage example:
+ * ##### Usage example:
+ *
  * ```js
  * class Meal {
  *   pay() {}

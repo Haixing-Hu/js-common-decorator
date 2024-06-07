@@ -14,7 +14,8 @@
  * non-enumerable by default, so this decorator only makes sense for class
  * properties.
  *
- * Usage example：
+ * ##### Usage example：
+ *
  * ```js
  * class Meal {
  *    entree = 'steak';

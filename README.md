@@ -15,7 +15,7 @@ supports the most recent (currently May 2023)
 
 - [Usage](#usage)
   - [@Model Decorator](#model)
-    - [Instance method: Class.prototype.assign(obj, normalized)](#model-assign)
+    - [Instance method: Class.prototype.assign(obj, options = undefined)](#model-assign)
     - [Instance method: Class.prototype.clone()](#model-clone)
     - [Instance method: Class.prototype.isEmpty()](#model-isEmpty)
     - [Instance method: Class.prototype.clear()](#model-clear)
@@ -25,10 +25,13 @@ supports the most recent (currently May 2023)
     - [Instance method: Class.prototype.normalize(fields)](#model-normalize)
     - [Instance method: Class.prototype.validateField(field)](#model-validateField)
     - [Instance method: Class.prototype.validate(fields)](#model-validate)
-    - [Class method: Class.create(obj, normalized)](#model-create)
-    - [Class method: Class.createArray(array, normalized)](#model-createArray)
-    - [Class method: Class.createPage(page)](#model-createPage)
+    - [Instance method: Class.prototype.toJSON(key, options = undefined)](#model-toJSON)
+    - [Instance method: Class.prototype.toJsonString(options = undeinfed)](#model-toJsonString)
+    - [Class method: Class.create(obj, options = undefined)](#model-create)
+    - [Class method: Class.createArray(array, options = undefined)](#model-createArray)
+    - [Class method: Class.createPage(page, options = undefined)](#model-createPage)
     - [Class method: Class.isNullishOrEmpty()](#model-isNullishOrEmpty)
+    - [Class method: Class.parseJsonString(json, options=undefined)](#model-parseJsonString)
     - [Usage Examples](#model-usage-examples)
   - [@Enum Decorator](#enum)
     - [Enumerator Fields](#enum-fields)
@@ -59,22 +62,32 @@ following instance and class methods to the decorated class.
 this decorator will not override the methods already implemented by the decorated 
 class.
 
-#### <span id="model-assign">Instance method: Class.prototype.assign(obj, normalized)</span>
+#### <span id="model-assign">Instance method: Class.prototype.assign(obj, options = undefined)</span>
 
 - Parameters:
   - `obj: object`: the object whose fields will be copied to this object,
      which may have a different prototype to this object.
-  - `normalized: boolean`: whether to normalize this object after copying 
-    properties. Default value is `true`.
+  - `options: null|undefined|object`: the additional options for the assignment. 
+    If this argument is `undefined` or `null`, the default options will be used. 
+    The default options can be retrieved by calling `DefaultOptions.get('assign')`.
+    Available options are:
+      - `normalize: boolean`, indicates whether to normalize this object
+        after the assignment. The default value is `true`.
+      - `convertNaming: boolean`, indicates whether to convert the naming
+        style of the target object. The default value is `false`.
+      - `sourceNamingStyle: string`, the naming style of the source object,
+        i.e., the first argument of the `assign()` method. The default value
+        of this argument is `'LOWER_UNDERSCORE'`.
+      - `targetNamingStyle: string`, the naming style of the target object,
+        i.e., the object calling the `assign()` method. The default value
+        of this argument is `'LOWER_CAMEL'`.
 - Returns: 
   - `object`: the calling object itself.
 
 This function copies the fields of the object `obj` to this object, only copying 
 fields defined in this object's class. If a field in the `obj` object is 
 `undefined` or `null`, it sets the field's value to the default value. Note that 
-`obj` can have a different prototype to this object. The `normalized` parameter 
-indicates whether to normalize this object after copying properties, with a 
-default value of `true`.
+`obj` can have a different prototype to this object.
 
 #### <span id="model-clone">Instance method: Class.prototype.clone()</span>
 
@@ -207,12 +220,119 @@ validatable fields whose names are specified in the array. Note that a field is
 validatable if and only if it is decorated by the `{@link Validatable}`
 decorator.
 
-#### <span id="model-create">Class method: Class.create(obj, normalized)</span>
+#### <span id="model-toJSON">Instance method: Class.prototype.toJSON(key, options = undefined)</span>
+
+- Parameters:
+    - `key: string`:`JSON.stringify()` calls `toJSON()` with one parameter,
+      the `key`,which takes the following values:
+        - if this object is a property value, this argument is the property
+          name;
+        - if this object is in an array, this argument is the index in the
+          array, as a string;
+        - if `JSON.stringify()` was directly called on this object, this
+          argument is an empty string.
+    - `options: null|undefined|object`: the additional options for the 
+      serialization. If this argument is `undefined` or `null`, the default 
+      options will be used. The default options can be retrieved by calling 
+      `DefaultOptions.get('toJSON')`. Available options are:
+        - `normalize: boolean`, indicates whether to normalize this object
+          before serializing. The default value is `true`.
+        - `convertNaming: boolean`, indicates whether to convert the naming
+          of properties of the object represented by the result JSON string.
+          The default value is `false`.
+        - `sourceNamingStyle: string`, the naming style of the source object,
+          i.e., the object calling the `toJSON()` method. The default value
+          of this argument is `'LOWER_CAMEL'`.
+        - `targetNamingStyle: string`, the naming style of the target object,
+          i.e., the object represented by the result JSON string of the
+          `toJSON()` method. The default value of this argument is
+          `'LOWER_UNDERSCORE'`.
+        - `space: string | number`, a string or number that's used to insert
+          white space (including indentation, line break characters, etc.) into
+          the output JSON string for readability purposes. If this is a number,
+          it indicates the number of space characters to be used as indentation,
+          clamped to 10 (that is, any number greater than 10 is treated as if
+          it were 10). Values less than 1 indicate that no space should be used.
+          If this is a string, the string (or the first 10 characters of the
+          string, if it's longer than that) is inserted before every nested
+          object or array. If this is anything other than a string or number
+          (can be either a primitive or a wrapper object) — for example, is
+          `null` or not provided — no white space is used. The default value
+          of this option is `null`.
+- Returns:
+    - `object`: the object to be serialized by `JSON.stringify()`, which may be
+      a modify copy of this object.
+
+This function gets the object to be serialized by `JSON.stringify()`.
+If the value has a `toJSON()` method, it's responsible to define what
+data will be serialized. Instead of the object being serialized, the value
+returned by the `toJSON()` method when called will be serialized.
+
+**NOTE:** this function returns an object to be serialized by
+`JSON.stringify()`, instead of a JSON string. Use `JSON.stringify()`
+or `this.toJsonString()` methods to serialize this object into a JSON
+string.
+
+#### <span id="model-toJsonString">Instance method: Class.prototype.toJsonString(options = undefined)</span>
+
+- Parameters:
+    - `options: null|undefined|object`: the additional options for the
+      serialization. If this argument is `undefined` or `null`, the default
+      options will be used. The default options can be retrieved by calling
+      `DefaultOptions.get('toJSON')`. Available options are:
+        - `normalize: boolean`, indicates whether to normalize this object
+          before serializing. The default value is `true`.
+        - `convertNaming: boolean`, indicates whether to convert the naming
+          of properties of the object represented by the result JSON string.
+          The default value is `false`.
+        - `sourceNamingStyle: string`, the naming style of the source object,
+          i.e., the object calling the `toJSON()` method. The default value
+          of this argument is `'LOWER_CAMEL'`.
+        - `targetNamingStyle: string`, the naming style of the target object,
+          i.e., the object represented by the result JSON string of the
+          `toJSON()` method. The default value of this argument is
+          `'LOWER_UNDERSCORE'`.
+        - `space: string | number`, a string or number that's used to insert
+          white space (including indentation, line break characters, etc.) into
+          the output JSON string for readability purposes. If this is a number,
+          it indicates the number of space characters to be used as indentation,
+          clamped to 10 (that is, any number greater than 10 is treated as if
+          it were 10). Values less than 1 indicate that no space should be used.
+          If this is a string, the string (or the first 10 characters of the
+          string, if it's longer than that) is inserted before every nested
+          object or array. If this is anything other than a string or number
+          (can be either a primitive or a wrapper object) — for example, is
+          `null` or not provided — no white space is used. The default value
+          of this option is `null`.
+- Returns:
+    - `string`: the JSON string serialized from this object, as `JSON.stringify()`
+      does, except that this function provides additional stringification
+      options.
+
+This function serializes this object into a JSON string.
+
+**NOTE:** This method supports native `bigint` value. For example, the
+`bigint` value `9223372036854775807n` will be stringify as
+`9223372036854775807`.
+
+#### <span id="model-create">Class method: Class.create(obj, options = undefined)</span>
 
 - Parameters: 
   - `obj: object`: the data object used to create the new instance. 
-  - `normalized: boolean`: whether to normalize the returned object. Default 
-    value is `true`.
+  - `options: null|undefined|object`: the additional options for the creation.
+    If this argument is `undefined` or `null`, the default options will be used. 
+    The default options can be retrieved by calling `DefaultOptions.get('assign')`.
+    Available options are:
+      - `normalize: boolean`, indicates whether to normalize this object
+        after the assignment. The default value is `true`.
+      - `convertNaming: boolean`, indicates whether to convert the naming
+        style of the target object. The default value is `false`.
+      - `sourceNamingStyle: string`, the naming style of the source object,
+        i.e., the first argument of the `create()` method. The default
+        value of this argument is `'LOWER_UNDERSCORE'`.
+      - `targetNamingStyle: string`, the naming style of the target object,
+        i.e., the object returned by the `create()` method. The default
+        value of this argument is `'LOWER_CAMEL'`.
 - Returns:
   - `object | null`: if the `obj` is `undefined` or `null`, returns `null`;
     otherwise, returns a new instance of the model class whose fields are 
@@ -220,16 +340,26 @@ decorator.
 
 This function creates a instance of the specified class from a data object, 
 whose fields are recursively initialized with properties in the `obj`. Note that
-`obj` can have a different prototype to the specified class. The `normalized`
-parameter indicates whether to normalize the returned object, with a default
-value of `true`.
+`obj` can have a different prototype to the specified class. 
 
-#### <span id="model-createArray">Class method: Class.createArray(array, normalized)</span>
+#### <span id="model-createArray">Class method: Class.createArray(array, options = undefined)</span>
 
 - Parameters:
   - `array: object[]`: the data object array used to create the new array.
-  - `normalized: boolean`: whether to normalize the objects in the returned 
-    array. Default value is `true`.
+  - `options: null|undefined|object`: the additional options for the creation. 
+    If this argument is `undefined` or `null`, the default options will be used.
+    The default options can be retrieved by calling `DefaultOptions.get('assign')`.
+    Available options are:
+      - `normalize: boolean`, indicates whether to normalize this object
+        after the assignment. The default value is `true`.
+      - `convertNaming: boolean`, indicates whether to convert the naming
+        style of the target object. The default value is `false`.
+      - `sourceNamingStyle: string`, the naming style of the source object,
+        i.e., the elements in the first argument of the `createArray()`
+        method. The default value of this argument is `'LOWER_UNDERSCORE'`.
+      - `targetNamingStyle: string`, the naming style of the target object,
+        i.e., the elements in the array returned by the `createArray()`
+        method. The default value of this argument is `'LOWER_CAMEL'`.
 - Returns:
   - `object[] | null`: if the `array` is `undefined` or `null`, returns `null`; 
     otherwise, returns a new array of instances of the model class whose 
@@ -239,14 +369,29 @@ This function creates an array of instances of the specified class from a data
 object array. The fields of instances in the returned array are recursively 
 initialized with corresponding properties of the corresponding data object in 
 the `array`. Note that data objects in `array` can have different prototypes to
-the specified class. The `normalized` parameter indicates whether to normalize 
-instances in the returned array, with a default value of `true`.
+the specified class. 
 
-#### <span id="model-createPage">Class method: Class.createPage(page)</span>
+#### <span id="model-createPage">Class method: Class.createPage(page, options = undefined)</span>
 
 - Parameters:
   - `page: object`: the pagination data object used to create the new `Page`
     instance.
+  - `options: null|undefined|object`: the additional options for the creation.
+    If this argument is `undefined` or `null`, the default options will be used.
+    The default options can be retrieved by calling `DefaultOptions.get('assign')`.
+    Available options are:
+      - `normalize: boolean`, indicates whether to normalize this object
+        after the assignment. The default value is `true`.
+      - `convertNaming: boolean`, indicates whether to convert the naming
+        style of the target object. The default value is `false`.
+      - `sourceNamingStyle: string`, the naming style of the source object,
+        i.e., the elements in the `content` array of the first argument of
+        the `createPage()` method. The default value of this argument is
+        `'LOWER_UNDERSCORE'`.
+      - `targetNamingStyle: string`, the naming style of the target object,
+        i.e., the elements in the `content` array of the `Page` object
+        returned by the `createPage()` method. The default value of this
+        argument is `'LOWER_CAMEL'`.
 - Returns:
   - `Page | null`: if the `page` is `undefined` or `null`, returns `null`;
     otherwise, returns a new instance of the `Page` class whose content are
@@ -257,7 +402,7 @@ content of the specified pagination data object. Typically, `page` is a list of
 domain objects obtained from a server using the `GET` method, and the object 
 should conform to the `Page` class definition. This class method returns
 a new `Page` object, with the `content` property being the result of 
-`createArray(page.content, true)`, and the other properties matching those of
+`createArray(page.content, options)`, and the other properties matching those of
 the `page` object. If `page` is not a valid `Page` object, it returns `null`.
 
 #### <span id="model-isNullishOrEmpty">Class method: Class.isNullishOrEmpty(obj)</span>
@@ -274,6 +419,35 @@ all of its fields have default values. The default value of a field is the value
 of the field of the default constructed instance of the class. This function is
 a convenient method to call `Class.prototype.isEmpty()`, with the handling of
 nullish values.
+
+#### <span id="model-parseJsonString">Class method: Class.parseJsonString(json, options = undefined)</span>
+
+- Parameters:
+    - `json: string`: the JSON string to be parsed.
+    - `options: null|undefined|object`: the additional options for the parsing.
+      If this argument is `undefined` or `null`, the default options will be used.
+      The default options can be retrieved by calling `DefaultOptions.get('assign')`.
+      Available options are:
+        - `normalize: boolean`, indicates whether to normalize this object
+          after the assignment. The default value is `true`.
+        - `convertNaming: boolean`, indicates whether to convert the naming
+          style of properties of the object represented by the JSON string.
+          The default value is `false`.
+        - `sourceNamingStyle: string`, the naming style of the source object,
+          i.e., the object represented by the JSON string. The default value
+          of this argument is `'LOWER_UNDERSCORE'`.
+        - `targetNamingStyle: string`, the naming style of the target object,
+          i.e., the object returned by the `parseJsonString()` method. The 
+          default value of this argument is `'LOWER_CAMEL'`.
+- Returns:
+    - `boolean`: whether the specified object is `undefined`, `null`, or an
+      empty object constructed with default values.
+
+This function parses an object of this class from a JSON string.
+
+**NOTE:** This method supports integer values fall out of IEEE 754 integer
+precision. For example, the integer value `9223372036854775807` will be
+parsed as the native `bigint` value `9223372036854775807n`.
 
 #### <span id="model-usage-examples">Usage Examples</span>
 

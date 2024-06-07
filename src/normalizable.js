@@ -45,7 +45,7 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
  *
  * The decorated target must be a non-static field of a class.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * class Foo {

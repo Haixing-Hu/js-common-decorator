@@ -480,7 +480,7 @@ const Impl = {
 /**
  * Assigns the specified source object to the specified target object.
  *
- * @param {function} Class
+ * @param {function|ObjectConstructor} Class
  *     The constructor of the class of the target object.
  * @param {object} target
  *     The target object which will be assigned to. This object must be an
@@ -489,7 +489,7 @@ const Impl = {
  * @param {object} source
  *     The source object which will be assigned from. This object may be any
  *     plain old JavaScript object without class information.
- * @param {object} options
+ * @param {null|undefined|object} options
  *     the additional options for the assignment. If this argument is
  *     `undefined` or `null`, the default options will be used. The default
  *     options can be retrieved by calling `DefaultOptions.get('assign')`.
@@ -498,24 +498,21 @@ const Impl = {
  *       after the assignment. The default value is `true`.
  *     - `convertNaming: boolean`, indicates whether to convert the naming
  *       style of the target object. The default value is `false`.
- *     - `sourceNamingStyle: NamingStyle`, the naming style of the source
- *       object. The default value is {@link LOWER_UNDERSCORE}.
- *     - `targetNamingStyle: NamingStyle`, the naming style of the target
- *       object. The default value is {@link LOWER_CAMEL}.
+ *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
+ *       source object, i.e., the first argument of the `assign()` method.
+ *       The default value of this argument is {@link LOWER_UNDERSCORE}.
+ *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
+ *       target object, i.e., the object calling the `assign()` method. The
+ *       default value of this argument is {@link LOWER_CAMEL}.
  * @return {Class}
  *     The target object after assignment.
+ * @see DefaultOptions.get('assign')
  * @author Haixing Hu
  * @private
  */
 function assignImpl(Class, target, source, options) {
   const defaultInstance = getDefaultInstance(Class);
-  let opt;
-  if (options === undefined || options === null) {
-    opt = { ...DefaultOptions.get('assign') };
-  } else {
-    // merge the default options with the specified options
-    opt = { ...DefaultOptions.get('assign'), ...options };
-  }
+  const opt = DefaultOptions.merge('assign', options);
   return Impl.doAssign(target, source, {
     path: Class.name,
     type: Class,

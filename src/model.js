@@ -28,6 +28,9 @@ import createImpl from './impl/model/create-impl';
 import createArrayImpl from './impl/model/create-array-impl';
 import createPageImpl from './impl/model/create-page-impl';
 import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
+import parseJsonStringImpl from './impl/model/parse-json-string-impl';
+import toJsonImpl from './impl/model/to-json-impl';
+import toJsonStringImpl from './impl/model/to-json-string-impl';
 
 /**
  * This decorator is used to add common methods to a domain model class.
@@ -97,12 +100,13 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * - Static class method `createPage(page, options)`: Creates a new page object
  *   based on a `page` pagination object. Typically, `page` is a list of domain
  *   objects obtained from a server using the GET method, and the object should
- *   conform to the `Page` class definition. This static class method returns a
- *   new `Page` object, with the `content` property being the result of
- *   `createArray(page.content, options)`, and the other properties matching
- *   those of the `page` object. If the input is not a valid `Page` object, it
- *   returns `null`. The `options` parameter is the additional options for the
- *   creation, which is the same as the `options` parameter of the `create()` method.
+ *   conform to the `{@link Page}` class definition. This static class method
+ *   returns a new `{@link Page}` object, with the `content` property being the
+ *   result of `createArray(page.content, options)`, and the other properties
+ *   matching those of the `page` object. If the input is not a valid
+ *   `{@link Page}` object, it returns `null`. The `options` parameter is the
+ *   additional options for the creation, which is the same as the `options`
+ *   parameter of the `create()` method.
  * - Static class method `isNullishOrEmpty(obj)`: Determines if the given instance
  *   is `undefined`, `null`, or an empty object constructed with default values.
  *
@@ -110,7 +114,7 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * this decorator will not override the methods already implemented by the
  * decorated class.
  *
- * Usage example:
+ * ##### Usage example:
  *
  * ```js
  * &#064;Model
@@ -205,10 +209,13 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * - `Credential.prototype.equals(obj)`
  * - `Credential.prototype.normalize(fields)`
  * - `Credential.prototype.validate(fields, options)`
- * - `Credential.create(obj)`
- * - `Credential.createArray(array)`
- * - `Credential.createPage(page)`
+ * - `Credential.prototype.toJSON(key, options = undefined)`
+ * - `Credential.prototype.toJsonString(options = undefined)`
+ * - `Credential.create(obj, options = undefined)`
+ * - `Credential.createArray(array, options = undefined)`
+ * - `Credential.createPage(page, options = undefined)`
  * - `Credential.isNullishOrEmpty(obj)`
+ * - `Credential.parseJsonString(json, options = undefined)`
  * - `Person.prototype.assign(obj, normalized)`
  * - `Person.prototype.clear()`
  * - `Person.prototype.clone()`
@@ -216,10 +223,13 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * - `Person.prototype.normalize(fields)`
  * - `Person.prototype.validate(fields, options)`
  * - `Person.prototype.generateId()`
+ * - `Person.prototype.toJSON(key, options = undefined)`
+ * - `Person.prototype.toJsonString(options = undefined)`
  * - `Person.create(obj, options = undefined)`
  * - `Person.createArray(array, options = undefined)`
  * - `Person.createPage(page, options = undefined)`
  * - `Person.isNullishOrEmpty(obj)`
+ * - `Person.parseJsonString(json, options = undefined)`
  *
  * **NOTE:**
  *
@@ -242,6 +252,8 @@ import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
  * @see Normalizable
  * @see Validatable
  * @see ValidationResult
+ * @see DefaultOptions.get('assign')
+ * @see DefaultOptions.get('toJSON')
  */
 function Model(Class, context) {
   if (context === null || typeof context !== 'object') {
@@ -267,7 +279,7 @@ function Model(Class, context) {
      *
      * @param {object} obj
      *     the data object, which may have a different prototype than this object.
-     * @param {object} options
+     * @param {null|undefined|object} options
      *     the additional options for the assignment. If this argument is
      *     `undefined` or `null`, the default options will be used. The default
      *     options can be retrieved by calling `DefaultOptions.get('assign')`.
@@ -276,12 +288,15 @@ function Model(Class, context) {
      *       after the assignment. The default value is `true`.
      *     - `convertNaming: boolean`, indicates whether to convert the naming
      *       style of the target object. The default value is `false`.
-     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
-     *       source object. The default value is {@link LOWER_UNDERSCORE}.
-     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
-     *       target object. The default value is {@link LOWER_CAMEL}.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the first argument of the `assign()` method. The default value
+     *       of this argument is `'LOWER_UNDERSCORE'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the object calling the `assign()` method. The default value
+     *       of this argument is `'LOWER_CAMEL'`.
      * @returns {object}
      *     the reference to this object.
+     * @see DefaultOptions.get('assign')
      */
     Class.prototype.assign = function assign(obj, options = undefined) {
       return assignImpl(Class, this, obj, options);
@@ -456,6 +471,117 @@ function Model(Class, context) {
       return generateIdImpl(Class, this);
     };
   }
+  // Add the instance method `toJSON()`
+  if (!hasOwnPrototypeFunction(Class, 'toJSON')) {
+    /**
+     * Gets the object to be serialized by `JSON.stringify()`.
+     *
+     * If the value has a `toJSON()` method, it's responsible to define what
+     * data will be serialized. Instead of the object being serialized, the value
+     * returned by the `toJSON()` method when called will be serialized.
+     *
+     * **NOTE:** this function returns an object to be serialized by
+     * `JSON.stringify()`, instead of a JSON string. Use `JSON.stringify()`
+     * or `this.toJsonString()` methods to serialize this object into a JSON
+     * string.
+     *
+     * @param {string} key
+     *     `JSON.stringify()` calls `toJSON()` with one parameter, the `key`,
+     *     which takes the following values:
+     *     - if this object is a property value, this argument is the property
+     *       name;
+     *     - if this object is in an array, this argument is the index in the
+     *       array, as a string;
+     *     - if `JSON.stringify()` was directly called on this object, this
+     *       argument is an empty string.
+     * @param {null|undefined|object} options
+     *     the additional options for the serialization. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('toJSON')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       before serializing. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       of properties of the object represented by the result JSON string.
+     *       The default value is `false`.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the object calling the `toJSON()` method. The default value
+     *       of this argument is `'LOWER_CAMEL'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the object represented by the result JSON string of the
+     *       `toJSON()` method. The default value of this argument is
+     *       `'LOWER_UNDERSCORE'`.
+     *     - `space: string | number`, a string or number that's used to insert
+     *       white space (including indentation, line break characters, etc.) into
+     *       the output JSON string for readability purposes. If this is a number,
+     *       it indicates the number of space characters to be used as indentation,
+     *       clamped to 10 (that is, any number greater than 10 is treated as if
+     *       it were 10). Values less than 1 indicate that no space should be used.
+     *       If this is a string, the string (or the first 10 characters of the
+     *       string, if it's longer than that) is inserted before every nested
+     *       object or array. If this is anything other than a string or number
+     *       (can be either a primitive or a wrapper object) — for example, is
+     *       `null` or not provided — no white space is used. The default value
+     *       of this option is `null`.
+     * @returns {object}
+     *     the object to be serialized by `JSON.stringify()`, which may be a
+     *     modify copy of this object.
+     * @see toJsonString()
+     * @see DefaultOptions.get('toJSON')
+     */
+    Class.prototype.toJSON = function toJSON(key, options = undefined) {
+      return toJsonImpl(Class, this, key, options);
+    };
+  }
+  // Add the instance method `toJSON()`
+  if (!hasOwnPrototypeFunction(Class, 'toJsonString')) {
+    /**
+     * Serializes this object into a JSON string.
+     *
+     * **NOTE:** This method supports native `bigint` value. For example, the
+     * `bigint` value `9223372036854775807n` will be stringify as
+     * `9223372036854775807`.
+     *
+     * @param {null|undefined|object} options
+     *     the additional options for the serialization. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('toJSON')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       before serializing. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       of properties of the object represented by the result JSON string.
+     *       The default value is `false`.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the object calling the `toJSON()` method. The default value
+     *       of this argument is `'LOWER_CAMEL'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the object represented by the result JSON string of the
+     *       `toJSON()` method. The default value of this argument is
+     *       `'LOWER_UNDERSCORE'`.
+     *     - `space: string | number`, a string or number that's used to insert
+     *       white space (including indentation, line break characters, etc.) into
+     *       the output JSON string for readability purposes. If this is a number,
+     *       it indicates the number of space characters to be used as indentation,
+     *       clamped to 10 (that is, any number greater than 10 is treated as if
+     *       it were 10). Values less than 1 indicate that no space should be used.
+     *       If this is a string, the string (or the first 10 characters of the
+     *       string, if it's longer than that) is inserted before every nested
+     *       object or array. If this is anything other than a string or number
+     *       (can be either a primitive or a wrapper object) — for example, is
+     *       `null` or not provided — no white space is used. The default value
+     *       of this option is `null`.
+     * @returns {string}
+     *     the JSON string serialized from this object, as `JSON.stringify()`
+     *     does, except that this function provides additional stringification
+     *     options.
+     * @see toJSON()
+     * @see DefaultOptions.get('toJSON')
+     */
+    Class.prototype.toJsonString = function toJsonString(options = undefined) {
+      return toJsonStringImpl(Class, this, options);
+    };
+  }
   // Add the class method `create()`
   if (!Object.prototype.hasOwnProperty.call(Class, 'create')) {
     /**
@@ -472,7 +598,7 @@ function Model(Class, context) {
      *
      * @param {object} obj
      *     the specified data object.
-     * @param {object} options
+     * @param {null|undefined|object} options
      *     the additional options for the creation. If this argument is
      *     `undefined` or `null`, the default options will be used. The default
      *     options can be retrieved by calling `DefaultOptions.get('assign')`.
@@ -481,13 +607,16 @@ function Model(Class, context) {
      *       after the assignment. The default value is `true`.
      *     - `convertNaming: boolean`, indicates whether to convert the naming
      *       style of the target object. The default value is `false`.
-     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
-     *       source object. The default value is {@link LOWER_UNDERSCORE}.
-     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
-     *       target object. The default value is {@link LOWER_CAMEL}.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the first argument of the `create()` method. The default
+     *       value of this argument is `'LOWER_UNDERSCORE'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the object returned by the `create()` method. The default
+     *       value of this argument is `'LOWER_CAMEL'`.
      * @returns {Class|null}
      *     the new instance of this class created from the specified data object,
      *     or `null` if the specified object is `null` or `undefined`.
+     * @see DefaultOptions.get('assign')
      */
     Class.create = function create(obj, options = undefined) {
       return createImpl(Class, obj, options);
@@ -508,7 +637,7 @@ function Model(Class, context) {
      *
      * @param {Array<object>}  array
      *     the specified array of data objects.
-     * @param {object} options
+     * @param {null|undefined|object} options
      *     the additional options for the creation. If this argument is
      *     `undefined` or `null`, the default options will be used. The default
      *     options can be retrieved by calling `DefaultOptions.get('assign')`.
@@ -517,14 +646,17 @@ function Model(Class, context) {
      *       after the assignment. The default value is `true`.
      *     - `convertNaming: boolean`, indicates whether to convert the naming
      *       style of the target object. The default value is `false`.
-     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
-     *       source object. The default value is {@link LOWER_UNDERSCORE}.
-     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
-     *       target object. The default value is {@link LOWER_CAMEL}.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the elements in the first argument of the `createArray()`
+     *       method. The default value of this argument is `'LOWER_UNDERSCORE'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the elements in the array returned by the `createArray()`
+     *       method. The default value of this argument is `'LOWER_CAMEL'`.
      * @returns {Array<Class>|null}
      *     the new array of instances of this class created from the specified
      *     data object array, or `null` if the specified data object array is
      *     `null` or `undefined`.
+     * @see DefaultOptions.get('assign')
      */
     Class.createArray = function createArray(array, options = undefined) {
       return createArrayImpl(Class, array, options);
@@ -542,7 +674,7 @@ function Model(Class, context) {
      * @param {object} page
      *     the specified pagination data object, which must conform to the
      *     `Page` class definition.
-     * @param {object} options
+     * @param {null|undefined|object} options
      *     the additional options for the creation. If this argument is
      *     `undefined` or `null`, the default options will be used. The default
      *     options can be retrieved by calling `DefaultOptions.get('assign')`.
@@ -551,15 +683,20 @@ function Model(Class, context) {
      *       after the assignment. The default value is `true`.
      *     - `convertNaming: boolean`, indicates whether to convert the naming
      *       style of the target object. The default value is `false`.
-     *     - `sourceNamingStyle: string | NamingStyle`, the naming style of the
-     *       source object. The default value is {@link LOWER_UNDERSCORE}.
-     *     - `targetNamingStyle: string | NamingStyle`, the naming style of the
-     *       target object. The default value is {@link LOWER_CAMEL}.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the elements in the `content` array of the first argument of
+     *       the `createPage()` method. The default value of this argument is
+     *       `'LOWER_UNDERSCORE'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the elements in the `content` array of the `Page` object
+     *       returned by the `createPage()` method. The default value of this
+     *       argument is `'LOWER_CAMEL'`.
      * @returns {Page|null}
      *     A new `Page` object, whose `content` property is the result of
      *     `this.createArray(page.content, true)`, and the other properties
      *     matching those of the `page` object. If the argument `page` is not a
      *     valid `Page` object, this function returns `null`.
+     * @see DefaultOptions.get('assign')
      */
     Class.createPage = function createPage(page, options = undefined) {
       return createPageImpl(Class, page, options);
@@ -584,6 +721,41 @@ function Model(Class, context) {
       return isNullishOrEmptyImpl(Class, obj);
     };
   }
+  // Add the class method `parseJsonString()`
+  if (!Object.prototype.hasOwnProperty.call(Class, 'parseJsonString')) {
+    /**
+     * Parses an object of this class from a JSON string.
+     *
+     * **NOTE:** This method supports integer values fall out of IEEE 754 integer
+     * precision. For example, the integer value `9223372036854775807` will be
+     * parsed as the native `bigint` value `9223372036854775807n`.
+     *
+     * @param {string} json
+     *     the JSON string to be parsed.
+     * @param {null|undefined|object} options
+     *     the additional options for the parsing. If this argument is
+     *     `undefined` or `null`, the default options will be used. The default
+     *     options can be retrieved by calling `DefaultOptions.get('assign')`.
+     *     Available options are:
+     *     - `normalize: boolean`, indicates whether to normalize this object
+     *       after the assignment. The default value is `true`.
+     *     - `convertNaming: boolean`, indicates whether to convert the naming
+     *       style of the target object. The default value is `false`.
+     *     - `sourceNamingStyle: string`, the naming style of the source object,
+     *       i.e., the first argument of the `assign()` method. The default
+     *       value of this argument is `'LOWER_UNDERSCORE'`.
+     *     - `targetNamingStyle: string`, the naming style of the target object,
+     *       i.e., the object calling the `assign()` method. The default value
+     *       of this argument is `'LOWER_CAMEL'`.
+     * @returns {object}
+     *     the object deserialized from the specified JSON string.
+     * @see toJsonString()
+     */
+    Class.parseJsonString = function parseJsonString(json, options = undefined) {
+      return parseJsonStringImpl(Class, json, options);
+    };
+  }
+
   // console.log('@Model: Class = ', Class, ', Class.prototype = ', Class.prototype);
 }
 

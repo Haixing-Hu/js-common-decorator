@@ -245,8 +245,7 @@ describe('Test static method `createPage()`', () => {
       page_size: 1,
       content: [obj],
     };
-    const defaultOptions = DefaultOptions.get('assign');
-    defaultOptions.convertNaming = true;
+    DefaultOptions.set('assign', { convertNaming: true });
     const result = ObjWithNamingConversion.createPage(page);
     expect(result.total_count).toBe(3);
     expect(result.total_pages).toBe(1);
@@ -261,6 +260,6 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
     expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
     expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
-    defaultOptions.convertNaming = false;
+    DefaultOptions.set('assign', { convertNaming: false });
   });
 });
