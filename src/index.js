@@ -19,6 +19,7 @@ import Payload from './payload';
 import NameField from './name-field';
 import Enum from './enum';
 import { isEnumClass, isEnumerator } from './impl/utils';
+import DefaultOptions from './default-options';
 
 export {
   Page,
@@ -35,4 +36,5 @@ export {
   Enum,
   isEnumClass,
   isEnumerator,
+  DefaultOptions,
 };

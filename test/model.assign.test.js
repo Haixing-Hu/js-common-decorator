@@ -6,10 +6,14 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { DefaultOptions } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import Child from './model/child';
+import ChildObj from './model/child-obj';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
+import ObjWithNamingConversion from './model/obj-with-naming-conversion';
+import ObjWithPersonField from './model/ObjWithPersonField';
 import Parent from './model/parent';
 import Person from './model/person';
 
@@ -190,5 +194,66 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.credential).toBeInstanceOf(Credential);
     expect(result.credential.type).toBe(CredentialType.DEFAULT);
     expect(result.credential.number).toBe('');
+  });
+  test('`assign()` with naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const result = new ObjWithNamingConversion();
+    result.assign(obj, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result.firstField).toBe('first-field');
+    expect(result.secondField).toBeInstanceOf(ChildObj);
+    expect(result.secondField.firstChildField).toBe('first-child-field');
+    expect(result.secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result.secondField.secondChildField.thePerson).toEqual(person);
+    expect(result.secondField.secondChildField.thePerson).not.toBe(person);
+  });
+  test('`assign()` with default naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const result = new ObjWithNamingConversion();
+    const defaultOptions = DefaultOptions.get('assign');
+    defaultOptions.convertNaming = true;
+    result.assign(obj);
+    expect(result.firstField).toBe('first-field');
+    expect(result.secondField).toBeInstanceOf(ChildObj);
+    expect(result.secondField.firstChildField).toBe('first-child-field');
+    expect(result.secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result.secondField.secondChildField.thePerson).toEqual(person);
+    expect(result.secondField.secondChildField.thePerson).not.toBe(person);
+    defaultOptions.convertNaming = false;
   });
 });

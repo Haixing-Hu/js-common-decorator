@@ -386,7 +386,6 @@ export function definePrototypeProperty(Class, ...properties) {
  *     `true` if the specified class is an enumeration class decorated by
  *     `@Enum`; `false` otherwise.
  * @author Haixing Hu
- * @private
  */
 export function isEnumClass(Class) {
   if (typeof Class !== 'function') {
@@ -407,7 +406,6 @@ export function isEnumClass(Class) {
  *     i.e., the static constants of a class decorated by `@Enum`; `false`
  *     otherwise.
  * @author Haixing Hu
- * @private
  */
 export function isEnumerator(value) {
   if (value === undefined || value === null || (typeof value !== 'object')) {

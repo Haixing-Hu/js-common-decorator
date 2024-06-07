@@ -7,9 +7,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { mount } from '@vue/test-utils';
-import { Page } from '../src';
+import { DefaultOptions, Page } from '../src';
+import ChildObj from './model/child-obj';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
+import ObjWithNamingConversion from './model/obj-with-naming-conversion';
+import ObjWithPersonField from './model/ObjWithPersonField';
 import Person from './model/person';
 import PageWrapper from './model/vue-page-wrapper';
 
@@ -173,5 +176,91 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[1]).toBeInstanceOf(Credential);
     expect(result.content[1].type).toBe(CredentialType.PASSPORT);
     expect(result.content[1].number).toBe('ABCDEFGH');
+  });
+  test('`createPage()` with naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const page = {
+      total_count: 3,
+      total_pages: 1,
+      page_index: 0,
+      page_size: 1,
+      content: [obj],
+    };
+    const result = ObjWithNamingConversion.createPage(page, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result).toBeInstanceOf(Page);
+    expect(result.total_count).toBe(3);
+    expect(result.total_pages).toBe(1);
+    expect(result.page_index).toBe(0);
+    expect(result.page_size).toBe(1);
+    expect(result.content).toBeArray();
+    expect(result.content.length).toBe(1);
+    expect(result.content[0].firstField).toBe('first-field');
+    expect(result.content[0].secondField).toBeInstanceOf(ChildObj);
+    expect(result.content[0].secondField.firstChildField).toBe('first-child-field');
+    expect(result.content[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result.content[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
+    expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
+  });
+  test('`createPage()` with default naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const page = {
+      total_count: 3,
+      total_pages: 1,
+      page_index: 0,
+      page_size: 1,
+      content: [obj],
+    };
+    const defaultOptions = DefaultOptions.get('assign');
+    defaultOptions.convertNaming = true;
+    const result = ObjWithNamingConversion.createPage(page);
+    expect(result.total_count).toBe(3);
+    expect(result.total_pages).toBe(1);
+    expect(result.page_index).toBe(0);
+    expect(result.page_size).toBe(1);
+    expect(result.content).toBeArray();
+    expect(result.content.length).toBe(1);
+    expect(result.content[0].firstField).toBe('first-field');
+    expect(result.content[0].secondField).toBeInstanceOf(ChildObj);
+    expect(result.content[0].secondField.firstChildField).toBe('first-child-field');
+    expect(result.content[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result.content[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
+    expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
+    defaultOptions.convertNaming = false;
   });
 });

@@ -7,6 +7,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { mount } from '@vue/test-utils';
+import { DefaultOptions } from '../src';
+import ChildObj from './model/child-obj';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import CredentialWithWrongNormalizer
@@ -14,6 +16,8 @@ import CredentialWithWrongNormalizer
 import ObjWithArrayField from './model/obj-with-array-field';
 import ObjWithArrayFieldsOfWrongNormalize
   from './model/obj-with-array-fields-of-wrong-normalize';
+import ObjWithNamingConversion from './model/obj-with-naming-conversion';
+import ObjWithPersonField from './model/ObjWithPersonField';
 import Person from './model/person';
 import ArrayWrapper from './model/vue-array-wrapper';
 
@@ -214,5 +218,68 @@ describe('Test static method `createArray()`', () => {
     expect(obj.credentials[1].number).toBe('XXXXXXXX');
     expect(obj.credentials[2].type).toBe('IDENTITY_CARD');
     expect(obj.credentials[2].number).toBe('99999999');
+  });
+  test('`createArray()` with naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const result = ObjWithNamingConversion.createArray([obj], {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result).toBeArray();
+    expect(result.length).toBe(1);
+    expect(result[0].firstField).toBe('first-field');
+    expect(result[0].secondField).toBeInstanceOf(ChildObj);
+    expect(result[0].secondField.firstChildField).toBe('first-child-field');
+    expect(result[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result[0].secondField.secondChildField.thePerson).toEqual(person);
+    expect(result[0].secondField.secondChildField.thePerson).not.toBe(person);
+  });
+  test('`createArray()` with default naming conversion options', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const defaultOptions = DefaultOptions.get('assign');
+    defaultOptions.convertNaming = true;
+    const result = ObjWithNamingConversion.createArray([obj]);
+    expect(result).toBeArray();
+    expect(result.length).toBe(1);
+    expect(result[0].firstField).toBe('first-field');
+    expect(result[0].secondField).toBeInstanceOf(ChildObj);
+    expect(result[0].secondField.firstChildField).toBe('first-child-field');
+    expect(result[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result[0].secondField.secondChildField.thePerson).toEqual(person);
+    expect(result[0].secondField.secondChildField.thePerson).not.toBe(person);
+    defaultOptions.convertNaming = false;
   });
 });

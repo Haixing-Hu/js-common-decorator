@@ -20,7 +20,7 @@ import {
   KEY_FIELD_ELEMENT_TYPE,
   KEY_FIELD_TYPE,
 } from '../metadata-keys';
-import ClassMetadataCache from '../class-metadata-cache';
+import classMetadataCache from '../class-metadata-cache';
 import DefaultOptions from '../../default-options';
 import defaultNormalizer from '../../default-normalizer';
 import ofValueImpl from '../enum/of-value-impl';
@@ -392,8 +392,8 @@ const Impl = {
     } else {
       // Loops over all enumerable properties of the default instance,
       // excluding those inherited from the parent class
-      const metadata = ClassMetadataCache.get(type);
-      const theDefaultInstance = defaultInstance ?? {}; // defaultInstance may be null or undefined
+      const metadata = classMetadataCache.get(type);
+      const theDefaultInstance = defaultInstance ?? getDefaultInstance(type);
       const targetKeys = this.getAllFields(target, source, { type, options });
       targetKeys.forEach((targetKey) => {
         const defaultFieldValue = theDefaultInstance[targetKey];
