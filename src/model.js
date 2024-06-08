@@ -6,7 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import cloneImpl from '@haixing_hu/clone';
 import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY, KEY_CLASS_NEXT_ID } from './impl/metadata-keys';
 import {
@@ -20,6 +19,7 @@ import isEmptyImpl from './impl/model/is-empty-impl';
 import equalsImpl from './impl/model/equals-impl';
 import generateIdImpl from './impl/model/generate-id-impl';
 import clearImpl from './impl/model/clear-impl';
+import cloneImpl from './impl/model/clone-impl';
 import normalizeFieldImpl from './impl/model/normalize-field-impl';
 import normalizeImpl from './impl/model/normalize-impl';
 import validateFieldImpl from './impl/model/validate-field-impl';
@@ -323,7 +323,7 @@ function Model(Class, context) {
      *     the cloned copy of this object.
      */
     Class.prototype.clone = function clone() {
-      return cloneImpl(this);
+      return cloneImpl(Class, this);
     };
   }
   // Add the instance method `isEmpty()`
