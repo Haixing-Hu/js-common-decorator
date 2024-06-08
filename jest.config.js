@@ -26,4 +26,5 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: './coverage',
   collectCoverageFrom: ['**/src/**/*.js'],
+  coveragePathIgnorePatterns: ['src/index.js'],
 };
