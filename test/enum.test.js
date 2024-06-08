@@ -349,4 +349,34 @@ describe('Test the `@Enum` class decorator', () => {
       Gender.XX = '';
     }).toThrowWithMessage(TypeError, 'Cannot add property XX, object is not extensible');
   });
+  test('Enumeration class should have static method `of()`', () => {
+    expect(GenderWithPayload.of('MALE')).toBe(GenderWithPayload.MALE);
+    expect(GenderWithPayload.of('FEMALE')).toBe(GenderWithPayload.FEMALE);
+    expect(GenderWithPayload.of('男')).toBe(GenderWithPayload.MALE);
+    expect(GenderWithPayload.of('女')).toBe(GenderWithPayload.FEMALE);
+    expect(GenderWithPayload.of('001')).toBe(GenderWithPayload.MALE);
+    expect(GenderWithPayload.of('002')).toBe(GenderWithPayload.FEMALE);
+    expect(GenderWithPayload.of(GenderWithPayload.MALE)).toBe(GenderWithPayload.MALE);
+    expect(GenderWithPayload.of(GenderWithPayload.FEMALE)).toBe(GenderWithPayload.FEMALE);
+    expect(GenderWithPayload.of('004')).toBeUndefined();
+    expect(GenderWithPayload.of(undefined)).toBeUndefined();
+    expect(GenderWithPayload.of(null)).toBeUndefined();
+    expect(GenderWithPayload.of('xxx')).toBeUndefined();
+    expect(GenderWithPayload.of(0)).toBeUndefined();
+  });
+  test('Enumeration class should have static method `has()`', () => {
+    expect(GenderWithPayload.has('MALE')).toBeTrue();
+    expect(GenderWithPayload.has('FEMALE')).toBeTrue();
+    expect(GenderWithPayload.has('男')).toBeTrue();
+    expect(GenderWithPayload.has('女')).toBeTrue();
+    expect(GenderWithPayload.has('001')).toBeTrue();
+    expect(GenderWithPayload.has('002')).toBeTrue();
+    expect(GenderWithPayload.has(GenderWithPayload.MALE)).toBeTrue();
+    expect(GenderWithPayload.has(GenderWithPayload.FEMALE)).toBeTrue();
+    expect(GenderWithPayload.has('004')).toBeFalse();
+    expect(GenderWithPayload.has(undefined)).toBeFalse();
+    expect(GenderWithPayload.has(null)).toBeFalse();
+    expect(GenderWithPayload.has('xxx')).toBeFalse();
+    expect(GenderWithPayload.has(0)).toBeFalse();
+  });
 });
