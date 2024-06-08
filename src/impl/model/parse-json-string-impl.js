@@ -8,7 +8,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 import jsonParser from './json-parser';
 import assignImpl from './assign-impl';
-import DefaultOptions from '../../default-options';
 
 /**
  * Parses the specified object from a JSON string.
