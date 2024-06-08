@@ -31,11 +31,11 @@ function defineEnumerator(Class, field) {
     enumerator.name = defaultValue;
   } else if (typeof defaultValue === 'object') {
     Object.assign(enumerator, defaultValue);
-    if (enumerator.i18n) {
-      // TODO: add i18n support
-    }
+    // if (enumerator.i18n) {
+    // TODO: add i18n support
+    // }
   } else {
-    throw new TypeError('The default value of the enumerator'
+    throw new TypeError('The default value of the enumerator '
       + `${Class.name}.${field} should be either a string or an object.`);
   }
   Object.freeze(enumerator);

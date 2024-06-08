@@ -7,6 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import clone from '@haixing_hu/clone';
+import { Enum } from '../src';
 import { getClassMetadata } from '../src/impl/utils';
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
 import Gender from './model/gender';
@@ -378,5 +379,14 @@ describe('Test the `@Enum` class decorator', () => {
     expect(GenderWithPayload.has(null)).toBeFalse();
     expect(GenderWithPayload.has('xxx')).toBeFalse();
     expect(GenderWithPayload.has(0)).toBeFalse();
+  });
+  test('Define enumerator with error type', () => {
+    expect(() => {
+      @Enum
+      class MyEnum {
+        static ITEM_1 = 0;
+      }
+    }).toThrowWithMessage(TypeError,
+      'The default value of the enumerator MyEnum.ITEM_1 should be either a string or an object.');
   });
 });
