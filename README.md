@@ -42,8 +42,10 @@ supports the most recent (currently May 2023)
     - [Class method: Class.hasValue(value)](#enum-hasValue)
     - [Class method: Class.ofName(name)](#enum-ofName)
     - [Class method: Class.hasName(name)](#enum-hasName)
-    - [Class method: Class.ofCode(code)](#enum-forCode)
+    - [Class method: Class.ofCode(code)](#enum-ofCode)
     - [Class method: Class.hasCode(code)](#enum-hasCode)
+    - [Class method: Class.of(expr)](#enum-of)
+    - [Class method: Class.has(expr)](#enum-has)
     - [Usage Example](#enum-usage-example)
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
@@ -688,6 +690,35 @@ This function returns the enumerator with the specified value.
 - Returns:
     - `boolean`: returns `true` if there is an enumerator in this enumeration
       class with the specified code, or `false` otherwise.
+
+This function tests whether there is an enumerator with the specified code.
+
+#### <span id="enum-of">Class method: Class.of(expr)</span>
+
+- Parameters:
+    - `expr: object | string`: the expression corresponds to the enumerator to 
+      be returned. The  expression could be one of the following:
+        - an enumerator of this enumeration class;
+        - or the value of an enumerator of this enumeration class;
+        - or the name of an enumerator of this enumeration class;
+        - or the code of an enumerator of this enumeration class.
+- Returns:
+    - `Class`: the enumerator in this enumeration class corresponds to the 
+      specified expression, or `undefined` if no such enumerator exists.
+
+This function returns the enumerator with the specified value.
+
+#### <span id="enum-has">Class method: Class.has(expr)</span>
+- Parameters:
+    - `expr: object | string`: the expression corresponds to the enumerator to
+      be returned. The  expression could be one of the following:
+        - an enumerator of this enumeration class;
+        - or the value of an enumerator of this enumeration class;
+        - or the name of an enumerator of this enumeration class;
+        - or the code of an enumerator of this enumeration class.
+- Returns:
+    - `boolean`: returns `true` if there is an enumerator in this enumeration
+      class corresponds to the specified expression, or `false` otherwise.
 
 This function tests whether there is an enumerator with the specified code.
 

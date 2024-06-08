@@ -60,6 +60,19 @@ import ofImpl from './impl/enum/of-impl';
  *   if no such enumerator exists.
  * - `hasCode(code): returns `true` if there is an enumerator whose code is
  *   `code`, or `false` otherwise.
+ * - `of(expr): returns the enumerator corresponding to the specified expression.
+ *   The expression could be one of the following:
+ *      - an enumerator of this enumeration class;
+ *      - or the value of an enumerator of this enumeration class;
+ *      - or the name of an enumerator of this enumeration class;
+ *      - or the code of an enumerator of this enumeration class.
+ * - `has(value): returns `true` if there is an enumerator corresponding to the
+ *   specified expression; or `false` otherwise. The expression could be one of
+ *   the following:
+ *      - an enumerator of this enumeration class;
+ *      - or the value of an enumerator of this enumeration class;
+ *      - or the name of an enumerator of this enumeration class;
+ *      - or the code of an enumerator of this enumeration class.
  *
  * ##### Usage example:
  *
@@ -110,6 +123,18 @@ import ofImpl from './impl/enum/of-impl';
  *
  *   static hasCode(code) {
  *     return Gender.ofCode(code) !== undefined;
+ *   }
+ *
+ *   static of(expr) {
+ *     if (expr instanceof Gender) {
+ *       return expr;
+ *     } else {
+ *       return Gender.ofValue(expr) ?? Gender.ofName(expr) ?? Gender.ofCode(expr);
+ *     }
+ *   }
+ *
+ *   static has(code) {
+ *     return Gender.of(expr) !== undefined;
  *   }
  *
  *   constructor(value, name) {
@@ -335,42 +360,46 @@ function Enum(Class, context) {
 
   /**
    * Returns the enumerator of this enumeration class corresponding to the
-   * specified value.
+   * specified expression.
    *
-   * The value could be an enumerator of this enumeration class, or the value of
-   * an enumerator of this enumeration class, or the name of an enumerator of
-   * this enumeration class, or the code of an enumerator of this enumeration
-   * class.
+   * The expression could be one of the following:
+   * - an enumerator of this enumeration class;
+   * - or the value of an enumerator of this enumeration class;
+   * - or the name of an enumerator of this enumeration class;
+   * - or the code of an enumerator of this enumeration class.
    *
-   * @param {object|string} value
-   *     The specified value.
+   * @param {object|string} expr
+   *     The specified value, which could be an enumerator object, the value of
+   *     an enumerator, the name of an enumerator, or the code of an enumerator.
    * @returns {undefined|object}
-   *     The enumerator corresponding to the specified value.; or `undefined` if
-   *     there is no such enumerator.
+   *     The enumerator corresponding to the specified enumerator, value, name
+   *     or code; or `undefined` if there is no such enumerator.
    * @author Haixing Hu
    */
-  Class.of = function of(value) {
-    return ofImpl(Class, value);
+  Class.of = function of(expr) {
+    return ofImpl(Class, expr);
   };
 
   /**
    * Tests whether there is an enumerator of this enumeration class corresponding
-   * to the specified value.
+   * to the specified expression.
    *
-   * The value could be an enumerator of this enumeration class, or the value of
-   * an enumerator of this enumeration class, or the name of an enumerator of
-   * this enumeration class, or the code of an enumerator of this enumeration
-   * class.
+   * The expression could be one of the following:
+   * - an enumerator of this enumeration class;
+   * - or the value of an enumerator of this enumeration class;
+   * - or the name of an enumerator of this enumeration class;
+   * - or the code of an enumerator of this enumeration class.
    *
-   * @param {object|string} value
-   *     The specified value.
+   * @param {object|string} expr
+   *     The specified expression, which could be an enumerator object, the value
+   *     of an enumerator, the name of an enumerator, or the code of an enumerator.
    * @returns {boolean}
-   *     `true` if there is an enumerator corresponding to the specified value;
-   *     `false` otherwise.
+   *     `true` if there is an enumerator corresponding to the specified
+   *     enumerator, value, name or code; `false` otherwise.
    * @author Haixing Hu
    */
-  Class.has = function has(value) {
-    return (ofImpl(Class, value) !== undefined);
+  Class.has = function has(expr) {
+    return (ofImpl(Class, expr) !== undefined);
   };
 }
 

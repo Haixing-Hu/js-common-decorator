@@ -38,6 +38,16 @@ describe('Test defaultNormalizer() function', () => {
     const testFunction = () => {};
     expect(defaultNormalizer(testFunction)).toBe(testFunction);
   });
+  test('should return built-in class as-is', () => {
+    const date = new Date();
+    expect(defaultNormalizer(date)).toBe(date);
+    const error = new Error();
+    expect(defaultNormalizer(error)).toBe(error);
+    const regex = /^.*$/;
+    expect(defaultNormalizer(regex)).toBe(regex);
+    // eslint-disable-next-line no-undef
+    expect(defaultNormalizer(arguments)).toBe(arguments);
+  });
   test('should normalize standard arrays', () => {
     expect(defaultNormalizer([' foo ', ' bar '])).toEqual(['foo', 'bar']);
   });
