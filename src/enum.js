@@ -133,7 +133,7 @@ import ofImpl from './impl/enum/of-impl';
  *     }
  *   }
  *
- *   static has(code) {
+ *   static has(expr) {
  *     return Gender.of(expr) !== undefined;
  *   }
  *
