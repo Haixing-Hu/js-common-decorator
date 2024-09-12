@@ -70,12 +70,12 @@ class DefaultToJsonOptions {
    * primitive or a wrapper object) — for example, is null or not provided
    * — no white space is used.
    *
-   * The default value of this option is `0`, indicating that no white space is
-   * used.
+   * The default value of this option is `undefined`, indicating that no white
+   * space is used.
    *
-   * @type {string | number}
+   * @type {string | number | undefined}
    */
-  space = 0;
+  space = undefined;
 }
 
 export default DefaultToJsonOptions;
