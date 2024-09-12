@@ -1489,11 +1489,12 @@ __metadata:
     "@babel/preset-env": "npm:^7.24.0"
     "@babel/runtime": "npm:^7.24.0"
     "@haixing_hu/clone": "npm:^1.6.0"
-    "@haixing_hu/common-util": "npm:^4.6.1"
-    "@haixing_hu/common-validator": "npm:^3.1.1"
+    "@haixing_hu/common-util": "npm:^4.7.0"
+    "@haixing_hu/common-validator": "npm:^3.2.0"
     "@haixing_hu/eslint-config": "npm:^1.3.1"
     "@haixing_hu/jsdoc-minami": "npm:^1.5.1"
-    "@haixing_hu/logging": "npm:^1.2.4"
+    "@haixing_hu/json": "npm:^1.0.2"
+    "@haixing_hu/logging": "npm:^1.3.2"
     "@haixing_hu/naming-style": "npm:^1.3.0"
     "@haixing_hu/rollup-builder": "npm:^1.6.1"
     "@haixing_hu/typeinfo": "npm:^2.5.2"
@@ -1520,7 +1521,6 @@ __metadata:
     jest-environment-jsdom-global: "npm:^4.0.0"
     jest-extended: "npm:^4.0.1"
     jsdoc: "npm:^4.0.2"
-    json-bigint: "npm:^1.0.0"
     rollup: "npm:^4.1.3"
     rollup-plugin-analyzer: "npm:^4.0.0"
     rollup-plugin-visualizer: "npm:^5.12.0"
@@ -1528,38 +1528,39 @@ __metadata:
   peerDependencies:
     "@babel/runtime": ^7.24.0
     "@haixing_hu/clone": ^1.6.0
-    "@haixing_hu/common-util": ^4.5.1
-    "@haixing_hu/common-validator": ^3.0.1
-    "@haixing_hu/logging": ^1.2.4
+    "@haixing_hu/common-util": ^4.7.0
+    "@haixing_hu/common-validator": ^3.2.0
+    "@haixing_hu/json": ^1.0.2
+    "@haixing_hu/logging": ^1.3.2
     "@haixing_hu/naming-style": ^1.3.0
     "@haixing_hu/typeinfo": ^2.3.0
-    json-bigint: ^1.0.0
   languageName: unknown
   linkType: soft
 
-"@haixing_hu/common-util@npm:^4.6.1":
-  version: 4.6.1
-  resolution: "@haixing_hu/common-util@npm:4.6.1"
+"@haixing_hu/common-util@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "@haixing_hu/common-util@npm:4.7.0"
   dependencies:
     deep-equal: "npm:^2.0.5"
     json-beautify: "npm:^1.1.1"
     query-string: "npm:^8.1.0"
   peerDependencies:
     "@babel/runtime": ^7.23.2
-    "@haixing_hu/clone": ^1.4.1
-    "@haixing_hu/logging": ^1.2.1
-    "@haixing_hu/typeinfo": ^2.3.0
-  checksum: 160a5d61585a3cbee5f53205f0752540170a4a7254f96da018ae21c746f923263985b380bacb7ebfff43746f07a10d06240f6acd3db698bee8d3e94b45ea948c
+    "@haixing_hu/clone": ^1.6.0
+    "@haixing_hu/logging": ^1.2.4
+    "@haixing_hu/naming-style": ^1.3.0
+    "@haixing_hu/typeinfo": ^2.5.2
+  checksum: 6662947865dac7a41bd79a766d0856bb908ce62cdd590128fba45030119877b248e0442e11fcbef9df5bda81d6e84fd1b593f59922d126e49cd2b8bced2b9fef
   languageName: node
   linkType: hard
 
-"@haixing_hu/common-validator@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@haixing_hu/common-validator@npm:3.1.1"
+"@haixing_hu/common-validator@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@haixing_hu/common-validator@npm:3.2.0"
   dependencies:
     email-validator: "npm:^2.0.4"
     node-uri: "npm:^1.1.2"
-  checksum: a7332dc8eda6d44b036ff41ffbea8cb3db30a2d61fb4ef65d138c643faf8d5f85f37ff0d357b4b88ab8c52b90d66000a8549729eaf604f1891e8f70f1647fa21
+  checksum: b6622dd9b5a6da917342ab25f4831fd231269d1b747f2805a96e050fbbda4aa45206e39f2f2b36ca1fe3d98079011c25fc407a2c63270f7a5de51eade6529bb6
   languageName: node
   linkType: hard
 
@@ -1584,12 +1585,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/logging@npm:^1.2.4":
-  version: 1.2.4
-  resolution: "@haixing_hu/logging@npm:1.2.4"
+"@haixing_hu/json@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@haixing_hu/json@npm:1.0.2"
+  dependencies:
+    json-custom-numbers: "npm:^3.1.1"
   peerDependencies:
     "@babel/runtime": ^7.23.0
-  checksum: 26f30b5a89dee006a2ea674ca559c3b54c63a3cf1cde1161f441f739acbd2ce7f5821a1844b10d1ca5de1665029504d26c888a8b271548b23870322cb3ab3683
+  checksum: 08f5e7b2f746616abab5cfc84e5d1b144099c4d8633ea12e9cbc8e50e6851308e8fc7a416cef4de79faaf199315618d296cb77e8e3f5314963b6232326b14523
+  languageName: node
+  linkType: hard
+
+"@haixing_hu/logging@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "@haixing_hu/logging@npm:1.3.2"
+  peerDependencies:
+    "@babel/runtime": ^7.23.0
+  checksum: 3acda72337f776a40b752949a08fabe9be30f09a0abc742ee1f55944aadec65ff63feabc4170532b64afd8d0a354a801ed060c77f19d69f0e47bdecabdabaf39
   languageName: node
   linkType: hard
 
@@ -2981,13 +2993,6 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 9308baf0a7e4838a82bbfd11e01b1cb0f0cf2893bc1676c27c2a8c0e70cbae1c59120c3268517a8ae7fb6376b4639ef81ca22582611dbee4ed28df945134aaee
-  languageName: node
-  linkType: hard
-
-"bignumber.js@npm:^9.0.0":
-  version: 9.1.2
-  resolution: "bignumber.js@npm:9.1.2"
-  checksum: e17786545433f3110b868725c449fa9625366a6e675cd70eb39b60938d6adbd0158cb4b3ad4f306ce817165d37e63f4aa3098ba4110db1d9a3b9f66abfbaf10d
   languageName: node
   linkType: hard
 
@@ -5791,19 +5796,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-bigint@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "json-bigint@npm:1.0.0"
-  dependencies:
-    bignumber.js: "npm:^9.0.0"
-  checksum: e3f34e43be3284b573ea150a3890c92f06d54d8ded72894556357946aeed9877fd795f62f37fe16509af189fd314ab1104d0fd0f163746ad231b9f378f5b33f4
-  languageName: node
-  linkType: hard
-
 "json-buffer@npm:3.0.1":
   version: 3.0.1
   resolution: "json-buffer@npm:3.0.1"
   checksum: 0d1c91569d9588e7eef2b49b59851f297f3ab93c7b35c7c221e288099322be6b562767d11e4821da500f3219542b9afd2e54c5dc573107c1126ed1080f8e96d7
+  languageName: node
+  linkType: hard
+
+"json-custom-numbers@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "json-custom-numbers@npm:3.1.1"
+  checksum: d019a13307a3729504c336dea62b0c24aca322d9a696e663c3c467fc90838982bdd5c411990c49cd4ab1aa1943dd3612b0e45922c0daf6c81b4430f3400b1795
   languageName: node
   linkType: hard
 

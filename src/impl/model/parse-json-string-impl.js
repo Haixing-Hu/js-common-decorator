@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import jsonParser from './json-parser';
+import Json from '@haixing_hu/json';
 import assignImpl from './assign-impl';
 
 /**
@@ -36,7 +36,7 @@ import assignImpl from './assign-impl';
  * @see DefaultOptions.get('assign')
  */
 function parseJsonStringImpl(Class, json, options) {
-  const obj = jsonParser.parse(json);
+  const obj = Json.parse(json);
   const result = new Class();
   return assignImpl(Class, result, obj, options);
 }

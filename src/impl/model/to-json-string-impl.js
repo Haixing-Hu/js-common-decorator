@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import jsonParser from './json-parser';
+import Json from '@haixing_hu/json';
 import DefaultOptions from '../../default-options';
 
 /**
@@ -54,7 +54,7 @@ import DefaultOptions from '../../default-options';
 function toJsonStringImpl(Class, obj, options) {
   const opt = DefaultOptions.merge('toJSON', options);
   const target = obj.toJSON('', opt);
-  return jsonParser.stringify(target, null, opt.space);
+  return Json.stringify(target, null, opt.space);
 }
 
 export default toJsonStringImpl;
