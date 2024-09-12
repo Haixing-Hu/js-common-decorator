@@ -47,6 +47,10 @@ supports the most recent (currently May 2023)
     - [Class method: Class.of(expr)](#enum-of)
     - [Class method: Class.has(expr)](#enum-has)
     - [Usage Example](#enum-usage-example)
+  - [DefaultOptions Class](#default-options)
+    - [Class method: DefaultOptions.get(name)](#default-options-get)
+    - [Class method: DefaultOptions.set(name, options)](#default-options-set)
+    - [Class method: DefaultOptions.merge(name, options)](#default-options-merge)
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
   - [Bundling with vite](#vite)
@@ -850,6 +854,92 @@ class Gender {
 }
 ```
 That is, the name of the enumerator is exactly its value.
+
+### <span id="default-options">`DefaultOptions` class</span>
+
+The `DefaultOptions` class is used to get or set the default options of different
+aspects of this library.
+
+The class accesses an internal `Map` object. The key of the map is the name
+of aspects, and the value of the map is an object representing the default
+options of the aspect.
+
+For example, the default options of the `assign()` method of the class
+decorated by `@Model` is stored in the key `assign`. That is,
+`DefaultOption.get('assign')` returns the object representing the default
+options of the `assign()` method.
+
+The program can change the default options with `DefaultOptions.set('key', options)`
+method.
+
+Currently, the following aspects are supported:
+- `assign`: the default options of the `Class.prototype.assign()`,
+  `Class.create()`, `Class.createArray()`, `Class.createPage()`,
+  `Class.parseJsonString()` methods of  the class decorated by `@Model`.
+- `toJSON`: the default options of the `Class.prototype.toJSON()`,
+  `Class.prototype.toJsonString()` methods of the class decorated by `@Model`.
+
+#### <span id="default-options-get">Class method: `DefaultOptions.get(aspect)`</span>
+
+Gets the default options of the specified aspect.
+
+The function returns the object representing the default options of the aspect, 
+or `undefined`if the aspect does not exist. Note that the returned object is a
+deep cloned copy of the object stored in the internal map, so that the
+modification of the returned object will **not** affect the default options
+stored in the internal map.
+
+```js
+import { DefaultOptions } from '@haixing_hu/common-decorator';
+
+const opt1 = DefaultOptions.get('assign');
+expect(opt1.convertNaming).toBe(false);
+opt1.convertNaming = true;
+const opt2 = DefaultOptions.get('assign');
+expect(opt2.convertNaming).toBe(false);
+```
+
+#### <span id="default-options-set">Class method: `DefaultOptions.set(aspect, options)`</span>
+
+Sets the default options of the specified aspect.
+
+This function will merge the new options into the old default options of the aspect. 
+If the new options have the same property as the old default options stored
+in the internal map, the value of the new options will override the value of the
+old default options; otherwise, the new property will be added to the old default
+options.
+
+```js
+import { DefaultOptions } from '@haixing_hu/common-decorator';
+
+const opt1 = DefaultOptions.get('assign');
+expect(opt1.convertNaming).toBe(false);
+DefaultOptions.set('assign', { convertNaming: true });
+const opt2 = DefaultOptions.get('assign');
+expect(opt2.convertNaming).toBe(true);
+expect(opt1.convertNaming).toBe(false);
+```
+
+
+#### <span id="default-options-merge">Class method: `DefaultOptions.merge(aspect, options)`</span>
+
+Gets the default options of the specified aspect, merging the provided default
+options into the returned object.
+
+**NOTE:** This function does **NOT** change the default options stored in the
+internal map, instead, it returns a new object representing the merged options.
+
+```js
+import { DefaultOptions } from '@haixing_hu/common-decorator';
+
+const opt1 = DefaultOptions.get('assign');
+expect(opt1.convertNaming).toBe(false);
+const opt2 = DefaultOptions.merge('assign', { convertNaming: true });
+expect(opt2.convertNaming).toBe(true);
+expect(opt1.convertNaming).toBe(false);
+const opt3 = DefaultOptions.merge('assign', null);
+expect(opt3.convertNaming).toBe(false);
+```
 
 ## <span id="configuration">Configuration</span>
 

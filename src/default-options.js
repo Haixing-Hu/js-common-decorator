@@ -23,7 +23,8 @@ import DefaultToJsonOptions from './impl/default-options/default-to-json-options
 const DEFAULT_OPTIONS_MAP = new Map();
 
 /**
- * The class used to get or set the default options of different aspects.
+ * The class is used to get or set the default options of different aspects of
+ * this library.
  *
  * This class accesses an internal `Map` object. The key of the map is the name
  * of aspects, and the value of the map is an object representing the default
@@ -66,8 +67,8 @@ class DefaultOptions {
    *     the object representing the default options of the aspect, or `undefined`
    *     if the aspect does not exist. Note that the returned object is a deep
    *     cloned copy of the object stored in the internal map, so that the
-   *     modification of the returned object will not affect the default options
-   *     stored in the internal map.
+   *     modification of the returned object will **not** affect the default
+   *     options stored in the internal map.
    * @see DefaultOptions.merge
    * @see DefaultOptions.set
    * @author Haixing Hu
@@ -80,6 +81,9 @@ class DefaultOptions {
   /**
    * Gets the default options of the specified aspect, merging the provided
    * default options into the returned object.
+   *
+   * **NOTE:** This function does **NOT** change the default options stored in the
+   * internal map, instead, it returns a new object representing the merged options.
    *
    * ##### Usage example:
    *
