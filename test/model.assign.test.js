@@ -295,4 +295,22 @@ describe('Test the prototype method `assign()`', () => {
 
     DefaultOptions.reset();
   });
+  test('`assign(data)` should throw for invalid enumeration values', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'passport',
+        number: 'xx1234567',
+      },
+    };
+    const person = new Person();
+    expect(() => person.assign(data))
+      .toThrowWithMessage(
+        RangeError,
+        'The value of Person.credential.type is not an enumerator of CredentialType: passport',
+      );
+  });
 });

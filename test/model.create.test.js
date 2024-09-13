@@ -138,4 +138,21 @@ describe('Test the static method `create()`', () => {
     expect(result.secondField.secondChildField.thePerson).not.toBe(person);
     DefaultOptions.set('assign', { convertNaming: false });
   });
+  test('`create()` should throw for invalid enumeration values', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'passport',
+        number: 'xx1234567',
+      },
+    };
+    expect(() => Person.create(data))
+      .toThrowWithMessage(
+        RangeError,
+        'The value of Person.credential.type is not an enumerator of CredentialType: passport',
+      );
+  });
 });
