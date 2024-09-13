@@ -1491,12 +1491,12 @@ __metadata:
     "@haixing_hu/clone": "npm:^1.6.0"
     "@haixing_hu/common-util": "npm:^4.7.0"
     "@haixing_hu/common-validator": "npm:^3.2.0"
-    "@haixing_hu/eslint-config": "npm:^1.3.1"
+    "@haixing_hu/eslint-config": "npm:^1.3.3"
     "@haixing_hu/jsdoc-minami": "npm:^1.5.1"
-    "@haixing_hu/json": "npm:^1.0.2"
+    "@haixing_hu/json": "npm:^1.0.3"
     "@haixing_hu/logging": "npm:^1.3.2"
     "@haixing_hu/naming-style": "npm:^1.3.0"
-    "@haixing_hu/rollup-builder": "npm:^1.6.1"
+    "@haixing_hu/rollup-builder": "npm:^1.6.5"
     "@haixing_hu/typeinfo": "npm:^2.5.2"
     "@jest/core": "npm:^29.7.0"
     "@rollup/plugin-alias": "npm:^5.0.1"
@@ -1530,10 +1530,10 @@ __metadata:
     "@haixing_hu/clone": ^1.6.0
     "@haixing_hu/common-util": ^4.7.0
     "@haixing_hu/common-validator": ^3.2.0
-    "@haixing_hu/json": ^1.0.2
+    "@haixing_hu/json": ^1.0.3
     "@haixing_hu/logging": ^1.3.2
     "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/typeinfo": ^2.3.0
+    "@haixing_hu/typeinfo": ^2.5.2
   languageName: unknown
   linkType: soft
 
@@ -1564,7 +1564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/eslint-config@npm:^1.3.1":
+"@haixing_hu/eslint-config@npm:^1.3.3":
   version: 1.3.3
   resolution: "@haixing_hu/eslint-config@npm:1.3.3"
   dependencies:
@@ -1585,14 +1585,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/json@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@haixing_hu/json@npm:1.0.2"
+"@haixing_hu/json@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@haixing_hu/json@npm:1.0.3"
   dependencies:
     json-custom-numbers: "npm:^3.1.1"
   peerDependencies:
     "@babel/runtime": ^7.23.0
-  checksum: 08f5e7b2f746616abab5cfc84e5d1b144099c4d8633ea12e9cbc8e50e6851308e8fc7a416cef4de79faaf199315618d296cb77e8e3f5314963b6232326b14523
+  checksum: 59554c8c4e3e278790aa2bf9f541c33feeda7f7ec1f29fdd11c9bc151da44533f7a45a02aea4c86b4ef765665b5a1d31eb08931b2a61d0a941882ff7c9765cd6
   languageName: node
   linkType: hard
 
@@ -1614,9 +1614,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/rollup-builder@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "@haixing_hu/rollup-builder@npm:1.6.1"
+"@haixing_hu/rollup-builder@npm:^1.6.5":
+  version: 1.6.5
+  resolution: "@haixing_hu/rollup-builder@npm:1.6.5"
   peerDependencies:
     "@babel/core": ^7.23.2
     "@babel/plugin-transform-runtime": ^7.23.2
@@ -1631,7 +1631,7 @@ __metadata:
     rollup: ^4.1.4
     rollup-plugin-analyzer: ^4.0.0
     rollup-plugin-visualizer: ^5.12.0
-  checksum: d4e73b87b81f51bce6eb7ac89aeabc69d2c62463cc409b8ad080bdd41f964661998686dab779b19ff3dc538b83f7aaab4c3eeea859c781136549f4bc6bedc50e
+  checksum: 765c15760d9f7c1ca15f4cb968a00c59bf6317dbb18d9e6a44906acd77993879e0d21f8321b951563e584ea4712a2eb23c4d6f2df82053067670b65deb07e88d
   languageName: node
   linkType: hard
 
