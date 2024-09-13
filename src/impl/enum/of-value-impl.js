@@ -13,8 +13,7 @@
  * @param {function} Class
  *     The constructor of the specified enumeration class.
  * @param {string} value
- *     The value of the enumerator to be returned. Note that the value will be
- *     trimmed and upper-cased to get the field name of the enumerator.
+ *     The value of the enumerator to be returned.
  * @returns {undefined|Class}
  *     The enumerator of the specified enumeration class which has the specified
  *     value; or `undefined` if there is no such enumerator.
@@ -22,11 +21,10 @@
  * @private
  */
 function ofValueImpl(Class, value) {
-  if ((value === undefined) || (value === null) || (typeof value !== 'string')) {
+  if (typeof value !== 'string') {
     return undefined;
   }
-  const field = value.trim().toUpperCase();
-  const e = Class[field];
+  const e = Class[value];
   return (e instanceof Class ? e : undefined);
 }
 

@@ -271,8 +271,7 @@ function Enum(Class, context) {
    * value.
    *
    * @param {string} value
-   *     The value of the enumerator to be returned. Note that the value will be
-   *     trimmed and upper-cased to get the field name of the enumerator.
+   *     The value of the enumerator to be returned.
    * @returns {undefined|Class}
    *     The enumerator of this enumeration class which has the specified value;
    *     or `undefined` if there is no such enumerator.
@@ -287,7 +286,7 @@ function Enum(Class, context) {
    * the specified value.
    *
    * @param {string} value
-   *     The specified value.
+   *     The value of the enumerator to be tested.
    * @returns {boolean}
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified value; `false` otherwise.
