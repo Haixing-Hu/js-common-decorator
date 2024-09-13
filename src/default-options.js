@@ -153,12 +153,20 @@ class DefaultOptions {
       DEFAULT_OPTIONS_MAP.set(aspect, { ...oldOptions, ...newOptions });
     }
   }
+
+  /**
+   * Resets the default options to factory settings.
+   *
+   * @author Haixing Hu
+   */
+  static reset() {
+    // setting up default options of the `assign()` methods of the class decorated by `@Model`
+    DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
+    // setting up default options of the `toJSON()` methods of the class decorated by `@Model`
+    DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
+  }
 }
 
-// setting up default options of the `assign()` methods of the class decorated by `@Model`
-DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
-
-// setting up default options of the `toJSON()` methods of the class decorated by `@Model`
-DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
+DefaultOptions.reset();
 
 export default DefaultOptions;
