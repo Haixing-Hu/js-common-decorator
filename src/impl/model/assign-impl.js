@@ -114,18 +114,17 @@ const Impl = {
    * @param {Function} type
    *    The constructor of the enumeration class of the target value. Note that
    *    this enumeration class **must** be decorated by `@Enum`.
-   * @param {undefined|null|type} defaultInstance
-   *    The default value of the target value. If the source value is an invalid
-   *    enumeration value, this default value is used to assign the target value.
    * @return {type|*|null}
    *    The target value deeply cloned from the source value, whose type is
    *    exactly the same as the specified type.
    * @author Haixing Hu
    * @private
    */
-  cloneEnumValue(source, { path, type, defaultInstance }) {
+  cloneEnumValue(source, { path, type }) {
     if (source === null || source === undefined) {
       return null;
+    } else if (source instanceof type) {
+      return source;
     } else if (typeof source === 'string') {
       // the blank string is treated as null enumerator
       if (source.trim().length === 0) {
@@ -134,16 +133,11 @@ const Impl = {
       // convert the string representation to the enumerator
       const e = ofValueImpl(type, source);
       if (e === undefined) {
-        console.error(`The value of ${path} is not a valid enumeration value:`, source);
-        return defaultInstance;
-      } else {
-        return e;
+        throw new RangeError(`The value of ${path} is not an enumerator of ${type.name}: ${source}`);
       }
-    } else if (source instanceof type) {
-      return source;
+      return e;
     } else {
-      console.error(`The value of ${path} is not a valid enumeration value:`, source);
-      return defaultInstance;
+      throw new RangeError(`The value of ${path} is not an enumerator of ${type.name}: ${source}`);
     }
   },
 
