@@ -50,7 +50,7 @@ describe('Test the static method `create()`', () => {
       age: 55,
       mobile: '139280384745',
       credential: {
-        type: 'passport',
+        type: 'PASSPORT',
         number: 'xx1234567',
       },
     };

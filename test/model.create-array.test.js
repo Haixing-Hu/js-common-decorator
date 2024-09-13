@@ -90,7 +90,7 @@ describe('Test static method `createArray()`', () => {
       age: 63,
       mobile: '139280384745',
       credential: {
-        type: 'passport',
+        type: 'PASSPORT',
         number: '1234567xx',
       },
     }, {

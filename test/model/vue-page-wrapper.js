@@ -19,7 +19,7 @@ const PageWrapper = defineComponent({
         page_size: 5,
         content: [
           new Credential('IDENTITY_CARD', '12345678'),
-          new Credential('passport  ', 'abcdefgh'),
+          new Credential('PASSPORT', 'abcdefgh'),
         ],
       },
     };

@@ -71,7 +71,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('Test `ObjWithNormalizableField.normalize()`', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -89,7 +89,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize(null)', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -107,7 +107,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("*")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -125,7 +125,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("number")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -143,7 +143,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("type")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -161,7 +161,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("nonNormalizable")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -179,7 +179,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("array")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: ['abc ', ' 12def ', '  h i g '],
       credential: null,
@@ -198,11 +198,11 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("credential")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: ['abc ', ' 12def ', '  h i g '],
       credential: {
-        type: ' identity_card ',
+        type: 'IDENTITY_CARD',
         number: ' abc-123-def   ',
       },
     };
@@ -222,7 +222,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize("xxx")', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -240,7 +240,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize(123)', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -255,7 +255,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize(number)但number字段值是undefined', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -274,7 +274,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize(number)但number字段值是null', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,
@@ -318,7 +318,7 @@ describe('Test the prototype method `normalize()`', () => {
   test('测试 ObjWithNormalizableField.normalize(["number", "type"])', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
       credential: null,

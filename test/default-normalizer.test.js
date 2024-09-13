@@ -113,17 +113,17 @@ describe('Test defaultNormalizer() function', () => {
   test('Test ObjWithDefaultNormalizerField.normalize()', () => {
     const data = {
       number: ' 111xyz  ',
-      type: ' identity_card    ',
+      type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       credential: {
-        type: ' identity_card  ',
+        type: 'IDENTITY_CARD',
         number: ' 123xxx',
       },
       noNormalizeField: {
         value: '  xxx ',
       },
       credentialDefaultNonNull: {
-        type: ' passport  ',
+        type: 'PASSPORT',
         number: ' 123xxx',
       },
     };
