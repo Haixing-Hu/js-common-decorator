@@ -513,6 +513,11 @@ const Impl = {
 function assignImpl(Class, target, source, options) {
   const defaultInstance = getDefaultInstance(Class);
   const opt = DefaultOptions.merge('assign', options);
+  // If the source object is of the same class with the target object,
+  // the naming conversion must be disabled
+  if (source instanceof Class) {
+    opt.convertNaming = false;
+  }
   return Impl.doAssign(target, source, {
     path: Class.name,
     type: Class,

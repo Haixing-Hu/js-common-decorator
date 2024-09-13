@@ -8,7 +8,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { DefaultOptions } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
-import assignImpl from '../src/impl/model/assign-impl';
 import Child from './model/child';
 import ChildObj from './model/child-obj';
 import Credential from './model/credential';
@@ -227,7 +226,7 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.secondField.secondChildField.thePerson).toEqual(person);
     expect(result.secondField.secondChildField.thePerson).not.toBe(person);
   });
-  test('`assign()` with default naming conversion options', () => {
+  test('`assign()` with naming conversion', () => {
     const person = new Person();
     person.id = 'xxxx';
     person.name = 'Bill Gates';
@@ -254,6 +253,46 @@ describe('Test the prototype method `assign()`', () => {
     expect(result.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
     expect(result.secondField.secondChildField.thePerson).toEqual(person);
     expect(result.secondField.secondChildField.thePerson).not.toBe(person);
-    DefaultOptions.set('assign', { convertNaming: false });
+    DefaultOptions.reset();
+  });
+  test('`assign()` with the same class of object never converting names', () => {
+    const person = new Person();
+    person.id = 'xxxx';
+    person.name = 'Bill Gates';
+    person.age = 55;
+    person.mobile = '139280384745';
+    person.credential.type = CredentialType.PASSPORT;
+    person.credential.number = '1234567';
+    const obj = {
+      first_field: 'first-field',
+      second_field: {
+        first_child_field: 'first-child-field',
+        second_child_field: {
+          the_person: person,
+        },
+      },
+    };
+    const result = new ObjWithNamingConversion();
+    DefaultOptions.set('assign', { convertNaming: true });
+    result.assign(obj);
+    expect(result.firstField).toBe('first-field');
+    expect(result.secondField).toBeInstanceOf(ChildObj);
+    expect(result.secondField.firstChildField).toBe('first-child-field');
+    expect(result.secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(result.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(result.secondField.secondChildField.thePerson).toEqual(person);
+    expect(result.secondField.secondChildField.thePerson).not.toBe(person);
+
+    const cloned = new ObjWithNamingConversion();
+    cloned.assign(result);
+    expect(cloned.firstField).toBe('first-field');
+    expect(cloned.secondField).toBeInstanceOf(ChildObj);
+    expect(cloned.secondField.firstChildField).toBe('first-child-field');
+    expect(cloned.secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
+    expect(cloned.secondField.secondChildField.thePerson).toBeInstanceOf(Person);
+    expect(cloned.secondField.secondChildField.thePerson).toEqual(person);
+    expect(cloned.secondField.secondChildField.thePerson).not.toBe(person);
+
+    DefaultOptions.reset();
   });
 });
