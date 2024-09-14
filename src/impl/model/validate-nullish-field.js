@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validator';
+import { ValidationResult } from '@haixing_hu/common-validation-rule';
 import { getFieldLabel, isFieldNullable } from '../field-utils';
 import { getInstanceName } from '../utils';
 

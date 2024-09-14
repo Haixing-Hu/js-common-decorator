@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validator';
+import { ValidationResult } from '@haixing_hu/common-validation-rule';
 import { isNullishOrEmpty } from '../../../src/impl/utils';
 import Email from './email';
 

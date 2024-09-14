@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@haixing_hu/common-util';
-import { ValidationResult } from '@haixing_hu/common-validator';
+import { ValidationResult } from '@haixing_hu/common-validation-rule';
 import {
   getFieldLabel,
   isFieldNonEmpty,

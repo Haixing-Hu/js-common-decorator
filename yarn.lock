@@ -1467,14 +1467,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/clone@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@haixing_hu/clone@npm:1.6.0"
+"@haixing_hu/clone@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "@haixing_hu/clone@npm:1.7.1"
   peerDependencies:
     "@babel/runtime": ^7.23.0
     "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/typeinfo": ^2.5.2
-  checksum: ae204a319af9729634ec261ca04f8395aa5b15ed604de76850161214b6e5f6498bc714fefb31d6579babd582d2430e081cbf674fd28da115d4472e0ffec53f29
+    "@haixing_hu/type-detect": ^1.1.0
+    "@haixing_hu/typeinfo": ^3.0.0
+  checksum: aa2e4fd9ae9cd845fe0c1cd90e65f860bcd77f056877e51e41237d176aa0a08edc730f558c872cc29e07aa798870296f99f9765a0679cf02a0412b2194834ad7
   languageName: node
   linkType: hard
 
@@ -1488,16 +1489,17 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.24.0"
     "@babel/preset-env": "npm:^7.24.0"
     "@babel/runtime": "npm:^7.24.0"
-    "@haixing_hu/clone": "npm:^1.6.0"
-    "@haixing_hu/common-util": "npm:^4.7.0"
-    "@haixing_hu/common-validator": "npm:^3.2.0"
+    "@haixing_hu/clone": "npm:^1.7.1"
+    "@haixing_hu/common-util": "npm:^4.8.1"
+    "@haixing_hu/common-validation-rule": "npm:^1.1.0"
     "@haixing_hu/eslint-config": "npm:^1.3.3"
     "@haixing_hu/jsdoc-minami": "npm:^1.5.1"
     "@haixing_hu/json": "npm:^1.0.3"
-    "@haixing_hu/logging": "npm:^1.3.2"
+    "@haixing_hu/logging": "npm:^1.3.3"
     "@haixing_hu/naming-style": "npm:^1.3.0"
     "@haixing_hu/rollup-builder": "npm:^1.6.5"
-    "@haixing_hu/typeinfo": "npm:^2.5.2"
+    "@haixing_hu/type-detect": "npm:^1.1.0"
+    "@haixing_hu/typeinfo": "npm:^3.0.0"
     "@jest/core": "npm:^29.7.0"
     "@rollup/plugin-alias": "npm:^5.0.1"
     "@rollup/plugin-babel": "npm:^6.0.4"
@@ -1527,40 +1529,44 @@ __metadata:
     vue: "npm:^3.3.7"
   peerDependencies:
     "@babel/runtime": ^7.24.0
-    "@haixing_hu/clone": ^1.6.0
-    "@haixing_hu/common-util": ^4.7.0
-    "@haixing_hu/common-validator": ^3.2.0
+    "@haixing_hu/clone": ^1.7.1
+    "@haixing_hu/common-util": ^4.8.1
+    "@haixing_hu/common-validation-rule": ^1.1.0
     "@haixing_hu/json": ^1.0.3
-    "@haixing_hu/logging": ^1.3.2
+    "@haixing_hu/logging": ^1.3.3
     "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/typeinfo": ^2.5.2
+    "@haixing_hu/type-detect": ^1.1.0
+    "@haixing_hu/typeinfo": ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@haixing_hu/common-util@npm:^4.7.0":
-  version: 4.7.0
-  resolution: "@haixing_hu/common-util@npm:4.7.0"
+"@haixing_hu/common-util@npm:^4.8.1":
+  version: 4.8.1
+  resolution: "@haixing_hu/common-util@npm:4.8.1"
   dependencies:
     deep-equal: "npm:^2.0.5"
     json-beautify: "npm:^1.1.1"
     query-string: "npm:^8.1.0"
   peerDependencies:
     "@babel/runtime": ^7.23.2
-    "@haixing_hu/clone": ^1.6.0
-    "@haixing_hu/logging": ^1.2.4
+    "@haixing_hu/clone": ^1.7.1
+    "@haixing_hu/logging": ^1.3.3
     "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/typeinfo": ^2.5.2
-  checksum: 6662947865dac7a41bd79a766d0856bb908ce62cdd590128fba45030119877b248e0442e11fcbef9df5bda81d6e84fd1b593f59922d126e49cd2b8bced2b9fef
+    "@haixing_hu/type-detect": ^1.1.0
+    "@haixing_hu/typeinfo": ^3.0.0
+  checksum: cf56ed1aed7a1264dffad4eaeae3948dcde753c105d4597b35a6f7fddafa62b730bd2820f3bb5578b9ec25e3d414a483f1137721a193b46cbdb2b7bbb0354a3b
   languageName: node
   linkType: hard
 
-"@haixing_hu/common-validator@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@haixing_hu/common-validator@npm:3.2.0"
+"@haixing_hu/common-validation-rule@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@haixing_hu/common-validation-rule@npm:1.1.0"
   dependencies:
     email-validator: "npm:^2.0.4"
     node-uri: "npm:^1.1.2"
-  checksum: b6622dd9b5a6da917342ab25f4831fd231269d1b747f2805a96e050fbbda4aa45206e39f2f2b36ca1fe3d98079011c25fc407a2c63270f7a5de51eade6529bb6
+  peerDependencies:
+    "@babel/runtime": ^7.23.0
+  checksum: c4ca92718c2a63212981b16bfe09646e0c19ff77fde97ea6921d84a86d64ba3535e64c4b4599b369f0ce14900ebbaef50183144c71bdb2e54fe97fd80416b9ba
   languageName: node
   linkType: hard
 
@@ -1596,12 +1602,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/logging@npm:^1.3.2":
-  version: 1.3.2
-  resolution: "@haixing_hu/logging@npm:1.3.2"
+"@haixing_hu/logging@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@haixing_hu/logging@npm:1.3.3"
   peerDependencies:
     "@babel/runtime": ^7.23.0
-  checksum: 3acda72337f776a40b752949a08fabe9be30f09a0abc742ee1f55944aadec65ff63feabc4170532b64afd8d0a354a801ed060c77f19d69f0e47bdecabdabaf39
+  checksum: 514825e0808f2d38d7c049b7093efd9b6001b3022d143e95c4e0e0af560b3b4f4dc6c3d19ded7ed4d82b8da50a77423d8e00b5ec3000abd6f6675e130e880264
   languageName: node
   linkType: hard
 
@@ -1635,12 +1641,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/typeinfo@npm:^2.5.2":
-  version: 2.5.2
-  resolution: "@haixing_hu/typeinfo@npm:2.5.2"
+"@haixing_hu/type-detect@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@haixing_hu/type-detect@npm:1.1.0"
   peerDependencies:
     "@babel/runtime": ^7.23.0
-  checksum: 58dc52bfdfd7f619eedf0dfdafb29fff40c5cc1416460261be50167894a5189dd30667aa4a982cdc6c0117dcef51998effa8b46ec19ad0497ad73b9c2f77ce83
+  checksum: b0ca44392c518793b71922ce2a969439d57589614f6d9453e9fca34aa2de2eba431df9a12a542fed2179e6450cf8157daef9e3875f80e7c61000bc8ffa25b2e3
+  languageName: node
+  linkType: hard
+
+"@haixing_hu/typeinfo@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@haixing_hu/typeinfo@npm:3.0.0"
+  peerDependencies:
+    "@babel/runtime": ^7.23.0
+    "@haixing_hu/type-detect": ^1.1.0
+  checksum: 714f80c6c440a3bbe3b201e92a9aba4321318a68ebc1b37bb3f12f2dfe12ad9f4922ce2143b3240b4bad1b6f4ff05013d9e175490eb9ab863ff2652bbe8ec856
   languageName: node
   linkType: hard
 

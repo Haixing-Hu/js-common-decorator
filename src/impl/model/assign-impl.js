@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import clone from '@haixing_hu/clone';
-import { isBuiltInClass } from '@haixing_hu/typeinfo';
+import { isBuiltInClass } from '@haixing_hu/type-detect';
 import { isUndefinedOrNull } from '@haixing_hu/common-util';
 import {
   getClassMetadata,

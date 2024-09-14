@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isTypedArray } from '@haixing_hu/typeinfo';
+import { isTypedArray } from '@haixing_hu/type-detect';
 
 /**
  * Normalizes the specified array field of the specified object.
