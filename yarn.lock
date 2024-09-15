@@ -1467,15 +1467,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@haixing_hu/clone@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "@haixing_hu/clone@npm:1.7.1"
+"@haixing_hu/clone@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@haixing_hu/clone@npm:1.7.2"
   peerDependencies:
     "@babel/runtime": ^7.23.0
     "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/type-detect": ^1.1.0
     "@haixing_hu/typeinfo": ^3.0.0
-  checksum: aa2e4fd9ae9cd845fe0c1cd90e65f860bcd77f056877e51e41237d176aa0a08edc730f558c872cc29e07aa798870296f99f9765a0679cf02a0412b2194834ad7
+  checksum: b326e42bfd6090deec6452044a14a9bcd87a3a06bd2b710b99858e03d895dc2c847f50d735740480d3525fbeb9ea886924f56567f4e1a0a120d619d79246d350
   languageName: node
   linkType: hard
 
@@ -1489,7 +1488,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.24.0"
     "@babel/preset-env": "npm:^7.24.0"
     "@babel/runtime": "npm:^7.24.0"
-    "@haixing_hu/clone": "npm:^1.7.1"
+    "@haixing_hu/clone": "npm:^1.7.2"
     "@haixing_hu/common-util": "npm:^4.8.1"
     "@haixing_hu/common-validation-rule": "npm:^1.1.0"
     "@haixing_hu/eslint-config": "npm:^1.3.3"
@@ -1529,11 +1528,10 @@ __metadata:
     vue: "npm:^3.3.7"
   peerDependencies:
     "@babel/runtime": ^7.24.0
-    "@haixing_hu/clone": ^1.7.1
+    "@haixing_hu/clone": ^1.7.2
     "@haixing_hu/common-util": ^4.8.1
     "@haixing_hu/common-validation-rule": ^1.1.0
     "@haixing_hu/json": ^1.0.3
-    "@haixing_hu/logging": ^1.3.3
     "@haixing_hu/naming-style": ^1.3.0
     "@haixing_hu/type-detect": ^1.1.0
     "@haixing_hu/typeinfo": ^3.0.0
