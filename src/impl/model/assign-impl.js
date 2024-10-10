@@ -9,6 +9,7 @@
 import clone from '@haixing_hu/clone';
 import { isBuiltInClass } from '@haixing_hu/type-detect';
 import { isUndefinedOrNull } from '@haixing_hu/common-util';
+import Logger from '@haixing_hu/logging';
 import {
   getClassMetadata,
   getFieldMetadata,
@@ -38,6 +39,8 @@ const CLONE_OPTIONS = {
   includeReadonly: true,
   includeNonConfigurable: true,
 };
+
+const logger = Logger.getLogger('@Model.assign');
 
 const Impl = {
   /**
@@ -222,7 +225,7 @@ const Impl = {
    */
   cloneArrayWithElementTypeInfo(sourceArray, { path, elementType, defaultArray, options }) {
     if (!Array.isArray(sourceArray)) {
-      console.error(`The value of ${path} should be an array:`, sourceArray);
+      logger.error(`The value of ${path} should be an array:`, sourceArray);
       // clone the default array without naming conversion
       return clone(defaultArray, CLONE_OPTIONS);
     }
@@ -346,7 +349,7 @@ const Impl = {
         targetNamingStyle: options.targetNamingStyle,
       });
     } else {
-      console.error(`The value of ${path} should be an array:`, sourceArray);
+      logger.error(`The value of ${path} should be an array:`, sourceArray);
       // clone the default array without naming conversion
       return clone(defaultArray, CLONE_OPTIONS);
     }
@@ -424,7 +427,7 @@ const Impl = {
           // decorated with `@Type`, it is impossible to determine the type of
           // the attribute, therefore we directly clone the source object field
           // value.
-          console.warn(`There is no type information for the field ${fieldPath}.`);
+          logger.warn('There is no type information for the field:', fieldPath);
           // clone the source field value with the naming conversion options
           target[targetKey] = clone(sourceFieldValue, {
             ...CLONE_OPTIONS,
@@ -435,7 +438,7 @@ const Impl = {
         } else if (Array.isArray(defaultFieldValue)) {
           // If the field value of the target object is an array but has not
           // been annotated with `@ElementType`
-          console.warn(`There is no element type information for the array field ${fieldPath}.`);
+          logger.warn('There is no element type information for the array field:', fieldPath);
           target[targetKey] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
             path: fieldPath,
             defaultArray: defaultFieldValue,
