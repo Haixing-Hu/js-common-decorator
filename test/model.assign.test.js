@@ -302,7 +302,7 @@ describe('Test the prototype method `assign()`', () => {
       age: 55,
       mobile: '139280384745',
       credential: {
-        type: 'passport',
+        type: 'xxx',
         number: 'xx1234567',
       },
     };
@@ -310,7 +310,7 @@ describe('Test the prototype method `assign()`', () => {
     expect(() => person.assign(data))
       .toThrowWithMessage(
         RangeError,
-        'The value of Person.credential.type is not an enumerator of CredentialType: passport',
+        'The value of Person.credential.type is not an enumerator of CredentialType: xxx',
       );
   });
 });

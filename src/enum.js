@@ -271,7 +271,9 @@ function Enum(Class, context) {
    * value.
    *
    * @param {string} value
-   *     The value of the enumerator to be returned.
+   *     The value of the enumerator to be returned. If the value is a primitive
+   *     string or a `String` object, it will be trimmed and converted to an
+   *     uppercase string.
    * @returns {undefined|Class}
    *     The enumerator of this enumeration class which has the specified value;
    *     or `undefined` if there is no such enumerator.
@@ -286,7 +288,9 @@ function Enum(Class, context) {
    * the specified value.
    *
    * @param {string} value
-   *     The value of the enumerator to be tested.
+   *     The value of the enumerator to be tested. If the value is a primitive
+   *     string or a `String` object, it will be trimmed and converted to an
+   *     uppercase string.
    * @returns {boolean}
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified value; `false` otherwise.
@@ -301,7 +305,8 @@ function Enum(Class, context) {
    * name.
    *
    * @param {string} name
-   *     The name of the enumerator to be returned.
+   *     The name of the enumerator to be returned.  If the name is a primitive
+   *     string or a `String` object, it will be trimmed.
    * @returns {undefined|Class}
    *     The enumerator of this enumeration class which has the specified name;
    *     or `undefined` if there is no such enumerator.
@@ -316,7 +321,8 @@ function Enum(Class, context) {
    * the specified name.
    *
    * @param {string} name
-   *     The specified name.
+   *     The specified name. If the name is a primitive string or a `String`
+   *     object, it will be trimmed.
    * @returns {boolean}
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified name; `false` otherwise.
@@ -331,7 +337,8 @@ function Enum(Class, context) {
    * code.
    *
    * @param {string} code
-   *     The code of the enumerator to be returned.
+   *     The code of the enumerator to be returned. If the code is a primitive
+   *     string or a `String` object, it will be trimmed.
    * @returns {undefined|Class}
    *     The enumerator of this enumeration class which has the specified code;
    *     or `undefined` if there is no such enumerator.
@@ -347,7 +354,8 @@ function Enum(Class, context) {
    * the specified code.
    *
    * @param {string} code
-   *     The specified code.
+   *     The specified code. If the code is a primitive string or a `String`
+   *     object, it will be trimmed.
    * @returns {boolean}
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified code; `false` otherwise.

@@ -6,6 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { isString } from '@haixing_hu/type-detect';
 import ofCodeImpl from './of-code-impl';
 import ofNameImpl from './of-name-impl';
 import ofValueImpl from './of-value-impl';
@@ -35,7 +36,7 @@ function ofImpl(Class, value) {
   if (value instanceof Class) {
     return value;
   }
-  if (typeof value === 'string') {
+  if (isString(value)) {
     return ofValueImpl(Class, value)
         ?? ofNameImpl(Class, value)
         ?? ofCodeImpl(Class, value);
