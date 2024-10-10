@@ -169,7 +169,7 @@ This function normalizes the specified field of this object. If the object has
 the specified field and the specified field is normalizable, the function 
 normalizes the specified field and returns `true`; otherwise, the function does
 nothing and returns `false`. Note that a field is normalizable if and only if it 
-is decorated by the `{@link Normalizable}` decorator.
+is decorated by the `@Normalizable` decorator.
 
 #### <span id="model-normalize">Instance method: Class.prototype.normalize(fields)</span>
 
@@ -189,8 +189,7 @@ parameter specifies the names of fields to be normalized. If `fields` is
 `undefined`, `null`, or the string `"*"`, it normalizes all the normalizable 
 fields of this object. If `fields` is an array of strings, it normalizes all the
 normalizable fields whose names are specified in the array. Note that a field is 
-normalizable if and only if it is decorated by the `{@link Normalizable}` 
-decorator.
+normalizable if and only if it is decorated by the `@Normalizable` decorator.
 
 #### <span id="model-validateField">Instance method: Class.prototype.validateField(field)</span>
 
@@ -203,7 +202,7 @@ This function validates the specified field of this object. If the object has
 the specified field and the specified field is validatable, the function
 validates the specified field and returns the validation result; otherwise, the 
 function does nothing and returns `null`. Note that a field is validatable if 
-and only if it is decorated by the `{@link Validatable}` decorator.
+and only if it is decorated by the `@Validatable` decorator.
 
 #### <span id="model-validate">Instance method: Class.prototype.validate(fields)</span>
 
@@ -223,7 +222,7 @@ parameter specifies the names of fields to be validated. If `fields` is
 `undefined`, `null`, or the string `"*"`, it validates all the validatable
 fields of this object. If `fields` is an array of strings, it validates all the
 validatable fields whose names are specified in the array. Note that a field is
-validatable if and only if it is decorated by the `{@link Validatable}`
+validatable if and only if it is decorated by the `@Validatable`
 decorator.
 
 #### <span id="model-toJSON">Instance method: Class.prototype.toJSON(key, options = undefined)</span>
@@ -545,33 +544,35 @@ class Person {
 After applying the `@Model` decorator, the following methods will be automatically 
 added:
 
-- `Credential.prototype.assign(obj, normalized)`
-- `Credential.prototype.clone()`
+- `Credential.prototype.assign(obj, options = undefined)`
 - `Credential.prototype.clear()`
+- `Credential.prototype.clone()`
 - `Credential.prototype.isEmpty()`
 - `Credential.prototype.equals(obj)`
-- `Credential.prototype.normalizeField(field)`
 - `Credential.prototype.normalize(fields)`
-- `Credential.prototype.validateField(field, options)`
 - `Credential.prototype.validate(fields, options)`
-- `Credential.create(obj, normalized)`
-- `Credential.createArray(array, normalized)`
-- `Credential.createPage(page, normalized)`
+- `Credential.prototype.toJSON(key, options = undefined)`
+- `Credential.prototype.toJsonString(options = undefined)`
+- `Credential.create(obj, options = undefined)`
+- `Credential.createArray(array, options = undefined)`
+- `Credential.createPage(page, options = undefined)`
 - `Credential.isNullishOrEmpty(obj)`
+- `Credential.parseJsonString(json, options = undefined)`
 - `Person.prototype.assign(obj, normalized)`
-- `Person.prototype.clone()`
 - `Person.prototype.clear()`
+- `Person.prototype.clone()`
 - `Person.prototype.isEmpty()`
-- `Person.prototype.generateId()`
-- `Person.prototype.normalizeField(field)`
 - `Person.prototype.normalize(fields)`
-- `Person.prototype.validateField(field, options)`
 - `Person.prototype.validate(fields, options)`
-- `Person.create(obj, normalized)`
-- `Person.createArray(array, normalized)`
-- `Person.createPage(page, normalized)`
+- `Person.prototype.generateId()`
+- `Person.prototype.toJSON(key, options = undefined)`
+- `Person.prototype.toJsonString(options = undefined)`
+- `Person.create(obj, options = undefined)`
+- `Person.createArray(array, options = undefined)`
+- `Person.createPage(page, options = undefined)`
 - `Person.isNullishOrEmpty(obj)`
-
+- `Person.parseJsonString(json, options = undefined)`
+- 
 **NOTE:**
 
 - Because the `Credential` class does not have an `id` attribute, the `@Model` 
@@ -689,6 +690,7 @@ This function tests whether there is an enumerator with the specified name.
 This function returns the enumerator with the specified value.
 
 #### <span id="enum-hasCode">Class method: Class.hasCode(code)</span>
+
 - Parameters:
     - `code: string`: the code of the enumerator to be tested. 
 - Returns:
@@ -713,6 +715,7 @@ This function tests whether there is an enumerator with the specified code.
 This function returns the enumerator with the specified value.
 
 #### <span id="enum-has">Class method: Class.has(expr)</span>
+
 - Parameters:
     - `expr: object | string`: the expression corresponds to the enumerator to
       be returned. The  expression could be one of the following:
@@ -776,7 +779,19 @@ class Gender {
   static hasCode(code) {
     return Gender.ofCode(code) !== undefined;
   }
+  
+  static of(expr) {
+    if (expr instanceof Gender) {
+      return expr;
+    } else {
+      return Gender.ofValue(expr) ?? Gender.ofName(expr) ?? Gender.ofCode(expr);
+    }
+  }
 
+  static has(expr) {
+    return Gender.of(expr) !== undefined;
+  }
+  
   constructor(value, name) {
     this.value = value;
     this.name = name;
@@ -883,7 +898,7 @@ Currently, the following aspects are supported:
 
 Gets the default options of the specified aspect.
 
-The function returns the object representing the default options of the aspect, 
+The function returns the object representing the default options of the aspect,
 or `undefined`if the aspect does not exist. Note that the returned object is a
 deep cloned copy of the object stored in the internal map, so that the
 modification of the returned object will **not** affect the default options
