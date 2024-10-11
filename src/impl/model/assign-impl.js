@@ -127,7 +127,7 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  cloneEnumValue(source, { targetPath, sourcePath, type }) {
+  cloneEnumValue(source, { sourcePath, type }) {
     if (source === null || source === undefined) {
       return null;
     } else if (source instanceof type) {
@@ -356,7 +356,7 @@ const Impl = {
    * @author Haixing Hu
    * @private
    */
-  cloneArrayWithoutElementTypeInfo(sourceArray, { targetPath, sourcePath, defaultArray, options }) {
+  cloneArrayWithoutElementTypeInfo(sourceArray, { sourcePath, defaultArray, options }) {
     // TODO: If there is type information in its default field value, we can
     //  construct an array of the same type based on the type information in
     //  the default field value.
