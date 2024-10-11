@@ -157,13 +157,27 @@ class DefaultOptions {
   /**
    * Resets the default options to factory settings.
    *
+   * @param {string|undefined} aspect
+   *     the name of the aspect to be reset. If this parameter is `undefined`,
+   *     all aspects will be reset.
    * @author Haixing Hu
    */
-  static reset() {
-    // setting up default options of the `assign()` methods of the class decorated by `@Model`
-    DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
-    // setting up default options of the `toJSON()` methods of the class decorated by `@Model`
-    DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
+  static reset(aspect = undefined) {
+    if (aspect) {
+      switch (aspect) {
+        case 'assign':
+          DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
+          break;
+        case 'toJSON':
+          DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
+          break;
+        default:
+          throw new Error(`Unknown aspect: ${aspect}`);
+      }
+    } else {
+      DEFAULT_OPTIONS_MAP.set('assign', new DefaultAssignmentOptions());
+      DEFAULT_OPTIONS_MAP.set('toJSON', new DefaultToJsonOptions());
+    }
   }
 }
 
