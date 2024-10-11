@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { DefaultOptions } from '../src';
+import AuditablePerson from './model/auditable-person';
 import ChildObj from './model/child-obj';
 //
 //    Copyright (c) 2022 - 2023.
@@ -152,7 +153,135 @@ describe('Test the static method `create()`', () => {
     expect(() => Person.create(data))
       .toThrowWithMessage(
         RangeError,
-        'The value of Person.credential.type is not an enumerator of CredentialType: xxx',
+        'The value of property \'source.credential.type\' is not an enumerator of CredentialType: xxx',
       );
+  });
+});
+
+describe('Test the static method `create()` with naming conversion', () => {
+  test('Test `AuditablePerson.create()` without naming conversion', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'PASSPORT',
+        number: '1234567',
+      },
+      createTime: '2022-01-01',
+      modifyTime: '2022-01-02',
+      deleteTime: '2022-01-03',
+    };
+    const result = AuditablePerson.create(data);
+    expect(result).toBeInstanceOf(AuditablePerson);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    expect(result.mobile).toBe(data.mobile);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(data.credential.number);
+    expect(result.createTime).toBe(data.createTime);
+    expect(result.modifyTime).toBe(data.modifyTime);
+    expect(result.deleteTime).toBe(data.deleteTime);
+  });
+
+  test('Test `AuditablePerson.create()` with naming conversion', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'PASSPORT',
+        number: '1234567',
+      },
+      create_time: '2022-01-01',
+      modify_time: '2022-01-02',
+      delete_time: '2022-01-03',
+    };
+    const result = AuditablePerson.create(data, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result).toBeInstanceOf(AuditablePerson);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    expect(result.mobile).toBe(data.mobile);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(data.credential.number);
+    expect(result.createTime).toBe(data.create_time);
+    expect(result.modifyTime).toBe(data.modify_time);
+    expect(result.deleteTime).toBe(data.delete_time);
+  });
+
+  test('Test `AuditablePerson.create()` with naming conversion set by DefaultOptions', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'PASSPORT',
+        number: '1234567',
+      },
+      create_time: '2022-01-01',
+      modify_time: '2022-01-02',
+      delete_time: '2022-01-03',
+    };
+    DefaultOptions.set('assign', { convertNaming: true });
+    const result = AuditablePerson.create(data);
+    expect(result).toBeInstanceOf(AuditablePerson);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    expect(result.mobile).toBe(data.mobile);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(data.credential.number);
+    expect(result.createTime).toBe(data.create_time);
+    expect(result.modifyTime).toBe(data.modify_time);
+    expect(result.deleteTime).toBe(data.delete_time);
+    DefaultOptions.reset('assign');
+  });
+
+  test('Test `AuditablePerson.create()` with naming conversion and wrong data naming style', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: '139280384745',
+      credential: {
+        type: 'PASSPORT',
+        number: '1234567',
+      },
+      createTime: '2022-01-01',
+      modifyTime: '2022-01-02',
+      deleteTime: '2022-01-03',
+    };
+    const result = AuditablePerson.create(data, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result).toBeInstanceOf(AuditablePerson);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    expect(result.mobile).toBe(data.mobile);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(data.credential.number);
+    expect(result.createTime).toBe('');
+    expect(result.modifyTime).toBe('');
+    expect(result.deleteTime).toBe('');
   });
 });

@@ -167,7 +167,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].mobile).toBe('');
     expect(result[1].credential).toBeInstanceOf(Credential);
     expect(result[1].credential.type).toBeNull();
-    expect(result[1].credential.number).toBe('');
+    expect(result[1].credential.number).toBeNull();
     expect(result[2]).toBeNull();
   });
   test('`Credential.createArray()` should handle the array managed by `Vue`', () => {

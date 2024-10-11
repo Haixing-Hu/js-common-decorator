@@ -119,7 +119,7 @@ describe('Test `@ElementType``', () => {
     expect(obj.nonDecoratedClassArray[0]).toBeInstanceOf(NonDecoratedClass);
     expect(obj.nonDecoratedClassArray[0].value).toBe('abc');
     expect(obj.nonDecoratedClassArray[1]).toBeInstanceOf(NonDecoratedClass);
-    expect(obj.nonDecoratedClassArray[1].value).toBe('');
+    expect(obj.nonDecoratedClassArray[1].value).toBeNull();
     expect(obj.nonDecoratedClassArray[2]).toBeInstanceOf(NonDecoratedClass);
     expect(obj.nonDecoratedClassArray[2].value).toBe('');
 

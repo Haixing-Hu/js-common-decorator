@@ -310,7 +310,7 @@ describe('Test the prototype method `assign()`', () => {
     expect(() => person.assign(data))
       .toThrowWithMessage(
         RangeError,
-        'The value of Person.credential.type is not an enumerator of CredentialType: xxx',
+        'The value of property \'source.credential.type\' is not an enumerator of CredentialType: xxx',
       );
   });
 });
