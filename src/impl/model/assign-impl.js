@@ -9,7 +9,6 @@
 import clone from '@haixing_hu/clone';
 import { isBuiltInClass } from '@haixing_hu/type-detect';
 import { isUndefinedOrNull } from '@haixing_hu/common-util';
-import Logger from '@haixing_hu/logging';
 import {
   getClassMetadata,
   getFieldMetadata,
@@ -40,8 +39,6 @@ const CLONE_OPTIONS = {
   includeReadonly: true,
   includeNonConfigurable: true,
 };
-
-const logger = Logger.getLogger('@Model.assign');
 
 const Impl = {
   /**
@@ -237,7 +234,7 @@ const Impl = {
    */
   cloneArrayWithElementTypeInfo(sourceArray, { targetPath, sourcePath, elementType, defaultArray, options }) {
     if (!Array.isArray(sourceArray)) {
-      logger.error(`The value of the property '${sourcePath}' should be an array:`, sourceArray);
+      console.error(`The value of the property '${sourcePath}' should be an array:`, sourceArray);
       // clone the default array without naming conversion
       return clone(defaultArray, CLONE_OPTIONS);
     }
@@ -369,7 +366,7 @@ const Impl = {
         targetNamingStyle: options.targetNamingStyle,
       });
     } else {
-      logger.error(`The value of the property '${sourcePath}' should be an array:`, sourceArray);
+      console.error(`The value of the property '${sourcePath}' should be an array:`, sourceArray);
       // clone the default array without naming conversion
       return clone(defaultArray, CLONE_OPTIONS);
     }
@@ -430,7 +427,7 @@ const Impl = {
           // warn if the source object has a field with different naming style
           const existSourceKey = getExistKeyWithDifferentNamingStyle(sourceKey, source);
           if (existSourceKey) {
-            logger.warn(`Cannot find the source property '${sourceFieldPath}' for the target property '${targetFieldPath}'. `
+            console.warn(`Cannot find the source property '${sourceFieldPath}' for the target property '${targetFieldPath}'. `
               + `But the source object has a property '${sourcePath}.${existSourceKey}'. A correct naming conversion may be needed.`);
           }
           // and then copy the default field value directly.
@@ -463,7 +460,7 @@ const Impl = {
           // decorated with `@Type`, it is impossible to determine the type of
           // the attribute, therefore we directly clone the source object field
           // value.
-          logger.warn('There is no type information for the field:', targetFieldPath);
+          console.warn('There is no type information for the field:', targetFieldPath);
           // clone the source field value with the naming conversion options
           target[targetKey] = clone(sourceFieldValue, {
             ...CLONE_OPTIONS,
@@ -474,7 +471,7 @@ const Impl = {
         } else if (Array.isArray(defaultFieldValue)) {
           // If the field value of the target object is an array but has not
           // been annotated with `@ElementType`
-          logger.warn('There is no element type information for the array field:', targetFieldPath);
+          console.warn('There is no element type information for the array field:', targetFieldPath);
           target[targetKey] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
             targetPath: targetFieldPath,
             sourcePath: sourceFieldPath,

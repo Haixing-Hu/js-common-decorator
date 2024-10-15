@@ -1489,12 +1489,11 @@ __metadata:
     "@babel/preset-env": "npm:^7.24.0"
     "@babel/runtime": "npm:^7.24.0"
     "@haixing_hu/clone": "npm:^1.7.2"
-    "@haixing_hu/common-util": "npm:^4.8.1"
+    "@haixing_hu/common-util": "npm:^5.0.0"
     "@haixing_hu/common-validation-rule": "npm:^1.1.0"
     "@haixing_hu/eslint-config": "npm:^1.3.3"
     "@haixing_hu/jsdoc-minami": "npm:^1.5.1"
     "@haixing_hu/json": "npm:^1.0.3"
-    "@haixing_hu/logging": "npm:^1.3.3"
     "@haixing_hu/naming-style": "npm:^1.3.0"
     "@haixing_hu/rollup-builder": "npm:^1.6.5"
     "@haixing_hu/type-detect": "npm:^1.1.0"
@@ -1529,31 +1528,26 @@ __metadata:
   peerDependencies:
     "@babel/runtime": ^7.24.0
     "@haixing_hu/clone": ^1.7.2
-    "@haixing_hu/common-util": ^4.8.1
+    "@haixing_hu/common-util": ^5.0.0
     "@haixing_hu/common-validation-rule": ^1.1.0
     "@haixing_hu/json": ^1.0.3
-    "@haixing_hu/logging": ^1.3.3
     "@haixing_hu/naming-style": ^1.3.0
     "@haixing_hu/type-detect": ^1.1.0
     "@haixing_hu/typeinfo": ^3.0.0
   languageName: unknown
   linkType: soft
 
-"@haixing_hu/common-util@npm:^4.8.1":
-  version: 4.8.1
-  resolution: "@haixing_hu/common-util@npm:4.8.1"
+"@haixing_hu/common-util@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@haixing_hu/common-util@npm:5.0.0"
   dependencies:
     deep-equal: "npm:^2.0.5"
     json-beautify: "npm:^1.1.1"
     query-string: "npm:^8.1.0"
   peerDependencies:
     "@babel/runtime": ^7.23.2
-    "@haixing_hu/clone": ^1.7.1
-    "@haixing_hu/logging": ^1.3.3
-    "@haixing_hu/naming-style": ^1.3.0
-    "@haixing_hu/type-detect": ^1.1.0
     "@haixing_hu/typeinfo": ^3.0.0
-  checksum: cf56ed1aed7a1264dffad4eaeae3948dcde753c105d4597b35a6f7fddafa62b730bd2820f3bb5578b9ec25e3d414a483f1137721a193b46cbdb2b7bbb0354a3b
+  checksum: ad0d305143246b474229d275cdab91ae5edca565b7fa439f288c7fa9070e872dcf001a25bf2e10be5a63a9d1feb48e5a0025cb92917fe7522a8956447c12d829
   languageName: node
   linkType: hard
 
@@ -1598,15 +1592,6 @@ __metadata:
   peerDependencies:
     "@babel/runtime": ^7.23.0
   checksum: 59554c8c4e3e278790aa2bf9f541c33feeda7f7ec1f29fdd11c9bc151da44533f7a45a02aea4c86b4ef765665b5a1d31eb08931b2a61d0a941882ff7c9765cd6
-  languageName: node
-  linkType: hard
-
-"@haixing_hu/logging@npm:^1.3.3":
-  version: 1.3.3
-  resolution: "@haixing_hu/logging@npm:1.3.3"
-  peerDependencies:
-    "@babel/runtime": ^7.23.0
-  checksum: 514825e0808f2d38d7c049b7093efd9b6001b3022d143e95c4e0e0af560b3b4f4dc6c3d19ded7ed4d82b8da50a77423d8e00b5ec3000abd6f6675e130e880264
   languageName: node
   linkType: hard
 
