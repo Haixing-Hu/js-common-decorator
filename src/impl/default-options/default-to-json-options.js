@@ -24,6 +24,16 @@ class DefaultToJsonOptions {
   normalize = true;
 
   /**
+   * Indicates whether to ignore the empty fields of the object represented by
+   * the result JSON string.
+   *
+   * The default value of this option is `false`.
+   *
+   * @type {boolean}
+   */
+  ignoreEmptyFields = false;
+
+  /**
    * Indicates whether to convert the naming of properties of the object
    * represented by the result JSON string.
    *
