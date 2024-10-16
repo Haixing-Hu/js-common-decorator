@@ -20,8 +20,7 @@ import typeInfo from '@haixing_hu/typeinfo';
  *   method of the object, if the object has such a method;
  * - Otherwise, it returns the value itself.
  *
- * Currently, the following JavaScript build-in collection types are
- * supported:
+ * Currently, the following JavaScript build-in collection types are supported:
  * - `Array`, `Int8Array`, `Uint8Array`, `Uint8ClampedArray`, `Int16Array`,
  *   `Uint16Array`, `Int32Array`, `Uint32Array`, `Float32Array`, `Float64Array`,
  *    `BigInt64Array`, `BigUint64Array`: the normalization function will be called

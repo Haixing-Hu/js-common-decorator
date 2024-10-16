@@ -32,6 +32,7 @@ import { requirePrototypeMethod } from '../utils';
  *     If the `obj` is `undefined` or `null`, returns `null`; otherwise, returns
  *     a new instance of the model class whose fields are initialized with the
  *     data in the `obj`.
+ * @see DefaultOptions.get('assign')
  * @author Haixing Hu
  * @private
  */

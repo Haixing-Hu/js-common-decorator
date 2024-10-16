@@ -23,6 +23,8 @@ import DefaultOptions from '../../default-options';
  *     Available options are:
  *     - `normalize: boolean`, indicates whether to normalize this object
  *       before serializing. The default value is `true`.
+ *     - `ignoreEmptyFields: boolean`, indicates whether to ignore the empty
+ *       fields of the object. The default value is `false`.
  *     - `convertNaming: boolean`, indicates whether to convert the naming
  *       of properties of the object represented by the result JSON string.
  *       The default value is `false`.
