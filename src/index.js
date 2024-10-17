@@ -27,6 +27,7 @@ import createPage from './create-page';
 import normalize from './normalize';
 import toJSON from './to-json';
 import toJsonString from './to-json-string';
+import stringifyId from './stringify-id';
 
 export {
   Page,
@@ -51,4 +52,5 @@ export {
   normalize,
   toJSON,
   toJsonString,
+  stringifyId,
 };
