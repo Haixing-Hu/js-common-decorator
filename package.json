@@ -24,6 +24,13 @@
       "import": "./dist/common-decorator.esm.min.mjs"
     }
   },
+  "files": [
+    "dist/**/*",
+    "doc/**/*",
+    "LICENSE",
+    "README.md",
+    "README.zh_CN.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "clean": "rm -rvf dist doc",
