@@ -15,8 +15,6 @@ import toJsonStringImpl from './impl/model/to-json-string-impl';
  * `bigint` value `9223372036854775807n` will be stringify as
  * `9223372036854775807`.
  *
- * @param {Function} Class
- *     the constructor of the model class of the object.
  * @param {object} obj
  *     the object to be serialized.
  * @param {null|undefined|object} options
@@ -26,8 +24,9 @@ import toJsonStringImpl from './impl/model/to-json-string-impl';
  *     Available options are:
  *     - `normalize: boolean`, indicates whether to normalize this object
  *       before serializing. The default value is `true`.
- *     - `ignoreEmptyFields: boolean`, indicates whether to ignore the empty
- *       fields of the object. The default value is `false`.
+ *     - `removeEmptyFields: boolean`, indicates whether to ignore the empty
+ *       fields of the object. If it is `true`, the empty fields of the object
+ *       will be removed before serialization. The default value is `false`.
  *     - `convertNaming: boolean`, indicates whether to convert the naming
  *       of properties of the object represented by the result JSON string.
  *       The default value is `false`.
@@ -57,8 +56,12 @@ import toJsonStringImpl from './impl/model/to-json-string-impl';
  * @see DefaultOptions.get('toJSON')
  * @author Haixing Hu
  */
-function toJsonString(Class, obj, options) {
-  return toJsonStringImpl(Class, this, options);
+function toJsonString(obj, options) {
+  if (typeof obj !== 'object') {
+    throw new TypeError('The object to be serialized must be an object.');
+  }
+  const Class = obj.constructor;
+  return toJsonStringImpl(Class, obj, options);
 }
 
 export default toJsonString;

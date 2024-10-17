@@ -9,6 +9,7 @@
 import clone from '@haixing_hu/clone';
 import defaultNormalizer from '../../default-normalizer';
 import DefaultOptions from '../../default-options';
+import CLONE_OPTIONS from './clone-options';
 
 /**
  * Gets the object to be serialized by `JSON.stringify()`.
@@ -37,6 +38,8 @@ import DefaultOptions from '../../default-options';
  *     Available options are:
  *     - `normalize: boolean`, indicates whether to normalize this object
  *       before serializing. The default value is `true`.
+ *     - `removeEmptyFields: boolean`, indicates whether to remove the empty
+ *       fields of the object. The default value is `false`.
  *     - `convertNaming: boolean`, indicates whether to convert the naming
  *       of properties of the object represented by the result JSON string.
  *       The default value is `false`.
@@ -70,17 +73,16 @@ function toJsonImpl(Class, obj, key, options) {
   if (opt.normalize) {
     obj = defaultNormalizer(obj);
   }
-  // convert the naming of the properties of the object if necessary
-  if (opt.convertNaming) {
-    obj = clone(obj, {
-      convertNaming: opt.convertNaming,
-      sourceNamingStyle: opt.sourceNamingStyle,
-      targetNamingStyle: opt.targetNamingStyle,
-    });
-  }
-  // NOTE: we must return a plain object to avoid the `toJSON()` method to be
-  // called recursively by JSON.stringify().
-  return { ...obj };
+  const cloneOptions = {
+    ...CLONE_OPTIONS,
+    convertNaming: opt.convertNaming,
+    sourceNamingStyle: opt.sourceNamingStyle,
+    targetNamingStyle: opt.targetNamingStyle,
+    removeEmptyFields: opt.removeEmptyFields,
+    pojo: true,
+    disableHooks: true,
+  };
+  return clone(obj, cloneOptions);
 }
 
 export default toJsonImpl;

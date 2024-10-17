@@ -20,8 +20,6 @@ import toJsonImpl from './impl/model/to-json-impl';
  * or `this.toJsonString()` methods to serialize this object into a JSON
  * string.
  *
- * @param {Function} Class
- *     the constructor of the model class of the object.
  * @param {object} obj
  *     the object to be serialized.
  * @param {null|undefined|object} options
@@ -31,8 +29,9 @@ import toJsonImpl from './impl/model/to-json-impl';
  *     Available options are:
  *     - `normalize: boolean`, indicates whether to normalize this object
  *       before serializing. The default value is `true`.
- *     - `ignoreEmptyFields: boolean`, indicates whether to ignore the empty
- *       fields of the object. The default value is `false`.
+ *     - `removeEmptyFields: boolean`, indicates whether to ignore the empty
+ *       fields of the object. If it is `true`, the empty fields of the object
+ *       will be removed before serialization. The default value is `false`.
  *     - `convertNaming: boolean`, indicates whether to convert the naming
  *       of properties of the object represented by the result JSON string.
  *       The default value is `false`.
@@ -60,8 +59,12 @@ import toJsonImpl from './impl/model/to-json-impl';
  * @see DefaultOptions.get('toJSON')
  * @author Haixing Hu
  */
-function toJSON(Class, obj, options) {
-  return toJsonImpl(Class, this, '', options);
+function toJSON(obj, options) {
+  if (typeof obj !== 'object') {
+    throw new TypeError('The object to be serialized must be an object.');
+  }
+  const Class = obj.constructor;
+  return toJsonImpl(Class, obj, '', options);
 }
 
 export default toJSON;

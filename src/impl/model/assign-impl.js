@@ -26,19 +26,7 @@ import defaultNormalizer from '../../default-normalizer';
 import ofValueImpl from '../enum/of-value-impl';
 import getSourceKey from './get-source-key';
 import getExistKeyWithDifferentNamingStyle from './get-exist-key-with-different-naming-style';
-
-/**
- * Parameters used when calling the `clone()` function to copy attributes.
- *
- * @author Haixing Hu
- * @private
- */
-const CLONE_OPTIONS = {
-  includeAccessor: false,
-  includeNonEnumerable: false,
-  includeReadonly: true,
-  includeNonConfigurable: true,
-};
+import CLONE_OPTIONS from './clone-options';
 
 const Impl = {
   /**

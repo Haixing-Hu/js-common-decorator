@@ -17,8 +17,6 @@ import assignImpl from './impl/model/assign-impl';
  *
  * Note that the data object may have a different prototype than the target object.
  *
- * @param {function|ObjectConstructor} Class
- *     The constructor of the class of the target object.
  * @param {object} target
  *     The target object which will be assigned to. This object must be an
  *     instance of the specified `Class`. Each fields of this object will be
@@ -46,7 +44,11 @@ import assignImpl from './impl/model/assign-impl';
  * @see DefaultOptions.get('assign')
  * @author Haixing Hu
  */
-function assign(Class, target, source, options = undefined) {
+function assign(target, source, options = undefined) {
+  if (typeof target !== 'object') {
+    throw new TypeError('The target object must be an object.');
+  }
+  const Class = target.constructor;
   return assignImpl(Class, target, source, options);
 }
 

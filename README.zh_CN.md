@@ -190,6 +190,8 @@
     - `options: null|undefined|object`：序列化的附加选项。如果该参数为 `undefined` 或 `null`，将使用默认选项。
       默认选项可通过调用 `DefaultOptions.get('toJSON')` 获取。可用选项包括：
         - `normalize: boolean`，指示在序列化之前是否对该对象进行规范化。默认值为 `true`。
+        - `removeEmptyFields: boolean`，指示是否忽略对象的空字段。如果为 `true`，对象的
+          空字段将在序列化之前被移除。默认值为 `false`。
         - `convertNaming: boolean`，指示是否转换结果 JSON 字符串中对象属性的命名风格。默认值为 `false`。
         - `sourceNamingStyle: string`，源对象的命名风格，即调用 `toJSON()` 方法的对象。默认值为 `'LOWER_CAMEL'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即 `toJSON()` 方法返回的 JSON 字符串中对象的命名风格。
@@ -214,6 +216,8 @@
     - `options: null|undefined|object`：用于序列化的附加选项。如果该参数为 `undefined` 或 `null`，将使用默认选项。
       默认选项可通过调用 `DefaultOptions.get('toJSON')` 获取。可用选项包括：
         - `normalize: boolean`，指示在序列化之前是否对该对象进行规范化。默认值为 `true`。
+        - `removeEmptyFields: boolean`，指示是否忽略对象的空字段。如果为 `true`，对象的
+          空字段将在序列化之前被移除。默认值为 `false`
         - `convertNaming: boolean`，指示是否转换结果 JSON 字符串中对象属性的命名风格。默认值为 `false`。
         - `sourceNamingStyle: string`，源对象的命名风格，即调用 `toJSON()` 方法的对象。默认值为 `'LOWER_CAMEL'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即 `toJSON()` 方法返回的 JSON 字符串中对象的命名风格。
