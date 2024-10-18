@@ -185,6 +185,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(male.value).toBe('MALE');
     expect(male.toString()).toBe('MALE');
     expect(String(male)).toBe('MALE');
+    expect(`the gender is ${male}`).toBe('the gender is MALE');
     const female = GenderWithPayload.FEMALE;
     expect(female).toBeDefined();
     expect(female).not.toBeNull();
@@ -192,6 +193,7 @@ describe('Test the `@Enum` class decorator', () => {
     expect(female.value).toBe('FEMALE');
     expect(female.toString()).toBe('FEMALE');
     expect(String(female)).toBe('FEMALE');
+    expect(`the gender is ${female}`).toBe('the gender is FEMALE');
   });
   test('Enumerators should have `toJSON()` method', () => {
     const male = GenderWithPayload.MALE;
