@@ -20,8 +20,8 @@ import toJsonImpl from './impl/model/to-json-impl';
  * or `this.toJsonString()` methods to serialize this object into a JSON
  * string.
  *
- * @param {object} obj
- *     the object to be serialized.
+ * @param {any} value
+ *     the value to be serialized.
  * @param {null|undefined|object} options
  *     the additional options for the serialization. If this argument is
  *     `undefined` or `null`, the default options will be used. The default
@@ -59,12 +59,11 @@ import toJsonImpl from './impl/model/to-json-impl';
  * @see DefaultOptions.get('toJSON')
  * @author Haixing Hu
  */
-function toJSON(obj, options) {
-  if (typeof obj !== 'object') {
-    throw new TypeError('The object to be serialized must be an object.');
-  }
-  const Class = obj.constructor;
-  return toJsonImpl(Class, obj, '', options);
+function toJSON(value, options = {}) {
+  return toJsonImpl(value, '', {
+    ...options,
+    skipRootToJSON: false,    // always use the toJSON() method of the root object
+  });
 }
 
 export default toJSON;

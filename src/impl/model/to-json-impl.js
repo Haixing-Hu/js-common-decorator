@@ -18,8 +18,6 @@ import CLONE_OPTIONS from './clone-options';
  * data will be serialized. Instead of the object being serialized, the value
  * returned by the `toJSON()` method when called will be serialized.
  *
- * @param {Function} Class
- *     the constructor of the model class of the object.
  * @param {object} obj
  *     the object to be serialized.
  * @param {string} key
@@ -67,7 +65,7 @@ import CLONE_OPTIONS from './clone-options';
  *     modify copy of this object.
  * @see DefaultOptions.get('toJSON')
  */
-function toJsonImpl(Class, obj, key, options) {
+function toJsonImpl(obj, key, options) {
   const opt = DefaultOptions.merge('toJSON', options);
   // normalize the object if necessary
   if (opt.normalize) {
@@ -75,12 +73,14 @@ function toJsonImpl(Class, obj, key, options) {
   }
   const cloneOptions = {
     ...CLONE_OPTIONS,
+    pojo: true,
+    disableHooks: true,
+    useToJSON: true,
     convertNaming: opt.convertNaming,
     sourceNamingStyle: opt.sourceNamingStyle,
     targetNamingStyle: opt.targetNamingStyle,
     removeEmptyFields: opt.removeEmptyFields,
-    pojo: true,
-    disableHooks: true,
+    skipRootToJSON: opt.skipRootToJSON,
   };
   return clone(obj, cloneOptions);
 }

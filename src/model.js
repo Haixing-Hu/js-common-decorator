@@ -533,7 +533,10 @@ function Model(Class, context) {
      * @see DefaultOptions.get('toJSON')
      */
     Class.prototype.toJSON = function toJSON(key, options = undefined) {
-      return toJsonImpl(Class, this, key, options);
+      return toJsonImpl(this, key, {
+        ...options,
+        skipRootToJSON: true,
+      });
     };
   }
   // Add the instance method `toJSON()`
