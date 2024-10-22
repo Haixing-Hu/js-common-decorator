@@ -1,4 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
+import Json from '@haixing_hu/json';
+import DefaultOptions from '../../default-options';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -7,7 +9,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import Page from '../../model/page';
-import createArrayImpl from './create-array-impl';
+import assignImpl from './assign-impl';
+import isValidPageSource from './is-valid-page-source';
 
 /**
  * Creates a Page object from the specified data.
@@ -29,6 +32,16 @@ import createArrayImpl from './create-array-impl';
  *       object. The default value is {@link LOWER_UNDERSCORE}.
  *     - `targetNamingStyle: NamingStyle`, the naming style of the target
  *       object. The default value is {@link LOWER_CAMEL}.
+ *     - `targetTypes: object`, the additional information about types of
+ *       fields of classes. The keys of this object are the path of the fields
+ *       or sub-fields of the target object, the values are the type of the
+ *       fields, represented as the constructor function of the type.
+ *       The default value is `{}`.
+ *     - `targetElementTypes: object`, the additional information about types of
+ *       elements of fields of classes. The keys of this object are the path of
+ *       the fields or sub-fields of the target object, the values are the type
+ *       of the elements, represented as the constructor function of the type.
+ *       The default value is `{}`.
  * @returns {Page}
  *     The created `Page` object.
  * @see Page
@@ -38,17 +51,17 @@ import createArrayImpl from './create-array-impl';
 function createPageImpl(Class, page, options) {
   if (page === undefined || page === null) {
     return null;
-  } else if (Page.isValid(page)) {
-    // FIXME: shall we use an option to control the name convention of JSON object?
-    return new Page(
-      page.total_count,
-      page.total_pages,
-      page.page_index,
-      page.page_size,
-      createArrayImpl(Class, page.content, options),
-    );
+  } else if (isValidPageSource(page, options)) {
+    const result = new Page();
+    const opt = { ...options };
+    if (opt.targetElementTypes) {
+      opt.targetElementTypes['Page.content'] = Class;
+    } else {
+      opt.targetElementTypes = { 'Page.content': Class };
+    }
+    return assignImpl(Page, result, page, opt);
   } else {
-    throw new TypeError(`Invalid page format: ${JSON.stringify(page)}`);
+    throw new TypeError(`Invalid page format: ${Json.stringify(page)}`);
   }
 }
 

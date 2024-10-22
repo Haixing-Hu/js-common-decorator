@@ -25,22 +25,6 @@ describe('Test static method `createPage()`', () => {
     const result = Person.createPage(null);
     expect(result).toBeNull();
   });
-  test('Test `Person.createPage("")`', () => {
-    expect(() => Person.createPage(''))
-      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
-  });
-  test('Test `Person.createPage("xx")`', () => {
-    expect(() => Person.createPage('xx'))
-      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
-  });
-  test('Test `Person.createPage({ xx: 123 })`', () => {
-    expect(() => Person.createPage({ xx: 123 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
-  });
-  test('Test `Person.createPage({ page_index: 0, page_size: 10 })`', () => {
-    expect(() => Person.createPage({ page_index: 0, page_size: 10 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"page_index":0,"page_size":10}');
-  });
   test('Test `Person.createPage(emptyPage)`', () => {
     const result = Person.createPage({
       total_count: 0,
@@ -48,6 +32,10 @@ describe('Test static method `createPage()`', () => {
       page_index: 0,
       page_size: 10,
       content: [],
+    }, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
     });
     expect(result).toEqual(new Page(0, 0, 0, 10, []));
   });
@@ -77,12 +65,16 @@ describe('Test static method `createPage()`', () => {
       null,
       ],
     };
-    const result = Person.createPage(page);
+    const result = Person.createPage(page, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
     expect(result).toBeInstanceOf(Page);
-    expect(result.total_count).toBe(3);
-    expect(result.total_pages).toBe(1);
-    expect(result.page_index).toBe(0);
-    expect(result.page_size).toBe(5);
+    expect(result.totalCount).toBe(3);
+    expect(result.totalPages).toBe(1);
+    expect(result.pageIndex).toBe(0);
+    expect(result.pageSize).toBe(5);
     expect(result.content).toBeArray();
     expect(result.content.length).toBe(3);
     expect(result.content[0]).toBeInstanceOf(Person);
@@ -131,12 +123,16 @@ describe('Test static method `createPage()`', () => {
       null,
       ],
     };
-    const result = Person.createPage(page);
+    const result = Person.createPage(page, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
     expect(result).toBeInstanceOf(Page);
-    expect(result.total_count).toBe(3);
-    expect(result.total_pages).toBe(1);
-    expect(result.page_index).toBe(0);
-    expect(result.page_size).toBe(5);
+    expect(result.totalCount).toBe(3);
+    expect(result.totalPages).toBe(1);
+    expect(result.pageIndex).toBe(0);
+    expect(result.pageSize).toBe(5);
     expect(result.content).toBeArray();
     expect(result.content.length).toBe(3);
     expect(result.content[0]).toBeInstanceOf(Person);
@@ -163,11 +159,15 @@ describe('Test static method `createPage()`', () => {
     const wrapper = mount(PageWrapper);
     expect(wrapper.vm.page).toBeDefined();
     expect(wrapper.vm.page).not.toBeNull();
-    const result = Credential.createPage(wrapper.vm.page);
-    expect(result.total_count).toBe(2);
-    expect(result.total_pages).toBe(1);
-    expect(result.page_index).toBe(0);
-    expect(result.page_size).toBe(5);
+    const result = Credential.createPage(wrapper.vm.page, {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
+    expect(result.totalCount).toBe(2);
+    expect(result.totalPages).toBe(1);
+    expect(result.pageIndex).toBe(0);
+    expect(result.pageSize).toBe(5);
     expect(result.content).toBeArray();
     expect(result.content.length).toBe(2);
     expect(result.content[0]).toBeInstanceOf(Credential);
@@ -207,10 +207,10 @@ describe('Test static method `createPage()`', () => {
       targetNamingStyle: 'LOWER_CAMEL',
     });
     expect(result).toBeInstanceOf(Page);
-    expect(result.total_count).toBe(3);
-    expect(result.total_pages).toBe(1);
-    expect(result.page_index).toBe(0);
-    expect(result.page_size).toBe(1);
+    expect(result.totalCount).toBe(3);
+    expect(result.totalPages).toBe(1);
+    expect(result.pageIndex).toBe(0);
+    expect(result.pageSize).toBe(1);
     expect(result.content).toBeArray();
     expect(result.content.length).toBe(1);
     expect(result.content[0].firstField).toBe('first-field');
@@ -245,12 +245,16 @@ describe('Test static method `createPage()`', () => {
       page_size: 1,
       content: [obj],
     };
-    DefaultOptions.set('assign', { convertNaming: true });
+    DefaultOptions.set('assign', {
+      convertNaming: true,
+      sourceNamingStyle: 'LOWER_UNDERSCORE',
+      targetNamingStyle: 'LOWER_CAMEL',
+    });
     const result = ObjWithNamingConversion.createPage(page);
-    expect(result.total_count).toBe(3);
-    expect(result.total_pages).toBe(1);
-    expect(result.page_index).toBe(0);
-    expect(result.page_size).toBe(1);
+    expect(result.totalCount).toBe(3);
+    expect(result.totalPages).toBe(1);
+    expect(result.pageIndex).toBe(0);
+    expect(result.pageSize).toBe(1);
     expect(result.content).toBeArray();
     expect(result.content.length).toBe(1);
     expect(result.content[0].firstField).toBe('first-field');
@@ -261,5 +265,22 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
     expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
     DefaultOptions.set('assign', { convertNaming: false });
+  });
+
+  test('Test `Person.createPage("")`', () => {
+    expect(() => Person.createPage(''))
+      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
+  });
+  test('Test `Person.createPage("xx")`', () => {
+    expect(() => Person.createPage('xx'))
+      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
+  });
+  test('Test `Person.createPage({ xx: 123 })`', () => {
+    expect(() => Person.createPage({ xx: 123 }))
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
+  });
+  test('Test `Person.createPage({ page_index: 0, page_size: 10 })`', () => {
+    expect(() => Person.createPage({ pageIndex: 0, pageSize: 10 }))
+      .toThrowWithMessage(TypeError, 'Invalid page format: {"pageIndex":0,"pageSize":10}');
   });
 });

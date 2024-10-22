@@ -8,52 +8,52 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 表示分页列表操作返回的数据页。
+ * The data page returned by the pagination list operation.
  *
- * @author 胡海星
+ * @author Haixing Hu
  */
 class Page {
   /**
-   * 符合查询条件的记录总数目。
+   * The total number of records that meet the query conditions.
+   *
+   * @type {number}
    */
-  total_count = 0;
+  totalCount = 0;
 
   /**
-   * 符合查询条件的分页总数目。
+   * The total number of pages.
+   *
+   * @type {number}
    */
-  total_pages = 0;
+  totalPages = 0;
 
   /**
-   * 当前分页的索引号，从0开始编号。
+   * The index of the current page, starting from 0.
+   *
+   * @type {number}
    */
-  page_index = 0;
+  pageIndex = 0;
 
   /**
-   * 当前分页的大小，即每页记录数。
+   * The size of the current page, i.e., the number of records per page.
+   *
+   * @type {number}
    */
-  page_size = 0;
+  pageSize = 0;
 
   /**
-   * 当前分页的记录集合。
+   * The content of the current page.
+   *
+   * @type {Array}
    */
   content = [];
 
-  constructor(total_count = 0, total_pages = 0, page_index = 0, page_size = 0, content = []) {
-    this.total_count = total_count;
-    this.total_pages = total_pages;
-    this.page_index = page_index;
-    this.page_size = page_size;
+  constructor(totalCount = 0, totalPages = 0, pageIndex = 0, pageSize = 0, content = []) {
+    this.totalCount = totalCount;
+    this.totalPages = totalPages;
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
     this.content = content;
-  }
-
-  static isValid(page) {
-    return (page !== undefined)
-      && (page !== null)
-      && (typeof page.total_count === 'number')
-      && (typeof page.total_pages === 'number')
-      && (typeof page.page_index === 'number')
-      && (typeof page.page_size === 'number')
-      && Array.isArray(page.content);
   }
 }
 

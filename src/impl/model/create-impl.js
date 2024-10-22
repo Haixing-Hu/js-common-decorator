@@ -6,7 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { requirePrototypeMethod } from '../utils';
+import { hasPrototypeFunction } from '../utils';
+import assignImpl from './assign-impl';
 
 /**
  * Creates an instance of a model class.
@@ -37,13 +38,17 @@ import { requirePrototypeMethod } from '../utils';
  * @private
  */
 function createImpl(Class, obj, options) {
-  requirePrototypeMethod(Class, 'assign');
   if (obj === undefined || obj === null) {
     return null;
   } else if (typeof obj !== 'object') {
     throw new TypeError(`The first argument of ${Class.name}.create() must be an object.`);
+  } else if (hasPrototypeFunction(Class, 'assign')) {
+    const result = new Class();
+    result.assign(obj, options);
+    return result;
   } else {
-    return new Class().assign(obj, options);
+    const result = new Class();
+    return assignImpl(Class, result, obj, options);
   }
 }
 

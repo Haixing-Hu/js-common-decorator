@@ -37,6 +37,16 @@ import createImpl from './impl/model/create-impl';
  *       object. The default value is {@link LOWER_UNDERSCORE}.
  *     - `targetNamingStyle: NamingStyle`, the naming style of the target
  *       object. The default value is {@link LOWER_CAMEL}.
+ *     - `targetTypes: object`, the additional information about types of
+ *       fields of classes. The keys of this object are the path of the fields
+ *       or sub-fields of the target object, the values are the type of the
+ *       fields, represented as the constructor function of the type.
+ *       The default value is `{}`.
+ *     - `targetElementTypes: object`, the additional information about types of
+ *       elements of fields of classes. The keys of this object are the path of
+ *       the fields or sub-fields of the target object, the values are the type
+ *       of the elements, represented as the constructor function of the type.
+ *       The default value is `{}`.
  * @returns {Class | null}
  *     If the `obj` is `undefined` or `null`, returns `null`; otherwise, returns
  *     a new instance of the model class whose fields are initialized with the
