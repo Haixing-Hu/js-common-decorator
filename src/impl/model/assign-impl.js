@@ -417,6 +417,8 @@ const Impl = {
           if (existSourceKey) {
             console.warn(`Cannot find the source property '${sourceFieldPath}' for the target property '${targetFieldPath}'. `
               + `But the source object has a property '${sourcePath}.${existSourceKey}'. A correct naming conversion may be needed.`);
+            console.warn('source object:', source);
+            console.warn('target object:', target);
           }
           // and then copy the default field value directly.
           target[targetKey] = clone(defaultFieldValue, CLONE_OPTIONS);
