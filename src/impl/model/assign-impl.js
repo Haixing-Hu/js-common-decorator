@@ -448,7 +448,6 @@ const Impl = {
           // decorated with `@Type`, it is impossible to determine the type of
           // the attribute, therefore we directly clone the source object field
           // value.
-          console.warn('There is no type information for the field:', targetFieldPath);
           // clone the source field value with the naming conversion options
           target[targetKey] = clone(sourceFieldValue, {
             ...CLONE_OPTIONS,
