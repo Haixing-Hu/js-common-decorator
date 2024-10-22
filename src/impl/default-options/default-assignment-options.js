@@ -52,6 +52,100 @@ class DefaultAssignmentOptions {
    * @type {string}
    */
   targetNamingStyle = 'LOWER_CAMEL';
+
+  /**
+   * The additional information about types of fields of classes.
+   *
+   * The keys of this object are the path of the fields or sub-fields of the
+   * target object, the values are the type of the fields, represented
+   * as the constructor function of the type.
+   *
+   * For example:
+   * ```js
+   * &#064;Model
+   * class Child {
+   *   name = null;
+   *
+   *   credential = null;
+   * }
+   *
+   * &#064;Model
+   * class Foo {
+   *   id = null;
+   *
+   *   &#064;Type(Child)
+   *   child = null;
+   * }
+   * ```
+   * In this example, in order to assign a JSON object to an instance of `Foo`,
+   * we could specify the type of the `Foo.id`, `Foo.child.name`, and
+   * `Foo.child.credential` as follows:
+   * ```
+   * const foo = Foo.create(obj, {
+   *   targetTypes: {
+   *     'Foo.id': Number,
+   *     'Foo.child.name': String,
+   *     'Foo.child.credential': Credential,
+   *   },
+   * });
+   * ```
+   *
+   * Note that the path of the fields or sub-fields of the target object should
+   * include the class name of the target object.
+   *
+   * The default value of this option is an empty object.
+   *
+   * @type {object}
+   */
+  targetTypes = {};
+
+  /**
+   * The additional information about element types of fields of the target object.
+   *
+   * The keys of this object are the path of the fields or sub-fields of the
+   * target object, the values are the type of the fields, represented
+   * as the constructor function of the type.
+   *
+   * For example:
+   * ```js
+   * &#064;Model
+   * class Child {
+   *   name = null;
+   *
+   *   credentials = [];
+   * }
+   *
+   * &#064;Model
+   * class Foo {
+   *   id = null;
+   *
+   *   &#064;Type(Child)
+   *   child = null;
+   * }
+   * ```
+   * In this example, in order to assign a JSON object to an instance of `Foo`,
+   * we could specify the type of the `Foo.id`, `Foo.child.name`, and
+   * `Foo.child.credentials` as follows:
+   * ```
+   * const foo = Foo.create(obj, {
+   *   targetTypes: {
+   *     'Foo.id': Number,
+   *     'Foo.child.name': String,
+   *   },
+   *   targetElementTypes: {
+   *     'Foo.child.credential': Credential,
+   *   },
+   * });
+   * ```
+   *
+   * Note that the path of the fields or sub-fields of the target object should
+   * include the class name of the target object.
+   *
+   * The default value of this option is an empty object.
+   *
+   * @type {object}
+   */
+  targetElementTypes = {};
 }
 
 export default DefaultAssignmentOptions;

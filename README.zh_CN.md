@@ -67,12 +67,19 @@
 
 - 参数：
     - `obj: object`：将要复制其字段的对象，该对象可能与当前对象有不同的原型。
-    - `options: null|undefined|object`：用于赋值的额外选项。如果该参数为 `undefined` 或 `null`，则使用默认选项。
-      默认选项可通过调用 `DefaultOptions.get('assign')` 获取。可用选项包括：
+    - `options: null|undefined|object`：用于赋值的额外选项。如果该参数为 `undefined` 
+      或 `null`，则使用默认选项。默认选项可通过调用 `DefaultOptions.get('assign')` 获取。
+      可用选项包括：
         - `normalize: boolean`，指示在赋值后是否对该对象进行规范化。默认值为 `true`。
         - `convertNaming: boolean`，指示是否转换目标对象的命名风格。默认值为 `false`。
-        - `sourceNamingStyle: string`，源对象的命名风格，即 `assign()` 方法的第一个参数。默认值为 `'LOWER_UNDERSCORE'`。
-        - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。默认值为 `'LOWER_CAMEL'`。
+        - `sourceNamingStyle: string`，源对象的命名风格，即 `assign()` 方法的第一个参数。
+          默认值为 `'LOWER_UNDERSCORE'`。
+        - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
+          默认值为 `'LOWER_CAMEL'`。
+        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+          值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
+        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+          或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object`：调用该方法的对象自身。
 
@@ -238,12 +245,19 @@
 
 - 参数：
     - `obj: object`：用于创建新实例的数据对象。
-    - `options: null|undefined|object`：用于创建的附加选项。如果该参数为 `undefined` 或 `null`，则使用默认选项。
-      默认选项可通过调用 `DefaultOptions.get('assign')` 获取。可用选项包括：
+    - `options: null|undefined|object`：用于赋值的额外选项。如果该参数为 `undefined`
+      或 `null`，则使用默认选项。默认选项可通过调用 `DefaultOptions.get('assign')` 获取。
+      可用选项包括：
         - `normalize: boolean`，指示在赋值后是否对该对象进行规范化。默认值为 `true`。
         - `convertNaming: boolean`，指示是否转换目标对象的命名风格。默认值为 `false`。
-        - `sourceNamingStyle: string`，源对象的命名风格，即 `create()` 方法的第一个参数。默认值为 `'LOWER_UNDERSCORE'`。
-        - `targetNamingStyle: string`，目标对象的命名风格，即 `create()` 方法返回的对象。默认值为 `'LOWER_CAMEL'`。
+        - `sourceNamingStyle: string`，源对象的命名风格，即 `assign()` 方法的第一个参数。
+          默认值为 `'LOWER_UNDERSCORE'`。
+        - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
+          默认值为 `'LOWER_CAMEL'`。
+        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+          值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
+        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+          或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object | null`：如果 `obj` 为 `undefined` 或 `null`，则返回 `null`；否则，返回一个新实例，
       实例的字段使用 `obj` 中的数据初始化。
@@ -254,14 +268,19 @@
 
 - 参数：
     - `array: object[]`：用于创建新数组的数据对象数组。
-    - `options: null|undefined|object`：用于创建的附加选项。如果该参数为 `undefined` 或 `null`，则使用默认选项。
-      默认选项可通过调用 `DefaultOptions.get('assign')` 获取。可用选项包括：
+    - `options: null|undefined|object`：用于赋值的额外选项。如果该参数为 `undefined`
+      或 `null`，则使用默认选项。默认选项可通过调用 `DefaultOptions.get('assign')` 获取。
+      可用选项包括：
         - `normalize: boolean`，指示在赋值后是否对该对象进行规范化。默认值为 `true`。
         - `convertNaming: boolean`，指示是否转换目标对象的命名风格。默认值为 `false`。
-        - `sourceNamingStyle: string`，源对象的命名风格，即 `createArray()` 方法的第一个参数的元素的命名风格。
+        - `sourceNamingStyle: string`，源对象的命名风格，即 `assign()` 方法的第一个参数。
           默认值为 `'LOWER_UNDERSCORE'`。
-        - `targetNamingStyle: string`，目标对象的命名风格，即 `createArray()` 方法返回的数组中的元素的命名风格。
+        - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
           默认值为 `'LOWER_CAMEL'`。
+        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+          值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
+        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+          或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object[] | null`：如果 `array` 为 `undefined` 或 `null`，则返回 `null`；否则，返回一个包含指定类实例的新数组，
       这些实例的字段由数组中的对应数据对象初始化。
@@ -281,6 +300,10 @@
           数组中的元素的命名风格。默认值为 `'LOWER_UNDERSCORE'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即 `createPage()` 方法返回的 `Page` 对象中 
           `content` 数组中的元素的命名风格。默认值为 `'LOWER_CAMEL'`。
+        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+          值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
+        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+          或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `Page | null`：如果 `page` 为 `undefined` 或 `null`，则返回 `null`；否则返回一个新的 `Page` 类实例，
       其内容由分页数据对象 `page` 的内容初始化。

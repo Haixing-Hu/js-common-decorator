@@ -78,7 +78,7 @@ describe('Test `@ElementType``', () => {
         number: 'US1234567',
       }, {
         number: '320103111101333X',
-      }, null],
+      }, undefined],
       stringArray: ['abc', 'def'],
       numberArray: [123, 456],
     };
@@ -98,8 +98,7 @@ describe('Test `@ElementType``', () => {
     expect(obj.credentials[2]).toBeInstanceOf(Credential);
     expect(obj.credentials[2].type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credentials[2].number).toBe('320103111101333X');
-    expect(obj.credentials[3].type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.credentials[3].number).toBe('');
+    expect(obj.credentials[3]).toBeNull();
 
     expect(obj.noTypeCredentials).toBeArray();
     expect(obj.noTypeCredentials.length).toBe(4);
@@ -120,8 +119,7 @@ describe('Test `@ElementType``', () => {
     expect(obj.nonDecoratedClassArray[0].value).toBe('abc');
     expect(obj.nonDecoratedClassArray[1]).toBeInstanceOf(NonDecoratedClass);
     expect(obj.nonDecoratedClassArray[1].value).toBeNull();
-    expect(obj.nonDecoratedClassArray[2]).toBeInstanceOf(NonDecoratedClass);
-    expect(obj.nonDecoratedClassArray[2].value).toBe('');
+    expect(obj.nonDecoratedClassArray[2]).toBeNull();
 
     expect(obj.assignedToNonArray).toBeArray();
     expect(obj.assignedToNonArray.length).toBe(0);
@@ -143,8 +141,7 @@ describe('Test `@ElementType``', () => {
     expect(obj.credentialsArrayDefaultNull[2]).toBeInstanceOf(Credential);
     expect(obj.credentialsArrayDefaultNull[2].type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credentialsArrayDefaultNull[2].number).toBe('320103111101333X');
-    expect(obj.credentialsArrayDefaultNull[3].type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.credentialsArrayDefaultNull[3].number).toBe('');
+    expect(obj.credentialsArrayDefaultNull[3]).toBeNull();
 
     expect(obj.credentialsArrayDefaultUndefined).toBeArray();
     expect(obj.credentialsArrayDefaultUndefined.length).toBe(4);
@@ -157,8 +154,7 @@ describe('Test `@ElementType``', () => {
     expect(obj.credentialsArrayDefaultUndefined[2]).toBeInstanceOf(Credential);
     expect(obj.credentialsArrayDefaultUndefined[2].type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credentialsArrayDefaultUndefined[2].number).toBe('320103111101333X');
-    expect(obj.credentialsArrayDefaultUndefined[3].type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.credentialsArrayDefaultUndefined[3].number).toBe('');
+    expect(obj.credentialsArrayDefaultUndefined[3]).toBeUndefined();
 
     expect(obj.stringArray).toBeArray();
     expect(obj.stringArray.length).toBe(2);

@@ -294,6 +294,16 @@ function Model(Class, context) {
      *     - `targetNamingStyle: string`, the naming style of the target object,
      *       i.e., the object calling the `assign()` method. The default value
      *       of this argument is `'LOWER_CAMEL'`.
+     *     - `targetTypes: object`, the additional information about types of
+     *       fields of classes. The keys of this object are the path of the fields
+     *       or sub-fields of the target object, the values are the type of the
+     *       fields, represented as the constructor function of the type.
+     *       The default value is `{}`.
+     *     - `targetElementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value is `{}`.
      * @returns {object}
      *     the reference to this object.
      * @see DefaultOptions.get('assign')
@@ -622,6 +632,16 @@ function Model(Class, context) {
      *     - `targetNamingStyle: string`, the naming style of the target object,
      *       i.e., the object returned by the `create()` method. The default
      *       value of this argument is `'LOWER_CAMEL'`.
+     *     - `targetTypes: object`, the additional information about types of
+     *       fields of classes. The keys of this object are the path of the fields
+     *       or sub-fields of the target object, the values are the type of the
+     *       fields, represented as the constructor function of the type.
+     *       The default value is `{}`.
+     *     - `targetElementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value is `{}`.
      * @returns {Class|null}
      *     the new instance of this class created from the specified data object,
      *     or `null` if the specified object is `null` or `undefined`.
@@ -661,6 +681,16 @@ function Model(Class, context) {
      *     - `targetNamingStyle: string`, the naming style of the target object,
      *       i.e., the elements in the array returned by the `createArray()`
      *       method. The default value of this argument is `'LOWER_CAMEL'`.
+     *     - `targetTypes: object`, the additional information about types of
+     *       fields of classes. The keys of this object are the path of the fields
+     *       or sub-fields of the target object, the values are the type of the
+     *       fields, represented as the constructor function of the type.
+     *       The default value is `{}`.
+     *     - `targetElementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value is `{}`.
      * @returns {Array<Class>|null}
      *     the new array of instances of this class created from the specified
      *     data object array, or `null` if the specified data object array is
@@ -700,6 +730,16 @@ function Model(Class, context) {
      *       i.e., the elements in the `content` array of the `Page` object
      *       returned by the `createPage()` method. The default value of this
      *       argument is `'LOWER_CAMEL'`.
+     *     - `targetTypes: object`, the additional information about types of
+     *       fields of classes. The keys of this object are the path of the fields
+     *       or sub-fields of the target object, the values are the type of the
+     *       fields, represented as the constructor function of the type.
+     *       The default value is `{}`.
+     *     - `targetElementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value is `{}`.
      * @returns {Page|null}
      *     A new `Page` object, whose `content` property is the result of
      *     `this.createArray(page.content, true)`, and the other properties

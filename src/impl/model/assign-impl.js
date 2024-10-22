@@ -24,9 +24,11 @@ import classMetadataCache from '../class-metadata-cache';
 import DefaultOptions from '../../default-options';
 import defaultNormalizer from '../../default-normalizer';
 import ofValueImpl from '../enum/of-value-impl';
-import getSourceKey from './get-source-key';
-import getExistKeyWithDifferentNamingStyle from './get-exist-key-with-different-naming-style';
+import getSourceField from './get-source-field';
+import getExistFieldWithDifferentNamingStyle from './get-exist-field-with-different-naming-style';
 import CLONE_OPTIONS from './clone-options';
+import getTargetFieldElementType from './get-target-field-element-type';
+import getTargetFieldType from './get-target-field-type';
 
 const Impl = {
   /**
@@ -249,6 +251,10 @@ const Impl = {
         // array one by one.
         const defaultElement = getDefaultInstance(elementType);
         return sourceArray.map((sourceElement, index) => {
+          if (isUndefinedOrNull(sourceElement)) {
+            // If the source element is nullish, directly returns it
+            return sourceElement;
+          }
           // Create an element from the target array
           /* eslint-disable-next-line new-cap */
           const targetElement = new elementType();
@@ -400,47 +406,52 @@ const Impl = {
       const metadata = classMetadataCache.get(type);
       const theDefaultInstance = defaultInstance ?? getDefaultInstance(type);
       const targetKeys = this.getAllFields(target, source, { type, options });
-      targetKeys.forEach((targetKey) => {
-        const defaultFieldValue = theDefaultInstance[targetKey];
-        const targetFieldPath = `${targetPath}.${targetKey}`;
-        const sourceKey = getSourceKey(targetKey, options);
-        const sourceFieldPath = `${sourcePath}.${sourceKey}`;
-        const sourceFieldValue = source[sourceKey];
-        // If field of the target object is annotated with `@Type`, get the annotated type
-        const annotatedFieldType = getFieldMetadata(metadata, targetKey, KEY_FIELD_TYPE);
-        // If field of the target object is annotated with `@ElementType`, get the annotated element type
-        const annotatedFieldElementType = getFieldMetadata(metadata, targetKey, KEY_FIELD_ELEMENT_TYPE);
-        if (!Object.prototype.hasOwnProperty.call(source, sourceKey)) {
+      targetKeys.forEach((targetField) => {
+        const defaultFieldValue = theDefaultInstance[targetField];
+        const targetFieldPath = `${targetPath}.${targetField}`;
+        const sourceField = getSourceField(targetField, options);
+        const sourceFieldPath = `${sourcePath}.${sourceField}`;
+        const sourceFieldValue = source[sourceField];
+        // If field of the target object is annotated with `@Type`, or the
+        // `options.targetTypes` has the type information of the field, get the field type
+        const targetFieldType = getTargetFieldType(metadata, targetField, targetFieldPath, options);
+        // If field of the target object is annotated with `@ElementType`,
+        // or the `options.targetElementTypes` has the type information of the
+        // field element, get the field element type
+        const targetFieldElementType = getTargetFieldElementType(metadata, targetField, targetFieldPath, options);
+        if (!Object.prototype.hasOwnProperty.call(source, sourceField)) {
           // If the source object does not have the field
           // warn if the source object has a field with different naming style
-          const existSourceKey = getExistKeyWithDifferentNamingStyle(sourceKey, source);
-          if (existSourceKey) {
-            console.warn(`Cannot find the source property '${sourceFieldPath}' for the target property '${targetFieldPath}'. `
-              + `But the source object has a property '${sourcePath}.${existSourceKey}'. A correct naming conversion may be needed.`);
+          const existSourceField = getExistFieldWithDifferentNamingStyle(sourceField, source);
+          if (existSourceField) {
+            console.warn(`Cannot find the source property '${sourceFieldPath}' `
+              + `for the target property '${targetFieldPath}'. `
+              + `But the source object has a property '${sourcePath}.${existSourceField}'. `
+              + 'A correct naming conversion may be needed.');
             console.warn('source object:', source);
             console.warn('target object:', target);
           }
           // and then copy the default field value directly.
-          target[targetKey] = clone(defaultFieldValue, CLONE_OPTIONS);
+          target[targetField] = clone(defaultFieldValue, CLONE_OPTIONS);
         } else if (isUndefinedOrNull(sourceFieldValue)) {
           // If the source object has the field, but the field value is nullish,
           // copy the nullish source field value directly.
-          target[targetKey] = sourceFieldValue;
-        } else if (annotatedFieldType) {
+          target[targetField] = sourceFieldValue;
+        } else if (targetFieldType) {
           // If the field of the target object is annotated with `@Type`
-          target[targetKey] = this.cloneWithTypeInfo(sourceFieldValue, {
+          target[targetField] = this.cloneWithTypeInfo(sourceFieldValue, {
             targetPath: targetFieldPath,
             sourcePath: sourceFieldPath,
-            type: annotatedFieldType,
+            type: targetFieldType,
             defaultInstance: defaultFieldValue,
             options,
           });
-        } else if (annotatedFieldElementType) {
+        } else if (targetFieldElementType) {
           // If the field of the target object is annotated with `@ElementType`
-          target[targetKey] = this.cloneArrayWithElementTypeInfo(sourceFieldValue, {
+          target[targetField] = this.cloneArrayWithElementTypeInfo(sourceFieldValue, {
             targetPath: targetFieldPath,
             sourcePath: sourceFieldPath,
-            elementType: annotatedFieldElementType,
+            elementType: targetFieldElementType,
             defaultArray: defaultFieldValue,
             options,
           });
@@ -451,7 +462,7 @@ const Impl = {
           // the attribute, therefore we directly clone the source object field
           // value.
           // clone the source field value with the naming conversion options
-          target[targetKey] = clone(sourceFieldValue, {
+          target[targetField] = clone(sourceFieldValue, {
             ...CLONE_OPTIONS,
             convertNaming: options.convertNaming,
             sourceNamingStyle: options.sourceNamingStyle,
@@ -460,8 +471,7 @@ const Impl = {
         } else if (Array.isArray(defaultFieldValue)) {
           // If the field value of the target object is an array but has not
           // been annotated with `@ElementType`
-          console.warn('There is no element type information for the array field:', targetFieldPath);
-          target[targetKey] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
+          target[targetField] = this.cloneArrayWithoutElementTypeInfo(sourceFieldValue, {
             targetPath: targetFieldPath,
             sourcePath: sourceFieldPath,
             defaultArray: defaultFieldValue,
@@ -471,7 +481,7 @@ const Impl = {
           // If the property value of the target object is a non-null and
           // non-array object, we must create an object of the same prototype
           // and copy the property value of the source object
-          target[targetKey] = this.cloneWithoutTypeInfo(sourceFieldValue, {
+          target[targetField] = this.cloneWithoutTypeInfo(sourceFieldValue, {
             targetPath: targetFieldPath,
             sourcePath: sourceFieldPath,
             defaultInstance: defaultFieldValue,
@@ -481,7 +491,7 @@ const Impl = {
           // If the attribute value of the target object is not an object,
           // directly clone the attribute value of the source object and assign
           // it to the target object.
-          target[targetKey] = clone(sourceFieldValue, {
+          target[targetField] = clone(sourceFieldValue, {
             ...CLONE_OPTIONS,
             convertNaming: options.convertNaming,
             sourceNamingStyle: options.sourceNamingStyle,

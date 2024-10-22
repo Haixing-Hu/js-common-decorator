@@ -9,10 +9,10 @@
 import { NamingStyle } from '@haixing_hu/naming-style';
 
 /**
- * Gets the key of the source object from the corresponding key of the target
- * object.
+ * Gets the name of the field of the source object from the corresponding field
+ * of the target object.
  *
- * @param {string} targetKey
+ * @param {string} targetField
  *     The key of the target object.
  * @param {object} options
  *     The options of the cloning algorithm.
@@ -21,14 +21,14 @@ import { NamingStyle } from '@haixing_hu/naming-style';
  * @author Haixing Hu
  * @private
  */
-function getSourceKey(targetKey, options) {
+function getSourceField(targetField, options) {
   if (options?.convertNaming === true) {
     const sourceNamingStyle = NamingStyle.of(options.sourceNamingStyle);
     const targetNamingStyle = NamingStyle.of(options.targetNamingStyle);
-    return targetNamingStyle.to(sourceNamingStyle, targetKey);
+    return targetNamingStyle.to(sourceNamingStyle, targetField);
   } else {
-    return targetKey;
+    return targetField;
   }
 }
 
-export default getSourceKey;
+export default getSourceField;

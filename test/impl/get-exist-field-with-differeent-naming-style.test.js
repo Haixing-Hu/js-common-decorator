@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { NamingStyle } from '@haixing_hu/naming-style';
-import getExistKeyWithDifferentNamingStyle from '../src/impl/model/get-exist-key-with-different-naming-style';
+import getExistFieldWithDifferentNamingStyle from '../../src/impl/model/get-exist-field-with-different-naming-style';
 
 describe('getExistKeyWithDifferentNamingStyle', () => {
   test('returns the key with different naming styles if it exists', () => {
@@ -16,7 +16,7 @@ describe('getExistKeyWithDifferentNamingStyle', () => {
       snake_case_key: 'value',
     };
     const key = 'camelCaseKey';
-    expect(getExistKeyWithDifferentNamingStyle(key, obj)).toBe('camelCaseKey');
+    expect(getExistFieldWithDifferentNamingStyle(key, obj)).toBe('camelCaseKey');
   });
 
   test('returns undefined if the key does not exist in any naming style', () => {
@@ -24,13 +24,13 @@ describe('getExistKeyWithDifferentNamingStyle', () => {
       anotherKey: 'value',
     };
     const key = 'nonExistentKey';
-    expect(getExistKeyWithDifferentNamingStyle(key, obj)).toBeUndefined();
+    expect(getExistFieldWithDifferentNamingStyle(key, obj)).toBeUndefined();
   });
 
   test('handles empty object correctly', () => {
     const obj = {};
     const key = 'anyKey';
-    expect(getExistKeyWithDifferentNamingStyle(key, obj)).toBeUndefined();
+    expect(getExistFieldWithDifferentNamingStyle(key, obj)).toBeUndefined();
   });
 
   test('handles empty key correctly', () => {
@@ -38,7 +38,7 @@ describe('getExistKeyWithDifferentNamingStyle', () => {
       someKey: 'value',
     };
     const key = '';
-    expect(getExistKeyWithDifferentNamingStyle(key, obj)).toBeUndefined();
+    expect(getExistFieldWithDifferentNamingStyle(key, obj)).toBeUndefined();
   });
 
   test('returns the first matching key with different naming styles', () => {
@@ -47,7 +47,7 @@ describe('getExistKeyWithDifferentNamingStyle', () => {
       snake_case_key: 'value',
     };
     const key = 'snake_case_key';
-    expect(getExistKeyWithDifferentNamingStyle(key, obj)).toBe('snake_case_key');
+    expect(getExistFieldWithDifferentNamingStyle(key, obj)).toBe('snake_case_key');
   });
 
   test('iterates all combination of naming styles', () => {
@@ -60,8 +60,8 @@ describe('getExistKeyWithDifferentNamingStyle', () => {
         const obj = {
           [key2]: 'value',
         };
-        expect(getExistKeyWithDifferentNamingStyle(key1, obj)).toBe(key2);
-        expect(getExistKeyWithDifferentNamingStyle('xxx', obj)).toBeUndefined();
+        expect(getExistFieldWithDifferentNamingStyle(key1, obj)).toBe(key2);
+        expect(getExistFieldWithDifferentNamingStyle('xxx', obj)).toBeUndefined();
       }
     }
   });
