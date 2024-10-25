@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
-import { getClassMetadata } from '../src/impl/utils';
+import getClassMetadata from '../src/impl/utils/get-class-metadata';
 import Person from './model/person';
 
 describe('Test the meta information of the decorated class', () => {

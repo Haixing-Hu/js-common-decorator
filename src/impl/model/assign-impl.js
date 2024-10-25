@@ -9,26 +9,19 @@
 import clone from '@haixing_hu/clone';
 import { isBuiltInClass } from '@haixing_hu/type-detect';
 import { isUndefinedOrNull } from '@haixing_hu/common-util';
-import {
-  getClassMetadata,
-  getFieldMetadata,
-  getDefaultInstance,
-  hasPrototypeFunction,
-} from '../utils';
-import {
-  KEY_CLASS_CATEGORY,
-  KEY_FIELD_ELEMENT_TYPE,
-  KEY_FIELD_TYPE,
-} from '../metadata-keys';
-import classMetadataCache from '../class-metadata-cache';
-import DefaultOptions from '../../default-options';
-import defaultNormalizer from '../../default-normalizer';
-import ofValueImpl from '../enum/of-value-impl';
-import getSourceField from './get-source-field';
-import getExistFieldWithDifferentNamingStyle from './get-exist-field-with-different-naming-style';
 import CLONE_OPTIONS from './clone-options';
+import DefaultOptions from '../../default-options';
+import classMetadataCache from '../class-metadata-cache';
+import defaultNormalizer from '../../default-normalizer';
+import getClassMetadata from '../utils/get-class-metadata';
+import getDefaultInstance from '../utils/get-default-instance';
+import getExistFieldWithDifferentNamingStyle from './get-exist-field-with-different-naming-style';
+import getSourceField from './get-source-field';
 import getTargetFieldElementType from './get-target-field-element-type';
 import getTargetFieldType from './get-target-field-type';
+import hasPrototypeFunction from '../utils/has-prototype-function';
+import ofValueImpl from '../enum/of-value-impl';
+import { KEY_CLASS_CATEGORY } from '../metadata-keys';
 
 const Impl = {
   /**

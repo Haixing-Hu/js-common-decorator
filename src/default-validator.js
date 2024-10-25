@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@haixing_hu/common-util';
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import { isEnumClass } from './impl/utils';
+import isEnumClass from './impl/utils/is-enum-class';
 
 /**
  * A default validator for a non-static class field.

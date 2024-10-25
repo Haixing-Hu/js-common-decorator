@@ -8,8 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 import clone from '@haixing_hu/clone';
 import { Enum } from '../src';
-import { getClassMetadata } from '../src/impl/utils';
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
+import getClassMetadata from '../src/impl/utils/get-class-metadata';
 import Gender from './model/gender';
 import GenderWithoutName from './model/gender-without-name';
 import GenderWithOptions from './model/gender-with-options';

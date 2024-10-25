@@ -1,6 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import Json from '@haixing_hu/json';
-import DefaultOptions from '../../default-options';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -8,6 +6,7 @@ import DefaultOptions from '../../default-options';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import Json from '@haixing_hu/json';
 import Page from '../../model/page';
 import assignImpl from './assign-impl';
 import isValidPageSource from './is-valid-page-source';

@@ -7,8 +7,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { registerCloneHook } from '@haixing_hu/clone';
-import { isEnumerator, setClassMetadata } from './impl/utils';
+import isEnumerator from './impl/utils/is-enumerator';
 import classMetadataCache from './impl/class-metadata-cache';
+import setClassMetadata from './impl/utils/set-class-metadata';
 import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
 import defineEnumerator from './impl/enum/define-enumerator';
 import ofValueImpl from './impl/enum/of-value-impl';

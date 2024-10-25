@@ -6,12 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import {
-  getFieldElementType,
-  getFieldLabel, isFieldNonEmpty,
-  isFieldNullable,
-} from '../field-utils';
-import { getInstanceName } from '../utils';
+import getInstanceName from '../utils/get-instance-name';
+import getFieldElementType from '../utils/get-field-element-type';
+import getFieldLabel from '../utils/get-field-label';
+import isFieldNullable from '../utils/is-field-nullable';
+import isFieldNonEmpty from '../utils/is-field-non-empty';
 
 /**
  * Gets the validation context of elements in the specified collection field.

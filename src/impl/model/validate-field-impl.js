@@ -9,14 +9,12 @@
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../metadata-keys';
-import {
-  getFieldMetadata,
-  hasOwnPrototypeFunction,
-} from '../utils';
 import validateArrayField from './validate-array-field';
 import validateMapField from './validate-map-field';
 import validateNormalField from './validate-normal-field';
 import validateSetField from './validate-set-field';
+import hasOwnPrototypeFunction from '../utils/has-own-prototype-function';
+import getFieldMetadata from '../utils/get-field-metadata';
 
 /**
  * Validates the specified field of the specified object.

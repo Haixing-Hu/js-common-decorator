@@ -6,9 +6,14 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+// The following polyfill is required to support the decorator metadata proposal.
+// see:
+// [1] https://github.com/babel/babel/issues/16838
+// [2] https://github.com/babel/website/blob/26139b82ac19e258c806db3de4f33844bd0abda1/docs/plugin-proposal-decorators.md#note-on-symbolmetadata
+import 'core-js/proposals/decorator-metadata-v2.js';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 
-const metadataSymbol = Symbol.for('metadata');
+const metadataSymbol = Symbol.metadata;
 
 describe('Test the feature of the stage 3 decorator', () => {
   test('The Symbol.metadata must exist', () => {

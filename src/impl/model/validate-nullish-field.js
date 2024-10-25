@@ -7,8 +7,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import { getFieldLabel, isFieldNullable } from '../field-utils';
-import { getInstanceName } from '../utils';
+import isFieldNullable from '../utils/is-field-nullable';
+import getInstanceName from '../utils/get-instance-name';
+import getFieldLabel from '../utils/get-field-label';
 
 /**
  * Validates the specified nullish field of the specified object.

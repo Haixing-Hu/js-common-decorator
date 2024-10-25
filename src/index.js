@@ -6,6 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+// The following polyfill is required to support the decorator metadata proposal.
+// see:
+// [1] https://github.com/babel/babel/issues/16838
+// [2] https://github.com/babel/website/blob/26139b82ac19e258c806db3de4f33844bd0abda1/docs/plugin-proposal-decorators.md#note-on-symbolmetadata
+import 'core-js/proposals/decorator-metadata-v2.js';
 import Page from './model/page';
 import Model from './model';
 import Type from './type';
@@ -18,7 +23,8 @@ import Label from './label';
 import Payload from './payload';
 import NameField from './name-field';
 import Enum from './enum';
-import { isEnumClass, isEnumerator } from './impl/utils';
+import isEnumClass from './impl/utils/is-enum-class';
+import isEnumerator from './impl/utils/is-enumerator';
 import DefaultOptions from './default-options';
 import assign from './assign';
 import create from './create';

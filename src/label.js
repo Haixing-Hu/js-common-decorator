@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_LABEL } from './impl/metadata-keys';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Decorates a class field to specify its label, i.e., the display name of the

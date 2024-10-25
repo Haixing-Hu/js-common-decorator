@@ -8,11 +8,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@haixing_hu/common-util';
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import {
-  getFieldLabel,
-  isFieldNonEmpty,
-} from '../field-utils';
-import { getInstanceName } from '../utils';
+import getInstanceName from '../utils/get-instance-name';
+import getFieldLabel from '../utils/get-field-label';
+import isFieldNonEmpty from '../utils/is-field-non-empty';
 
 /**
  * Validates the specified empty field of the specified object.

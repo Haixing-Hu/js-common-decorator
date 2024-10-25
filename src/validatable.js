@@ -6,9 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_VALIDATOR } from './impl/metadata-keys';
-import isDecoratorContext from './impl/is-decorator-context';
+import setFieldMetadata from './impl/utils/set-field-metadata';
+import isDecoratorContext from './impl/utils/is-decorator-context';
 import defaultValidator from './default-validator';
 
 /**

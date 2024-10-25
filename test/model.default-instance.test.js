@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getDefaultInstance } from '../src/impl/utils';
+import getDefaultInstance from '../src/impl/utils/get-default-instance';
 import Person from './model/person';
 
 describe('Test the default instance of the decorated class', () => {

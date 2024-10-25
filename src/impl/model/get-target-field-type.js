@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { KEY_FIELD_TYPE } from '../metadata-keys';
-import { getFieldMetadata } from '../utils';
+import getFieldMetadata from '../utils/get-field-metadata';
 
 /**
  * Gets the field type of the target object.

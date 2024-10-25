@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import { isNullishOrEmpty } from '../../../src/impl/utils';
+import isNullishOrEmpty from '../../../src/impl/utils/is-nullish-or-empty';
 import Mobile from './mobile';
 
 export default function validatePersonMobile(mobile, { owner, label, nullable }) {

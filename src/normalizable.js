@@ -7,9 +7,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import defaultNormalizer from './default-normalizer';
-import isDecoratorContext from './impl/is-decorator-context';
-import { setFieldMetadata } from './impl/utils';
+import isDecoratorContext from './impl/utils/is-decorator-context';
 import { KEY_FIELD_NORMALIZER } from './impl/metadata-keys';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Sets the normalizer of a decorated field.

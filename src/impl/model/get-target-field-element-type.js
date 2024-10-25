@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { KEY_FIELD_ELEMENT_TYPE, KEY_FIELD_TYPE } from '../metadata-keys';
-import { getFieldMetadata } from '../utils';
+import { KEY_FIELD_ELEMENT_TYPE } from '../metadata-keys';
+import getFieldMetadata from '../utils/get-field-metadata';
 
 /**
  * Gets the field element type of the target object.

@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { hasPrototypeFunction } from '../utils';
 import assignImpl from './assign-impl';
+import hasPrototypeFunction from '../utils/has-prototype-function';
 
 /**
  * Creates an instance of a model class.

@@ -10,7 +10,7 @@ import { Model, Normalizable } from '../src';
 import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
-import { getFieldMetadata } from '../src/impl/utils';
+import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 
 /**
  * Unit test of the `@Normalizable` decorator.

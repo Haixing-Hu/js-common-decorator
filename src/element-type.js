@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_ELEMENT_TYPE } from './impl/metadata-keys';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Decorates a class field to mark it as an array of the specified type.

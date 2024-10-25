@@ -6,13 +6,11 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import {
-  getFieldType,
-  getFieldLabel,
-  isFieldNullable,
-  isFieldNonEmpty,
-} from '../field-utils';
-import { getInstanceName } from '../utils';
+import getInstanceName from '../utils/get-instance-name';
+import getFieldType from '../utils/get-field-type';
+import getFieldLabel from '../utils/get-field-label';
+import isFieldNullable from '../utils/is-field-nullable';
+import isFieldNonEmpty from '../utils/is-field-non-empty';
 
 /**
  * Gets the validation context of the value of the specified field.

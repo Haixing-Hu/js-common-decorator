@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",
@@ -87,7 +87,7 @@
     "@vue/test-utils": "^2.4.1",
     "babel-jest": "^29.7.0",
     "check-es-version": "^1.4.2",
-    "core-js": "^3.33.0",
+    "core-js": "^3.38.1",
     "cross-env": "^7.0.3",
     "email-validator": "^2.0.4",
     "eslint": "^8.49.0",

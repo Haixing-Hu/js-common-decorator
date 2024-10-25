@@ -9,7 +9,7 @@
 import defaultValidator from '../src/default-validator';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../src/impl/metadata-keys';
-import { getFieldMetadata } from '../src/impl/utils';
+import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 import validateCredentialNumber from './model/rules/validate-credential-number';
 import validatePersonBirthday from './model/rules/validate-person-birthday';
 import validatePersonEmail from './model/rules/validate-person-email';

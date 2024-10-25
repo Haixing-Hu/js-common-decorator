@@ -9,7 +9,7 @@
 import { Model, Label } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_LABEL } from '../src/impl/metadata-keys';
-import { getFieldMetadata } from '../src/impl/utils';
+import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 
 /**
  * Unit test of the `@Label` decorator.

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { requirePrototypeMethod } from '../utils';
+import requirePrototypeMethod from '../utils/require-prototype-method';
 
 /**
  * Clones an object.

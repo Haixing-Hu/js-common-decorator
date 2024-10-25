@@ -10,7 +10,7 @@ import { trimUppercaseString } from '@haixing_hu/common-util';
 import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
-import { getFieldMetadata } from '../src/impl/utils';
+import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-field';

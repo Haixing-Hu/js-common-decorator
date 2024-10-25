@@ -6,11 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-// FIXME: Why we should define this symbol here?
-// see: https://github.com/babel/babel/blob/672b881e41228f5060bb80ea89f64315b4a1e05b/packages/babel-plugin-proposal-decorators/test/fixtures/metadata/element/exec.js
-Symbol.metadata = Symbol.for('metadata');
-
 /**
  * A map used to cache the metadata of each class.
  *
@@ -49,15 +44,13 @@ const classMetadataCache = {
     if (result) {
       return result;
     } else {
-      let metadata = Class[Symbol.metadata];
+      const metadata = Class[Symbol.metadata];
       if (metadata) {
         METADATA_CACHE.set(Class, metadata);
         return metadata;
       } else {
-        metadata = {};
-        METADATA_CACHE.set(Class, metadata);
-        Class[Symbol.metadata] = metadata;
-        return metadata;
+        // NOTE: Class[Symbol.metadata] is readonly, so we can't set it directly.
+        return {};
       }
     }
   },

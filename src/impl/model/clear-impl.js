@@ -6,7 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { getDefaultInstance, requirePrototypeMethod } from '../utils';
+import requirePrototypeMethod from '../utils/require-prototype-method';
+import getDefaultInstance from '../utils/get-default-instance';
 
 /**
  * Clears all fields of an object.

@@ -6,7 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setClassMetadata, getClassMetadata } from '../utils';
+import getClassMetadata from '../utils/get-class-metadata';
+import setClassMetadata from '../utils/set-class-metadata';
 import { KEY_CLASS_NEXT_ID } from '../metadata-keys';
 
 /**

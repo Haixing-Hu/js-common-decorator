@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_NULLABLE } from './impl/metadata-keys';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Decorates the class field to indicate that it can be `null`.

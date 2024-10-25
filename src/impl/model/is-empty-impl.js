@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { deepEqual } from '@haixing_hu/common-util';
-import { getDefaultInstance } from '../utils';
+import getDefaultInstance from '../utils/get-default-instance';
 
 /**
  * Tests whether the specified object of the specified model class is empty.

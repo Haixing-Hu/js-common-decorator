@@ -8,15 +8,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../metadata-keys';
-import {
-  getFieldMetadata,
-  hasOwnPrototypeFunction,
-} from '../utils';
 import normalizeArrayField from './normalize-array-field';
 import normalizeMapField from './normalize-map-field';
 import normalizeNormalField from './normalize-normal-field';
 import normalizeNullishField from './normalize-nullish-field';
 import normalizeSetField from './normalize-set-field';
+import hasOwnPrototypeFunction from '../utils/has-own-prototype-function';
+import getFieldMetadata from '../utils/get-field-metadata';
 
 /**
  * Normalizes the specified field of the specified object.

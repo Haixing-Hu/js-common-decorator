@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { setFieldMetadata } from './impl/utils';
 import { KEY_FIELD_PAYLOAD } from './impl/metadata-keys';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Decorates a static filed of an enumeration class to specify the payload of

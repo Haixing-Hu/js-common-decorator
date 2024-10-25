@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import { isNullishOrEmpty } from '../../../src/impl/utils';
+import isNullishOrEmpty from '../../../src/impl/utils/is-nullish-or-empty';
 import Email from './email';
 
 export default function validatePersonEmail(email, { owner, label, nullable }) {
