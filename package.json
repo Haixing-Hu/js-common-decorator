@@ -1,6 +1,6 @@
 {
   "name": "@haixing_hu/common-decorator",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",
@@ -16,12 +16,12 @@
     "JavaScript",
     "decorator"
   ],
-  "main": "dist/common-decorator.cjs.min.js",
-  "module": "dist/common-decorator.esm.min.mjs",
+  "main": "dist/common-decorator.min.cjs",
+  "module": "dist/common-decorator.min.mjs",
   "exports": {
     ".": {
-      "require": "./dist/common-decorator.cjs.min.js",
-      "import": "./dist/common-decorator.esm.min.mjs"
+      "require": "./dist/common-decorator.min.cjs",
+      "import": "./dist/common-decorator.min.mjs"
     }
   },
   "files": [
@@ -50,13 +50,13 @@
   },
   "peerDependencies": {
     "@babel/runtime": "^7.24.0",
-    "@haixing_hu/clone": "^1.11.1",
-    "@haixing_hu/common-util": "^5.1.0",
-    "@haixing_hu/common-validation-rule": "^1.2.1",
-    "@haixing_hu/json": "^1.0.3",
-    "@haixing_hu/naming-style": "^1.3.0",
-    "@haixing_hu/type-detect": "^1.1.0",
-    "@haixing_hu/typeinfo": "^3.0.0"
+    "@haixing_hu/clone": "^1.12.0",
+    "@haixing_hu/common-util": "^5.2.0",
+    "@haixing_hu/common-validation-rule": "^1.3.0",
+    "@haixing_hu/json": "^1.1.0",
+    "@haixing_hu/naming-style": "^1.3.1",
+    "@haixing_hu/type-detect": "^1.2.0",
+    "@haixing_hu/typeinfo": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
@@ -65,16 +65,16 @@
     "@babel/plugin-transform-runtime": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
     "@babel/runtime": "^7.24.0",
-    "@haixing_hu/clone": "^1.11.1",
-    "@haixing_hu/common-util": "^5.1.0",
-    "@haixing_hu/common-validation-rule": "^1.2.1",
+    "@haixing_hu/clone": "^1.12.0",
+    "@haixing_hu/common-util": "^5.2.0",
+    "@haixing_hu/common-validation-rule": "^1.3.0",
     "@haixing_hu/eslint-config": "^1.3.3",
     "@haixing_hu/jsdoc-minami": "^1.5.1",
-    "@haixing_hu/json": "^1.0.3",
-    "@haixing_hu/naming-style": "^1.3.0",
-    "@haixing_hu/rollup-builder": "^1.6.5",
-    "@haixing_hu/type-detect": "^1.1.0",
-    "@haixing_hu/typeinfo": "^3.0.0",
+    "@haixing_hu/json": "^1.1.0",
+    "@haixing_hu/naming-style": "^1.3.1",
+    "@haixing_hu/rollup-builder": "^1.8.2",
+    "@haixing_hu/type-detect": "^1.2.0",
+    "@haixing_hu/typeinfo": "^3.1.0",
     "@jest/core": "^29.7.0",
     "@rollup/plugin-alias": "^5.0.1",
     "@rollup/plugin-babel": "^6.0.4",
@@ -103,5 +103,5 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "vue": "^3.3.7"
   },
-  "packageManager": "yarn@4.0.0"
+  "packageManager": "yarn@4.5.0"
 }
