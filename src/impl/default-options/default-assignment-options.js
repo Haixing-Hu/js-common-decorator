@@ -82,7 +82,7 @@ class DefaultAssignmentOptions {
    * `Foo.child.credential` as follows:
    * ```
    * const foo = Foo.create(obj, {
-   *   targetTypes: {
+   *   types: {
    *     'Foo.id': Number,
    *     'Foo.child.name': String,
    *     'Foo.child.credential': Credential,
@@ -97,7 +97,7 @@ class DefaultAssignmentOptions {
    *
    * @type {object}
    */
-  targetTypes = {};
+  types = {};
 
   /**
    * The additional information about element types of fields of the target object.
@@ -128,11 +128,11 @@ class DefaultAssignmentOptions {
    * `Foo.child.credentials` as follows:
    * ```
    * const foo = Foo.create(obj, {
-   *   targetTypes: {
+   *   types: {
    *     'Foo.id': Number,
    *     'Foo.child.name': String,
    *   },
-   *   targetElementTypes: {
+   *   elementTypes: {
    *     'Foo.child.credential': Credential,
    *   },
    * });
@@ -145,7 +145,7 @@ class DefaultAssignmentOptions {
    *
    * @type {object}
    */
-  targetElementTypes = {};
+  elementTypes = {};
 }
 
 export default DefaultAssignmentOptions;

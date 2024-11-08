@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import classMetadataCache from '../class-metadata-cache';
-import { KEY_FIELD_NORMALIZER } from '../metadata-keys';
+import { KEY_FIELD_ELEMENT_TYPE, KEY_FIELD_NORMALIZER, KEY_FIELD_TYPE } from '../metadata-keys';
 import normalizeArrayField from './normalize-array-field';
 import normalizeMapField from './normalize-map-field';
 import normalizeNormalField from './normalize-normal-field';
@@ -55,6 +55,8 @@ function normalizeFieldImpl(Class, obj, field) {
     // the field is not decorated with @Normalizable
     return false;
   }
+  // const type = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
+  // const elementType = getFieldMetadata(metadata, field, KEY_FIELD_ELEMENT_TYPE);
   const value = obj[field];
   return normalizeNullishField(Class, obj, field, value)
       || normalizeArrayField(obj, field, value, normalizer)

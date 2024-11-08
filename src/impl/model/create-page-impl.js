@@ -31,12 +31,12 @@ import isValidPageSource from './is-valid-page-source';
  *       object. The default value is {@link LOWER_UNDERSCORE}.
  *     - `targetNamingStyle: NamingStyle`, the naming style of the target
  *       object. The default value is {@link LOWER_CAMEL}.
- *     - `targetTypes: object`, the additional information about types of
+ *     - `types: object`, the additional information about types of
  *       fields of classes. The keys of this object are the path of the fields
  *       or sub-fields of the target object, the values are the type of the
  *       fields, represented as the constructor function of the type.
  *       The default value is `{}`.
- *     - `targetElementTypes: object`, the additional information about types of
+ *     - `elementTypes: object`, the additional information about types of
  *       elements of fields of classes. The keys of this object are the path of
  *       the fields or sub-fields of the target object, the values are the type
  *       of the elements, represented as the constructor function of the type.
@@ -53,10 +53,10 @@ function createPageImpl(Class, page, options) {
   } else if (isValidPageSource(page, options)) {
     const result = new Page();
     const opt = { ...options };
-    if (opt.targetElementTypes) {
-      opt.targetElementTypes['Page.content'] = Class;
+    if (opt.elementTypes) {
+      opt.elementTypes['.content'] = Class;
     } else {
-      opt.targetElementTypes = { 'Page.content': Class };
+      opt.elementTypes = { '.content': Class };
     }
     return assignImpl(Page, result, page, opt);
   } else {
