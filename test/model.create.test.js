@@ -153,7 +153,7 @@ describe('Test the static method `create()`', () => {
     expect(() => Person.create(data))
       .toThrowWithMessage(
         RangeError,
-        'The value of property \'source.credential.type\' is not an enumerator of CredentialType: xxx',
+        'The value of property \'.credential.type\' of the source object is not an enumerator of CredentialType: xxx',
       );
   });
 });

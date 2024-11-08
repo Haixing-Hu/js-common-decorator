@@ -87,12 +87,12 @@ class.
       - `targetNamingStyle: string`, the naming style of the target object,
         i.e., the object calling the `assign()` method. The default value
         of this argument is `'LOWER_CAMEL'`.
-      - `targetTypes: object`, the additional information about types of
-        fields of classes. The keys of this object are the path of the fields
-        or sub-fields of the target object, the values are the type of the
+      - `types: object`, the additional information about types of fields of 
+        classes. The keys of this object are the path of the fields or
+        sub-fields of the target object, the values are the type of the
         fields, represented as the constructor function of the type.
         The default value is `{}`.
-      - `targetElementTypes: object`, the additional information about types of
+      - `elementTypes: object`, the additional information about types of
         elements of fields of classes. The keys of this object are the path of
         the fields or sub-fields of the target object, the values are the type
         of the elements, represented as the constructor function of the type.
@@ -354,12 +354,12 @@ This function serializes this object into a JSON string.
       - `targetNamingStyle: string`, the naming style of the target object,
         i.e., the object returned by the `create()` method. The default
         value of this argument is `'LOWER_CAMEL'`.
-      - `targetTypes: object`, the additional information about types of
+      - `types: object`, the additional information about types of
         fields of classes. The keys of this object are the path of the fields
         or sub-fields of the target object, the values are the type of the
         fields, represented as the constructor function of the type.
         The default value is `{}`.
-      - `targetElementTypes: object`, the additional information about types of
+      - `elementTypes: object`, the additional information about types of
         elements of fields of classes. The keys of this object are the path of
         the fields or sub-fields of the target object, the values are the type
         of the elements, represented as the constructor function of the type.
@@ -391,12 +391,12 @@ whose fields are recursively initialized with properties in the `obj`. Note that
       - `targetNamingStyle: string`, the naming style of the target object,
         i.e., the elements in the array returned by the `createArray()`
         method. The default value of this argument is `'LOWER_CAMEL'`.
-      - `targetTypes: object`, the additional information about types of
+      - `types: object`, the additional information about types of
         fields of classes. The keys of this object are the path of the fields
         or sub-fields of the target object, the values are the type of the
         fields, represented as the constructor function of the type.
         The default value is `{}`.
-      - `targetElementTypes: object`, the additional information about types of
+      - `elementTypes: object`, the additional information about types of
         elements of fields of classes. The keys of this object are the path of
         the fields or sub-fields of the target object, the values are the type
         of the elements, represented as the constructor function of the type.
@@ -433,12 +433,12 @@ the specified class.
         i.e., the elements in the `content` array of the `Page` object
         returned by the `createPage()` method. The default value of this
         argument is `'LOWER_CAMEL'`.
-      - `targetTypes: object`, the additional information about types of
+      - `types: object`, the additional information about types of
         fields of classes. The keys of this object are the path of the fields
         or sub-fields of the target object, the values are the type of the
         fields, represented as the constructor function of the type.
         The default value is `{}`.
-      - `targetElementTypes: object`, the additional information about types of
+      - `elementTypes: object`, the additional information about types of
         elements of fields of classes. The keys of this object are the path of
         the fields or sub-fields of the target object, the values are the type
         of the elements, represented as the constructor function of the type.

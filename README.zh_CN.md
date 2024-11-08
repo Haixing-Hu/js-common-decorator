@@ -76,9 +76,9 @@
           默认值为 `'LOWER_UNDERSCORE'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
           默认值为 `'LOWER_CAMEL'`。
-        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+        - `types: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
           值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
-        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+        - `elementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
           或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object`：调用该方法的对象自身。
@@ -254,9 +254,9 @@
           默认值为 `'LOWER_UNDERSCORE'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
           默认值为 `'LOWER_CAMEL'`。
-        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+        - `types: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
           值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
-        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+        - `elementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
           或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object | null`：如果 `obj` 为 `undefined` 或 `null`，则返回 `null`；否则，返回一个新实例，
@@ -277,9 +277,9 @@
           默认值为 `'LOWER_UNDERSCORE'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即调用 `assign()` 方法的对象。
           默认值为 `'LOWER_CAMEL'`。
-        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+        - `types: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
           值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
-        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+        - `elementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
           或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `object[] | null`：如果 `array` 为 `undefined` 或 `null`，则返回 `null`；否则，返回一个包含指定类实例的新数组，
@@ -300,9 +300,9 @@
           数组中的元素的命名风格。默认值为 `'LOWER_UNDERSCORE'`。
         - `targetNamingStyle: string`，目标对象的命名风格，即 `createPage()` 方法返回的 `Page` 对象中 
           `content` 数组中的元素的命名风格。默认值为 `'LOWER_CAMEL'`。
-        - `targetTypes: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
+        - `types: object`，类字段类型的附加信息。此对象的键是目标对象字段或子字段的路径，
           值是字段的类型，以类型的构造函数表示。默认值为 `{}`。
-        - `targetElementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
+        - `elementTypes: object`，类字段元素类型的附加信息。此对象的键是目标对象字段
           或子字段的路径，值是元素的类型，以类型的构造函数表示。默认值为 `{}`。
 - 返回值：
     - `Page | null`：如果 `page` 为 `undefined` 或 `null`，则返回 `null`；否则返回一个新的 `Page` 类实例，

@@ -12,7 +12,7 @@ import CredentialType from './model/credential-type';
 import Person from './model/person';
 
 describe('create', () => {
-  test('create() with options.targetElementTypes', () => {
+  test('create() with options.elementTypes', () => {
     const data = {
       total_count: 3,
       total_pages: 1,
@@ -41,8 +41,8 @@ describe('create', () => {
       convertNaming: true,
       sourceNamingStyle: 'LOWER_UNDERSCORE',
       targetNamingStyle: 'LOWER_CAMEL',
-      targetElementTypes: {
-        'Page.content': Person,
+      elementTypes: {
+        '.content': Person,
       },
     });
     expect(result).toBeInstanceOf(Page);
