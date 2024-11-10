@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { isTypedArray } from '@haixing_hu/type-detect';
 import { ValidationResult } from '@haixing_hu/common-validation-rule';
-import getElementValidationContext from './get-element-validation-context';
+import getElementValidationContext from '../utils/get-element-validation-context';
 import validateEmptyField from './validate-empty-field';
 
 /**
@@ -21,6 +21,8 @@ import validateEmptyField from './validate-empty-field';
  * This function assumes that the field exists, and is validatable, not nullish
  * nor empty.
  *
+ * @param {function} Class
+ *     The constructor of the class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
@@ -40,7 +42,7 @@ import validateEmptyField from './validate-empty-field';
  * @author Haixing Hu
  * @private
  */
-function validateArrayField(metadata, obj, field, value, validator, context) {
+function validateArrayField(Class, metadata, obj, field, value, validator, context) {
   if (Array.isArray(value) || isTypedArray(value)) {
     // check the empty array
     const result = validateEmptyField(metadata, obj, field, value, context);
@@ -48,7 +50,7 @@ function validateArrayField(metadata, obj, field, value, validator, context) {
       return result;
     }
     // get the validation options
-    const ctx = getElementValidationContext(metadata, obj, field, context);
+    const ctx = getElementValidationContext(Class, metadata, obj, field, context);
     // validate each element of the array
     const results = value.map((e, i) => {
       ctx.index = i;

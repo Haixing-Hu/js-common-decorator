@@ -61,9 +61,9 @@ function validateFieldImpl(Class, obj, field, context) {
     return new ValidationResult(true);
   }
   const value = obj[field];
-  return validateArrayField(metadata, obj, field, value, validator, context)
-    ?? validateSetField(metadata, obj, field, value, validator, context)
-    ?? validateMapField(metadata, obj, field, value, validator, context)
+  return validateArrayField(Class, metadata, obj, field, value, validator, context)
+    ?? validateSetField(Class, metadata, obj, field, value, validator, context)
+    ?? validateMapField(Class, metadata, obj, field, value, validator, context)
     ?? validateNormalField(Class, metadata, obj, field, value, validator, context);
 }
 

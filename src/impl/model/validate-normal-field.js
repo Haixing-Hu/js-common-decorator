@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getValidationContext from './get-validation-context';
+import getValidationContext from '../utils/get-validation-context';
 
 /**
  * Validates the specified field of the specified object.

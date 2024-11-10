@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { NamingStyle } from '@haixing_hu/naming-style';
-import getExistFieldWithDifferentNamingStyle from '../../src/impl/model/get-exist-field-with-different-naming-style';
+import getExistFieldWithDifferentNamingStyle from '../../src/impl/utils/get-exist-field-with-different-naming-style';
 
 describe('getExistKeyWithDifferentNamingStyle', () => {
   test('returns the key with different naming styles if it exists', () => {

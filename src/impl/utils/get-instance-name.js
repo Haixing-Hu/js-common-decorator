@@ -9,7 +9,7 @@
 import { KEY_CLASS_NAME_FIELD } from '../metadata-keys';
 
 /**
- * Gets the name of a instance.
+ * Gets the value of the name field of a instance.
  *
  * The name of an instance is the value of the field decorated by the `@NameField`
  * decorator.

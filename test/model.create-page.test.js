@@ -93,7 +93,7 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[1].gender).toBe('');
     expect(result.content[1].mobile).toBe('');
     expect(result.content[1].credential).toBeInstanceOf(Credential);
-    expect(result.content[1].credential.type).toBeNull();
+    expect(result.content[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result.content[1].credential.number).toBe('');
     expect(result.content[2]).toBeNull();
   });
@@ -151,7 +151,7 @@ describe('Test static method `createPage()`', () => {
     expect(result.content[1].gender).toBe('');
     expect(result.content[1].mobile).toBe('');
     expect(result.content[1].credential).toBeInstanceOf(Credential);
-    expect(result.content[1].credential.type).toBeNull();
+    expect(result.content[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result.content[1].credential.number).toBe('');
     expect(result.content[2]).toBeNull();
   });

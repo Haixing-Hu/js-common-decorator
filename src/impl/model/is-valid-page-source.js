@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getSourceField from './get-source-field';
+import getSourceField from '../utils/get-source-field';
 import DefaultOptions from '../../default-options';
 
 /**

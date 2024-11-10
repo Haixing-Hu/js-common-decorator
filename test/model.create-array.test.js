@@ -72,7 +72,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].gender).toBe('');
     expect(result[1].mobile).toBe('');
     expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBeNull();
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
   });
@@ -120,7 +120,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].gender).toBe('');
     expect(result[1].mobile).toBe('');
     expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBeNull();
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
 
@@ -143,7 +143,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].gender).toBe('');
     expect(result[1].mobile).toBe('');
     expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBeNull();
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
 
@@ -166,7 +166,7 @@ describe('Test static method `createArray()`', () => {
     expect(result[1].gender).toBe('');
     expect(result[1].mobile).toBe('');
     expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBeNull();
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result[1].credential.number).toBeNull();
     expect(result[2]).toBeNull();
   });

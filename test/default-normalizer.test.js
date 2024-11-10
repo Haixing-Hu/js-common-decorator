@@ -160,7 +160,7 @@ describe('Test defaultNormalizer() function', () => {
     expect(obj.credentialDefaultNonNull.type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.credentialDefaultNonNull.number).toBe('');
   });
-  test('Test whether DefaultNormalizer takes effect on array fields', () => {
+  test('Test whether defaultNormalizer takes effect on array fields', () => {
     const obj = new ObjWithArrayField();
     obj.normalize();
     expect(obj.credentials).toBeArray();
@@ -171,5 +171,28 @@ describe('Test defaultNormalizer() function', () => {
     expect(obj.credentials[1]).toBeInstanceOf(Credential);
     expect(obj.credentials[1].type).toBe(CredentialType.PASSPORT);
     expect(obj.credentials[1].number).toBe('ABCDEFGH');
+  });
+
+  test('Test defaultNormalizer takes effect on enum fields', () => {
+    const obj = new ObjWithDefaultNormalizerField();
+    obj.type = 'identity_card ';
+    obj.number = '  abcdefg  ';
+    obj.normalize();
+    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.number).toBe('ABCDEFG');
+  });
+
+  test('Test defaultNormalizer takes effect on nested enum fields', () => {
+    const obj = new ObjWithDefaultNormalizerField();
+    obj.type = 'identity_card ';
+    obj.number = '  abcdefg  ';
+    obj.credential = new Credential();
+    obj.credential.type = 'identity_card ';
+    obj.credential.number = '  abcdefg  ';
+    obj.normalize();
+    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.number).toBe('ABCDEFG');
+    expect(obj.credential.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.credential.number).toBe('ABCDEFG');
   });
 });

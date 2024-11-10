@@ -6,41 +6,65 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_TYPE } from '../metadata-keys';
 import getDefaultInstance from './get-default-instance';
 import getFieldMetadata from './get-field-metadata';
 
 /**
- * Gets the type of the specified field.
+ * Gets the type of the specified field of an object.
  *
- * If the field is decorated with `@Type` decorator, this function returns the
- * type specified by the decorator; otherwise, this function returns the type of
- * the value of the field of the default instance of the class.
+ * The function will first check the annotated type information of the specified
+ * field of the object. If the annotated type information is found, the function
+ * will return it. Otherwise, the function will check the additional type
+ * information provided by the options. If the additional type information is
+ * found, the function will return it. Otherwise, the function will return
+ * `null`.
  *
  * @param {function} Class
  *     The constructor of the class of the object.
- * @param {object} metadata
- *     the metadata of the class.
  * @param {string} field
  *     the name of the field.
- * @return {function}
- *     the constructor of the type of the field, or `undefined` if the field is
- *     not decorated with `@Type` decorator and its default value is `undefined`
- *     or `null`.
- * @author Haixing Hu
+ * @param {string} path
+ *     the path of the field in the property tree of the original root object.
+ * @param {object} options
+ *     the additional options for the assignment.
+ * @return {function|null}
+ *     the type of the specified field of the object, or `null` if the field
+ *     type cannot be inferred.
  * @private
+ * @author Haixing Hu
  */
-function getFieldType(Class, metadata, field) {
-  const result = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
-  if (result !== undefined) {
+function getFieldType(Class, field, path = undefined, options = {}) {
+  path ??= `.${field}`;
+  options ??= {};
+  // try to find the annotated type information
+  const metadata = classMetadataCache.get(Class);
+  const annotatedType = getFieldMetadata(metadata, field, KEY_FIELD_TYPE);
+  if (annotatedType) {
+    if (typeof annotatedType !== 'function') {
+      throw new TypeError(`The annotated type of '${Class.name}.${path}' is not a function.`);
+    }
+    return annotatedType;
+  }
+  // try to find the additional type information provided by the options
+  if (options && options.types && options.types[path]) {
+    const result = options.types[path];
+    if (typeof result !== 'function') {
+      throw new TypeError(`The target type of '${Class.name}.${path}' is not a function.`);
+    }
     return result;
   }
+  // try to find the type information from the default field value
   const defaultInstance = getDefaultInstance(Class);
-  const defaultValue = defaultInstance[field];
-  if (defaultValue !== undefined && defaultValue !== null) {
-    return defaultValue.constructor;
+  const defaultFieldValue = defaultInstance[field];
+  if ((defaultFieldValue !== undefined)
+      && (defaultFieldValue !== null)
+      && (typeof defaultFieldValue.constructor === 'function')) {
+    return defaultFieldValue.constructor;
   }
-  return undefined;
+  // otherwise returns null
+  return null;
 }
 
 export default getFieldType;

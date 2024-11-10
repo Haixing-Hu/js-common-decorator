@@ -1,20 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getInstanceName from '../utils/get-instance-name';
-import getFieldElementType from '../utils/get-field-element-type';
-import getFieldLabel from '../utils/get-field-label';
-import isFieldNullable from '../utils/is-field-nullable';
-import isFieldNonEmpty from '../utils/is-field-non-empty';
+import getInstanceName from './get-instance-name';
+import getFieldLabel from './get-field-label';
+import isFieldNullable from './is-field-nullable';
+import isFieldNonEmpty from './is-field-non-empty';
+import getFieldElementType from './get-field-element-type';
 
 /**
  * Gets the validation context of elements in the specified collection field.
  *
+ * @param {function} Class
+ *     The constructor of the class of the object to be validated.
  * @param {object} metadata
  *     The metadata of the class of the object to be validated.
  * @param {object} obj
@@ -41,11 +43,11 @@ import isFieldNonEmpty from '../utils/is-field-non-empty';
  * @author Haixing Hu
  * @private
  */
-function getElementValidationContext(metadata, obj, field, context) {
+function getElementValidationContext(Class, metadata, obj, field, context) {
   // get the name of the instance as the owner of the field
   const owner = context.owner ?? getInstanceName(metadata, obj);
   // get the element type of the field
-  const elementType = context.type ?? getFieldElementType(metadata, field);
+  const elementType = context.type ?? getFieldElementType(Class, field);
   // get the label of the field
   const label = context.label ?? getFieldLabel(metadata, field);
   // get the nullable flag of the field

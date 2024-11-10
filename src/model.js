@@ -380,11 +380,29 @@ function Model(Class, context) {
      *     function normalizes the field with the name equals to this argument;
      *     if the specified field does not exist nor non-normalizable, this
      *     function does nothing.
+     * @param {object} options
+     *     The optional options for the normalization. Default value is an empty
+     *     object. Currently, the following options are supported:
+     *     - `path: string`, the path of the root object of this object.
+     *       The default value of this option is `'.'`.
+     *     - `types: object`, the additional information about types of fields
+     *       of classes. The keys of this object are the path of the fields or
+     *       sub-fields of this object, the values are the type of the fields,
+     *       represented as the constructor function of the type. The path of
+     *       the root of this object is an empty, therefore the path of the direct
+     *       field of this object is of the form `'.field'`, and the
+     *       path of the sub-field of a field is of the form `'.field.subField'`.
+     *       The default value of this option is `{}`.
+     *     - `elementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value of this option is `{}`.
      * @returns {object}
      *     the reference to this object.
      */
-    Class.prototype.normalize = function normalize(fields = '*') {
-      return normalizeImpl(Class, this, fields);
+    Class.prototype.normalize = function normalize(fields = '*', options = {}) {
+      return normalizeImpl(Class, this, fields, options);
     };
   }
   // Add the instance method `normalizeField()`
@@ -399,12 +417,30 @@ function Model(Class, context) {
      *     the names of fields to be normalized. If the specified field does not
      *     exist nor non-normalizable, this function does nothing and returns
      *     `false`.
+     * @param {object} options
+     *     The optional options for the normalization. Default value is an empty
+     *     object. Currently, the following options are supported:
+     *     - `path: string`, the path of the root object of this object.
+     *       The default value of this option is `'.'`.
+     *     - `types: object`, the additional information about types of fields
+     *       of classes. The keys of this object are the path of the fields or
+     *       sub-fields of this object, the values are the type of the fields,
+     *       represented as the constructor function of the type. The path of
+     *       the root of this object is an empty, therefore the path of the direct
+     *       field of this object is of the form `'.field'`, and the
+     *       path of the sub-field of a field is of the form `'.field.subField'`.
+     *       The default value of this option is `{}`.
+     *     - `elementTypes: object`, the additional information about types of
+     *       elements of fields of classes. The keys of this object are the path of
+     *       the fields or sub-fields of the target object, the values are the type
+     *       of the elements, represented as the constructor function of the type.
+     *       The default value of this option is `{}`.
      * @returns {boolean}
      *     `true` if the specified field exists and is normalizable; `false`
      *     otherwise.
      */
-    Class.prototype.normalizeField = function normalizeField(field) {
-      return normalizeFieldImpl(Class, this, field);
+    Class.prototype.normalizeField = function normalizeField(field, options = {}) {
+      return normalizeFieldImpl(Class, this, field, options);
     };
   }
   // Add the instance method `validate()`

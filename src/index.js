@@ -34,6 +34,8 @@ import normalize from './normalize';
 import toJSON from './to-json';
 import toJsonString from './to-json-string';
 import stringifyId from './stringify-id';
+import defaultNormalizer from './default-normalizer';
+import enumNormalizer from './enum-normalizer';
 
 export {
   Page,
@@ -59,4 +61,6 @@ export {
   toJSON,
   toJsonString,
   stringifyId,
+  defaultNormalizer,
+  enumNormalizer,
 };

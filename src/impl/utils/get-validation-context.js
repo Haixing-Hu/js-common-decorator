@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2024.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getInstanceName from '../utils/get-instance-name';
-import getFieldType from '../utils/get-field-type';
-import getFieldLabel from '../utils/get-field-label';
-import isFieldNullable from '../utils/is-field-nullable';
-import isFieldNonEmpty from '../utils/is-field-non-empty';
+import getInstanceName from './get-instance-name';
+import getFieldLabel from './get-field-label';
+import isFieldNullable from './is-field-nullable';
+import isFieldNonEmpty from './is-field-non-empty';
+import getFieldType from './get-field-type';
 
 /**
  * Gets the validation context of the value of the specified field.
@@ -47,7 +47,7 @@ function getValidationContext(Class, metadata, obj, field, context) {
   // get the name of the instance as the owner of the field
   const owner = context.owner ?? getInstanceName(metadata, obj);
   // get the element type of the field
-  const type = context.type ?? getFieldType(Class, metadata, field);
+  const type = context.type ?? getFieldType(Class, field);
   // get the label of the field
   const label = context.label ?? getFieldLabel(metadata, field);
   // get the nullable flag of the field
