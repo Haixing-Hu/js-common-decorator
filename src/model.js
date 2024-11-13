@@ -250,7 +250,8 @@ import hasPrototypeFunction from './impl/utils/has-prototype-function';
  * @see Normalizable
  * @see Validatable
  * @see ValidationResult
- * @see DefaultOptions#get
+ * @see DefaultOptions.get('assign')
+ * @see DefaultOptions.get('toJSON')
  * @author Haixing Hu
  */
 function Model(Class, context) {

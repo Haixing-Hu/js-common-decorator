@@ -53,6 +53,8 @@ import DefaultOptions from '../../default-options';
  *     does, except that this function provides additional stringification
  *     options.
  * @see DefaultOptions.get('toJSON')
+ * @author Haixing Hu
+ * @private
  */
 function toJsonStringImpl(Class, obj, options) {
   const opt = DefaultOptions.merge('toJSON', options);

@@ -64,6 +64,8 @@ import CLONE_OPTIONS from './clone-options';
  *     the object to be serialized by `JSON.stringify()`, which may be a
  *     modify copy of this object.
  * @see DefaultOptions.get('toJSON')
+ * @author Haixing Hu
+ * @private
  */
 function toJsonImpl(obj, key, options) {
   const opt = DefaultOptions.merge('toJSON', options);

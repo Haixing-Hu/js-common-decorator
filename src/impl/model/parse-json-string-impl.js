@@ -34,6 +34,8 @@ import assignImpl from './assign-impl';
  * @returns {object}
  *     the object deserialized from the specified JSON string.
  * @see DefaultOptions.get('assign')
+ * @author Haixing Hu
+ * @private
  */
 function parseJsonStringImpl(Class, json, options) {
   const obj = Json.parse(json);
