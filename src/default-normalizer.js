@@ -36,22 +36,22 @@ import isEnumClass from './is-enum-class';
  *     The value to be normalized.
  * @param {object} context
  *     The context of normalization. It is an object with the following fields:
- *     - `path: string`, the path of the root object of this object.
- *       The default value of this option is `''`.
- *     - `type: function`, the type of the field to be normalized.
- *     - `types: object`, the additional information about types of fields of
- *       classes. The keys of this object are the path of the fields or
- *       sub-fields of this object, the values are the type of the fields,
- *       represented as the constructor function of the type. The path of the
- *       root of this object is an empty, therefore the path of the direct field of
- *       this object is of the form `'.field'`, and the path of the sub-field of
- *       a field is of the form `'.field.subField'`. The default value of this
- *       option is `{}`.
- *     - `elementTypes: object`, the additional information about types of
- *       elements of fields of classes. The keys of this object are the path of
- *       the fields or sub-fields of the target object, the values are the type
- *       of the elements, represented as the constructor function of the type.
- *       The default value of this option is `{}`.
+ *  - `path: string`, the path of the root object of this object.
+ *     The default value of this option is `''`.
+ *  - `type: function`, the type of the field to be normalized.
+ *  - `types: object`, the additional information about types of fields of
+ *     classes. The keys of this object are the path of the fields or
+ *     sub-fields of this object, the values are the type of the fields,
+ *     represented as the constructor function of the type. The path of the
+ *     root of this object is an empty, therefore the path of the direct field of
+ *     this object is of the form `'.field'`, and the path of the sub-field of
+ *     a field is of the form `'.field.subField'`. The default value of this
+ *     option is `{}`.
+ *  - `elementTypes: object`, the additional information about types of
+ *     elements of fields of classes. The keys of this object are the path of
+ *     the fields or sub-fields of the target object, the values are the type
+ *     of the elements, represented as the constructor function of the type.
+ *     The default value of this option is `{}`.
  * @return {any}
  *     The normalized value.
  * @author Haixing Hu

@@ -27,6 +27,7 @@ import toJsonImpl from './impl/model/to-json-impl';
  *     `undefined` or `null`, the default options will be used. The default
  *     options can be retrieved by calling `DefaultOptions.get('toJSON')`.
  *     Available options are:
+ *
  *     - `normalize: boolean`, indicates whether to normalize this object
  *       before serializing. The default value is `true`.
  *     - `removeEmptyFields: boolean`, indicates whether to ignore the empty
