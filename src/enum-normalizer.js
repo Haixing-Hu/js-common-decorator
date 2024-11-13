@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import isEnumClass from './impl/utils/is-enum-class';
+import isEnumClass from './is-enum-class';
 
 /**
  * The normalizer used to normalize the value of an enumeration.

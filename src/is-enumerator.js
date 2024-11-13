@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { KEY_CLASS_CATEGORY } from '../metadata-keys';
-import getClassMetadata from './get-class-metadata';
+import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
+import getClassMetadata from './impl/utils/get-class-metadata';
 
 /**
  * Tests whether a specified value is an enumerator of an enumeration class,

@@ -10,7 +10,7 @@ import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../metadata-keys';
 import getFieldElementType from '../utils/get-field-element-type';
 import getFieldType from '../utils/get-field-type';
-import isEnumClass from '../utils/is-enum-class';
+import isEnumClass from '../../is-enum-class';
 import normalizeArrayField from './normalize-array-field';
 import normalizeMapField from './normalize-map-field';
 import normalizeNormalField from './normalize-normal-field';

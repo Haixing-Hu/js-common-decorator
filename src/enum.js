@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { registerCloneHook } from '@haixing_hu/clone';
-import isEnumerator from './impl/utils/is-enumerator';
+import isEnumerator from './is-enumerator';
 import classMetadataCache from './impl/class-metadata-cache';
 import setClassMetadata from './impl/utils/set-class-metadata';
 import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
@@ -220,6 +220,7 @@ import ofImpl from './impl/enum/of-impl';
  *     The constructor of the class being decorated.
  * @param {object} context
  *     The context object containing information about the class being decorated.
+ * @namespace
  * @author Haixing Hu
  */
 function Enum(Class, context) {
@@ -262,6 +263,8 @@ function Enum(Class, context) {
    *
    * @returns {Array<object>}
    *     The array of all enumerators of this enumeration class.
+   * @method
+   * @memberof Enum
    */
   Class.values = function values() {
     return valuesImpl(Class);
@@ -279,6 +282,8 @@ function Enum(Class, context) {
    *     The enumerator of this enumeration class which has the specified value;
    *     or `undefined` if there is no such enumerator.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.ofValue = function ofValue(value) {
     return ofValueImpl(Class, value);
@@ -296,6 +301,8 @@ function Enum(Class, context) {
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified value; `false` otherwise.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.hasValue = function hasValue(value) {
     return (ofValueImpl(Class, value) !== undefined);
@@ -312,6 +319,8 @@ function Enum(Class, context) {
    *     The enumerator of this enumeration class which has the specified name;
    *     or `undefined` if there is no such enumerator.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.ofName = function ofName(name) {
     return ofNameImpl(Class, name);
@@ -328,6 +337,8 @@ function Enum(Class, context) {
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified name; `false` otherwise.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.hasName = function hasName(name) {
     return (ofNameImpl(Class, name) !== undefined);
@@ -344,7 +355,8 @@ function Enum(Class, context) {
    *     The enumerator of this enumeration class which has the specified code;
    *     or `undefined` if there is no such enumerator.
    * @author Haixing Hu
-   * @private
+   * @method
+   * @memberof Enum
    */
   Class.ofCode = function ofCode(code) {
     return ofCodeImpl(Class, code);
@@ -361,6 +373,8 @@ function Enum(Class, context) {
    *     `true` if there is an enumerator of this enumeration class which has
    *     the specified code; `false` otherwise.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.hasCode = function hasCode(code) {
     return (ofCodeImpl(Class, code) !== undefined);
@@ -383,6 +397,8 @@ function Enum(Class, context) {
    *     The enumerator corresponding to the specified enumerator, value, name
    *     or code; or `undefined` if there is no such enumerator.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.of = function of(expr) {
     return ofImpl(Class, expr);
@@ -405,6 +421,8 @@ function Enum(Class, context) {
    *     `true` if there is an enumerator corresponding to the specified
    *     enumerator, value, name or code; `false` otherwise.
    * @author Haixing Hu
+   * @method
+   * @memberof Enum
    */
   Class.has = function has(expr) {
     return (ofImpl(Class, expr) !== undefined);

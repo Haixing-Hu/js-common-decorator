@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import typeInfo from '@haixing_hu/typeinfo';
 import enumNormalizer from './enum-normalizer';
-import isEnumClass from './impl/utils/is-enum-class';
+import isEnumClass from './is-enum-class';
 
 /**
  * A default normalizer for a non-static class field.

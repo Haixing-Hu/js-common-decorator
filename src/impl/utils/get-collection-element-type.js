@@ -9,7 +9,7 @@
 import { isTypedArray, isCollection } from '@haixing_hu/type-detect';
 
 /**
- * Gets the element type of a collection.
+ * Gets the element types of a collection.
  *
  * @param {any} obj
  *     The collection object.
@@ -17,6 +17,8 @@ import { isTypedArray, isCollection } from '@haixing_hu/type-detect';
  *     The element type of the collection, or `null` if the object is not a
  *     collection, or the collection is empty, or the element type cannot be
  *     determined.
+ * @author Haixing Hu
+ * @private
  */
 function getCollectionElementType(obj) {
   if (Array.isArray(obj) || isTypedArray(obj)) {

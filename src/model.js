@@ -241,7 +241,7 @@ import hasPrototypeFunction from './impl/utils/has-prototype-function';
  *     The constructor of the class being decorated.
  * @param {object} context
  *     The context object containing information about the class being decorated.
- * @author Haixing Hu
+ * @namespace
  * @see Type
  * @see ElementType
  * @see Nullable
@@ -250,8 +250,8 @@ import hasPrototypeFunction from './impl/utils/has-prototype-function';
  * @see Normalizable
  * @see Validatable
  * @see ValidationResult
- * @see DefaultOptions.get('assign')
- * @see DefaultOptions.get('toJSON')
+ * @see DefaultOptions#get
+ * @author Haixing Hu
  */
 function Model(Class, context) {
   if (context === null || typeof context !== 'object') {
@@ -305,6 +305,9 @@ function Model(Class, context) {
      * @returns {object}
      *     the reference to this object.
      * @see DefaultOptions.get('assign')
+     * @method
+     * @name Model#assign
+     * @memberof Model
      */
     Class.prototype.assign = function assign(obj, options = undefined) {
       return assignImpl(Class, this, obj, options);
@@ -317,6 +320,9 @@ function Model(Class, context) {
      *
      * @returns {object}
      *     the reference to this object.
+     * @method
+     * @name Model#clear
+     * @memberof Model
      */
     Class.prototype.clear = function clear() {
       return clearImpl(Class, this);
@@ -329,6 +335,9 @@ function Model(Class, context) {
      *
      * @returns {object}
      *     the cloned copy of this object.
+     * @method
+     * @name Model#clone
+     * @memberof Model
      */
     Class.prototype.clone = function clone() {
       return cloneImpl(Class, this);
@@ -342,6 +351,9 @@ function Model(Class, context) {
      *
      * @returns {boolean}
      *     `true` if this object is empty; `false` otherwise.
+     * @method
+     * @name Model#isEmpty
+     * @memberof Model
      */
     Class.prototype.isEmpty = function isEmpty() {
       return isEmptyImpl(Class, this);
@@ -357,6 +369,9 @@ function Model(Class, context) {
      * @returns {boolean}
      *     `true` if this object is deeply equal to the other object; `false`
      *     otherwise.
+     * @method
+     * @name Model#equals
+     * @memberof Model
      */
     Class.prototype.equals = function equals(obj) {
       return equalsImpl(this, obj);
@@ -400,6 +415,9 @@ function Model(Class, context) {
      *       The default value of this option is `{}`.
      * @returns {object}
      *     the reference to this object.
+     * @method
+     * @name Model#normalize
+     * @memberof Model
      */
     Class.prototype.normalize = function normalize(fields = '*', options = {}) {
       return normalizeImpl(Class, this, fields, options);
@@ -438,6 +456,9 @@ function Model(Class, context) {
      * @returns {boolean}
      *     `true` if the specified field exists and is normalizable; `false`
      *     otherwise.
+     * @method
+     * @name Model#normalizeField
+     * @memberof Model
      */
     Class.prototype.normalizeField = function normalizeField(field, options = {}) {
       return normalizeFieldImpl(Class, this, field, options);
@@ -462,6 +483,9 @@ function Model(Class, context) {
      *     context is used.
      * @returns {ValidationResult}
      *     The result of validation.
+     * @method
+     * @name Model#validate
+     * @memberof Model
      */
     Class.prototype.validate = function validate(fields = '*', context = {}) {
       return validateImpl(Class, this, fields, context);
@@ -486,6 +510,9 @@ function Model(Class, context) {
      *     The validation result if the specified field exists; `null` otherwise.
      *     If the specified field exist but is non-validatable, returns the success
      *     validation result.
+     * @method
+     * @name Model#validateField
+     * @memberof Model
      */
     Class.prototype.validateField = function validateField(field, context = {}) {
       return validateFieldImpl(Class, this, field, context);
@@ -510,6 +537,9 @@ function Model(Class, context) {
      *
      * @returns {number}
      *     the generated unique ID.
+     * @method
+     * @name Model#generateId
+     * @memberof Model
      */
     Class.prototype.generateId = function generateId() {
       return generateIdImpl(Class, this);
@@ -575,6 +605,9 @@ function Model(Class, context) {
      *     modify copy of this object.
      * @see toJsonString()
      * @see DefaultOptions.get('toJSON')
+     * @method
+     * @name Model#toJSON
+     * @memberof Model
      */
     Class.prototype.toJSON = function toJSON(key, options = undefined) {
       return toJsonImpl(this, key, {
@@ -630,6 +663,9 @@ function Model(Class, context) {
      *     options.
      * @see toJSON()
      * @see DefaultOptions.get('toJSON')
+     * @method
+     * @name Model#toJsonString
+     * @memberof Model
      */
     Class.prototype.toJsonString = function toJsonString(options = undefined) {
       return toJsonStringImpl(Class, this, options);
@@ -680,6 +716,8 @@ function Model(Class, context) {
      *     the new instance of this class created from the specified data object,
      *     or `null` if the specified object is `null` or `undefined`.
      * @see DefaultOptions.get('assign')
+     * @method
+     * @memberof Model
      */
     Class.create = function create(obj, options = undefined) {
       return createImpl(Class, obj, options);
@@ -730,6 +768,8 @@ function Model(Class, context) {
      *     data object array, or `null` if the specified data object array is
      *     `null` or `undefined`.
      * @see DefaultOptions.get('assign')
+     * @method
+     * @memberof Model
      */
     Class.createArray = function createArray(array, options = undefined) {
       return createArrayImpl(Class, array, options);
@@ -780,6 +820,8 @@ function Model(Class, context) {
      *     matching those of the `page` object. If the argument `page` is not a
      *     valid `Page` object, this function returns `null`.
      * @see DefaultOptions.get('assign')
+     * @method
+     * @memberof Model
      */
     Class.createPage = function createPage(page, options = undefined) {
       return createPageImpl(Class, page, options);
@@ -799,6 +841,8 @@ function Model(Class, context) {
      * @throws TypeError
      *     if the specified object is not nullish and is not a instance of this
      *     class.
+     * @method
+     * @memberof Model
      */
     Class.isNullishOrEmpty = function isNullishOrEmpty(obj) {
       return isNullishOrEmptyImpl(Class, obj);
@@ -833,6 +877,8 @@ function Model(Class, context) {
      * @returns {object}
      *     the object deserialized from the specified JSON string.
      * @see toJsonString()
+     * @method
+     * @memberof Model
      */
     Class.parseJsonString = function parseJsonString(json, options = undefined) {
       return parseJsonStringImpl(Class, json, options);
