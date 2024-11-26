@@ -55,6 +55,20 @@ class Page {
     this.pageSize = pageSize;
     this.content = content;
   }
+
+  /**
+   * Assigns the properties of another page to this page.
+   *
+   * @param {object} page
+   *     The page whose properties are to be assigned to this page.
+   */
+  assign(page) {
+    this.totalCount = page.totalCount;
+    this.totalPages = page.totalPages;
+    this.pageIndex = page.pageIndex;
+    this.pageSize = page.pageSize;
+    this.content = page.content;
+  }
 }
 
 export default Page;
