@@ -106,6 +106,27 @@ class Page {
   static emptyPage(pageSize) {
     return new Page(0, 0, 0, pageSize, []);
   }
+
+  /**
+   * Gets a page of data from an array.
+   *
+   * @param {object} pageRequest
+   *     the page request.
+   * @param {Array} array
+   *     the array of data.
+   * @return {Page}
+   *     the specified page of data from the array.
+   */
+  static getPageFrom(pageRequest, array) {
+    const totalCount = array.length;
+    const pageSize = pageRequest.pageSize;
+    const pageIndex = pageRequest.pageIndex;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const fromIndex = pageIndex * pageSize;
+    const toIndex = Math.min(fromIndex + pageSize, totalCount);
+    const content = array.slice(fromIndex, toIndex);
+    return new Page(totalCount, totalPages, pageIndex, pageSize, content);
+  }
 }
 
 export default Page;
