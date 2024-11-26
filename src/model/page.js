@@ -103,7 +103,7 @@ class Page {
    * @return {Page}
    *     the created empty page.
    */
-  static emptyPage(pageSize) {
+  static newEmpty(pageSize) {
     return new Page(0, 0, 0, pageSize, []);
   }
 
@@ -117,7 +117,7 @@ class Page {
    * @return {Page}
    *     the specified page of data from the array.
    */
-  static getPageFrom(pageRequest, array) {
+  static getFrom(pageRequest, array) {
     const totalCount = array.length;
     const pageSize = pageRequest.pageSize;
     const pageIndex = pageRequest.pageIndex;
