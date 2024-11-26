@@ -94,6 +94,18 @@ class Page {
   assign(obj, options = undefined) {
     return assignImpl(Page, this, obj, options);
   }
+
+  /**
+   * Creates a empty page with the specified page size.
+   *
+   * @param pageSize
+   *     the size of the page.
+   * @return {Page}
+   *     the created empty page.
+   */
+  static emptyPage(pageSize) {
+    return new Page(0, 0, 0, pageSize, []);
+  }
 }
 
 export default Page;
