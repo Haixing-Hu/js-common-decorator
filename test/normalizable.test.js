@@ -84,7 +84,7 @@ describe('Test @Normalizable', () => {
       obj.hello();
     }).toThrowWithMessage(
       TypeError,
-      'The argument of @Normalizable decorated on the "number" field must a function.',
+      'The argument of @Normalizable decorated on the "number" field must be a function.',
     );
   });
   test('Invalid number of arguments of @Normalizable', () => {

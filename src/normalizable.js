@@ -34,7 +34,7 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
   }
   if (typeof normalizer !== 'function') {
     throw new TypeError(
-      `The argument of @Normalizable decorated on the "${name}" field must a function.`,
+      `The argument of @Normalizable decorated on the "${name}" field must be a function.`,
     );
   }
   setFieldMetadata(metadata, name, KEY_FIELD_NORMALIZER, normalizer);
