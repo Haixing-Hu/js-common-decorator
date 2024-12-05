@@ -33,7 +33,7 @@ function setValidator(field, { metadata, kind, name }, validator) {
     throw new SyntaxError(`The @Validatable must decorate a class field: ${name}`);
   }
   if (typeof validator !== 'function') {
-    throw new TypeError(`The argument of @Validatable decorated on the "${name}" field must a function.`);
+    throw new TypeError(`The argument of @Validatable decorated on the "${name}" field must be a function, but it is a ${typeof validator}.`);
   }
   setFieldMetadata(metadata, name, KEY_FIELD_VALIDATOR, validator);
 }

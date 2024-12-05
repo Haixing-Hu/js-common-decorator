@@ -304,7 +304,7 @@ describe('Test the prototype method `normalize()`', () => {
       const obj = new ObjWithInvalidNormalizer();
       obj.hello();
     }).toThrowWithMessage(TypeError,
-      'The argument of @Normalizable decorated on the "number" field must be a function.');
+      'The argument of @Normalizable decorated on the "number" field must be a function, but it is a string.');
   });
   test('ObjWithoutDecoratedField.normalize()', () => {
     const obj = new ObjWithoutDecoratedField();

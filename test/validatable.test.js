@@ -88,7 +88,7 @@ describe('Test @Validatable', () => {
       obj.hello();
     }).toThrowWithMessage(
       TypeError,
-      'The argument of @Validatable decorated on the "number" field must a function.',
+      'The argument of @Validatable decorated on the "number" field must be a function, but it is a string.',
     );
   });
   test('Invalid number of arguments of @Validatable', () => {
