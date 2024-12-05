@@ -121,7 +121,8 @@ function setNormalizer(field, { metadata, kind, name }, normalizer) {
  */
 function Normalizable(...args) {
   if (args.length === 1) {
-    return (field, context) => setNormalizer(field, context, args[0]);
+    const normalizer = args[0] ?? defaultNormalizer;
+    return (field, context) => setNormalizer(field, context, normalizer);
   } else if ((args.length === 2) && isDecoratorContext(args[1])) {
     setNormalizer(args[0], args[1], defaultNormalizer);
   } else {

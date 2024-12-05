@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
+import defaultNormalizer from './default-normalizer';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -131,7 +132,8 @@ function setValidator(field, { metadata, kind, name }, validator) {
  */
 function Validatable(...args) {
   if (args.length === 1) {
-    return (field, context) => setValidator(field, context, args[0]);
+    const validator = args[0] ?? defaultValidator;
+    return (field, context) => setValidator(field, context, validator);
   } else if ((args.length === 2) && isDecoratorContext(args[1])) {
     setValidator(args[0], args[1], defaultValidator);
   } else {
