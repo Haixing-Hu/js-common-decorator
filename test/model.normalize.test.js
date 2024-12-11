@@ -12,6 +12,7 @@ import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
 import getFieldMetadata from '../src/impl/utils/get-field-metadata';
+import normalizeInteger from './impl/normalize-integer';
 import Child from './model/child';
 import CredentialType from './model/credential-type';
 import Credential from './model/normalizable-credential';
@@ -358,5 +359,27 @@ describe('Test the prototype method `normalize()`', () => {
     obj.name = '   xxx  ';
     obj.normalize('name');
     expect(obj.name).toBe('xxx');
+  });
+
+  test('normalize the field which cannot be represented by a Number', () => {
+    @Model
+    class Foo {
+      @Normalizable(normalizeInteger)
+      id = null;
+    }
+
+    @Model
+    class Goo {
+      @Normalizable
+      foo = new Foo();
+    }
+
+    const goo = Goo.create({
+      foo: {
+        id: '809373128651177984',
+      },
+    });
+    goo.normalize();
+    expect(goo.foo.id).toBe(809373128651177984n);
   });
 });
