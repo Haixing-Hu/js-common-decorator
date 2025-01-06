@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import CredentialType from '../credential-type';
 import Gender from '../gender';
 import IdentityCard from './identity-card';

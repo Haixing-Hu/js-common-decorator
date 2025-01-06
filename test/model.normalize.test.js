@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { trimString, trimUppercaseString } from '@haixing_hu/common-util';
+import { trimString, trimUppercaseString } from '@qubit-ltd/common-util';
 import { Model, Normalizable } from '../src';
 import defaultNormalizer from '../src/default-normalizer';
 import classMetadataCache from '../src/impl/class-metadata-cache';

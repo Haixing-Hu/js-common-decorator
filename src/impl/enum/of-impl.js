@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isString } from '@haixing_hu/type-detect';
+import { isString } from '@qubit-ltd/type-detect';
 import ofCodeImpl from './of-code-impl';
 import ofNameImpl from './of-name-impl';
 import ofValueImpl from './of-value-impl';

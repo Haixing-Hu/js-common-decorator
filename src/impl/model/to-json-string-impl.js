@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import Json from '@haixing_hu/json';
+import Json from '@qubit-ltd/json';
 import DefaultOptions from '../../default-options';
 
 /**

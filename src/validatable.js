@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import defaultNormalizer from './default-normalizer';
 //
 //    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.

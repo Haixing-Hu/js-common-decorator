@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isTypedArray, isCollection } from '@haixing_hu/type-detect';
+import { isTypedArray, isCollection } from '@qubit-ltd/type-detect';
 
 /**
  * Gets the element types of a collection.

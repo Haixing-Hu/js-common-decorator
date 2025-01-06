@@ -1,12 +1,12 @@
 # js-common-decorator
 
-[![npm package](https://img.shields.io/npm/v/@haixing_hu/common-decorator.svg)](https://npmjs.com/package/@haixing_hu/common-decorator)
+[![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![English Document](https://img.shields.io/badge/Document-English-blue.svg)](README.md)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Haixing-Hu/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Haixing-Hu/js-common-decorator/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
 
-[@haixing_hu/common-decorator] 是一个 JavaScript 通用装饰器库，提供装饰器用于为领域类添加常用方法。
+[@qubit-ltd/common-decorator] 是一个 JavaScript 通用装饰器库，提供装饰器用于为领域类添加常用方法。
 该库支持 JavaScript 装饰器的最新 (截至2023年5月) [stage 3 提案]。
 
 ## <span id="content">目录</span>
@@ -748,7 +748,7 @@ class Gender {
 中对象的深度克隆副本，因此对返回对象的修改 **不会** 影响内部 `Map` 中存储的默认选项。
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -765,7 +765,7 @@ expect(opt2.convertNaming).toBe(false);
 新选项的值将覆盖旧默认选项的值；否则，新属性将被添加到旧默认选项中。
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -782,7 +782,7 @@ expect(opt1.convertNaming).toBe(false);
 **注意：** 此函数**不会**更改存储在内部 `Map` 中的默认选项，而是返回一个表示合并选项的新对象。
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -804,7 +804,7 @@ expect(opt1.convertNaming).toBe(false);
 
 1. 安装依赖：
    ```shell
-   yarn add @haixing_hu/common-decorator
+   yarn add @qubit-ltd/common-decorator
    yarn add --dev @babel/core @babel/runtime @babel/preset-env
    yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-transform-class-properties @babel/plugin-transform-runtime
    ```
@@ -826,7 +826,7 @@ expect(opt1.convertNaming).toBe(false);
 
 1. 安装依赖：
    ```shell
-   yarn add @haixing_hu/common-decorator
+   yarn add @qubit-ltd/common-decorator
    yarn add --dev @babel/core @babel/runtime @babel/preset-env
    yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-transform-class-properties @babel/plugin-transform-runtime
    ```
@@ -888,7 +888,7 @@ expect(opt1.convertNaming).toBe(false);
     import { fileURLToPath, URL } from 'node:url';
     import { defineConfig } from 'vite';
     import vue from '@vitejs/plugin-vue';
-    import babel from '@haixing_hu/vite-plugin-babel';
+    import babel from '@qubit-ltd/vite-plugin-babel';
     
     export default defineConfig({
       plugins: [
@@ -913,9 +913,9 @@ expect(opt1.convertNaming).toBe(false);
 
 ## <span id="license">许可证</span>
 
-[@haixing_hu/common-decorator] 根据 Apache 2.0 许可证分发。详情请参阅 [LICENSE](LICENSE) 文件。
+[@qubit-ltd/common-decorator] 根据 Apache 2.0 许可证分发。详情请参阅 [LICENSE](LICENSE) 文件。
 
-[@haixing_hu/common-decorator]: https://npmjs.com/package/@haixing_hu/common-decorator
+[@qubit-ltd/common-decorator]: https://npmjs.com/package/@qubit-ltd/common-decorator
 [Babel]: https://babeljs.io/
 [@babel/plugin-transform-class-properties]: https://babeljs.io/docs/babel-plugin-transform-class-properties
 [@babel/plugin-proposal-decorators]: https://babeljs.io/docs/babel-plugin-proposal-decorators
@@ -926,4 +926,4 @@ expect(opt1.convertNaming).toBe(false);
 [vite]: https://vitejs.dev/
 [vite-plugin-vue]: https://www.npmjs.com/package/@vitejs/plugin-vue
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
-[我们的 vite-plugin-babel]: https://npmjs.com/package/@haixing_hu/vite-plugin-babel
+[我们的 vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel

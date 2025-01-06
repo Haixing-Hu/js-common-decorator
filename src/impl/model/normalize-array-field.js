@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isTypedArray } from '@haixing_hu/type-detect';
+import { isTypedArray } from '@qubit-ltd/type-detect';
 import getFieldElementType from '../utils/get-field-element-type';
 
 /**

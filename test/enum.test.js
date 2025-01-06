@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import clone from '@haixing_hu/clone';
+import clone from '@qubit-ltd/clone';
 import { Enum } from '../src';
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
 import getClassMetadata from '../src/impl/utils/get-class-metadata';

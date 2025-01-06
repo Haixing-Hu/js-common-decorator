@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { NamingStyle } from '@haixing_hu/naming-style';
+import { NamingStyle } from '@qubit-ltd/naming-style';
 import getExistFieldWithDifferentNamingStyle from '../../src/impl/utils/get-exist-field-with-different-naming-style';
 
 describe('getExistKeyWithDifferentNamingStyle', () => {

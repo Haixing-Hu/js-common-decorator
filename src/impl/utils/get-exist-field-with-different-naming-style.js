@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { NamingStyle } from '@haixing_hu/naming-style';
+import { NamingStyle } from '@qubit-ltd/naming-style';
 
 /**
  * Gets the existing field of the object with different naming styles.

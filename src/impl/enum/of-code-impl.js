@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isString } from '@haixing_hu/type-detect';
+import { isString } from '@qubit-ltd/type-detect';
 
 /**
  * Returns the enumerator of an enumeration class which has the specified code.

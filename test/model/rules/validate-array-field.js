@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isUndefinedOrNullOrEmptyArray } from '@haixing_hu/common-util';
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { isUndefinedOrNullOrEmptyArray } from '@qubit-ltd/common-util';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 
 /**
  * 校验某个对象的一个数组类型的字段值中每个元素是否合法。

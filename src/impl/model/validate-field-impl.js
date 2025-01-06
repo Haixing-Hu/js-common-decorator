@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../metadata-keys';
 import validateArrayField from './validate-array-field';

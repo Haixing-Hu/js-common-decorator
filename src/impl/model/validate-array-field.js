@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isTypedArray } from '@haixing_hu/type-detect';
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { isTypedArray } from '@qubit-ltd/type-detect';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import getElementValidationContext from '../utils/get-element-validation-context';
 import validateEmptyField from './validate-empty-field';
 

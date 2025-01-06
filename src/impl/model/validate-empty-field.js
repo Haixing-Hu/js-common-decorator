@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isEmpty } from '@haixing_hu/common-util';
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { isEmpty } from '@qubit-ltd/common-util';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import getInstanceName from '../utils/get-instance-name';
 import getFieldLabel from '../utils/get-field-label';
 import isFieldNonEmpty from '../utils/is-field-non-empty';

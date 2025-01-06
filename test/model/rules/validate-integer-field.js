@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isUndefinedOrNullOrEmptyString } from '@haixing_hu/common-util';
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { isUndefinedOrNullOrEmptyString } from '@qubit-ltd/common-util';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import Integer from './integer';
 
 /**

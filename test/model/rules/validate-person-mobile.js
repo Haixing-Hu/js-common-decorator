@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import isNullishOrEmpty from '../../../src/impl/utils/is-nullish-or-empty';
 import Mobile from './mobile';
 

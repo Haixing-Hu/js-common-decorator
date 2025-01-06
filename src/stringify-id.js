@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isString } from '@haixing_hu/type-detect';
-import Json from '@haixing_hu/json';
+import { isString } from '@qubit-ltd/type-detect';
+import Json from '@qubit-ltd/json';
 
 /**
  * Convert an id to a string.

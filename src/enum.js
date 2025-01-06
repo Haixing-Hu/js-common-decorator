@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { registerCloneHook } from '@haixing_hu/clone';
+import { registerCloneHook } from '@qubit-ltd/clone';
 import isEnumerator from './is-enumerator';
 import classMetadataCache from './impl/class-metadata-cache';
 import setClassMetadata from './impl/utils/set-class-metadata';

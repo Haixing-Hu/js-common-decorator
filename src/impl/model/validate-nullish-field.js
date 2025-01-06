@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import isFieldNullable from '../utils/is-field-nullable';
 import getInstanceName from '../utils/get-instance-name';
 import getFieldLabel from '../utils/get-field-label';

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import Json from '@haixing_hu/json';
+import Json from '@qubit-ltd/json';
 
 /**
  * 将某个字段值正则化为表示整数的`Number`或`bigint`对象。

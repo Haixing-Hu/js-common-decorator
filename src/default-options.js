@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import clone from '@haixing_hu/clone';
+import clone from '@qubit-ltd/clone';
 import DefaultAssignmentOptions from './impl/default-options/default-assignment-options';
 import DefaultToJsonOptions from './impl/default-options/default-to-json-options';
 

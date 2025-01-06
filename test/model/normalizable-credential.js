@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { trimUppercaseString } from '@haixing_hu/common-util';
+import { trimUppercaseString } from '@qubit-ltd/common-util';
 import { Model, Type, Normalizable } from '../../src';
 import CredentialType from './credential-type';
 

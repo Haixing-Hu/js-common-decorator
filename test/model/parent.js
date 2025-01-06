@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { trimUppercaseString } from '@haixing_hu/common-util';
+import { trimUppercaseString } from '@qubit-ltd/common-util';
 import { Model } from '../../src';
 
 @Model

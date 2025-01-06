@@ -6,9 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import clone from '@haixing_hu/clone';
-import { isBuiltInClass } from '@haixing_hu/type-detect';
-import { isUndefinedOrNull } from '@haixing_hu/common-util';
+import clone from '@qubit-ltd/clone';
+import { isBuiltInClass } from '@qubit-ltd/type-detect';
+import { isUndefinedOrNull } from '@qubit-ltd/common-util';
 import CLONE_OPTIONS from './clone-options';
 import DefaultOptions from '../../default-options';
 import defaultNormalizer from '../../default-normalizer';

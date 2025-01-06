@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isEmpty } from '@haixing_hu/common-util';
-import { ValidationResult } from '@haixing_hu/common-validation-rule';
+import { isEmpty } from '@qubit-ltd/common-util';
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import isEnumClass from './is-enum-class';
 
 /**

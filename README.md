@@ -1,12 +1,12 @@
  # js-common-decorator
 
-[![npm package](https://img.shields.io/npm/v/@haixing_hu/common-decorator.svg)](https://npmjs.com/package/@haixing_hu/common-decorator)
+[![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![中文文档](https://img.shields.io/badge/文档-中文版-blue.svg)](README.zh_CN.md)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Haixing-Hu/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Haixing-Hu/js-common-decorator/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
 
-[@haixing_hu/common-decorator] is a JavaScript library of common decorators,
+[@qubit-ltd/common-decorator] is a JavaScript library of common decorators,
 provides decorators to add common methods to domain classes. The library 
 supports the most recent (currently May 2023) 
 [stage 3 proposal of JavaScript decorators].
@@ -951,7 +951,7 @@ modification of the returned object will **not** affect the default options
 stored in the internal map.
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -971,7 +971,7 @@ old default options; otherwise, the new property will be added to the old defaul
 options.
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -991,7 +991,7 @@ options into the returned object.
 internal map, instead, it returns a new object representing the merged options.
 
 ```js
-import { DefaultOptions } from '@haixing_hu/common-decorator';
+import { DefaultOptions } from '@qubit-ltd/common-decorator';
 
 const opt1 = DefaultOptions.get('assign');
 expect(opt1.convertNaming).toBe(false);
@@ -1017,7 +1017,7 @@ at least `7.23.0`.
 
 1.  Install the required dependencies:
     ```shell
-    yarn add @haixing_hu/common-decorator
+    yarn add @qubit-ltd/common-decorator
     yarn add --dev @babel/core @babel/runtime @babel/preset-env
     yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-transform-class-properties @babel/plugin-transform-runtime
     ```
@@ -1041,7 +1041,7 @@ at least `7.23.0`.
 
 1.  Install the required dependencies:
     ```shell
-    yarn add @haixing_hu/common-decorator
+    yarn add @qubit-ltd/common-decorator
     yarn add --dev @babel/core @babel/runtime @babel/preset-env
     yarn add --dev @babel/plugin-proposal-decorators @babel/plugin-transform-class-properties @babel/plugin-transform-runtime
     ```
@@ -1113,7 +1113,7 @@ at least `7.23.0`.
     import { fileURLToPath, URL } from 'node:url';
     import { defineConfig } from 'vite';
     import vue from '@vitejs/plugin-vue';
-    import babel from '@haixing_hu/vite-plugin-babel';
+    import babel from '@qubit-ltd/vite-plugin-babel';
 
     export default defineConfig({
       plugins: [
@@ -1139,10 +1139,10 @@ to open an issue or submit a pull request to the [GitHub repository].
 
 ## <span id="license">License</span>
 
-[@haixing_hu/common-decorator] is distributed under the Apache 2.0 license.
+[@qubit-ltd/common-decorator] is distributed under the Apache 2.0 license.
 See the [LICENSE](LICENSE) file for more details.
 
-[@haixing_hu/common-decorator]: https://npmjs.com/package/@haixing_hu/common-decorator
+[@qubit-ltd/common-decorator]: https://npmjs.com/package/@qubit-ltd/common-decorator
 [Babel]: https://babeljs.io/
 [@babel/plugin-transform-class-properties]: https://babeljs.io/docs/babel-plugin-transform-class-properties
 [@babel/plugin-proposal-decorators]: https://babeljs.io/docs/babel-plugin-proposal-decorators
@@ -1153,4 +1153,4 @@ See the [LICENSE](LICENSE) file for more details.
 [vite]: https://vitejs.dev/
 [vite-plugin-vue]: https://www.npmjs.com/package/@vitejs/plugin-vue
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
-[our version of vite-plugin-babel]: https://npmjs.com/package/@haixing_hu/vite-plugin-babel
+[our version of vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel

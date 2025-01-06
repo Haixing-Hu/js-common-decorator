@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import Json from '@haixing_hu/json';
+import Json from '@qubit-ltd/json';
 import Page from '../../model/page';
 import assignImpl from './assign-impl';
 import isValidPageSource from './is-valid-page-source';
