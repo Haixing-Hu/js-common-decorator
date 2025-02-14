@@ -71,6 +71,9 @@ function toJsonImpl(obj, key, options) {
   const opt = DefaultOptions.merge('toJSON', options);
   // normalize the object if necessary
   if (opt.normalize) {
+    // must clone the object before normalizing it, otherwise the original
+    // object will be modified.
+    obj = clone(obj, CLONE_OPTIONS);
     obj = defaultNormalizer(obj);
   }
   const cloneOptions = {

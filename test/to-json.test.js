@@ -104,4 +104,22 @@ describe('toJSON', () => {
     const result = toJSON(obj);
     expect(result).toEqual({ a: 1, bar: { c: 3 } });
   });
+
+  it('should modify the original object even if the normalize option is set', () => {
+    class Foo {
+      constructor(a, b) {
+        this.a = a;
+        this.b = b;
+      }
+
+      normalize() {
+        this.b = this.b.toUpperCase();
+      }
+    }
+    const obj = new Foo(1, 'test');
+    const options = { normalize: true };
+    const result = toJSON(obj, options);
+    expect(obj).toEqual({ a: 1, b: 'test' });
+    expect(result).toEqual({ a: 1, b: 'TEST' });
+  });
 });
