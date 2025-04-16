@@ -948,6 +948,298 @@ expect(opt1.convertNaming).toBe(false);
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
 [我们的 vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel
 
+## 前后端数据转换示例
+
+在实际项目中，前端与后端之间的数据交换是非常常见的场景。下面的示例展示了如何使用本库处理从RESTful接口获取的数据，以及如何将数据发送回后端。
+
+### 完整示例
+
+假设我们有一个电子商务应用，需要处理订单数据。后端API返回的数据是小写加下划线的命名风格（如`order_id`），而前端代码使用驼峰命名（如`orderId`）。同时，订单ID使用Java的Long类型（对JavaScript来说可能超出安全整数范围）。
+
+首先，定义我们的领域模型：
+
+```javascript
+import { Model, Type, ElementType, Normalizable, Validatable, NonEmpty, DefaultOptions } from '@qubit-ltd/common-decorator';
+
+// 设置默认选项，处理命名风格转换
+DefaultOptions.set('assign', {
+  normalize: true,
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_UNDERSCORE',  // 后端返回的JSON数据格式
+  targetNamingStyle: 'LOWER_CAMEL'        // 前端使用的格式
+});
+
+DefaultOptions.set('toJSON', {
+  normalize: true,
+  removeEmptyFields: true,    // 自动删除空值属性
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',       // 前端使用的格式
+  targetNamingStyle: 'LOWER_UNDERSCORE'   // 发送到后端的格式
+});
+
+// 定义订单项模型
+@Model
+class OrderItem {
+  constructor() {
+    this.id = null;           // Java Long类型，会自动转为BigInt
+    this.productId = null;    // 前端使用驼峰命名，对应后端的product_id
+    this.productName = '';
+    this.quantity = 0;
+    this.unitPrice = 0;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(String)
+  get productName() {
+    return this._productName;
+  }
+  
+  set productName(value) {
+    this._productName = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Number)
+  get quantity() {
+    return this._quantity;
+  }
+  
+  set quantity(value) {
+    this._quantity = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Number)
+  get unitPrice() {
+    return this._unitPrice;
+  }
+  
+  set unitPrice(value) {
+    this._unitPrice = value;
+  }
+  
+  // 计算总价
+  getTotalPrice() {
+    return this.quantity * this.unitPrice;
+  }
+}
+
+// 定义订单模型
+@Model
+class Order {
+  constructor() {
+    this.id = null;               // Java Long类型，会自动转为BigInt
+    this.orderNumber = '';        // 前端使用驼峰命名，对应后端的order_number
+    this.customerId = null;
+    this.customerName = '';
+    this.orderDate = null;
+    this.orderItems = [];         // 订单项数组
+    this.totalAmount = 0;
+    this.status = '';
+    this.note = '';               // 可选字段，空值发送到后端时会被移除
+  }
+  
+  @Normalizable
+  @Validatable
+  @NonEmpty
+  @Type(String)
+  get orderNumber() {
+    return this._orderNumber;
+  }
+  
+  set orderNumber(value) {
+    this._orderNumber = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(String)
+  get customerName() {
+    return this._customerName;
+  }
+  
+  set customerName(value) {
+    this._customerName = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Date)
+  get orderDate() {
+    return this._orderDate;
+  }
+  
+  set orderDate(value) {
+    this._orderDate = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @ElementType(OrderItem)
+  get orderItems() {
+    return this._orderItems;
+  }
+  
+  set orderItems(value) {
+    this._orderItems = value;
+  }
+}
+
+// 使用示例 - 从后端获取数据
+async function fetchOrder(orderId) {
+  try {
+    // 假设这是从后端API获取的响应
+    const response = await fetch(`/api/orders/${orderId}`);
+    const data = await response.json();
+    
+    // 数据示例（小写加下划线的命名风格）
+    // {
+    //   "id": "9223372036854775807",  // 注意：Java Long类型的最大值，超出JS Number安全范围
+    //   "order_number": "ORD-2023-001",
+    //   "customer_id": "5678",
+    //   "customer_name": "张三",
+    //   "order_date": "2023-08-15T14:30:00.000Z",
+    //   "order_items": [
+    //     {
+    //       "id": "8345678912345678901",  // 同样是大整数
+    //       "product_id": "101",
+    //       "product_name": "笔记本电脑",
+    //       "quantity": 1,
+    //       "unit_price": 6999
+    //     },
+    //     {
+    //       "id": "8345678912345678902",
+    //       "product_id": "202",
+    //       "product_name": "无线鼠标",
+    //       "quantity": 2,
+    //       "unit_price": 129
+    //     }
+    //   ],
+    //   "total_amount": 7257,
+    //   "status": "PENDING",
+    //   "note": null
+    // }
+    
+    // 使用 Order.create() 创建领域对象，自动处理命名风格转换和大整数
+    const order = Order.create(data);
+    
+    console.log(order.id);  // 输出: 9223372036854775807n (BigInt类型)
+    console.log(order.orderNumber);  // 输出: "ORD-2023-001" (已转换为驼峰命名)
+    console.log(order.orderItems[0].productName);  // 输出: "笔记本电脑"
+    
+    // 验证和规范化
+    order.normalize();
+    const validationResult = order.validate();
+    if (!validationResult.valid) {
+      console.error('订单数据验证失败:', validationResult.message);
+    }
+    
+    return order;
+  } catch (error) {
+    console.error('获取订单失败:', error);
+    throw error;
+  }
+}
+
+// 将数据发送回后端
+async function updateOrder(order) {
+  try {
+    // 使用toJSON将领域对象转换为普通JavaScript对象
+    // 自动处理: 1.命名风格转换 2.空值属性移除 3.BigInt转换
+    const orderData = order.toJSON();
+    
+    // 转换后的数据格式示例:
+    // {
+    //   "id": "9223372036854775807",  // BigInt转为字符串，没有'n'后缀
+    //   "order_number": "ORD-2023-001",
+    //   "customer_id": "5678",
+    //   "customer_name": "张三",
+    //   "order_date": "2023-08-15T14:30:00.000Z",
+    //   "order_items": [
+    //     {
+    //       "id": "8345678912345678901",
+    //       "product_id": "101",
+    //       "product_name": "笔记本电脑",
+    //       "quantity": 1,
+    //       "unit_price": 6999
+    //     },
+    //     // ...其他订单项
+    //   ],
+    //   "total_amount": 7257,
+    //   "status": "PENDING"
+    //   // 注意: note字段为null，已被自动移除
+    // }
+    
+    const response = await fetch(`/api/orders/${order.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)  // 无需额外处理，已经是合适的格式
+    });
+    
+    if (!response.ok) {
+      throw new Error(`更新订单失败: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('更新订单失败:', error);
+    throw error;
+  }
+}
+
+// 使用示例
+async function example() {
+  // 获取订单数据并修改
+  const order = await fetchOrder('123');
+  order.status = 'COMPLETED';
+  order.note = '';  // 空字符串，在发送到后端时会被移除
+  
+  // 为订单添加新项目
+  const newItem = new OrderItem();
+  newItem.productId = '303';
+  newItem.productName = '耳机';
+  newItem.quantity = 1;
+  newItem.unitPrice = 299;
+  order.orderItems.push(newItem);
+  
+  // 重新计算总金额
+  order.totalAmount = order.orderItems.reduce(
+    (sum, item) => sum + item.getTotalPrice(), 0
+  );
+  
+  // 将更新后的订单发送回后端
+  await updateOrder(order);
+}
+
+### 关键点说明
+
+1. **命名风格自动转换**：
+   - 从后端获取的数据使用小写加下划线格式（如`order_number`）
+   - 前端领域对象使用驼峰命名格式（如`orderNumber`）
+   - 通过`DefaultOptions.set('assign', {...})`配置，`Model.create()`和`model.assign()`可以自动转换命名风格
+   - 通过`DefaultOptions.set('toJSON', {...})`配置，`model.toJSON()`可以自动将驼峰命名转回小写加下划线
+
+2. **超大整数自动处理**：
+   - Java后端使用Long类型的ID（如`9223372036854775807`）超出了JavaScript的安全整数范围
+   - `Model.create()`和`model.assign()`自动将这些大整数转换为JavaScript的BigInt类型
+   - `model.toJSON()`自动将BigInt转换为正确的JSON格式（不带'n'后缀）
+
+3. **空值属性自动处理**：
+   - 配置`removeEmptyFields: true`后，`model.toJSON()`会自动移除null、undefined和空字符串属性
+   - 在示例中，null和空字符串的'note'字段不会被发送到后端
+
+4. **类型转换与验证**：
+   - 使用`@Type`和`@ElementType`装饰器确保类型安全
+   - 通过`model.normalize()`进行数据规范化
+   - 通过`model.validate()`验证数据完整性
+
+这个完整示例展示了如何在实际应用场景中使用本库的特性，轻松处理前后端数据交换中的各种挑战。
+
 ## 高级用法
 
 ### 组合多个装饰器
@@ -1061,200 +1353,3 @@ class EmailSubscription {
   }
 }
 ```
-
-### 使用 DefaultOptions
-
-您可以为各种操作配置默认选项：
-
-```javascript
-import { DefaultOptions, Model } from '@qubit-ltd/common-decorator';
-
-// 配置 JSON 序列化的默认选项
-DefaultOptions.set('toJSON', {
-  normalize: true,
-  removeEmptyFields: true,
-  convertNaming: true,
-  sourceNamingStyle: 'LOWER_CAMEL',
-  targetNamingStyle: 'LOWER_UNDERSCORE'
-});
-
-@Model
-class Order {
-  constructor() {
-    this.orderId = null;
-    this.customerName = '';
-    this.orderItems = [];
-  }
-}
-
-const order = new Order();
-order.assign({
-  orderId: '12345',
-  customerName: '张三',
-  orderItems: [
-    { itemId: 1, name: '产品1', quantity: 2 }
-  ]
-});
-
-// 将使用配置的默认选项进行序列化
-const json = order.toJsonString();
-console.log(json);
-// 输出将使用下划线命名风格：
-// {"order_id":"12345","customer_name":"张三","order_items":[{"item_id":1,"name":"产品1","quantity":2}]}
-```
-
-## 集成示例
-
-### 与 Vue.js 集成
-
-```javascript
-import { Model, Normalizable, Validatable } from '@qubit-ltd/common-decorator';
-import { defineComponent, ref } from 'vue';
-
-@Model
-class UserProfile {
-  constructor() {
-    this.username = '';
-    this.email = '';
-    this.bio = '';
-  }
-  
-  @Normalizable
-  @Validatable
-  get username() {
-    return this._username;
-  }
-  
-  set username(value) {
-    this._username = value;
-  }
-  
-  // 其他 getter 和 setter...
-}
-
-export default defineComponent({
-  setup() {
-    const profile = ref(new UserProfile());
-    
-    const updateProfile = (formData) => {
-      profile.value.assign(formData);
-      profile.value.normalize();
-      const validation = profile.value.validate();
-      
-      if (validation.valid) {
-        // 保存资料
-      } else {
-        // 处理验证错误
-        console.error(validation.message);
-      }
-    };
-    
-    return {
-      profile,
-      updateProfile
-    };
-  }
-});
-```
-
-### 与 Express.js 集成
-
-```javascript
-import express from 'express';
-import { Model, Normalizable, Validatable, NonEmpty } from '@qubit-ltd/common-decorator';
-
-const app = express();
-app.use(express.json());
-
-@Model
-class NewUserRequest {
-  constructor() {
-    this.username = '';
-    this.email = '';
-    this.password = '';
-  }
-  
-  @NonEmpty
-  @Normalizable
-  @Validatable
-  get username() {
-    return this._username;
-  }
-  
-  set username(value) {
-    this._username = value;
-  }
-  
-  // 其他 getter 和 setter...
-}
-
-app.post('/api/users', (req, res) => {
-  try {
-    const userRequest = NewUserRequest.create(req.body);
-    userRequest.normalize();
-    const validation = userRequest.validate();
-    
-    if (!validation.valid) {
-      return res.status(400).json({ error: validation.message });
-    }
-    
-    // 在数据库中创建用户
-    return res.status(201).json({ message: '用户创建成功' });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
-
-app.listen(3000, () => {
-  console.log('服务器运行在端口 3000');
-});
-```
-
-## 兼容性和要求
-
-- **Node.js**: 14.x 或更高版本
-- **ECMAScript**: ES2022 或更高版本
-- **装饰器支持**: 需要为 Stage 3 装饰器配置 babel
-- **浏览器支持**: 支持 ES6+ 的现代浏览器
-
-## 最佳实践
-
-### 项目结构
-
-使用此库时，我们建议以结构化的方式组织您的领域模型：
-
-```
-src/
-├── models/
-│   ├── base/
-│   │   └── BaseModel.js
-│   ├── User.js
-│   ├── Product.js
-│   └── Order.js
-├── enums/
-│   ├── Status.js
-│   └── Role.js
-└── app.js
-```
-
-### 性能考虑
-
-- 仅在必要时使用 `normalize()`，而不是在每次操作时都使用
-- 考虑缓存频繁访问对象的验证结果
-- 对于大型集合，使用 `createArray()` 方法而不是映射每个项目
-
-### 类型安全
-
-虽然 JavaScript 是动态类型的，但此库提供了几种确保类型安全的方法：
-
-1. 使用 `@Type` 装饰器强制对属性进行类型检查
-2. 对数组使用 `@ElementType` 装饰器
-3. 启用规范化以自动将值转换为正确的类型
-
-### 内存管理
-
-处理大型对象图时：
-
-1. 避免不必要的深度克隆
-2. 对大型对象使用 `toJSON` 中的 `removeEmptyFields` 选项
-3. 序列化对象时注意循环引用

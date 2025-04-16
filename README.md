@@ -1175,6 +1175,300 @@ See the [LICENSE](LICENSE) file for more details.
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
 [our version of vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel
 
+## Front-end and Back-end Data Exchange Example
+
+In real-world applications, data exchange between front-end and back-end is a common scenario. The following example demonstrates how to use this library to process data from RESTful APIs and send it back to the server.
+
+### Complete Example
+
+Suppose we have an e-commerce application that needs to handle order data. The back-end API returns data in snake_case naming convention (e.g., `order_id`), while the front-end code uses camelCase (e.g., `orderId`). Additionally, order IDs use Java's Long type (which may exceed JavaScript's safe integer range).
+
+First, let's define our domain models:
+
+```javascript
+import { Model, Type, ElementType, Normalizable, Validatable, NonEmpty } from '@qubit-ltd/common-decorator';
+
+// Configure default options for naming style conversion
+DefaultOptions.set('assign', {
+  normalize: true,
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_UNDERSCORE',  // JSON data format from back-end
+  targetNamingStyle: 'LOWER_CAMEL'        // Format used in front-end
+});
+
+DefaultOptions.set('toJSON', {
+  normalize: true,
+  removeEmptyFields: true,    // Automatically remove empty fields
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',       // Format used in front-end
+  targetNamingStyle: 'LOWER_UNDERSCORE'   // Format to send to back-end
+});
+
+// Define the OrderItem model
+@Model
+class OrderItem {
+  constructor() {
+    this.id = null;           // Java Long type, automatically converted to BigInt
+    this.productId = null;    // Front-end uses camelCase, corresponding to product_id in back-end
+    this.productName = '';
+    this.quantity = 0;
+    this.unitPrice = 0;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(String)
+  get productName() {
+    return this._productName;
+  }
+  
+  set productName(value) {
+    this._productName = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Number)
+  get quantity() {
+    return this._quantity;
+  }
+  
+  set quantity(value) {
+    this._quantity = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Number)
+  get unitPrice() {
+    return this._unitPrice;
+  }
+  
+  set unitPrice(value) {
+    this._unitPrice = value;
+  }
+  
+  // Calculate total price
+  getTotalPrice() {
+    return this.quantity * this.unitPrice;
+  }
+}
+
+// Define the Order model
+@Model
+class Order {
+  constructor() {
+    this.id = null;               // Java Long type, automatically converted to BigInt
+    this.orderNumber = '';        // Front-end uses camelCase, corresponding to order_number in back-end
+    this.customerId = null;
+    this.customerName = '';
+    this.orderDate = null;
+    this.orderItems = [];         // Array of order items
+    this.totalAmount = 0;
+    this.status = '';
+    this.note = '';               // Optional field, empty values will be removed when sent to back-end
+  }
+  
+  @Normalizable
+  @Validatable
+  @NonEmpty
+  @Type(String)
+  get orderNumber() {
+    return this._orderNumber;
+  }
+  
+  set orderNumber(value) {
+    this._orderNumber = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(String)
+  get customerName() {
+    return this._customerName;
+  }
+  
+  set customerName(value) {
+    this._customerName = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @Type(Date)
+  get orderDate() {
+    return this._orderDate;
+  }
+  
+  set orderDate(value) {
+    this._orderDate = value;
+  }
+  
+  @Normalizable
+  @Validatable
+  @ElementType(OrderItem)
+  get orderItems() {
+    return this._orderItems;
+  }
+  
+  set orderItems(value) {
+    this._orderItems = value;
+  }
+}
+
+// Example usage - Fetching data from back-end
+async function fetchOrder(orderId) {
+  try {
+    // Assume this is the response from a back-end API
+    const response = await fetch(`/api/orders/${orderId}`);
+    const data = await response.json();
+    
+    // Sample data (in snake_case naming style)
+    // {
+    //   "id": "9223372036854775807",  // Note: Max value of Java Long, exceeds JS Number safe range
+    //   "order_number": "ORD-2023-001",
+    //   "customer_id": "5678",
+    //   "customer_name": "John Doe",
+    //   "order_date": "2023-08-15T14:30:00.000Z",
+    //   "order_items": [
+    //     {
+    //       "id": "8345678912345678901",  // Another large integer
+    //       "product_id": "101",
+    //       "product_name": "Laptop",
+    //       "quantity": 1,
+    //       "unit_price": 999.99
+    //     },
+    //     {
+    //       "id": "8345678912345678902",
+    //       "product_id": "202",
+    //       "product_name": "Wireless Mouse",
+    //       "quantity": 2,
+    //       "unit_price": 29.99
+    //     }
+    //   ],
+    //   "total_amount": 1059.97,
+    //   "status": "PENDING",
+    //   "note": null
+    // }
+    
+    // Create domain object using Order.create(), automatically handling naming style conversion and large integers
+    const order = Order.create(data);
+    
+    console.log(order.id);  // Output: 9223372036854775807n (BigInt type)
+    console.log(order.orderNumber);  // Output: "ORD-2023-001" (converted to camelCase)
+    console.log(order.orderItems[0].productName);  // Output: "Laptop"
+    
+    // Validation and normalization
+    order.normalize();
+    const validationResult = order.validate();
+    if (!validationResult.valid) {
+      console.error('Order data validation failed:', validationResult.message);
+    }
+    
+    return order;
+  } catch (error) {
+    console.error('Failed to fetch order:', error);
+    throw error;
+  }
+}
+
+// Sending data back to the back-end
+async function updateOrder(order) {
+  try {
+    // Use toJSON to convert domain object to plain JavaScript object
+    // Automatically handles: 1. Naming style conversion 2. Empty field removal 3. BigInt conversion
+    const orderData = order.toJSON();
+    
+    // Example of converted data format:
+    // {
+    //   "id": "9223372036854775807",  // BigInt converted to string, without 'n' suffix
+    //   "order_number": "ORD-2023-001",
+    //   "customer_id": "5678",
+    //   "customer_name": "John Doe",
+    //   "order_date": "2023-08-15T14:30:00.000Z",
+    //   "order_items": [
+    //     {
+    //       "id": "8345678912345678901",
+    //       "product_id": "101",
+    //       "product_name": "Laptop",
+    //       "quantity": 1,
+    //       "unit_price": 999.99
+    //     },
+    //     // ...other order items
+    //   ],
+    //   "total_amount": 1059.97,
+    //   "status": "PENDING"
+    //   // Note: 'note' field was null and has been automatically removed
+    // }
+    
+    const response = await fetch(`/api/orders/${order.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)  // No additional processing needed, already in the right format
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to update order: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to update order:', error);
+    throw error;
+  }
+}
+
+// Example usage
+async function example() {
+  // Fetch order data and modify it
+  const order = await fetchOrder('123');
+  order.status = 'COMPLETED';
+  order.note = '';  // Empty string, will be removed when sent to back-end
+  
+  // Add a new item to the order
+  const newItem = new OrderItem();
+  newItem.productId = '303';
+  newItem.productName = 'Headphones';
+  newItem.quantity = 1;
+  newItem.unitPrice = 79.99;
+  order.orderItems.push(newItem);
+  
+  // Recalculate total amount
+  order.totalAmount = order.orderItems.reduce(
+    (sum, item) => sum + item.getTotalPrice(), 0
+  );
+  
+  // Send the updated order back to the server
+  await updateOrder(order);
+}
+
+```
+
+### Key Points
+
+1. **Automatic Naming Style Conversion**:
+   - Data from the back-end uses snake_case format (e.g., `order_number`)
+   - Front-end domain objects use camelCase format (e.g., `orderNumber`)
+   - Through `DefaultOptions.set('assign', {...})` configuration, `Model.create()` and `model.assign()` automatically convert naming styles
+   - Through `DefaultOptions.set('toJSON', {...})` configuration, `model.toJSON()` automatically converts camelCase back to snake_case
+
+2. **Large Integer Handling**:
+   - Back-end uses Java Long type IDs (e.g., `9223372036854775807`) that exceed JavaScript's safe integer range
+   - `Model.create()` and `model.assign()` automatically convert these large integers to JavaScript's BigInt type
+   - `model.toJSON()` automatically converts BigInt to the correct JSON format (without the 'n' suffix)
+
+3. **Empty Field Handling**:
+   - With `removeEmptyFields: true` configuration, `model.toJSON()` automatically removes null, undefined, and empty string properties
+   - In the example, the 'note' field with null or empty string value won't be sent to the back-end
+
+4. **Type Conversion and Validation**:
+   - Use `@Type` and `@ElementType` decorators to ensure type safety
+   - Use `model.normalize()` for data normalization
+   - Use `model.validate()` to validate data integrity
+
+This complete example demonstrates how to use the features of this library to easily handle various challenges in front-end and back-end data exchange in real-world applications.
+
 ## Advanced Usage
 
 ### Combining Multiple Decorators
