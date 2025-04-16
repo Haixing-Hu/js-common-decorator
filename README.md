@@ -1,4 +1,4 @@
- # js-common-decorator
+# js-common-decorator
 
 [![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
@@ -10,6 +10,26 @@
 provides decorators to add common methods to domain classes. The library 
 supports the most recent (currently May 2023) 
 [stage 3 proposal of JavaScript decorators].
+
+## Features
+
+- **Modern Decorator Support**: Compatible with the latest Stage 3 proposal for JavaScript decorators
+- **Model Enhancement**: `@Model` decorator adds common methods to domain model classes
+- **Enum Implementation**: `@Enum` decorator provides Java-like enumeration capabilities
+- **Validation Support**: `@Validatable` decorator enables field validation
+- **Normalization Support**: `@Normalizable` decorator enables field normalization
+- **Type Safety**: `@Type` and `@ElementType` decorators for type checking
+- **Serialization Utilities**: Built-in JSON serialization/deserialization support
+
+## Installation
+
+```bash
+# Using npm
+npm install @qubit-ltd/common-decorator
+
+# Using yarn
+yarn add @qubit-ltd/common-decorator
+```
 
 ## <span id="content">Table of Contents</span>
 
@@ -1154,3 +1174,314 @@ See the [LICENSE](LICENSE) file for more details.
 [vite-plugin-vue]: https://www.npmjs.com/package/@vitejs/plugin-vue
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
 [our version of vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel
+
+## Advanced Usage
+
+### Combining Multiple Decorators
+
+You can combine multiple decorators to add rich functionality to your classes:
+
+```javascript
+import { 
+  Model, 
+  Type, 
+  ElementType, 
+  Normalizable, 
+  Validatable, 
+  NonEmpty 
+} from '@qubit-ltd/common-decorator';
+
+@Model
+class Product {
+  constructor() {
+    this.id = null;
+    this.name = '';
+    this.price = 0;
+    this.tags = [];
+    this.createdAt = null;
+  }
+  
+  @NonEmpty
+  @Validatable
+  @Normalizable
+  @Type(String)
+  get name() {
+    return this._name;
+  }
+  
+  set name(value) {
+    this._name = value;
+  }
+  
+  @Validatable
+  @Normalizable
+  @Type(Number)
+  get price() {
+    return this._price;
+  }
+  
+  set price(value) {
+    this._price = value;
+  }
+  
+  @Normalizable
+  @ElementType(String)
+  get tags() {
+    return this._tags;
+  }
+  
+  set tags(value) {
+    this._tags = value;
+  }
+}
+
+// Usage
+const product = new Product();
+product.assign({
+  name: '  Product Name  ',
+  price: '99.99',
+  tags: ['tag1', 2, 'tag3']
+});
+
+// After normalization, product.name will be trimmed, 
+// product.price will be a Number,
+// and all elements in product.tags will be strings
+product.normalize();
+
+console.log(product.validate()); // Checks if name is not empty and all types match
+```
+
+### Custom Validation and Normalization
+
+You can implement custom validation and normalization logic:
+
+```javascript
+import { Model, Normalizable, Validatable } from '@qubit-ltd/common-decorator';
+
+@Model
+class EmailSubscription {
+  constructor() {
+    this.email = '';
+    this.subscribed = false;
+  }
+  
+  @Normalizable((value) => {
+    // Custom normalizer that converts email to lowercase and trims whitespace
+    return typeof value === 'string' ? value.toLowerCase().trim() : value;
+  })
+  @Validatable((value) => {
+    // Custom validator that checks if email is valid
+    if (typeof value !== 'string' || !value.includes('@')) {
+      return {
+        valid: false,
+        message: 'Invalid email address',
+      };
+    }
+    return { valid: true };
+  })
+  get email() {
+    return this._email;
+  }
+  
+  set email(value) {
+    this._email = value;
+  }
+}
+```
+
+### Working with DefaultOptions
+
+You can configure default options for various operations:
+
+```javascript
+import { DefaultOptions, Model } from '@qubit-ltd/common-decorator';
+
+// Configure default options for JSON serialization
+DefaultOptions.set('toJSON', {
+  normalize: true,
+  removeEmptyFields: true,
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE'
+});
+
+@Model
+class Order {
+  constructor() {
+    this.orderId = null;
+    this.customerName = '';
+    this.orderItems = [];
+  }
+}
+
+const order = new Order();
+order.assign({
+  orderId: '12345',
+  customerName: 'John Doe',
+  orderItems: [
+    { itemId: 1, name: 'Product 1', quantity: 2 }
+  ]
+});
+
+// Will use the configured default options for serialization
+const json = order.toJsonString();
+console.log(json);
+// Output will use lower_underscore naming: 
+// {"order_id":"12345","customer_name":"John Doe","order_items":[{"item_id":1,"name":"Product 1","quantity":2}]}
+```
+
+## Integration Examples
+
+### Using with Vue.js
+
+```javascript
+import { Model, Normalizable, Validatable } from '@qubit-ltd/common-decorator';
+import { defineComponent, ref } from 'vue';
+
+@Model
+class UserProfile {
+  constructor() {
+    this.username = '';
+    this.email = '';
+    this.bio = '';
+  }
+  
+  @Normalizable
+  @Validatable
+  get username() {
+    return this._username;
+  }
+  
+  set username(value) {
+    this._username = value;
+  }
+  
+  // Other getters and setters...
+}
+
+export default defineComponent({
+  setup() {
+    const profile = ref(new UserProfile());
+    
+    const updateProfile = (formData) => {
+      profile.value.assign(formData);
+      profile.value.normalize();
+      const validation = profile.value.validate();
+      
+      if (validation.valid) {
+        // Save profile
+      } else {
+        // Handle validation errors
+        console.error(validation.message);
+      }
+    };
+    
+    return {
+      profile,
+      updateProfile
+    };
+  }
+});
+```
+
+### Using with Express.js
+
+```javascript
+import express from 'express';
+import { Model, Normalizable, Validatable, NonEmpty } from '@qubit-ltd/common-decorator';
+
+const app = express();
+app.use(express.json());
+
+@Model
+class NewUserRequest {
+  constructor() {
+    this.username = '';
+    this.email = '';
+    this.password = '';
+  }
+  
+  @NonEmpty
+  @Normalizable
+  @Validatable
+  get username() {
+    return this._username;
+  }
+  
+  set username(value) {
+    this._username = value;
+  }
+  
+  // Other getters and setters...
+}
+
+app.post('/api/users', (req, res) => {
+  try {
+    const userRequest = NewUserRequest.create(req.body);
+    userRequest.normalize();
+    const validation = userRequest.validate();
+    
+    if (!validation.valid) {
+      return res.status(400).json({ error: validation.message });
+    }
+    
+    // Create user in database
+    return res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+```
+
+## Compatibility and Requirements
+
+- **Node.js**: 14.x or higher
+- **ECMAScript**: ES2022 or higher
+- **Decorator Support**: Requires babel configuration for Stage 3 decorators
+- **Browser Support**: Modern browsers with ES6+ support
+
+## Best Practices
+
+### Project Structure
+
+When using this library, we recommend organizing your domain models in a structured way:
+
+```
+src/
+├── models/
+│   ├── base/
+│   │   └── BaseModel.js
+│   ├── User.js
+│   ├── Product.js
+│   └── Order.js
+├── enums/
+│   ├── Status.js
+│   └── Role.js
+└── app.js
+```
+
+### Performance Considerations
+
+- Use `normalize()` only when necessary, not on every operation
+- Consider caching validation results for frequently accessed objects
+- For large collections, use `createArray()` method instead of mapping each item
+
+### Type Safety
+
+While JavaScript is dynamically typed, this library provides several ways to ensure type safety:
+
+1. Use the `@Type` decorator to enforce type checking for properties
+2. Use the `@ElementType` decorator for arrays
+3. Enable normalization to automatically convert values to the correct type
+
+### Memory Management
+
+When working with large object graphs:
+
+1. Avoid deep cloning unnecessarily
+2. Use the `removeEmptyFields` option in `toJSON` for large objects
+3. Be cautious with circular references when serializing objects

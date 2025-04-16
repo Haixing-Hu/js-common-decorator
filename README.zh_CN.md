@@ -9,6 +9,26 @@
 [@qubit-ltd/common-decorator] 是一个 JavaScript 通用装饰器库，提供装饰器用于为领域类添加常用方法。
 该库支持 JavaScript 装饰器的最新 (截至2023年5月) [stage 3 提案]。
 
+## 特性
+
+- **现代装饰器支持**：兼容最新的 JavaScript 装饰器 Stage 3 提案
+- **模型增强**：`@Model` 装饰器为领域模型类添加常用方法
+- **枚举实现**：`@Enum` 装饰器提供类似 Java 的枚举功能
+- **验证支持**：`@Validatable` 装饰器实现字段验证
+- **规范化支持**：`@Normalizable` 装饰器实现字段规范化
+- **类型安全**：`@Type` 和 `@ElementType` 装饰器用于类型检查
+- **序列化工具**：内置 JSON 序列化/反序列化支持
+
+## 安装
+
+```bash
+# 使用 npm
+npm install @qubit-ltd/common-decorator
+
+# 使用 yarn
+yarn add @qubit-ltd/common-decorator
+```
+
 ## <span id="content">目录</span>
 
 - [使用方法](#usage)
@@ -927,3 +947,314 @@ expect(opt1.convertNaming).toBe(false);
 [vite-plugin-vue]: https://www.npmjs.com/package/@vitejs/plugin-vue
 [vite-plugin-babel]: https://www.npmjs.com/package/vite-plugin-babel
 [我们的 vite-plugin-babel]: https://npmjs.com/package/@qubit-ltd/vite-plugin-babel
+
+## 高级用法
+
+### 组合多个装饰器
+
+您可以组合多个装饰器为类添加丰富的功能：
+
+```javascript
+import { 
+  Model, 
+  Type, 
+  ElementType, 
+  Normalizable, 
+  Validatable, 
+  NonEmpty 
+} from '@qubit-ltd/common-decorator';
+
+@Model
+class Product {
+  constructor() {
+    this.id = null;
+    this.name = '';
+    this.price = 0;
+    this.tags = [];
+    this.createdAt = null;
+  }
+  
+  @NonEmpty
+  @Validatable
+  @Normalizable
+  @Type(String)
+  get name() {
+    return this._name;
+  }
+  
+  set name(value) {
+    this._name = value;
+  }
+  
+  @Validatable
+  @Normalizable
+  @Type(Number)
+  get price() {
+    return this._price;
+  }
+  
+  set price(value) {
+    this._price = value;
+  }
+  
+  @Normalizable
+  @ElementType(String)
+  get tags() {
+    return this._tags;
+  }
+  
+  set tags(value) {
+    this._tags = value;
+  }
+}
+
+// 使用示例
+const product = new Product();
+product.assign({
+  name: '  产品名称  ',
+  price: '99.99',
+  tags: ['标签1', 2, '标签3']
+});
+
+// 规范化后，product.name 将被去除空格，
+// product.price 将转为数字类型，
+// product.tags 中的所有元素都将转为字符串
+product.normalize();
+
+console.log(product.validate()); // 检查 name 是否非空以及所有类型是否匹配
+```
+
+### 自定义验证和规范化
+
+您可以实现自定义的验证和规范化逻辑：
+
+```javascript
+import { Model, Normalizable, Validatable } from '@qubit-ltd/common-decorator';
+
+@Model
+class EmailSubscription {
+  constructor() {
+    this.email = '';
+    this.subscribed = false;
+  }
+  
+  @Normalizable((value) => {
+    // 自定义规范化器，将邮箱转为小写并去除空格
+    return typeof value === 'string' ? value.toLowerCase().trim() : value;
+  })
+  @Validatable((value) => {
+    // 自定义验证器，检查邮箱是否有效
+    if (typeof value !== 'string' || !value.includes('@')) {
+      return {
+        valid: false,
+        message: '无效的电子邮件地址',
+      };
+    }
+    return { valid: true };
+  })
+  get email() {
+    return this._email;
+  }
+  
+  set email(value) {
+    this._email = value;
+  }
+}
+```
+
+### 使用 DefaultOptions
+
+您可以为各种操作配置默认选项：
+
+```javascript
+import { DefaultOptions, Model } from '@qubit-ltd/common-decorator';
+
+// 配置 JSON 序列化的默认选项
+DefaultOptions.set('toJSON', {
+  normalize: true,
+  removeEmptyFields: true,
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE'
+});
+
+@Model
+class Order {
+  constructor() {
+    this.orderId = null;
+    this.customerName = '';
+    this.orderItems = [];
+  }
+}
+
+const order = new Order();
+order.assign({
+  orderId: '12345',
+  customerName: '张三',
+  orderItems: [
+    { itemId: 1, name: '产品1', quantity: 2 }
+  ]
+});
+
+// 将使用配置的默认选项进行序列化
+const json = order.toJsonString();
+console.log(json);
+// 输出将使用下划线命名风格：
+// {"order_id":"12345","customer_name":"张三","order_items":[{"item_id":1,"name":"产品1","quantity":2}]}
+```
+
+## 集成示例
+
+### 与 Vue.js 集成
+
+```javascript
+import { Model, Normalizable, Validatable } from '@qubit-ltd/common-decorator';
+import { defineComponent, ref } from 'vue';
+
+@Model
+class UserProfile {
+  constructor() {
+    this.username = '';
+    this.email = '';
+    this.bio = '';
+  }
+  
+  @Normalizable
+  @Validatable
+  get username() {
+    return this._username;
+  }
+  
+  set username(value) {
+    this._username = value;
+  }
+  
+  // 其他 getter 和 setter...
+}
+
+export default defineComponent({
+  setup() {
+    const profile = ref(new UserProfile());
+    
+    const updateProfile = (formData) => {
+      profile.value.assign(formData);
+      profile.value.normalize();
+      const validation = profile.value.validate();
+      
+      if (validation.valid) {
+        // 保存资料
+      } else {
+        // 处理验证错误
+        console.error(validation.message);
+      }
+    };
+    
+    return {
+      profile,
+      updateProfile
+    };
+  }
+});
+```
+
+### 与 Express.js 集成
+
+```javascript
+import express from 'express';
+import { Model, Normalizable, Validatable, NonEmpty } from '@qubit-ltd/common-decorator';
+
+const app = express();
+app.use(express.json());
+
+@Model
+class NewUserRequest {
+  constructor() {
+    this.username = '';
+    this.email = '';
+    this.password = '';
+  }
+  
+  @NonEmpty
+  @Normalizable
+  @Validatable
+  get username() {
+    return this._username;
+  }
+  
+  set username(value) {
+    this._username = value;
+  }
+  
+  // 其他 getter 和 setter...
+}
+
+app.post('/api/users', (req, res) => {
+  try {
+    const userRequest = NewUserRequest.create(req.body);
+    userRequest.normalize();
+    const validation = userRequest.validate();
+    
+    if (!validation.valid) {
+      return res.status(400).json({ error: validation.message });
+    }
+    
+    // 在数据库中创建用户
+    return res.status(201).json({ message: '用户创建成功' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('服务器运行在端口 3000');
+});
+```
+
+## 兼容性和要求
+
+- **Node.js**: 14.x 或更高版本
+- **ECMAScript**: ES2022 或更高版本
+- **装饰器支持**: 需要为 Stage 3 装饰器配置 babel
+- **浏览器支持**: 支持 ES6+ 的现代浏览器
+
+## 最佳实践
+
+### 项目结构
+
+使用此库时，我们建议以结构化的方式组织您的领域模型：
+
+```
+src/
+├── models/
+│   ├── base/
+│   │   └── BaseModel.js
+│   ├── User.js
+│   ├── Product.js
+│   └── Order.js
+├── enums/
+│   ├── Status.js
+│   └── Role.js
+└── app.js
+```
+
+### 性能考虑
+
+- 仅在必要时使用 `normalize()`，而不是在每次操作时都使用
+- 考虑缓存频繁访问对象的验证结果
+- 对于大型集合，使用 `createArray()` 方法而不是映射每个项目
+
+### 类型安全
+
+虽然 JavaScript 是动态类型的，但此库提供了几种确保类型安全的方法：
+
+1. 使用 `@Type` 装饰器强制对属性进行类型检查
+2. 对数组使用 `@ElementType` 装饰器
+3. 启用规范化以自动将值转换为正确的类型
+
+### 内存管理
+
+处理大型对象图时：
+
+1. 避免不必要的深度克隆
+2. 对大型对象使用 `toJSON` 中的 `removeEmptyFields` 选项
+3. 序列化对象时注意循环引用
