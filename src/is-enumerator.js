@@ -25,7 +25,11 @@ function isEnumerator(value) {
   if (value === undefined || value === null || (typeof value !== 'object')) {
     return false;
   }
-  const Class = Object.getPrototypeOf(value).constructor;
+  const proto = Object.getPrototypeOf(value);
+  if (!proto || !proto.constructor) {
+    return false;
+  }
+  const Class = proto.constructor;
   const category = getClassMetadata(Class, KEY_CLASS_CATEGORY);
   return category === 'enum';
 }
