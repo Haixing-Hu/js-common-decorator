@@ -48,6 +48,9 @@
       "babelify"
     ]
   },
+  "dependencies": {
+    "deep-equal": "^2.2.3"
+  },
   "peerDependencies": {
     "@babel/runtime": "^7.26.0",
     "@qubit-ltd/clone": "^1.13.0",

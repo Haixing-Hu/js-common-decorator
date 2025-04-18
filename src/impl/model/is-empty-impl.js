@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { deepEqual } from '@qubit-ltd/common-util';
+import deepEqual from 'deep-equal';
 import getDefaultInstance from '../utils/get-default-instance';
 
 /**
