@@ -29,7 +29,7 @@ function hasOwnClassField(Class, field) {
     return true;
   } else {
     const defaultInstance = getDefaultInstance(Class);
-    return Object.prototype.hasOwnProperty.call(defaultInstance, field);
+    return defaultInstance && Object.prototype.hasOwnProperty.call(defaultInstance, field);
   }
 }
 
