@@ -20,7 +20,6 @@ import Validatable from './validatable';
 import Nullable from './nullable';
 import NonEmpty from './non-empty';
 import Label from './label';
-import Payload from './payload';
 import NameField from './name-field';
 import Enum from './enum';
 import isEnumClass from './is-enum-class';
@@ -47,7 +46,6 @@ export {
   Nullable,
   NonEmpty,
   Label,
-  Payload,
   NameField,
   Enum,
   isEnumClass,

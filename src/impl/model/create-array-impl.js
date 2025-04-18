@@ -32,6 +32,10 @@ import createImpl from './create-impl';
  *       object. The default value is {@link LOWER_UNDERSCORE}.
  *     - `targetNamingStyle: NamingStyle`, the naming style of the target
  *       object. The default value is {@link LOWER_CAMEL}.
+ *     - `elementTypes: object`, the additional information about types of
+ *       elements of fields of classes. The keys of this object are the paths of
+ *       the fields or sub-fields of the target object, the values are the types
+ *       of the elements, represented as the constructor functions of the types.
  * @return {array}
  *     A new array of instances of the specified class, or `null` if the
  *     specified array is `undefined` or `null`. Each element of the created

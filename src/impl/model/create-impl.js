@@ -29,6 +29,10 @@ import hasPrototypeFunction from '../utils/has-prototype-function';
  *       object. The default value is {@link LOWER_UNDERSCORE}.
  *     - `targetNamingStyle: NamingStyle`, the naming style of the target
  *       object. The default value is {@link LOWER_CAMEL}.
+ *     - `elementTypes: object`, additional information about types of
+ *       elements in collection fields of classes. The keys of this object are 
+ *       the paths of the fields or sub-fields of the target object, the values 
+ *       are the types of the elements, represented as constructor functions.
  * @returns {Class | null}
  *     If the `obj` is `undefined` or `null`, returns `null`; otherwise, returns
  *     a new instance of the model class whose fields are initialized with the

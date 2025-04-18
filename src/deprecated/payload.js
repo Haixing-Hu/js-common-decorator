@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { KEY_FIELD_PAYLOAD } from './impl/metadata-keys';
-import setFieldMetadata from './impl/utils/set-field-metadata';
+import { KEY_FIELD_PAYLOAD } from '../impl/metadata-keys';
+import setFieldMetadata from '../impl/utils/set-field-metadata';
 
 /**
  * Decorates a static filed of an enumeration class to specify the payload of
@@ -39,6 +39,8 @@ import setFieldMetadata from './impl/utils/set-field-metadata';
  *     The field decorating function, which returns `void`.
  * @author Haixing Hu
  * @see Enum
+ * @deprecated Directly define payloads in the enumerator constants. See the
+ *             {@link Enum} documentation for more details.
  */
 function Payload(payload) {
   return function decorate(field, { kind, name, metadata }) {

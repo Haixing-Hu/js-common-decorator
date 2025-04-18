@@ -406,7 +406,8 @@ const Impl = {
    */
   doAssign(target, source, { targetPath, sourcePath, targetType, defaultInstance, options }) {
     if (isUndefinedOrNull(source)) {
-      // if source is nullish, assign the default object to the target object
+      // If the source object is nullish, directly deep clone the default instance
+      // without naming style conversion
       this.copyPropertiesWithoutNamingConversion(target, defaultInstance);
     } else {
       // Loops over all enumerable properties of the default instance,
