@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { NamingStyle } from '@qubit-ltd/naming-style';
-import getExistFieldWithDifferentNamingStyle from '../../src/impl/utils/get-exist-field-with-different-naming-style';
+import getExistFieldWithDifferentNamingStyle from '../../../src/impl/utils/get-exist-field-with-different-naming-style';
 
 describe('getExistKeyWithDifferentNamingStyle', () => {
   test('returns the key with different naming styles if it exists', () => {

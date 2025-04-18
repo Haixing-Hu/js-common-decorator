@@ -36,9 +36,9 @@ import getFieldLabel from '../utils/get-field-label';
  * @author Haixing Hu
  * @private
  */
-function validateNullishField(metadata, obj, field, value) {
+function validateNullishField(metadata, obj, field, value, context = {}) {
   if (value === undefined || value === null) {
-    if (context.nullable || isFieldNullable(metadata, field)) {
+    if ((context && context.nullable) || isFieldNullable(metadata, field)) {
       return new ValidationResult(true);
     } else {
       const label = getFieldLabel(metadata, field);

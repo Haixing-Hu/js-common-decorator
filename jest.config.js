@@ -28,6 +28,5 @@ module.exports = {
   collectCoverageFrom: ['**/src/**/*.js'],
   coveragePathIgnorePatterns: [
     'src/index.js',
-    'src/deprecated/**/*.js',
   ],
 };
