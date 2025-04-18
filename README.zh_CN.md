@@ -7,7 +7,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
 
 [@qubit-ltd/common-decorator] 是一个 JavaScript 通用装饰器库，提供装饰器用于为领域类添加常用方法。
-该库支持 JavaScript 装饰器的最新 (截至2023年5月) [stage 3 提案]。
+该库支持 JavaScript 装饰器的最新 (截至2023年11月) [stage 3 提案]。
 
 ## 特性
 
@@ -813,12 +813,12 @@ expect(opt1.convertNaming).toBe(false);
 
 ## <span id="configuration">配置</span>
 
-此库使用了最新的（截至2023年5月的）[JavaScript 装饰器 stage 3 提案]。因此，必须使用 
+此库使用了最新的（截至2023年11月的）[JavaScript 装饰器 stage 3 提案]。因此，必须使用 
 [@babel/plugin-transform-class-properties] 和 [@babel/plugin-proposal-decorators] 
 插件配置 [Babel]。
 
-**注意：** 为了支持 [JavaScript 装饰器元数据 stage 3 提案]，[Babel] 插件 [@babel/plugin-proposal-decorators]
-的版本必须至少为 `7.23.0`。
+**注意：** 为了支持2023年11月的 [JavaScript 装饰器元数据 stage 3 提案]，[Babel] 插件 [@babel/plugin-proposal-decorators]
+的版本必须至少为 `7.24.0`。
 
 ### <span id="webpack">使用 [webpack] 打包</span>
 
@@ -836,7 +836,7 @@ expect(opt1.convertNaming).toBe(false);
      ],
      "plugins": [
        "@babel/plugin-transform-runtime",
-       ["@babel/plugin-proposal-decorators", { "version": "2023-05" }],
+       ["@babel/plugin-proposal-decorators", { "version": "2023-11" }],
        "@babel/plugin-transform-class-properties"
      ]
    }
@@ -859,7 +859,7 @@ expect(opt1.convertNaming).toBe(false);
      ],
      "plugins": [
        "@babel/plugin-transform-runtime",
-       ["@babel/plugin-proposal-decorators", { "version": "2023-05" }],
+       ["@babel/plugin-proposal-decorators", { "version": "2023-11" }],
        "@babel/plugin-transform-class-properties"
      ]
    }

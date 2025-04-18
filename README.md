@@ -8,7 +8,7 @@
 
 [@qubit-ltd/common-decorator] is a JavaScript library of common decorators,
 provides decorators to add common methods to domain classes. The library 
-supports the most recent (currently May 2023) 
+supports the most recent (currently November 2023) 
 [stage 3 proposal of JavaScript decorators].
 
 ## Features
@@ -1024,14 +1024,14 @@ expect(opt3.convertNaming).toBe(false);
 
 ## <span id="configuration">Configuration</span>
 
-This library uses the most recent (currently May 2023)
+This library uses the most recent (currently November 2023)
 [stage 3 proposal of JavaScript decorators]. Therefore, you must configure
 [Babel] with [@babel/plugin-transform-class-properties] and the
 [@babel/plugin-proposal-decorators] plugins.
 
-**NOTE:** To support the [stage 3 proposal of JavaScript decorator metadata],
-the version of the [Babel] plugin [@babel/plugin-proposal-decorators] must be
-at least `7.23.0`.
+**NOTE:** To support the [stage 3 proposal of JavaScript decorator metadata] 
+at November 2023, the version of the [Babel] plugin [@babel/plugin-proposal-decorators] 
+must be at least `7.24.0`.
 
 ### <span id="webpack">Bundling with [webpack]</span>
 
@@ -1051,7 +1051,7 @@ at least `7.23.0`.
       ],
       "plugins": [
         "@babel/plugin-transform-runtime",
-        ["@babel/plugin-proposal-decorators", { "version": "2023-05" }],
+        ["@babel/plugin-proposal-decorators", { "version": "2023-11" }],
         "@babel/plugin-transform-class-properties"
       ]
     }
@@ -1075,7 +1075,7 @@ at least `7.23.0`.
       ],
       "plugins": [
         "@babel/plugin-transform-runtime",
-        ["@babel/plugin-proposal-decorators", { "version": "2023-05" }],
+        ["@babel/plugin-proposal-decorators", { "version": "2023-11" }],
         "@babel/plugin-transform-class-properties"
       ]
     }
