@@ -17,11 +17,11 @@ import isEnumClass from './is-enum-class';
  *     The normalizer function for the specified enumeration class.
  */
 function enumNormalizer(EnumClass) {
+  if (!isEnumClass(EnumClass)) {
+    throw new TypeError('The argument must be the constructor function of an '
+      + 'enumeration class decorated by `@Enum`.');
+  }
   return (value) => {
-    if (!isEnumClass(EnumClass)) {
-      throw new TypeError('The argument must be the constructor function of an '
-        + 'enumeration class decorated by `@Enum`.');
-    }
     return EnumClass.of(value);
   };
 }
