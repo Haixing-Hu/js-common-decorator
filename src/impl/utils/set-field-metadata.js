@@ -28,7 +28,7 @@ function setFieldMetadata(metadata, field, key, value) {
   if (md) {
     md[key] = value;
   } else {
-    throw new Error(`The metadata of the field "${field}" of the class`);
+    throw new Error(`The metadata of the field "${field}" of the class does not exist.`);
   }
 }
 
