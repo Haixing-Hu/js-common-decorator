@@ -21,9 +21,7 @@ function enumNormalizer(EnumClass) {
     throw new TypeError('The argument must be the constructor function of an '
       + 'enumeration class decorated by `@Enum`.');
   }
-  return (value) => {
-    return EnumClass.of(value);
-  };
+  return (value) => EnumClass.of(value);
 }
 
 export default enumNormalizer;
