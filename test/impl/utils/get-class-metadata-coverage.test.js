@@ -71,16 +71,23 @@ describe('getClassMetadata enhanced coverage tests', () => {
   
   // 测试类的元数据不存在的情况（覆盖第35行）
   test('should return undefined when class metadata does not exist', () => {
-    // 使用未装饰的普通类
-    class PlainClass {
-      field = 'value';
-    }
+    // 直接模拟 classMetadataCache.get 返回 null
+    const classMetadataCache = jest.requireActual('../../../src/impl/class-metadata-cache').default;
+    const mockGet = jest.spyOn(classMetadataCache, 'get').mockReturnValue(null);
+    
+    class TestClass {}
     
     // 获取不存在的元数据
-    const result = getClassMetadata(PlainClass, 'anyKey');
+    const result = getClassMetadata(TestClass, 'anyKey');
+    
+    // 验证 classMetadataCache.get 被调用
+    expect(mockGet).toHaveBeenCalledWith(TestClass);
     
     // 应该返回undefined
     expect(result).toBeUndefined();
+    
+    // 恢复原始行为
+    mockGet.mockRestore();
   });
   
   // 测试在元数据存在但指定的键不存在的情况
