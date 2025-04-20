@@ -8,6 +8,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 import setClassMetadata from '../../../src/impl/utils/set-class-metadata';
 
+// 在外部定义模拟数据
+const mockClassMetadata = {};
+const mockEmptyCache = {};
+
 // 模拟class-metadata-cache的行为
 jest.mock('../../../src/impl/class-metadata-cache', () => ({
   __esModule: true,
@@ -23,10 +27,6 @@ jest.mock('../../../src/impl/class-metadata-cache', () => ({
     }),
   },
 }));
-
-// 在外部定义模拟数据
-const mockClassMetadata = {};
-const mockEmptyCache = {};
 
 // 在测试中定义类
 class TestClass {}

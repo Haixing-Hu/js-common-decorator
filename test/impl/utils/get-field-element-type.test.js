@@ -57,9 +57,7 @@ jest.mock('../../../src/impl/utils/get-default-instance', () => ({
 // 模拟getCollectionElementType，对于空数组返回null
 jest.mock('../../../src/impl/utils/get-collection-element-type', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation((value) =>
-  // 确保测试中总是返回null
-    null),
+  default: jest.fn().mockImplementation((value) => null),
 }));
 
 // 模拟classMetadataCache
