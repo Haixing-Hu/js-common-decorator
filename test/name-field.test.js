@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Label, NameField } from '../src';
+import { Label, Model, NameField } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_CLASS_NAME_FIELD } from '../src/impl/metadata-keys';
 

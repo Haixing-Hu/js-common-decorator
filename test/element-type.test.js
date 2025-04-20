@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -13,8 +13,8 @@ import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
 import Gender from './model/gender';
-import ObjWithArrayMember from './model/obj-with-array-member';
 import NonDecoratedClass from './model/non-decorated-class';
+import ObjWithArrayMember from './model/obj-with-array-member';
 
 describe('Test `@ElementType``', () => {
   test('Check the field metadata of `ObjWithArrayMember`', () => {

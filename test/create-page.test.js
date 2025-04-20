@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-import createPage from '../src/create-page';
+import { createPage } from '../src';
 import createPageImpl from '../src/impl/model/create-page-impl';
 
 // Mock dependencies

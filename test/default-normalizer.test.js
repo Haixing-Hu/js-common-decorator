@@ -1,21 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@qubit-ltd/common-util';
-import defaultNormalizer from '../src/default-normalizer';
+import { defaultNormalizer } from '../src';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_NORMALIZER } from '../src/impl/metadata-keys';
 import getFieldMetadata from '../src/impl/utils/get-field-metadata';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
-import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-field';
 import NonDecoratedClass from './model/non-decorated-class';
 import ObjWithArrayField from './model/obj-with-array-field';
+import ObjWithDefaultNormalizerField from './model/obj-with-default-normalizer-field';
 
 /**
  * Unit test of the `defaultNormalizer()` function.

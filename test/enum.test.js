@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -11,9 +11,9 @@ import { Enum } from '../src';
 import { KEY_CLASS_CATEGORY } from '../src/impl/metadata-keys';
 import getClassMetadata from '../src/impl/utils/get-class-metadata';
 import Gender from './model/gender';
-import GenderWithoutName from './model/gender-without-name';
 import GenderWithOptions from './model/gender-with-options';
 import GenderWithPayload from './model/gender-with-payload';
+import GenderWithoutName from './model/gender-without-name';
 
 /**
  * Unit test the `@Enum` decorator.

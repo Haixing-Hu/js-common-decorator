@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { DefaultOptions, Page } from '../src';
+import { DefaultOptions } from '../src';
 import AuditablePerson from './model/auditable-person';
 import ChildObj from './model/child-obj';
 import Credential from './model/credential';

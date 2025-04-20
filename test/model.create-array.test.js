@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -11,11 +11,9 @@ import { DefaultOptions } from '../src';
 import ChildObj from './model/child-obj';
 import Credential from './model/credential';
 import CredentialType from './model/credential-type';
-import CredentialWithWrongNormalizer
-  from './model/credential-with-wrong-normalizer';
+import CredentialWithWrongNormalizer from './model/credential-with-wrong-normalizer';
 import ObjWithArrayField from './model/obj-with-array-field';
-import ObjWithArrayFieldsOfWrongNormalize
-  from './model/obj-with-array-fields-of-wrong-normalize';
+import ObjWithArrayFieldsOfWrongNormalize from './model/obj-with-array-fields-of-wrong-normalize';
 import ObjWithNamingConversion from './model/obj-with-naming-conversion';
 import ObjWithPersonField from './model/ObjWithPersonField';
 import Person from './model/person';

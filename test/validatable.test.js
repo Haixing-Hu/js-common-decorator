@@ -1,16 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@qubit-ltd/common-validation-rule';
-import {
-  Model,
-  Validatable,
-} from '../src';
+import { Model, Validatable } from '../src';
 import defaultValidator from '../src/default-validator';
 import classMetadataCache from '../src/impl/class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../src/impl/metadata-keys';
