@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -32,7 +32,7 @@ describe('requirePrototypeMethod', () => {
   test('should throw TypeError when neither the class nor its parent classes have the specified prototype method', () => {
     expect(() => requirePrototypeMethod(ChildClass, 'nonExistingMethod')).toThrow(TypeError);
     expect(() => requirePrototypeMethod(ChildClass, 'nonExistingMethod')).toThrow(
-      `The class ChildClass does not implement the prototype method "nonExistingMethod()".`
+      'The class ChildClass does not implement the prototype method "nonExistingMethod()".',
     );
   });
 
@@ -44,7 +44,7 @@ describe('requirePrototypeMethod', () => {
   test('should throw TypeError with class name included in error message', () => {
     class SpecialClass {}
     expect(() => requirePrototypeMethod(SpecialClass, 'specialMethod')).toThrow(
-      `The class SpecialClass does not implement the prototype method "specialMethod()".`
+      'The class SpecialClass does not implement the prototype method "specialMethod()".',
     );
   });
-}); 
+});

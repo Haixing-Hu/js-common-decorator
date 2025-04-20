@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, ElementType, Normalizable } from '../../src';
+import { ElementType, Model, Normalizable } from '../../src';
 import CredentialWithWrongNormalizer from './credential-with-wrong-normalizer';
 
 @Model

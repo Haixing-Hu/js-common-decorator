@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -22,7 +22,7 @@ describe('getCollectionElementType', () => {
       const obj = [];
       expect(getCollectionElementType(obj)).toBeNull();
     });
-    
+
     test('should return null if first element has no constructor', () => {
       const obj = [Object.create(null), {}];
       expect(getCollectionElementType(obj)).toBeNull();
@@ -32,7 +32,7 @@ describe('getCollectionElementType', () => {
       const obj = new Int32Array([1, 2, 3]);
       expect(getCollectionElementType(obj)).toBe(Number);
     });
-    
+
     test('should return null for empty typed arrays', () => {
       const obj = new Int32Array([]);
       expect(getCollectionElementType(obj)).toBeNull();
@@ -47,8 +47,8 @@ describe('getCollectionElementType', () => {
 
     test('should return the constructor of the first value for Maps', () => {
       const obj = new Map([
-        ['key1', new TestClass()], 
-        ['key2', new AnotherClass()]
+        ['key1', new TestClass()],
+        ['key2', new AnotherClass()],
       ]);
       expect(getCollectionElementType(obj)).toBe(TestClass);
     });
@@ -62,7 +62,7 @@ describe('getCollectionElementType', () => {
       const obj = new Map();
       expect(getCollectionElementType(obj)).toBeNull();
     });
-    
+
     test('should return null if first element in collection has no constructor', () => {
       const weirdObj = Object.create(null);
       const obj = new Set([weirdObj, {}]);
@@ -87,4 +87,4 @@ describe('getCollectionElementType', () => {
       expect(getCollectionElementType(undefined)).toBeNull();
     });
   });
-}); 
+});

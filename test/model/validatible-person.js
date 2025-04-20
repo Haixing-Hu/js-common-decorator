@@ -1,26 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import {
-  Label,
-  Model,
-  NameField,
-  Nullable,
-  Type,
-  Validatable,
-} from '../../src';
-import Credential from './validatible-credential';
+import { Label, Model, NameField, Nullable, Type, Validatable } from '../../src';
 import Gender from './gender';
-import validatePersonName from './rules/validate-person-name';
-import validatePersonGender from './rules/validate-person-gender';
 import validatePersonBirthday from './rules/validate-person-birthday';
-import validatePersonMobile from './rules/validate-person-mobile';
 import validatePersonEmail from './rules/validate-person-email';
+import validatePersonGender from './rules/validate-person-gender';
+import validatePersonMobile from './rules/validate-person-mobile';
+import validatePersonName from './rules/validate-person-name';
+import Credential from './validatible-credential';
 
 @Model
 export default class Person {

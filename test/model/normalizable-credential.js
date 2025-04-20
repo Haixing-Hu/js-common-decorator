@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { trimUppercaseString } from '@qubit-ltd/common-util';
-import { Model, Type, Normalizable } from '../../src';
+import { Model, Normalizable, Type } from '../../src';
 import CredentialType from './credential-type';
 
 @Model

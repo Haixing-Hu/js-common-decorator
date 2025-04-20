@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -16,11 +16,10 @@ jest.mock('@qubit-ltd/common-validation-rule', () => ({
 }));
 
 // Import after mocking
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import validateNullishField from '../../../src/impl/model/validate-nullish-field';
-import isFieldNullable from '../../../src/impl/utils/is-field-nullable';
-import getInstanceName from '../../../src/impl/utils/get-instance-name';
 import getFieldLabel from '../../../src/impl/utils/get-field-label';
+import getInstanceName from '../../../src/impl/utils/get-instance-name';
+import isFieldNullable from '../../../src/impl/utils/is-field-nullable';
 
 // Mock dependencies
 jest.mock('../../../src/impl/utils/is-field-nullable');

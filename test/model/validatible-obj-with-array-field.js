@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validatable, ElementType, Nullable, NonEmpty } from '../../src';
+import { ElementType, Model, NonEmpty, Nullable, Validatable } from '../../src';
 import validateIntegerField from './rules/validate-integer-field';
 
 @Model

@@ -1,45 +1,42 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import hasOwnClassField from '../../../src/impl/utils/has-own-class-field';
-import getDefaultInstance from '../../../src/impl/utils/get-default-instance';
 
 // 模拟class-metadata-cache的行为
 const mockMetadataCache = new Map();
 
 // 模拟获取默认实例的方法
-jest.mock('../../../src/impl/utils/get-default-instance', () => {
-  return {
-    __esModule: true,
-    default: jest.fn((Class) => {
-      // 如果我们有特殊的模拟，就返回它
-      if (mockMetadataCache.has(Class)) {
-        return mockMetadataCache.get(Class);
-      }
-      // 对于继承类，我们需要处理特殊情况
-      if (Class.name === 'ChildClass') {
-        // 创建一个只有childField的实例，不包含parentField
-        const instance = new Class();
-        // 创建一个新对象，只复制子类自己的属性（不包括继承的属性）
-        const ownPropsInstance = {};
-        Object.defineProperty(ownPropsInstance, 'childField', {
-          value: instance.childField,
-          enumerable: true,
-        });
-        // 确保实例看起来像是ChildClass的实例
-        Object.setPrototypeOf(ownPropsInstance, Class.prototype);
-        return ownPropsInstance;
-      }
-      // 否则返回普通的实例
-      return new Class();
-    })
-  };
-});
+jest.mock('../../../src/impl/utils/get-default-instance', () => ({
+  __esModule: true,
+  default: jest.fn((Class) => {
+    // 如果我们有特殊的模拟，就返回它
+    if (mockMetadataCache.has(Class)) {
+      return mockMetadataCache.get(Class);
+    }
+    // 对于继承类，我们需要处理特殊情况
+    if (Class.name === 'ChildClass') {
+      // 创建一个只有childField的实例，不包含parentField
+      const instance = new Class();
+      // 创建一个新对象，只复制子类自己的属性（不包括继承的属性）
+      const ownPropsInstance = {};
+      Object.defineProperty(ownPropsInstance, 'childField', {
+        value: instance.childField,
+        enumerable: true,
+      });
+      // 确保实例看起来像是ChildClass的实例
+      Object.setPrototypeOf(ownPropsInstance, Class.prototype);
+      return ownPropsInstance;
+    }
+    // 否则返回普通的实例
+    return new Class();
+  }),
+}));
 
 describe('hasOwnClassField', () => {
   class ParentClass {
@@ -54,13 +51,13 @@ describe('hasOwnClassField', () => {
   class ModelClass {
     modelField = 'model';
   }
-  
+
   // 在测试前设置模拟的默认实例
   beforeAll(() => {
     const mockInstance = new ModelClass();
     mockMetadataCache.set(ModelClass, mockInstance);
   });
-  
+
   afterAll(() => {
     mockMetadataCache.clear();
     jest.restoreAllMocks();
@@ -98,4 +95,4 @@ describe('hasOwnClassField', () => {
     }
     expect(hasOwnClassField(ModernClass, 'instanceField')).toBe(true);
   });
-}); 
+});

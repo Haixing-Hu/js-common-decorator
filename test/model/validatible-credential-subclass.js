@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validatable, Label } from '../../src';
-import Credential from './validatible-credential';
+import { Label, Model, Validatable } from '../../src';
 import validateCredentialNumber from './rules/validate-credential-number';
+import Credential from './validatible-credential';
 
 @Model
 export default class CredentialSubclass extends Credential {

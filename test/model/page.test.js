@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -37,9 +37,9 @@ describe('Page class', () => {
       pageSize: 10,
       content: [{ id: 3 }, { id: 4 }],
     };
-    
+
     const result = page.assign(data);
-    
+
     expect(result).toBe(page); // Returns this reference
     expect(page.totalCount).toBe(200);
     expect(page.totalPages).toBe(20);
@@ -50,9 +50,9 @@ describe('Page class', () => {
 
   test('assign should handle null/undefined', () => {
     const page = new Page(100, 10, 2, 10, [{ id: 1 }]);
-    
+
     page.assign(null);
-    
+
     expect(page.totalCount).toBe(0);
     expect(page.totalPages).toBe(0);
     expect(page.pageIndex).toBe(0);
@@ -69,13 +69,13 @@ describe('Page class', () => {
       page_size: 10,
       content: [{ id: 3 }, { id: 4 }],
     };
-    
-    const result = page.assign(data, { 
+
+    const result = page.assign(data, {
       convertNaming: true,
       sourceNamingStyle: 'LOWER_UNDERSCORE',
       targetNamingStyle: 'LOWER_CAMEL',
     });
-    
+
     expect(result).toBe(page);
     expect(page.totalCount).toBe(200);
     expect(page.totalPages).toBe(20);
@@ -86,7 +86,7 @@ describe('Page class', () => {
 
   test('newEmpty should create an empty page with specified page size', () => {
     const page = Page.newEmpty(15);
-    
+
     expect(page).toBeInstanceOf(Page);
     expect(page.totalCount).toBe(0);
     expect(page.totalPages).toBe(0);
@@ -101,9 +101,9 @@ describe('Page class', () => {
       pageIndex: 1,
       pageSize: 3,
     };
-    
+
     const page = Page.getFrom(pageRequest, array);
-    
+
     expect(page).toBeInstanceOf(Page);
     expect(page.totalCount).toBe(11);
     expect(page.totalPages).toBe(4); // ceil(11/3)
@@ -118,9 +118,9 @@ describe('Page class', () => {
       pageIndex: 3,
       pageSize: 3,
     };
-    
+
     const page = Page.getFrom(pageRequest, array);
-    
+
     expect(page.totalCount).toBe(11);
     expect(page.totalPages).toBe(4);
     expect(page.pageIndex).toBe(3);
@@ -134,13 +134,13 @@ describe('Page class', () => {
       pageIndex: 0,
       pageSize: 10,
     };
-    
+
     const page = Page.getFrom(pageRequest, array);
-    
+
     expect(page.totalCount).toBe(0);
     expect(page.totalPages).toBe(0);
     expect(page.pageIndex).toBe(0);
     expect(page.pageSize).toBe(10);
     expect(page.content).toEqual([]);
   });
-}); 
+});

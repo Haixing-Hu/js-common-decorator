@@ -1,15 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import CredentialType from '../credential-type';
-import {
-  isIdCardNumberValid, getIdCardBirthday, getIdCardGender,
-} from './identity-card-validator';
+import { getIdCardBirthday, getIdCardGender, isIdCardNumberValid } from './identity-card-validator';
 
 /**
  * 中华人民共和国大陆身份证号码验证规则。

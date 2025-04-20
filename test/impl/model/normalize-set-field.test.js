@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -22,16 +22,16 @@ describe('normalizeSetField', () => {
       elementTypes: {},
     };
     const normalizer = (v) => (typeof v === 'string' ? v.trim() : v);
-    
+
     const result = normalizeSetField(TestClass, obj, 'mySet', obj.mySet, options, normalizer);
-    
+
     expect(result).toBe(true);
     expect(obj.mySet).toBeInstanceOf(Set);
     expect(obj.mySet.size).toBe(2);
     expect(obj.mySet.has('hello')).toBe(true);
     expect(obj.mySet.has('world')).toBe(true);
   });
-  
+
   test('should return true and normalize Set with elementType specified', () => {
     const obj = new TestClass();
     obj.mySet = new Set(['123', '456']);
@@ -48,16 +48,16 @@ describe('normalizeSetField', () => {
       }
       return v;
     };
-    
+
     const result = normalizeSetField(TestClass, obj, 'mySet', obj.mySet, options, normalizer);
-    
+
     expect(result).toBe(true);
     expect(obj.mySet).toBeInstanceOf(Set);
     expect(obj.mySet.size).toBe(2);
     expect(obj.mySet.has(123)).toBe(true);
     expect(obj.mySet.has(456)).toBe(true);
   });
-  
+
   test('should return false for non-Set values', () => {
     const obj = new TestClass();
     obj.mySet = ['value1', 'value2']; // array instead of Set
@@ -67,13 +67,13 @@ describe('normalizeSetField', () => {
       elementTypes: {},
     };
     const normalizer = (v) => v;
-    
+
     const result = normalizeSetField(TestClass, obj, 'mySet', obj.mySet, options, normalizer);
-    
+
     expect(result).toBe(false);
     expect(obj.mySet).toEqual(['value1', 'value2']); // unchanged
   });
-  
+
   test('should handle empty Set', () => {
     const obj = new TestClass();
     obj.mySet = new Set();
@@ -83,14 +83,14 @@ describe('normalizeSetField', () => {
       elementTypes: {},
     };
     const normalizer = (v) => v;
-    
+
     const result = normalizeSetField(TestClass, obj, 'mySet', obj.mySet, options, normalizer);
-    
+
     expect(result).toBe(true);
     expect(obj.mySet).toBeInstanceOf(Set);
     expect(obj.mySet.size).toBe(0);
   });
-  
+
   test('should apply normalizer to each element in the Set', () => {
     const obj = new TestClass();
     obj.mySet = new Set([1, 2, 3]);
@@ -100,9 +100,9 @@ describe('normalizeSetField', () => {
       elementTypes: {},
     };
     const normalizer = (v) => v * 2;
-    
+
     const result = normalizeSetField(TestClass, obj, 'mySet', obj.mySet, options, normalizer);
-    
+
     expect(result).toBe(true);
     expect(obj.mySet).toBeInstanceOf(Set);
     expect(obj.mySet.size).toBe(3);
@@ -110,4 +110,4 @@ describe('normalizeSetField', () => {
     expect(obj.mySet.has(4)).toBe(true);
     expect(obj.mySet.has(6)).toBe(true);
   });
-}); 
+});

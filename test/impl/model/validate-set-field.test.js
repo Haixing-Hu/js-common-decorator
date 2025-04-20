@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -32,8 +32,8 @@ jest.mock('@qubit-ltd/common-validation-rule', () => {
 
 // Import after mocking
 import { ValidationResult } from '@qubit-ltd/common-validation-rule';
-import validateSetField from '../../../src/impl/model/validate-set-field';
 import validateEmptyField from '../../../src/impl/model/validate-empty-field';
+import validateSetField from '../../../src/impl/model/validate-set-field';
 import getElementValidationContext from '../../../src/impl/utils/get-element-validation-context';
 
 // Mock dependencies

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model, Validatable, Type, Label, NonEmpty } from '../../src';
+import { Label, Model, NonEmpty, Type, Validatable } from '../../src';
 import CredentialType from './credential-type';
 import validateCredentialNumber from './rules/validate-credential-number';
 

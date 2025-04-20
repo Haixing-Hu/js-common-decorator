@@ -1,89 +1,105 @@
 ////////////////////////////////////////////////////////////////////////////////
+import classMetadataCache from '../../../src/impl/class-metadata-cache';
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import getClassMetadata from '../../../src/impl/utils/get-class-metadata';
-import classMetadataCache from '../../../src/impl/class-metadata-cache';
+
+// 模拟类定义
+class MockClass {}
 
 describe('getClassMetadata', () => {
-  class TestClass {}
-  
   beforeEach(() => {
-    // 在每个测试之前，预先设置一个空的元数据对象
-    classMetadataCache.set(TestClass, {});
+    // 清除测试前可能存在的缓存
+    if (MockClass[Symbol.metadata]) {
+      delete MockClass[Symbol.metadata];
+    }
   });
-  
-  test('should return undefined for non-existent key', () => {
-    const value = getClassMetadata(TestClass, 'nonExistentKey');
-    
-    expect(value).toBeUndefined();
-  });
-  
-  test('should return metadata value for existing key', () => {
-    // 设置初始元数据
-    const initialMetadata = { testKey: 'testValue' };
-    classMetadataCache.set(TestClass, initialMetadata);
-    
-    const value = getClassMetadata(TestClass, 'testKey');
-    
-    expect(value).toBe('testValue');
-  });
-  
-  test('should return undefined if class metadata is not set', () => {
-    // 创建一个新类，没有设置元数据
-    class NewClass {}
-    
-    const value = getClassMetadata(NewClass, 'anyKey');
-    
-    expect(value).toBeUndefined();
-  });
-  
-  test('should handle complex value types', () => {
-    const complexValue = { 
-      nested: { 
-        array: [1, 2, 3],
-        object: { prop: 'value' }
-      } 
-    };
-    
-    // 设置复杂类型的元数据
-    const metadata = { complex: complexValue };
-    classMetadataCache.set(TestClass, metadata);
-    
-    const value = getClassMetadata(TestClass, 'complex');
-    
-    expect(value).toBe(complexValue);
-    expect(value.nested.array).toEqual([1, 2, 3]);
-  });
-  
-  test('should work correctly with Symbol.metadata', () => {
-    // 创建一个带有Symbol.metadata的类
-    class ClassWithMetadata {}
-    const testValue = 'symbolValue';
-    const symbolMetadata = { symbolKey: testValue };
-    
-    Object.defineProperty(ClassWithMetadata, Symbol.metadata, {
-      value: symbolMetadata,
-      writable: false,
-      enumerable: false,
-      configurable: true,
+
+  test('当类缓存中有元数据且key存在时应返回该值', () => {
+    // 准备测试数据
+    classMetadataCache.set(MockClass, {
+      testKey: 'testValue',
     });
-    
-    const value = getClassMetadata(ClassWithMetadata, 'symbolKey');
-    
-    expect(value).toBe(testValue);
+
+    // 执行函数
+    const result = getClassMetadata(MockClass, 'testKey');
+
+    // 验证结果
+    expect(result).toBe('testValue');
   });
-  
-  test('should return undefined for null metadata', () => {
-    // 强制将元数据设为null
-    classMetadataCache.set(TestClass, null);
-    
-    const value = getClassMetadata(TestClass, 'anyKey');
-    
-    expect(value).toBeUndefined();
+
+  test('当类缓存中有元数据但key不存在时应返回undefined', () => {
+    // 准备测试数据
+    classMetadataCache.set(MockClass, {
+      testKey: 'testValue',
+    });
+
+    // 执行函数
+    const result = getClassMetadata(MockClass, 'nonExistKey');
+
+    // 验证结果
+    expect(result).toBeUndefined();
   });
-}); 
+
+  test('当类缓存中没有元数据但Symbol.metadata中有时应返回该值', () => {
+    // 准备测试数据
+    MockClass[Symbol.metadata] = {
+      testKey: 'testValue',
+    };
+
+    // 清除缓存确保从Symbol.metadata获取
+    classMetadataCache.set(MockClass, null);
+
+    // 执行函数
+    const result = getClassMetadata(MockClass, 'testKey');
+
+    // 验证结果
+    expect(result).toBe('testValue');
+  });
+
+  test('当类缓存和Symbol.metadata都没有元数据时应返回undefined', () => {
+    // 清除缓存
+    classMetadataCache.set(MockClass, null);
+
+    // 执行函数
+    const result = getClassMetadata(MockClass, 'testKey');
+
+    // 验证结果
+    expect(result).toBeUndefined();
+  });
+
+  test('当元数据存在但是null时应返回undefined', () => {
+    // 准备测试数据
+    classMetadataCache.set(MockClass, null);
+
+    // 执行函数
+    const result = getClassMetadata(MockClass, 'testKey');
+
+    // 验证结果
+    expect(result).toBeUndefined();
+  });
+
+  test('当传入的Class不是函数时应抛出错误', () => {
+    // 执行函数应抛出错误
+    expect(() => {
+      getClassMetadata({}, 'testKey');
+    }).toThrow(TypeError);
+
+    expect(() => {
+      getClassMetadata(null, 'testKey');
+    }).toThrow(TypeError);
+
+    expect(() => {
+      getClassMetadata(undefined, 'testKey');
+    }).toThrow(TypeError);
+
+    expect(() => {
+      getClassMetadata('string', 'testKey');
+    }).toThrow(TypeError);
+  });
+});

@@ -1,17 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@qubit-ltd/common-validation-rule';
-import IdentityCard from './identity-card';
 import CredentialType from '../credential-type';
-import Passport from './passport';
+import IdentityCard from './identity-card';
 import OfficerCard from './officer-card';
 import OtherCredential from './other-credential';
+import Passport from './passport';
 
 export default function validateCredentialNumber(number, { instance, label, owner }) {
   const credentialType = instance?.type?.name || '';
