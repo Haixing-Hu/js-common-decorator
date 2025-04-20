@@ -1,110 +1,86 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import isEnumerator from '../src/is-enumerator';
-import isEnumClass from '../src/is-enum-class';
-
-// 模拟枚举类的元数据
-function mockEnumClass(Class) {
-  // 模拟标记为枚举类
-  Class.prototype.constructor.__cd_category__ = 'enum';
-  // 为新的元数据系统设置
-  if (!Class[Symbol.metadata]) {
-    Class[Symbol.metadata] = Object.create(null);
-  }
-  Class[Symbol.metadata].__cd_category__ = 'enum';
-  
-  // 添加of方法
-  Class.of = function(value) {
-    if (value === null || value === undefined) {
-      return null;
-    }
-    if (value instanceof Class) {
-      return value;
-    }
-    const strValue = String(value).toUpperCase();
-    // 查找匹配的枚举值
-    for (const key in Class) {
-      if (Class.hasOwnProperty(key) && Class[key] instanceof Class) {
-        if (Class[key].value.toUpperCase() === strValue) {
-          return Class[key];
-        }
-        if (Class[key].name && Class[key].name === value) {
-          return Class[key];
-        }
-      }
-    }
-    return null;
-  };
-  return Class;
-}
+import { isEnumerator, Enum } from '../src';
 
 describe('isEnumerator', () => {
-  // 创建枚举类
+  // 使用实际的Enum装饰器创建一个枚举类
+  @Enum
   class Gender {
-    static MALE = new Gender('MALE', '男');
-    static FEMALE = new Gender('FEMALE', '女');
-    
-    constructor(value, name) {
-      this.value = value;
+    static MALE = '男';
+    static FEMALE = '女';
+  }
+
+  // 创建一个普通类作为对照
+  class RegularClass {
+    constructor(name) {
       this.name = name;
     }
   }
-  // 模拟枚举类
-  mockEnumClass(Gender);
-  
-  // 验证我们的模拟正确
-  expect(isEnumClass(Gender)).toBe(true);
-  
-  class RegularClass {
-    constructor(value) {
-      this.value = value;
-    }
-  }
-  
-  test('should return true for enum instances', () => {
+
+  test('应该对枚举实例返回true', () => {
+    // 测试实际的枚举实例
     expect(isEnumerator(Gender.MALE)).toBe(true);
     expect(isEnumerator(Gender.FEMALE)).toBe(true);
   });
-  
-  test('should return false for primitive values', () => {
+
+  test('应该对基本类型值返回false', () => {
     expect(isEnumerator(null)).toBe(false);
     expect(isEnumerator(undefined)).toBe(false);
     expect(isEnumerator(123)).toBe(false);
-    expect(isEnumerator('string')).toBe(false);
+    expect(isEnumerator('字符串')).toBe(false);
     expect(isEnumerator(true)).toBe(false);
     expect(isEnumerator(Symbol('symbol'))).toBe(false);
   });
-  
-  test('should return false for non-enum objects', () => {
+
+  test('应该对非枚举对象返回false', () => {
     expect(isEnumerator({})).toBe(false);
     expect(isEnumerator([])).toBe(false);
     expect(isEnumerator(new Date())).toBe(false);
-    expect(isEnumerator(new RegExp('.*'))).toBe(false);
-    expect(isEnumerator(new RegularClass('value'))).toBe(false);
+    expect(isEnumerator(/正则表达式/)).toBe(false);
+    expect(isEnumerator(new RegularClass('测试'))).toBe(false);
   });
-  
-  test('should return false for objects with no prototype', () => {
+
+  test('应该对无原型的对象返回false', () => {
     const obj = Object.create(null);
     expect(isEnumerator(obj)).toBe(false);
   });
-  
-  test('should return false for enum class itself', () => {
+
+  test('应该对枚举类本身返回false', () => {
     expect(isEnumerator(Gender)).toBe(false);
   });
-  
-  test('should handle objects mimicking enumerators', () => {
-    // 尝试创建一个模拟枚举值但没有正确元数据的对象
-    const mockEnumerator = new Gender('MOCK', 'Mock');
-    expect(isEnumerator(mockEnumerator)).toBe(true); // 实际上会返回true，因为它的原型链是正确的
+
+  test('应该对模拟枚举但未被@Enum装饰的对象返回false', () => {
+    class FakeEnum {
+      static ONE = new FakeEnum('ONE', '一');
+      static TWO = new FakeEnum('TWO', '二');
+      
+      constructor(value, name) {
+        this.value = value;
+        this.name = name;
+      }
+    }
     
-    // 创建一个完全不同的对象，但有相同字段名
-    const fakeEnumerator = { value: 'FAKE', name: 'Fake' };
-    expect(isEnumerator(fakeEnumerator)).toBe(false);
+    expect(isEnumerator(FakeEnum.ONE)).toBe(false);
   });
-}); 
+
+  test('应该对带有枚举属性的复杂枚举实例返回true', () => {
+    @Enum
+    class Status {
+      static ACTIVE = { name: '活跃', code: 'A', order: 1 };
+      static INACTIVE = { name: '不活跃', code: 'I', order: 2 };
+    }
+    
+    expect(isEnumerator(Status.ACTIVE)).toBe(true);
+    expect(isEnumerator(Status.INACTIVE)).toBe(true);
+    
+    // 验证额外属性
+    expect(Status.ACTIVE.code).toBe('A');
+    expect(Status.ACTIVE.order).toBe(1);
+  });
+});

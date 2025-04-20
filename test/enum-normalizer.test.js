@@ -1,141 +1,111 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import enumNormalizer from '../src/enum-normalizer';
-import isEnumClass from '../src/is-enum-class';
-
-// 模拟枚举类的元数据
-function mockEnumClass(Class) {
-  // 模拟标记为枚举类
-  Class.prototype.constructor.__cd_category__ = 'enum';
-  // 为新的元数据系统设置
-  if (!Class[Symbol.metadata]) {
-    Class[Symbol.metadata] = Object.create(null);
-  }
-  Class[Symbol.metadata].__cd_category__ = 'enum';
-  
-  // 添加of方法
-  Class.of = function(value) {
-    if (value === null || value === undefined) {
-      return null;
-    }
-    if (value instanceof Class) {
-      return value;
-    }
-    const strValue = String(value).toUpperCase();
-    // 查找匹配的枚举值
-    for (const key in Class) {
-      if (Class.hasOwnProperty(key) && Class[key] instanceof Class) {
-        if (Class[key].value.toUpperCase() === strValue) {
-          return Class[key];
-        }
-        if (Class[key].name && Class[key].name === value) {
-          return Class[key];
-        }
-      }
-    }
-    return null;
-  };
-  return Class;
-}
+import { enumNormalizer, Enum } from '../src';
 
 describe('enumNormalizer', () => {
-  // 创建枚举类
+  // 使用实际的Enum装饰器创建一个简单的枚举类
+  @Enum
   class Gender {
-    static MALE = new Gender('MALE', '男');
-    static FEMALE = new Gender('FEMALE', '女');
-    
-    constructor(value, name) {
-      this.value = value;
-      this.name = name;
-    }
+    static MALE = '男';
+    static FEMALE = '女';
   }
-  // 模拟枚举类
-  mockEnumClass(Gender);
   
+  // 使用实际的Enum装饰器创建一个带有额外属性的枚举类
+  @Enum
   class Status {
-    static ACTIVE = new Status('ACTIVE', '活跃');
-    static INACTIVE = new Status('INACTIVE', '不活跃');
-    static PENDING = new Status('PENDING', '待定');
-    
-    constructor(value, name) {
-      this.value = value;
+    static ACTIVE = { name: '活跃', code: 'A' };
+    static INACTIVE = { name: '不活跃', code: 'I' };
+    static PENDING = { name: '待定', code: 'P' };
+  }
+  
+  // 创建一个非枚举类作为对照
+  class RegularClass {
+    constructor(name) {
       this.name = name;
     }
   }
-  // 模拟枚举类
-  mockEnumClass(Status);
-  
-  // 验证我们的模拟正确
-  expect(isEnumClass(Gender)).toBe(true);
-  expect(isEnumClass(Status)).toBe(true);
-  
-  test('should return a function', () => {
+
+  test('应该返回一个函数', () => {
     const normalizer = enumNormalizer(Gender);
     expect(typeof normalizer).toBe('function');
   });
-  
-  test('should normalize string value to enum instance', () => {
+
+  test('应该将字符串值归一化为对应的枚举实例', () => {
     const normalizer = enumNormalizer(Gender);
-    
-    const result1 = normalizer('MALE');
-    expect(result1).toBe(Gender.MALE);
-    
-    const result2 = normalizer('FEMALE');
-    expect(result2).toBe(Gender.FEMALE);
+
+    // 测试通过值查找枚举实例
+    expect(normalizer('MALE')).toBe(Gender.MALE);
+    expect(normalizer('FEMALE')).toBe(Gender.FEMALE);
+  });
+
+  test('应该支持不区分大小写的字符串值查找', () => {
+    const normalizer = enumNormalizer(Status);
+
+    // 使用小写值查找枚举实例
+    expect(normalizer('active')).toBe(Status.ACTIVE);
+    expect(normalizer('inactive')).toBe(Status.INACTIVE);
+    expect(normalizer('PENDING')).toBe(Status.PENDING);
+  });
+
+  test('应该支持通过显示名称查找枚举实例', () => {
+    const normalizer = enumNormalizer(Status);
+
+    // 通过中文名称查找枚举实例
+    expect(normalizer('活跃')).toBe(Status.ACTIVE);
+    expect(normalizer('不活跃')).toBe(Status.INACTIVE);
+    expect(normalizer('待定')).toBe(Status.PENDING);
   });
   
-  test('should normalize case-insensitive string value', () => {
+  test('应该支持通过枚举代码查找枚举实例', () => {
     const normalizer = enumNormalizer(Status);
     
-    const result = normalizer('active');
-    expect(result).toBe(Status.ACTIVE);
+    // 通过code属性查找枚举实例
+    expect(normalizer('A')).toBe(Status.ACTIVE);
+    expect(normalizer('I')).toBe(Status.INACTIVE);
+    expect(normalizer('P')).toBe(Status.PENDING);
   });
-  
-  test('should normalize by name property', () => {
-    const normalizer = enumNormalizer(Status);
-    
-    const result = normalizer('活跃');
-    expect(result).toBe(Status.ACTIVE);
-  });
-  
-  test('should return null if input is not a valid enum value or name', () => {
+
+  test('对于无效的枚举值应该返回undefined', () => {
     const normalizer = enumNormalizer(Gender);
-    
-    // This will result in null since the enum's of() method returns null for invalid values
-    const result = normalizer('UNKNOWN');
-    expect(result).toBeNull();
+
+    // 测试无效值
+    expect(normalizer('UNKNOWN')).toBeUndefined();
+    expect(normalizer('')).toBeUndefined();
   });
-  
-  test('should throw TypeError if argument is not an enum class', () => {
-    class RegularClass {}
-    
+
+  test('参数不是枚举类时应该抛出TypeError', () => {
     expect(() => {
       enumNormalizer(RegularClass);
     }).toThrow(TypeError);
     
     expect(() => {
-      enumNormalizer(RegularClass)('someValue');
+      enumNormalizer({});
+    }).toThrow(TypeError);
+    
+    expect(() => {
+      enumNormalizer(null);
     }).toThrow(TypeError);
   });
-  
-  test('should handle null and undefined inputs', () => {
+
+  test('应该正确处理null和undefined输入', () => {
     const normalizer = enumNormalizer(Gender);
-    
-    // Enum.of() typically returns null for nullish values
-    expect(normalizer(null)).toBeNull();
-    expect(normalizer(undefined)).toBeNull();
+
+    // null和undefined应该返回undefined
+    expect(normalizer(null)).toBeUndefined();
+    expect(normalizer(undefined)).toBeUndefined();
   });
-  
-  test('should pass through enum instances unchanged', () => {
+
+  test('应该原样返回枚举实例', () => {
     const normalizer = enumNormalizer(Gender);
-    
-    const result = normalizer(Gender.MALE);
-    expect(result).toBe(Gender.MALE);
+
+    // 输入枚举实例时应该原样返回
+    expect(normalizer(Gender.MALE)).toBe(Gender.MALE);
+    expect(normalizer(Gender.FEMALE)).toBe(Gender.FEMALE);
   });
-}); 
+});
