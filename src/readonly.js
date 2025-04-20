@@ -85,11 +85,11 @@ export function createDeferredReadonlyInitializer(propertyName) {
  * ```js
  * class Meal {
  *   // Field with initial value - immediately read-only
- *   @Readonly
+ *   &#64;Readonly
  *   entree = 'steak';
  *
  *   // Field without initial value - will be read-only after first assignment
- *   @Readonly
+ *   &#64;Readonly
  *   dessert;
  * }
  *
