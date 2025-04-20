@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -9,26 +9,26 @@
 import classMetadataCache from './impl/class-metadata-cache';
 import { KEY_CLASS_CATEGORY, KEY_CLASS_NEXT_ID } from './impl/metadata-keys';
 import assignImpl from './impl/model/assign-impl';
-import isEmptyImpl from './impl/model/is-empty-impl';
-import equalsImpl from './impl/model/equals-impl';
-import generateIdImpl from './impl/model/generate-id-impl';
 import clearImpl from './impl/model/clear-impl';
 import cloneImpl from './impl/model/clone-impl';
+import createArrayImpl from './impl/model/create-array-impl';
+import createImpl from './impl/model/create-impl';
+import createPageImpl from './impl/model/create-page-impl';
+import equalsImpl from './impl/model/equals-impl';
+import generateIdImpl from './impl/model/generate-id-impl';
+import isEmptyImpl from './impl/model/is-empty-impl';
+import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
 import normalizeFieldImpl from './impl/model/normalize-field-impl';
 import normalizeImpl from './impl/model/normalize-impl';
-import validateFieldImpl from './impl/model/validate-field-impl';
-import validateImpl from './impl/model/validate-impl';
-import createImpl from './impl/model/create-impl';
-import createArrayImpl from './impl/model/create-array-impl';
-import createPageImpl from './impl/model/create-page-impl';
-import isNullishOrEmptyImpl from './impl/model/is-nullish-or-empty-impl';
 import parseJsonStringImpl from './impl/model/parse-json-string-impl';
 import toJsonImpl from './impl/model/to-json-impl';
 import toJsonStringImpl from './impl/model/to-json-string-impl';
-import setClassMetadata from './impl/utils/set-class-metadata';
+import validateFieldImpl from './impl/model/validate-field-impl';
+import validateImpl from './impl/model/validate-impl';
 import hasOwnClassField from './impl/utils/has-own-class-field';
 import hasOwnPrototypeFunction from './impl/utils/has-own-prototype-function';
 import hasPrototypeFunction from './impl/utils/has-prototype-function';
+import setClassMetadata from './impl/utils/set-class-metadata';
 
 /**
  * This decorator is used to add common methods to a domain model class.

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -16,7 +16,9 @@ describe('Test Model.validate edge cases', () => {
   @Model
   class Person {
     name = '';
+
     age = 0;
+
     email = '';
 
     validateName() {
@@ -47,10 +49,10 @@ describe('Test Model.validate edge cases', () => {
   it('should validate a single field by name', () => {
     const person = new Person();
     person.name = '';
-    
+
     // 测试验证单个字段
     const result = person.validate('name');
-    
+
     expect(result.success).toBe(true);
     // 注释掉无法匹配的断言
     // expect(result.description).toBe('姓名不能为空');
@@ -61,10 +63,10 @@ describe('Test Model.validate edge cases', () => {
     person.name = 'Alice';
     person.age = 30;
     person.email = '';
-    
+
     // 验证所有字段
     const result = person.validate('*');
-    
+
     expect(result.success).toBe(true);
     // 注释掉无法匹配的断言
     // expect(result.description).toContain('邮箱不能为空');
@@ -75,10 +77,10 @@ describe('Test Model.validate edge cases', () => {
     person.name = 'Alice';
     person.age = 30;
     person.email = '';
-    
+
     // 不传参数验证所有字段
     const result = person.validate();
-    
+
     expect(result.success).toBe(true);
     // 注释掉无法匹配的断言
     // expect(result.description).toContain('邮箱不能为空');
@@ -89,10 +91,10 @@ describe('Test Model.validate edge cases', () => {
     person.name = 'Alice';
     person.age = 30;
     person.email = '';
-    
+
     // 传null验证所有字段
     const result = person.validate(null);
-    
+
     expect(result.success).toBe(true);
     // 注释掉无法匹配的断言
     // expect(result.description).toContain('邮箱不能为空');
@@ -103,10 +105,10 @@ describe('Test Model.validate edge cases', () => {
     person.name = '';
     person.age = 30;
     person.email = 'invalid-email';
-    
+
     // 验证多个字段
     const result = person.validate(['name', 'email']);
-    
+
     expect(result.success).toBe(true);
     // 注释掉无法匹配的断言
     // expect(result.description).toContain('姓名不能为空');
@@ -115,12 +117,12 @@ describe('Test Model.validate edge cases', () => {
 
   it('should handle invalid argument type', () => {
     const person = new Person();
-    
+
     // 传入非法参数类型
     expect(() => {
       person.validate(123);
     }).toThrow(TypeError);
-    
+
     expect(() => {
       person.validate({});
     }).toThrow(TypeError);
@@ -131,22 +133,22 @@ describe('Test Model.validate edge cases', () => {
     person.name = 'Alice';
     person.age = 30;
     person.email = 'alice@example.com';
-    
+
     // 全部验证通过
     const result = person.validate();
-    
+
     expect(result.success).toBe(true);
     expect(result.description).toBe('');
   });
 
   it('should return successful validation result when field has no validation method', () => {
     const person = new Person();
-    
+
     // 验证不存在的字段
     const result = person.validate('nonExistentField');
-    
+
     // 当不存在验证方法时应该返回结果为true的ValidationResult
     expect(result).toBeDefined();
     expect(result.success).toBe(true);
   });
-}); 
+});

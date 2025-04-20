@@ -52,7 +52,7 @@ describe('createPageImpl', () => {
       totalPages: 10,
       pageIndex: 0,
       pageSize: 10,
-      content: []
+      content: [],
     };
 
     // 执行函数

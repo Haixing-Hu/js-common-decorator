@@ -124,7 +124,7 @@ describe('validateImpl', () => {
     mockMergedResult.fields = {
       id: mockIdResult,
       name: mockNameResult,
-      age: mockAgeResult
+      age: mockAgeResult,
     };
     ValidationResult.merge.mockReturnValue(mockMergedResult);
 
@@ -185,7 +185,7 @@ describe('validateImpl', () => {
     const mockMergedResult = new ValidationResult(false);
     mockMergedResult.fields = {
       id: mockIdResult,
-      name: mockNameResult
+      name: mockNameResult,
     };
     ValidationResult.merge.mockReturnValue(mockMergedResult);
 
@@ -219,7 +219,7 @@ describe('validateImpl', () => {
     mockMergedResult.fields = {
       id: successResult,
       name: successResult,
-      age: successResult
+      age: successResult,
     };
     ValidationResult.merge.mockReturnValue(mockMergedResult);
 

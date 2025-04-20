@@ -15,54 +15,52 @@ import DefaultOptions from '../../../src/default-options';
 import toJsonImpl from '../../../src/impl/model/to-json-impl';
 
 // 我们需要模拟clone函数，因为测试中的问题主要与其有关
-jest.mock('@qubit-ltd/clone', () => {
-  return jest.fn().mockImplementation((obj, options) => {
-    if (options && options.useToJSON && !options.skipRootToJSON && typeof obj.toJSON === 'function') {
-      return obj.toJSON();
-    }
+jest.mock('@qubit-ltd/clone', () => jest.fn().mockImplementation((obj, options) => {
+  if (options && options.useToJSON && !options.skipRootToJSON && typeof obj.toJSON === 'function') {
+    return obj.toJSON();
+  }
 
-    // 处理removeEmptyFields选项
-    if (options && options.removeEmptyFields) {
-      const result = {};
-      Object.keys(obj).forEach(key => {
-        const value = obj[key];
-        const isEmpty = value === '' || value === null || value === undefined ||
-                       (Array.isArray(value) && value.length === 0);
+  // 处理removeEmptyFields选项
+  if (options && options.removeEmptyFields) {
+    const result = {};
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+      const isEmpty = value === '' || value === null || value === undefined
+                       || (Array.isArray(value) && value.length === 0);
         // 注意：这里没有检查空对象，与实际实现一致
-        if (!isEmpty) {
-          result[key] = value;
-        }
+      if (!isEmpty) {
+        result[key] = value;
+      }
+    });
+    return result;
+  }
+
+  // 处理命名风格转换
+  if (options && options.convertNaming && options.sourceNamingStyle && options.targetNamingStyle) {
+    if (options.sourceNamingStyle === 'LOWER_CAMEL' && options.targetNamingStyle === 'LOWER_UNDERSCORE') {
+      const result = {};
+      Object.keys(obj).forEach((key) => {
+        // 将 lowerCamel 转换为 lower_underscore
+        const newKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+        result[newKey] = obj[key];
       });
       return result;
     }
+  }
 
-    // 处理命名风格转换
-    if (options && options.convertNaming && options.sourceNamingStyle && options.targetNamingStyle) {
-      if (options.sourceNamingStyle === 'LOWER_CAMEL' && options.targetNamingStyle === 'LOWER_UNDERSCORE') {
-        const result = {};
-        Object.keys(obj).forEach(key => {
-          // 将 lowerCamel 转换为 lower_underscore
-          const newKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-          result[newKey] = obj[key];
-        });
-        return result;
-      }
+  // 处理 skipRootToJSON 选项
+  if (options && options.skipRootToJSON) {
+    // 当 skipRootToJSON 为 true 时，我们需要确保返回的对象不包含 toJSON 方法
+    const result = { ...obj };
+    if (typeof result.toJSON === 'function') {
+      delete result.toJSON;
     }
+    return result;
+  }
 
-    // 处理 skipRootToJSON 选项
-    if (options && options.skipRootToJSON) {
-      // 当 skipRootToJSON 为 true 时，我们需要确保返回的对象不包含 toJSON 方法
-      const result = { ...obj };
-      if (typeof result.toJSON === 'function') {
-        delete result.toJSON;
-      }
-      return result;
-    }
-
-    // 默认只是浅复制
-    return { ...obj };
-  });
-});
+  // 默认只是浅复制
+  return { ...obj };
+}));
 
 describe('toJsonImpl', () => {
   beforeEach(() => {
@@ -175,7 +173,7 @@ describe('toJsonImpl', () => {
     // 验证结果，根据实际实现空对象不会被视为空字段
     expect(result).toEqual({
       name: 'test',
-      emptyObject: {}
+      emptyObject: {},
     });
   });
 

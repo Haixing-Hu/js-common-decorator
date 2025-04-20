@@ -1,13 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { Model, Page } from '../src';
-import { Json } from '@qubit-ltd/json';
 
 /**
  * @test 测试Model.createPage方法
@@ -17,6 +16,7 @@ describe('Test Model.createPage method', () => {
   @Model
   class Person {
     name = '';
+
     age = 0;
 
     constructor(name = '', age = 0) {
@@ -42,7 +42,7 @@ describe('Test Model.createPage method', () => {
     };
 
     const page = Person.createPage(pageData);
-    
+
     expect(page).toBeInstanceOf(Page);
     expect(page.pageIndex).toBe(1);
     expect(page.pageSize).toBe(10);
@@ -68,7 +68,7 @@ describe('Test Model.createPage method', () => {
   it('should throw TypeError for invalid page format', () => {
     const invalidData = {
       // 缺少必要的字段
-      content: 'not an array'
+      content: 'not an array',
     };
 
     expect(() => {
@@ -89,7 +89,7 @@ describe('Test Model.createPage method', () => {
     };
 
     const page = Person.createPage(pageData);
-    
+
     expect(page).toBeInstanceOf(Page);
     expect(page.content).toHaveLength(0);
   });
@@ -111,7 +111,7 @@ describe('Test Model.createPage method', () => {
     };
 
     const page = Person.createPage(pageData, options);
-    
+
     expect(page).toBeInstanceOf(Page);
     expect(page.content[0]).toBeInstanceOf(Person);
     expect(page.content[0].name).toBe('Alice');

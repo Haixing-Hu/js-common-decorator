@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -18,7 +18,9 @@ describe('Test @Enum', () => {
     @Enum
     class Color {
       static RED = { value: 'RED', code: 'R', name: '红色' };
+
       static GREEN = { value: 'GREEN', code: 'G', name: '绿色' };
+
       static BLUE = { value: 'BLUE', code: 'B', name: '蓝色' };
     }
 
@@ -67,4 +69,4 @@ describe('Test @Enum', () => {
       expect(Color.has('Y')).toBe(false);
     });
   });
-}); 
+});

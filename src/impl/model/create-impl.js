@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import hasPrototypeFunction from '../utils/has-prototype-function';
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import assignImpl from './assign-impl';
-import hasPrototypeFunction from '../utils/has-prototype-function';
 
 /**
  * Creates an instance of a model class.

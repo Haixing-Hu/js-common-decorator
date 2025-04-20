@@ -114,7 +114,7 @@ describe('createImpl', () => {
 
     // 模拟normalize方法
     const originalNormalize = MockClass.prototype.normalize;
-    MockClass.prototype.normalize = jest.fn().mockImplementation(function () {
+    MockClass.prototype.normalize = jest.fn().mockImplementation(function normalizeFunction() {
       this.name = this.name.toUpperCase(); // 模拟规范化操作
       return this;
     });

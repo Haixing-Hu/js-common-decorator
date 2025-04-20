@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -8,8 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@qubit-ltd/common-util';
 import { ValidationResult } from '@qubit-ltd/common-validation-rule';
-import getInstanceName from '../utils/get-instance-name';
 import getFieldLabel from '../utils/get-field-label';
+import getInstanceName from '../utils/get-instance-name';
 import isFieldNonEmpty from '../utils/is-field-non-empty';
 
 /**

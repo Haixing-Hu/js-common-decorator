@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import defaultNormalizer from './default-normalizer';
-import isDecoratorContext from './impl/utils/is-decorator-context';
 import { KEY_FIELD_NORMALIZER } from './impl/metadata-keys';
+import isDecoratorContext from './impl/utils/is-decorator-context';
 import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**

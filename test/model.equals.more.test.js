@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -16,6 +16,7 @@ describe('Test Model.equals edge cases', () => {
   @Model
   class Person {
     name = '';
+
     age = 0;
 
     constructor(name = '', age = 0) {
@@ -27,6 +28,7 @@ describe('Test Model.equals edge cases', () => {
   @Model
   class Employee {
     name = '';
+
     age = 0;
 
     constructor(name = '', age = 0) {
@@ -60,7 +62,7 @@ describe('Test Model.equals edge cases', () => {
   it('should handle different prototype comparisons', () => {
     const person = new Person('Alice', 30);
     const employee = new Employee('Alice', 30);
-    
+
     // 即使内容相同，但是不同的类
     expect(person.equals(employee)).toBe(false);
   });
@@ -69,7 +71,7 @@ describe('Test Model.equals edge cases', () => {
     const person1 = new Person('Alice', 30);
     const person2 = new Person('Alice', 30);
     const person3 = new Person('Bob', 25);
-    
+
     expect(person1.equals(person2)).toBe(true);
     expect(person1.equals(person3)).toBe(false);
   });
@@ -78,19 +80,20 @@ describe('Test Model.equals edge cases', () => {
     @Model
     class Team {
       name = '';
+
       members = [];
-      
+
       constructor(name = '', members = []) {
         this.name = name;
         this.members = members;
       }
     }
-    
+
     const team1 = new Team('Alpha', [new Person('Alice', 30), new Person('Bob', 25)]);
     const team2 = new Team('Alpha', [new Person('Alice', 30), new Person('Bob', 25)]);
     const team3 = new Team('Beta', [new Person('Alice', 30), new Person('Bob', 25)]);
-    
+
     expect(team1.equals(team2)).toBe(true);
     expect(team1.equals(team3)).toBe(false);
   });
-}); 
+});

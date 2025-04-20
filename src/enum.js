@@ -1,22 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { registerCloneHook } from '@qubit-ltd/clone';
-import isEnumerator from './is-enumerator';
 import classMetadataCache from './impl/class-metadata-cache';
-import setClassMetadata from './impl/utils/set-class-metadata';
-import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
 import defineEnumerator from './impl/enum/define-enumerator';
+import ofCodeImpl from './impl/enum/of-code-impl';
+import ofImpl from './impl/enum/of-impl';
+import ofNameImpl from './impl/enum/of-name-impl';
 import ofValueImpl from './impl/enum/of-value-impl';
 import valuesImpl from './impl/enum/values-impl';
-import ofCodeImpl from './impl/enum/of-code-impl';
-import ofNameImpl from './impl/enum/of-name-impl';
-import ofImpl from './impl/enum/of-impl';
+import { KEY_CLASS_CATEGORY } from './impl/metadata-keys';
+import setClassMetadata from './impl/utils/set-class-metadata';
+import isEnumerator from './is-enumerator';
 
 /**
  * This decorator is used to decorate an enumeration class.

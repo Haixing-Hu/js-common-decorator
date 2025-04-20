@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { ValidationResult } from '@qubit-ltd/common-validation-rule';
-import isFieldNullable from '../utils/is-field-nullable';
-import getInstanceName from '../utils/get-instance-name';
 import getFieldLabel from '../utils/get-field-label';
+import getInstanceName from '../utils/get-instance-name';
+import isFieldNullable from '../utils/is-field-nullable';
 
 /**
  * Validates the specified nullish field of the specified object.

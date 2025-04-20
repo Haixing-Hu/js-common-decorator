@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
+import { KEY_CLASS_NEXT_ID } from '../metadata-keys';
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
@@ -8,7 +9,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 import getClassMetadata from '../utils/get-class-metadata';
 import setClassMetadata from '../utils/set-class-metadata';
-import { KEY_CLASS_NEXT_ID } from '../metadata-keys';
 
 /**
  * Generates a unique ID for the specified object.

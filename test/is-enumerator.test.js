@@ -6,13 +6,14 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isEnumerator, Enum } from '../src';
+import { Enum, isEnumerator } from '../src';
 
 describe('isEnumerator', () => {
   // 使用实际的Enum装饰器创建一个枚举类
   @Enum
   class Gender {
     static MALE = '男';
+
     static FEMALE = '女';
   }
 
@@ -58,14 +59,15 @@ describe('isEnumerator', () => {
   test('应该对模拟枚举但未被@Enum装饰的对象返回false', () => {
     class FakeEnum {
       static ONE = new FakeEnum('ONE', '一');
+
       static TWO = new FakeEnum('TWO', '二');
-      
+
       constructor(value, name) {
         this.value = value;
         this.name = name;
       }
     }
-    
+
     expect(isEnumerator(FakeEnum.ONE)).toBe(false);
   });
 
@@ -73,12 +75,13 @@ describe('isEnumerator', () => {
     @Enum
     class Status {
       static ACTIVE = { name: '活跃', code: 'A', order: 1 };
+
       static INACTIVE = { name: '不活跃', code: 'I', order: 2 };
     }
-    
+
     expect(isEnumerator(Status.ACTIVE)).toBe(true);
     expect(isEnumerator(Status.INACTIVE)).toBe(true);
-    
+
     // 验证额外属性
     expect(Status.ACTIVE.code).toBe('A');
     expect(Status.ACTIVE.order).toBe(1);

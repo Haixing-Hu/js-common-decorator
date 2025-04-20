@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { isTypedArray, isCollection } from '@qubit-ltd/type-detect';
+import { isCollection, isTypedArray } from '@qubit-ltd/type-detect';
 
 /**
  * Gets the element types of a collection.

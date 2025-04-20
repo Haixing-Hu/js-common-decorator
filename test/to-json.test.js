@@ -6,8 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { toJSON } from '../src';
-import { DefaultOptions } from '../src';
+import { DefaultOptions, toJSON } from '../src';
 
 describe('toJSON', () => {
   it('should serialize a simple object', () => {

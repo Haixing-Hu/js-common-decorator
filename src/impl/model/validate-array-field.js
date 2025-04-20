@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isTypedArray } from '@qubit-ltd/type-detect';
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
 import getElementValidationContext from '../utils/get-element-validation-context';
 import validateEmptyField from './validate-empty-field';
 

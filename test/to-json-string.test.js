@@ -6,8 +6,8 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { toJsonString } from '../src';
 import Json from '@qubit-ltd/json';
+import { toJsonString } from '../src';
 
 // 模拟实现对象的 toJSON 方法
 const originalObjectToJSON = Object.prototype.toJSON;

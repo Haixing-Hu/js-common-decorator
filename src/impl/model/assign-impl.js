@@ -1,26 +1,26 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import clone from '@qubit-ltd/clone';
-import { isBuiltInClass } from '@qubit-ltd/type-detect';
 import { isUndefinedOrNull } from '@qubit-ltd/common-util';
-import CLONE_OPTIONS from './clone-options';
-import DefaultOptions from '../../default-options';
+import { isBuiltInClass } from '@qubit-ltd/type-detect';
 import defaultNormalizer from '../../default-normalizer';
+import DefaultOptions from '../../default-options';
+import ofValueImpl from '../enum/of-value-impl';
+import { KEY_CLASS_CATEGORY } from '../metadata-keys';
 import getClassMetadata from '../utils/get-class-metadata';
 import getDefaultInstance from '../utils/get-default-instance';
 import getExistFieldWithDifferentNamingStyle from '../utils/get-exist-field-with-different-naming-style';
-import getSourceField from '../utils/get-source-field';
 import getFieldElementType from '../utils/get-field-element-type';
 import getFieldType from '../utils/get-field-type';
+import getSourceField from '../utils/get-source-field';
 import hasPrototypeFunction from '../utils/has-prototype-function';
-import ofValueImpl from '../enum/of-value-impl';
-import { KEY_CLASS_CATEGORY } from '../metadata-keys';
+import CLONE_OPTIONS from './clone-options';
 
 const Impl = {
   /**

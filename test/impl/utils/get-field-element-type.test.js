@@ -44,43 +44,36 @@ class MapValueType {}
 class SetElementType {}
 
 // 模拟getDefaultInstance，使其返回没有元素类型信息的对象
-jest.mock('../../../src/impl/utils/get-default-instance', () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation((Class) => {
-      if (Class === MockClass) {
-        return MockClass.createDefault();
-      }
-      return new Class();
-    }),
-  };
-});
+jest.mock('../../../src/impl/utils/get-default-instance', () => ({
+  __esModule: true,
+  default: jest.fn().mockImplementation((Class) => {
+    if (Class === MockClass) {
+      return MockClass.createDefault();
+    }
+    return new Class();
+  }),
+}));
 
 // 模拟getCollectionElementType，对于空数组返回null
-jest.mock('../../../src/impl/utils/get-collection-element-type', () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation((value) => {
-      // 确保测试中总是返回null
-      return null;
-    }),
-  };
-});
+jest.mock('../../../src/impl/utils/get-collection-element-type', () => ({
+  __esModule: true,
+  default: jest.fn().mockImplementation((value) =>
+  // 确保测试中总是返回null
+    null),
+}));
 
 // 模拟classMetadataCache
-jest.mock('../../../src/impl/class-metadata-cache', () => {
-  return {
-    __esModule: true,
-    default: {
-      get: jest.fn().mockImplementation((Class) => {
-        if (Class[Symbol.metadata]) {
-          return Class[Symbol.metadata];
-        }
-        return {};
-      }),
-    }
-  };
-});
+jest.mock('../../../src/impl/class-metadata-cache', () => ({
+  __esModule: true,
+  default: {
+    get: jest.fn().mockImplementation((Class) => {
+      if (Class[Symbol.metadata]) {
+        return Class[Symbol.metadata];
+      }
+      return {};
+    }),
+  },
+}));
 
 describe('getFieldElementType', () => {
   test('当field在options.elementTypes中指定了类型时应返回该类型', () => {

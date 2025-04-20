@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import Json from '@qubit-ltd/json';
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isString } from '@qubit-ltd/type-detect';
-import Json from '@qubit-ltd/json';
 
 /**
  * Convert an id to a string.

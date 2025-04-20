@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import DefaultOptions from '../../default-options';
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import getSourceField from '../utils/get-source-field';
-import DefaultOptions from '../../default-options';
 
 /**
  * Tests whether the specified object is a valid page object.

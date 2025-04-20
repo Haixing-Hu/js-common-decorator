@@ -21,15 +21,15 @@ describe('validateEmptyField enhanced coverage tests', () => {
     const obj = {};
     const field = 'testField';
     const value = '';  // 空字符串是一个空值
-    
+
     // 创建上下文，确保 nonEmpty 标志为 false
     const context = { nonEmpty: false };
-    
+
     // 执行测试 - 这应该触发第52行的代码路径
     const result = validateEmptyField(metadata, obj, field, value, context);
-    
+
     // 验证结果是成功的验证结果
     expect(result).toBeInstanceOf(ValidationResult);
     expect(result.success).toBe(true);
   });
-}); 
+});

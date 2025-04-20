@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////
+import defaultValidator from './default-validator';
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { KEY_FIELD_VALIDATOR } from './impl/metadata-keys';
-import setFieldMetadata from './impl/utils/set-field-metadata';
 import isDecoratorContext from './impl/utils/is-decorator-context';
-import defaultValidator from './default-validator';
+import setFieldMetadata from './impl/utils/set-field-metadata';
 
 /**
  * Sets the validator of a decorated field.

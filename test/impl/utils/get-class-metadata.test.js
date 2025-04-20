@@ -1,15 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { Model } from '../../../src';
-import getClassMetadata from '../../../src/impl/utils/get-class-metadata';
 import classMetadataCache from '../../../src/impl/class-metadata-cache';
-import setClassMetadata from '../../../src/impl/utils/set-class-metadata';
+import getClassMetadata from '../../../src/impl/utils/get-class-metadata';
 
 /**
  * @test Test of the getClassMetadata function
@@ -26,11 +24,11 @@ describe('getClassMetadata', () => {
     expect(() => {
       getClassMetadata({}, 'key');
     }).toThrow(TypeError);
-    
+
     expect(() => {
       getClassMetadata(null, 'key');
     }).toThrow(TypeError);
-    
+
     expect(() => {
       getClassMetadata('string', 'key');
     }).toThrow(TypeError);
@@ -39,7 +37,7 @@ describe('getClassMetadata', () => {
   it('should return undefined if metadata is not cached', () => {
     // 创建一个类但不添加到缓存
     class TestClass {}
-    
+
     // 应该返回undefined而不是抛出错误
     expect(getClassMetadata(TestClass, 'key')).toBeUndefined();
   });
@@ -49,19 +47,16 @@ describe('getClassMetadata', () => {
     class TestClass {}
 
     // 模拟缓存并设置测试数据
-    jest.spyOn(classMetadataCache, 'get').mockImplementation((key) => {
-      // 返回一个包含测试数据的对象
-      return { 
-        key1: 'value1',
-        key2: 'value2'
-      };
-    });
-    
+    jest.spyOn(classMetadataCache, 'get').mockImplementation((key) => ({
+      key1: 'value1',
+      key2: 'value2',
+    }));
+
     // 测试获取元数据
     expect(getClassMetadata(TestClass, 'key1')).toBe('value1');
     expect(getClassMetadata(TestClass, 'key2')).toBe('value2');
     expect(getClassMetadata(TestClass, 'nonExistentKey')).toBeUndefined();
-    
+
     // 清理
     jest.restoreAllMocks();
   });
@@ -69,14 +64,14 @@ describe('getClassMetadata', () => {
   it('should work with cached metadata', () => {
     // 创建一个类
     class SimpleClass {}
-    
+
     // 直接使用内部API设置元数据
     const metadata = { testKey: 'testValue' };
     jest.spyOn(classMetadataCache, 'get').mockImplementation(() => metadata);
 
     // 验证getClassMetadata可以正确获取元数据
     expect(getClassMetadata(SimpleClass, 'testKey')).toBe('testValue');
-    
+
     // 清理
     jest.restoreAllMocks();
   });

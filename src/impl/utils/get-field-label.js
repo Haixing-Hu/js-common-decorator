@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import { KEY_FIELD_LABEL } from '../metadata-keys';
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import getFieldMetadata from './get-field-metadata';
-import { KEY_FIELD_LABEL } from '../metadata-keys';
 
 /**
  * Gets the label of the specified field.

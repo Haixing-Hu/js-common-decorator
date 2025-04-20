@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////
+import getFieldLabel from './get-field-label';
+import getFieldType from './get-field-type';
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import getInstanceName from './get-instance-name';
-import getFieldLabel from './get-field-label';
-import isFieldNullable from './is-field-nullable';
 import isFieldNonEmpty from './is-field-non-empty';
-import getFieldType from './get-field-type';
+import isFieldNullable from './is-field-nullable';
 
 /**
  * Gets the validation context of the value of the specified field.

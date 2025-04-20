@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
+import getDefaultInstance from '../utils/get-default-instance';
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import requirePrototypeMethod from '../utils/require-prototype-method';
-import getDefaultInstance from '../utils/get-default-instance';
 
 /**
  * Clears all fields of an object.
