@@ -6,8 +6,9 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { assign, ElementType, Model, Type } from '../src';
+import { assign, ElementType, Enum, Model, Type } from '../src';
 import Gender from './model/gender';
+import assignImpl from '../src/impl/model/assign-impl';
 
 // 模拟包含枚举字段的模型类
 @Model
@@ -343,5 +344,166 @@ describe('Test nested object assignment', () => {
     expect(instance.company.address.street).toBe('');
     expect(instance.company).toBeInstanceOf(CompanyWithDecorator);
     expect(instance.company.address).toBeInstanceOf(AddressWithDecorator);
+  });
+});
+
+/**
+ * 测试assign-impl.js中的边缘情况
+ */
+describe('assign-impl edge cases', () => {
+  // 测试cloneWithType函数中对非目标类型实例的警告处理
+  it('should handle non-target type instances with warning', () => {
+    // 创建一个简单的模型类
+    @Model
+    class Person {
+      id = '';
+      name = '';
+      age = 0;
+    }
+    
+    // 创建测试数据
+    const source = {
+      id: 9223372036854775000, // 使用一个大数字，不使用BigInt
+      name: 'John',
+      age: 30
+    };
+    
+    // 监听console.warn调用
+    const originalWarn = console.warn;
+    let warningCalled = false;
+    console.warn = jest.fn((...args) => {
+      warningCalled = true;
+      // 恢复原始函数以避免影响其他测试
+      console.warn = originalWarn;
+    });
+    
+    // 执行assign操作
+    const target = new Person();
+    assignImpl(Person, target, source);
+    
+    // 验证警告被调用
+    expect(warningCalled).toBe(true);
+    // 验证值被正确赋值（即使类型不匹配）
+    expect(target.id.toString()).toBe('9223372036854775000');
+  });
+  
+  // 测试cloneEnum函数对空字符串的处理
+  it('should handle empty string when cloning enum', () => {
+    @Enum
+    class Status {
+      static ACTIVE = { value: 'ACTIVE', name: 'ACTIVE', code: 'A' };
+      static INACTIVE = { value: 'INACTIVE', name: 'INACTIVE', code: 'I' };
+    }
+    
+    @Model
+    class Task {
+      id = '';
+      status = Status.INACTIVE;
+    }
+    
+    // 使用空字符串作为枚举值
+    const source = {
+      id: '123',
+      status: '  ' // 空白字符串
+    };
+    
+    const target = new Task();
+    assignImpl(Task, target, source);
+    
+    // 验证空白字符串被转换为默认枚举值
+    expect(target.status).toBe(Status.INACTIVE);
+  });
+  
+  // 测试cloneEnum抛出异常的情况
+  it('should throw exception when cloning invalid enum value', () => {
+    @Enum
+    class Status {
+      static ACTIVE = { value: 'ACTIVE', name: 'ACTIVE', code: 'A' };
+      static INACTIVE = { value: 'INACTIVE', name: 'INACTIVE', code: 'I' };
+    }
+    
+    @Model
+    class Task {
+      id = '';
+      status = Status.INACTIVE;
+    }
+    
+    // 使用无效的枚举值
+    const source = {
+      id: '123',
+      status: 'UNKNOWN' // 不存在的枚举值
+    };
+    
+    expect(() => {
+      const target = new Task();
+      assignImpl(Task, target, source);
+    }).toThrow(RangeError);
+  });
+  
+  // 测试cloneEnum对非字符串值的处理
+  it('should throw exception when cloning non-string enum value', () => {
+    @Enum
+    class Status {
+      static ACTIVE = { value: 'ACTIVE', name: 'ACTIVE', code: 'A' };
+      static INACTIVE = { value: 'INACTIVE', name: 'INACTIVE', code: 'I' };
+    }
+    
+    @Model
+    class Task {
+      id = '';
+      status = Status.INACTIVE;
+    }
+    
+    // 使用非字符串值作为枚举
+    const source = {
+      id: '123',
+      status: 123 // 数字类型而不是字符串
+    };
+    
+    expect(() => {
+      const target = new Task();
+      assignImpl(Task, target, source);
+    }).toThrow(RangeError);
+  });
+  
+  // 测试cloneArrayWithElementType对非数组值的处理
+  it('should handle non-array values in cloneArrayWithElementType', () => {
+    @Model
+    class Item {
+      name = '';
+    }
+    
+    @Model
+    class Container {
+      items = [];
+    }
+    
+    // 监听console.error调用
+    const originalError = console.error;
+    let errorCalled = false;
+    console.error = jest.fn((...args) => {
+      errorCalled = true;
+      // 恢复原始函数以避免影响其他测试
+      console.error = originalError;
+    });
+    
+    // 源对象中的items不是数组
+    const source = {
+      items: 'not an array'
+    };
+    
+    const target = new Container();
+    // 在选项中指定元素类型
+    assignImpl(Container, target, source, {
+      elementTypes: {
+        '.items': Item
+      }
+    });
+    
+    // 验证错误被记录
+    expect(errorCalled).toBe(true);
+    // 验证结果是空数组（默认值）
+    expect(Array.isArray(target.items)).toBe(true);
+    expect(target.items.length).toBe(0);
   });
 });

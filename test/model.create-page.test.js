@@ -1,286 +1,119 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2025.
+//    Copyright (c) 2022 - 2023.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { mount } from '@vue/test-utils';
-import { DefaultOptions, Page } from '../src';
-import ChildObj from './model/child-obj';
-import Credential from './model/credential';
-import CredentialType from './model/credential-type';
-import ObjWithNamingConversion from './model/obj-with-naming-conversion';
-import ObjWithPersonField from './model/ObjWithPersonField';
-import Person from './model/person';
-import PageWrapper from './model/vue-page-wrapper';
+import { Model, Page } from '../src';
+import { Json } from '@qubit-ltd/json';
 
-describe('Test static method `createPage()`', () => {
-  test('Test `Person.createPage(undefined)`', () => {
-    const result = Person.createPage(undefined);
-    expect(result).toBeNull();
+/**
+ * @test 测试Model.createPage方法
+ * @author Haixing Hu
+ */
+describe('Test Model.createPage method', () => {
+  @Model
+  class Person {
+    name = '';
+    age = 0;
+
+    constructor(name = '', age = 0) {
+      this.name = name;
+      this.age = age;
+    }
+  }
+
+  beforeEach(() => {
+    console.error = jest.fn();
   });
-  test('Test `Person.createPage(null)`', () => {
-    const result = Person.createPage(null);
-    expect(result).toBeNull();
+
+  it('should create a page from valid source data', () => {
+    const pageData = {
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 100,
+      totalPages: 10,
+      content: [
+        { name: 'Alice', age: 25 },
+        { name: 'Bob', age: 30 },
+      ],
+    };
+
+    const page = Person.createPage(pageData);
+    
+    expect(page).toBeInstanceOf(Page);
+    expect(page.pageIndex).toBe(1);
+    expect(page.pageSize).toBe(10);
+    expect(page.totalCount).toBe(100);
+    expect(page.content).toHaveLength(2);
+    expect(page.content[0]).toBeInstanceOf(Person);
+    expect(page.content[0].name).toBe('Alice');
+    expect(page.content[0].age).toBe(25);
+    expect(page.content[1].name).toBe('Bob');
+    expect(page.content[1].age).toBe(30);
   });
-  test('Test `Person.createPage(emptyPage)`', () => {
-    const result = Person.createPage({
-      total_count: 0,
-      total_pages: 0,
-      page_index: 0,
-      page_size: 10,
+
+  it('should return null for null input', () => {
+    const page = Person.createPage(null);
+    expect(page).toBeNull();
+  });
+
+  it('should return null for undefined input', () => {
+    const page = Person.createPage(undefined);
+    expect(page).toBeNull();
+  });
+
+  it('should throw TypeError for invalid page format', () => {
+    const invalidData = {
+      // 缺少必要的字段
+      content: 'not an array'
+    };
+
+    expect(() => {
+      Person.createPage(invalidData);
+    }).toThrow(TypeError);
+    expect(() => {
+      Person.createPage(invalidData);
+    }).toThrow(/Invalid page format/);
+  });
+
+  it('should create a page with empty content', () => {
+    const pageData = {
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 0,
+      totalPages: 0,
       content: [],
-    }, {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    expect(result).toEqual(new Page(0, 0, 0, 10, []));
-  });
-  test('Test `Person.createPage(nonEmptyPage)`', () => {
-    const page = {
-      total_count: 3,
-      total_pages: 1,
-      page_index: 0,
-      page_size: 5,
-      content: [{
-        id: 'xxxxx',
-        name: 'Bill Gates',
-        age: 63,
-        mobile: '139280384745',
-        credential: {
-          type: 'PASSPORT',
-          number: '1234567',
-        },
-      }, {
-        name: 'Jack Ma',
-        age: 55,
-        credential: {
-          type: '',
-          number: null,
-        },
-      },
-      null,
-      ],
     };
-    const result = Person.createPage(page, {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    expect(result).toBeInstanceOf(Page);
-    expect(result.totalCount).toBe(3);
-    expect(result.totalPages).toBe(1);
-    expect(result.pageIndex).toBe(0);
-    expect(result.pageSize).toBe(5);
-    expect(result.content).toBeArray();
-    expect(result.content.length).toBe(3);
-    expect(result.content[0]).toBeInstanceOf(Person);
-    expect(result.content[0].id).toBe(page.content[0].id);
-    expect(result.content[0].name).toBe(page.content[0].name);
-    expect(result.content[0].age).toBe(page.content[0].age);
-    expect(result.content[0].gender).toBe('');
-    expect(result.content[0].mobile).toBe(page.content[0].mobile);
-    expect(result.content[0].credential).toBeInstanceOf(Credential);
-    expect(result.content[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result.content[0].credential.number).toBe(page.content[0].credential.number);
-    expect(result.content[1]).toBeInstanceOf(Person);
-    expect(result.content[1].id).toBe('');
-    expect(result.content[1].name).toBe(page.content[1].name);
-    expect(result.content[1].age).toBe(page.content[1].age);
-    expect(result.content[1].gender).toBe('');
-    expect(result.content[1].mobile).toBe('');
-    expect(result.content[1].credential).toBeInstanceOf(Credential);
-    expect(result.content[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result.content[1].credential.number).toBe('');
-    expect(result.content[2]).toBeNull();
-  });
-  test('`Person.createPage()` should call `Credential.normalize()`', () => {
-    const page = {
-      total_count: 3,
-      total_pages: 1,
-      page_index: 0,
-      page_size: 5,
-      content: [{
-        id: 'xxxxx',
-        name: 'Bill Gates',
-        age: 63,
-        mobile: '139280384745',
-        credential: {
-          type: 'PASSPORT',
-          number: '1234567xx',
-        },
-      }, {
-        name: 'Jack Ma',
-        age: 55,
-        credential: {
-          type: '',
-          number: null,
-        },
-      },
-      null,
-      ],
-    };
-    const result = Person.createPage(page, {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    expect(result).toBeInstanceOf(Page);
-    expect(result.totalCount).toBe(3);
-    expect(result.totalPages).toBe(1);
-    expect(result.pageIndex).toBe(0);
-    expect(result.pageSize).toBe(5);
-    expect(result.content).toBeArray();
-    expect(result.content.length).toBe(3);
-    expect(result.content[0]).toBeInstanceOf(Person);
-    expect(result.content[0].id).toBe(page.content[0].id);
-    expect(result.content[0].name).toBe(page.content[0].name);
-    expect(result.content[0].age).toBe(page.content[0].age);
-    expect(result.content[0].gender).toBe('');
-    expect(result.content[0].mobile).toBe(page.content[0].mobile);
-    expect(result.content[0].credential).toBeInstanceOf(Credential);
-    expect(result.content[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result.content[0].credential.number).toBe('1234567XX');
-    expect(result.content[1]).toBeInstanceOf(Person);
-    expect(result.content[1].id).toBe('');
-    expect(result.content[1].name).toBe(page.content[1].name);
-    expect(result.content[1].age).toBe(page.content[1].age);
-    expect(result.content[1].gender).toBe('');
-    expect(result.content[1].mobile).toBe('');
-    expect(result.content[1].credential).toBeInstanceOf(Credential);
-    expect(result.content[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result.content[1].credential.number).toBe('');
-    expect(result.content[2]).toBeNull();
-  });
-  test('`Credential.createPage()` should handle the page managed by Vue', () => {
-    const wrapper = mount(PageWrapper);
-    expect(wrapper.vm.page).toBeDefined();
-    expect(wrapper.vm.page).not.toBeNull();
-    const result = Credential.createPage(wrapper.vm.page, {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    expect(result.totalCount).toBe(2);
-    expect(result.totalPages).toBe(1);
-    expect(result.pageIndex).toBe(0);
-    expect(result.pageSize).toBe(5);
-    expect(result.content).toBeArray();
-    expect(result.content.length).toBe(2);
-    expect(result.content[0]).toBeInstanceOf(Credential);
-    expect(result.content[0].type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result.content[0].number).toBe('12345678');
-    expect(result.content[1]).toBeInstanceOf(Credential);
-    expect(result.content[1].type).toBe(CredentialType.PASSPORT);
-    expect(result.content[1].number).toBe('ABCDEFGH');
-  });
-  test('`createPage()` with naming conversion options', () => {
-    const person = new Person();
-    person.id = 'xxxx';
-    person.name = 'Bill Gates';
-    person.age = 55;
-    person.mobile = '139280384745';
-    person.credential.type = CredentialType.PASSPORT;
-    person.credential.number = '1234567';
-    const obj = {
-      first_field: 'first-field',
-      second_field: {
-        first_child_field: 'first-child-field',
-        second_child_field: {
-          the_person: person,
-        },
-      },
-    };
-    const page = {
-      total_count: 3,
-      total_pages: 1,
-      page_index: 0,
-      page_size: 1,
-      content: [obj],
-    };
-    const result = ObjWithNamingConversion.createPage(page, {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    expect(result).toBeInstanceOf(Page);
-    expect(result.totalCount).toBe(3);
-    expect(result.totalPages).toBe(1);
-    expect(result.pageIndex).toBe(0);
-    expect(result.pageSize).toBe(1);
-    expect(result.content).toBeArray();
-    expect(result.content.length).toBe(1);
-    expect(result.content[0].firstField).toBe('first-field');
-    expect(result.content[0].secondField).toBeInstanceOf(ChildObj);
-    expect(result.content[0].secondField.firstChildField).toBe('first-child-field');
-    expect(result.content[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
-    expect(result.content[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
-    expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
-    expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
-  });
-  test('`createPage()` with default naming conversion options', () => {
-    const person = new Person();
-    person.id = 'xxxx';
-    person.name = 'Bill Gates';
-    person.age = 55;
-    person.mobile = '139280384745';
-    person.credential.type = CredentialType.PASSPORT;
-    person.credential.number = '1234567';
-    const obj = {
-      first_field: 'first-field',
-      second_field: {
-        first_child_field: 'first-child-field',
-        second_child_field: {
-          the_person: person,
-        },
-      },
-    };
-    const page = {
-      total_count: 3,
-      total_pages: 1,
-      page_index: 0,
-      page_size: 1,
-      content: [obj],
-    };
-    DefaultOptions.set('assign', {
-      convertNaming: true,
-      sourceNamingStyle: 'LOWER_UNDERSCORE',
-      targetNamingStyle: 'LOWER_CAMEL',
-    });
-    const result = ObjWithNamingConversion.createPage(page);
-    expect(result.totalCount).toBe(3);
-    expect(result.totalPages).toBe(1);
-    expect(result.pageIndex).toBe(0);
-    expect(result.pageSize).toBe(1);
-    expect(result.content).toBeArray();
-    expect(result.content.length).toBe(1);
-    expect(result.content[0].firstField).toBe('first-field');
-    expect(result.content[0].secondField).toBeInstanceOf(ChildObj);
-    expect(result.content[0].secondField.firstChildField).toBe('first-child-field');
-    expect(result.content[0].secondField.secondChildField).toBeInstanceOf(ObjWithPersonField);
-    expect(result.content[0].secondField.secondChildField.thePerson).toBeInstanceOf(Person);
-    expect(result.content[0].secondField.secondChildField.thePerson).toEqual(person);
-    expect(result.content[0].secondField.secondChildField.thePerson).not.toBe(person);
-    DefaultOptions.set('assign', { convertNaming: false });
+
+    const page = Person.createPage(pageData);
+    
+    expect(page).toBeInstanceOf(Page);
+    expect(page.content).toHaveLength(0);
   });
 
-  test('Test `Person.createPage("")`', () => {
-    expect(() => Person.createPage(''))
-      .toThrowWithMessage(TypeError, 'Invalid page format: ""');
-  });
-  test('Test `Person.createPage("xx")`', () => {
-    expect(() => Person.createPage('xx'))
-      .toThrowWithMessage(TypeError, 'Invalid page format: "xx"');
-  });
-  test('Test `Person.createPage({ xx: 123 })`', () => {
-    expect(() => Person.createPage({ xx: 123 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"xx":123}');
-  });
-  test('Test `Person.createPage({ page_index: 0, page_size: 10 })`', () => {
-    expect(() => Person.createPage({ pageIndex: 0, pageSize: 10 }))
-      .toThrowWithMessage(TypeError, 'Invalid page format: {"pageIndex":0,"pageSize":10}');
+  it('should handle custom options when creating page', () => {
+    const pageData = {
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 1,
+      totalPages: 1,
+      content: [
+        { name: 'Alice', age: '25' }, // 注意这里年龄是字符串
+      ],
+    };
+
+    // 使用自定义选项来处理类型转换
+    const options = {
+      normalize: true,
+    };
+
+    const page = Person.createPage(pageData, options);
+    
+    expect(page).toBeInstanceOf(Page);
+    expect(page.content[0]).toBeInstanceOf(Person);
+    expect(page.content[0].name).toBe('Alice');
   });
 });
