@@ -1,15 +1,20 @@
 # js-common-decorator
 
+<div align="center">
+
 [![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![中文文档](https://img.shields.io/badge/文档-中文版-blue.svg)](README.zh_CN.md)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Haixing-Hu/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Haixing-Hu/js-common-decorator/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
 
-[@qubit-ltd/common-decorator] is a JavaScript library of common decorators,
-provides decorators to add common methods to domain classes. The library 
-supports the most recent (currently November 2023) 
-[stage 3 proposal of JavaScript decorators].
+</div>
+
+## Overview
+
+[@qubit-ltd/common-decorator] is a JavaScript library of common decorators that provides powerful tools to enhance your domain classes. The library supports the most recent (as of November 2023) [stage 3 proposal of JavaScript decorators].
+
+With this library, you can easily add common methods to your domain classes, implement Java-like enum functionality, add validation and normalization capabilities, and much more - all using the modern decorator syntax.
 
 ## Features
 
@@ -20,6 +25,7 @@ supports the most recent (currently November 2023)
 - **Normalization Support**: `@Normalizable` decorator enables field normalization
 - **Type Safety**: `@Type` and `@ElementType` decorators for type checking
 - **Serialization Utilities**: Built-in JSON serialization/deserialization support
+- **High Test Coverage**: Comprehensive test suite ensuring reliability of all features
 
 ## Installation
 
@@ -29,6 +35,9 @@ npm install @qubit-ltd/common-decorator
 
 # Using yarn
 yarn add @qubit-ltd/common-decorator
+
+# Using pnpm
+pnpm add @qubit-ltd/common-decorator
 ```
 
 ## <span id="content">Table of Contents</span>
@@ -74,6 +83,7 @@ yarn add @qubit-ltd/common-decorator
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
   - [Bundling with vite](#vite)
+- [Recent Updates](#recent-updates)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -1151,6 +1161,20 @@ must be at least `7.24.0`.
       },
     });
     ```
+
+## <span id="recent-updates">Recent Updates</span>
+
+### Test Coverage Enhancements (December 2023)
+
+- **Enum Clone Hook Test**: Added comprehensive tests to verify the behavior of enum clone hooks, ensuring that enumerator objects are properly handled during cloning operations.
+- **Field Validation Coverage**: Enhanced test coverage for field validation, specifically targeting edge cases to ensure robust validation in all scenarios.
+- **Model Implementation Tests**: Added additional tests for various model implementation functions to achieve higher code coverage.
+
+The latest updates focus on improving test coverage and reliability, with particular attention to:
+
+- Ensuring enumerator objects maintain their singleton pattern during cloning
+- Validating empty fields with proper error handling
+- Verifying that model implementation functions work correctly in all edge cases
 
 ## <span id="contributing">Contributing</span>
 

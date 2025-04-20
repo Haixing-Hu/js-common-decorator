@@ -1,13 +1,20 @@
 # js-common-decorator
 
+<div align="center">
+
 [![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![English Document](https://img.shields.io/badge/Document-English-blue.svg)](README.md)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/Haixing-Hu/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Haixing-Hu/js-common-decorator/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
 
-[@qubit-ltd/common-decorator] 是一个 JavaScript 通用装饰器库，提供装饰器用于为领域类添加常用方法。
-该库支持 JavaScript 装饰器的最新 (截至2023年11月) [stage 3 提案]。
+</div>
+
+## 概述
+
+[@qubit-ltd/common-decorator] 是一个JavaScript通用装饰器库，为您的领域类提供强大的增强工具。该库支持最新的（截至2023年11月）JavaScript装饰器[stage 3 提案]。
+
+使用这个库，您可以轻松地为领域类添加常用方法，实现类似Java的枚举功能，添加验证和规范化功能等 - 所有这些都使用现代装饰器语法。
 
 ## 特性
 
@@ -18,6 +25,7 @@
 - **规范化支持**：`@Normalizable` 装饰器实现字段规范化
 - **类型安全**：`@Type` 和 `@ElementType` 装饰器用于类型检查
 - **序列化工具**：内置 JSON 序列化/反序列化支持
+- **高测试覆盖率**：全面的测试套件确保所有功能的可靠性
 
 ## 安装
 
@@ -27,6 +35,9 @@ npm install @qubit-ltd/common-decorator
 
 # 使用 yarn
 yarn add @qubit-ltd/common-decorator
+
+# 使用 pnpm
+pnpm add @qubit-ltd/common-decorator
 ```
 
 ## <span id="content">目录</span>
@@ -72,6 +83,7 @@ yarn add @qubit-ltd/common-decorator
 - [配置](#configuration)
     - [使用 webpack 打包](#webpack)
     - [使用 vite 打包](#vite)
+- [最新更新](#recent-updates)
 - [贡献](#contributing)
 - [许可证](#license)
 
@@ -926,6 +938,20 @@ expect(opt1.convertNaming).toBe(false);
       },
     });
     ```
+
+## <span id="recent-updates">最新更新</span>
+
+### 测试覆盖增强（2023年12月）
+
+- **枚举克隆钩子测试**：添加了全面的测试，验证枚举克隆钩子的行为，确保在克隆操作中正确处理枚举器对象。
+- **字段验证覆盖**：增强了字段验证的测试覆盖率，特别针对边缘情况，确保在所有场景下都能进行可靠的验证。
+- **模型实现测试**：为各种模型实现函数添加了额外的测试，以实现更高的代码覆盖率。
+
+最新更新主要集中在提高测试覆盖率和可靠性，特别关注：
+
+- 确保枚举器对象在克隆过程中保持单例模式
+- 验证空字段的处理与适当的错误处理
+- 验证模型实现函数在所有边缘情况下都能正常工作
 
 ## <span id="contributing">贡献</span>
 
