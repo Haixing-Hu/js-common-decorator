@@ -16,13 +16,16 @@ import { KEY_CLASS_FIELDS_METADATA } from '../metadata-keys';
  *     The metadata of the specified class.
  * @param {string} field
  *     The name of the specified field.
- * @returns {object}
+ * @returns {object|undefined}
  *     The metadata object for the field of the specified class, creating a new
- *     one if it does not exist.
+ *     one if it does not exist. Returns undefined if metadata is null or undefined.
  * @author Haixing Hu
  * @private
  */
 function getFieldMetadataObject(metadata, field) {
+  if (metadata == null) {
+    return undefined;
+  }
   metadata[KEY_CLASS_FIELDS_METADATA] ??= {};
   const fieldsMetadata = metadata[KEY_CLASS_FIELDS_METADATA];
   fieldsMetadata[field] ??= {};

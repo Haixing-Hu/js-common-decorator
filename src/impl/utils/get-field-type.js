@@ -19,7 +19,7 @@ import getFieldMetadata from './get-field-metadata';
  * will return it. Otherwise, the function will check the additional type
  * information provided by the options. If the additional type information is
  * found, the function will return it. Otherwise, the function will return
- * `null`.
+ * `undefined`.
  *
  * @param {function} Class
  *     The constructor of the class of the object.
@@ -29,8 +29,8 @@ import getFieldMetadata from './get-field-metadata';
  *     the path of the field in the property tree of the original root object.
  * @param {object} options
  *     the additional options for the assignment.
- * @return {function|null}
- *     the type of the specified field of the object, or `null` if the field
+ * @return {function|undefined}
+ *     the type of the specified field of the object, or `undefined` if the field
  *     type cannot be inferred.
  * @private
  * @author Haixing Hu
@@ -63,8 +63,8 @@ function getFieldType(Class, field, path = undefined, options = {}) {
       && (typeof defaultFieldValue.constructor === 'function')) {
     return defaultFieldValue.constructor;
   }
-  // otherwise returns null
-  return null;
+  // otherwise returns undefined
+  return undefined;
 }
 
 export default getFieldType;

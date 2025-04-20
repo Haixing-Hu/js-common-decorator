@@ -39,7 +39,7 @@ import getFieldMetadata from './get-field-metadata';
 function getFieldElementType(Class, field, path = undefined, options = {}) {
   path ??= `.${field}`;
   options ??= {};
-  // try to find the annotated element type information
+  // try to get the annotated element type from the metadata
   const metadata = classMetadataCache.get(Class);
   const annotatedElementType = getFieldMetadata(metadata, field, KEY_FIELD_ELEMENT_TYPE);
   if (annotatedElementType) {

@@ -24,6 +24,9 @@ import classMetadataCache from '../class-metadata-cache';
  * @private
  */
 function getClassMetadata(Class, key) {
+  if (typeof Class !== 'function') {
+    throw new TypeError('The first argument must be a class constructor.');
+  }
   const metadata = classMetadataCache.get(Class);
   // if (!metadata) {
   //   throw new Error(`The metadata of the class "${Class.name}" has not been cached.`);
