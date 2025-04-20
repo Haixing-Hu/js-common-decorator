@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { toJSON } from '../src';
-import DefaultOptions from '../src/default-options';
+import { DefaultOptions } from '../src';
 
 describe('toJSON', () => {
   it('should serialize a simple object', () => {

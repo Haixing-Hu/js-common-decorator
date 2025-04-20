@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import stringifyId from '../src/stringify-id';
+import { stringifyId } from '../src';
 
 describe('Test stringifyId() function', () => {
   test('should handle null input', () => {

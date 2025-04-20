@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import { toJsonString } from '../src';
 import Json from '@qubit-ltd/json';
-import toJsonString from '../src/to-json-string';
 
 // 模拟实现对象的 toJSON 方法
 const originalObjectToJSON = Object.prototype.toJSON;

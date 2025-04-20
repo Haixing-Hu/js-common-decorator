@@ -1,13 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2024.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import createArray from '../src/create-array';
-import Model from '../src/model';
+import { createArray, Model } from '../src';
 
 describe('Test createArray() function', () => {
   @Model

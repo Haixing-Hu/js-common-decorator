@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//    Copyright (c) 2022 - 2023.
+//    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
 //
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-import normalize from '../src/normalize';
-import defaultNormalizer from '../src/default-normalizer';
+import { defaultNormalizer, normalize } from '../src';
 
 // Mock the default normalizer
 jest.mock('../src/default-normalizer', () => jest.fn((value) => `normalized:${value}`));
