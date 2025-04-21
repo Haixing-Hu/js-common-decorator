@@ -2225,11 +2225,11 @@ __metadata:
     "@babel/runtime": "npm:^7.27.0"
     "@jest/core": "npm:^29.7.0"
     "@qubit-ltd/clone": "npm:^1.13.0"
-    "@qubit-ltd/common-util": "npm:^5.4.0"
-    "@qubit-ltd/common-validation-rule": "npm:^1.4.6"
+    "@qubit-ltd/common-util": "npm:^5.4.1"
+    "@qubit-ltd/common-validation-rule": "npm:^1.5.0"
     "@qubit-ltd/eslint-config": "npm:^1.3.4"
     "@qubit-ltd/jsdoc-minami": "npm:^1.5.2"
-    "@qubit-ltd/json": "npm:^1.2.0"
+    "@qubit-ltd/json": "npm:^1.2.1"
     "@qubit-ltd/naming-style": "npm:^1.3.6"
     "@qubit-ltd/rollup-builder": "npm:^1.8.9"
     "@qubit-ltd/type-detect": "npm:^2.2.0"
@@ -2264,36 +2264,37 @@ __metadata:
   peerDependencies:
     "@babel/runtime": ^7.26.0
     "@qubit-ltd/clone": ^1.13.0
-    "@qubit-ltd/common-util": ^5.4.0
-    "@qubit-ltd/common-validation-rule": ^1.4.6
-    "@qubit-ltd/json": ^1.2.0
+    "@qubit-ltd/common-util": ^5.4.1
+    "@qubit-ltd/common-validation-rule": ^1.5.0
+    "@qubit-ltd/json": ^1.2.1
     "@qubit-ltd/naming-style": ^1.3.6
     "@qubit-ltd/type-detect": ^2.2.0
     "@qubit-ltd/typeinfo": ^3.3.0
   languageName: unknown
   linkType: soft
 
-"@qubit-ltd/common-util@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "@qubit-ltd/common-util@npm:5.4.0"
+"@qubit-ltd/common-util@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "@qubit-ltd/common-util@npm:5.4.1"
   peerDependencies:
     "@babel/runtime": ^7.26.0
-    "@qubit-ltd/json": ^1.2.0
+    "@qubit-ltd/json": ^1.2.1
     "@qubit-ltd/type-detect": ^2.2.0
     "@qubit-ltd/typeinfo": ^3.3.0
-  checksum: 10c0/bec31ee8a5725e026f69d74e5e2a6c81b887f94363ea44c263ce6960c54e0fb16aad7b52d9143cea4da78a06c215bae026914f15afb6e3a503c5bb55ced1b841
+  checksum: 10c0/f60f598ea1838b34a352e298df1850b385c3de542bca6797a2acd71c648fda0beda818e327bf3c518d62835f4e855b4fe37c8db2e0fca5bc496acf829b0c504b
   languageName: node
   linkType: hard
 
-"@qubit-ltd/common-validation-rule@npm:^1.4.6":
-  version: 1.4.6
-  resolution: "@qubit-ltd/common-validation-rule@npm:1.4.6"
+"@qubit-ltd/common-validation-rule@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@qubit-ltd/common-validation-rule@npm:1.5.0"
   dependencies:
     email-validator: "npm:^2.0.4"
     node-uri: "npm:^1.1.2"
   peerDependencies:
     "@babel/runtime": ^7.26.0
-  checksum: 10c0/2307de74458e5b0bfbbc9a97defbcec81e7f2996b5889aab9423a890485a97936ad51f23b03041edc4099badab9199f355faeacf8b4ec05b9abda286b8d3e330
+    "@qubit-ltd/type-detect": ^2.2.0
+  checksum: 10c0/ea5010fd2aea7cdca695ac5fb14d2cb9115f3fd6fddec8be2a555ee50fd487617d5760a8443b3c5d8a94fe617d8f9e5a11ebbd07d3dd646bd3fd4d1b91f5cdb7
   languageName: node
   linkType: hard
 
@@ -2318,14 +2319,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@qubit-ltd/json@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@qubit-ltd/json@npm:1.2.0"
+"@qubit-ltd/json@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@qubit-ltd/json@npm:1.2.1"
   dependencies:
     json-custom-numbers: "npm:^3.1.1"
   peerDependencies:
     "@babel/runtime": ^7.26.0
-  checksum: 10c0/6887b878783ce5f8a38efaea3e797825ed0c78bf510882f40eef80a2cc2a8a8d6a4660a57b6ae32abcde2e50d5222a8fcb58664ed350aa27500dec52ccab3ff9
+  checksum: 10c0/32fa915ec95a40b03e8c144f4deafb5e1b6d195d5f16b8841c8d5af232cdf114eef1604ea18c67551e29424d11576cd5dd55c4ffc93c5217a7d417d6bb6db1b2
   languageName: node
   linkType: hard
 
