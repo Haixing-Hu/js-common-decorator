@@ -25,7 +25,7 @@ jobs:
           command: yarn lint
       - run:
           name: Test the Library
-          command: yarn test --maxWorkers=2 --runInBand
+          command: yarn test --runInBand
       - run:
           name: Generate the API Documents
           command: yarn doc
