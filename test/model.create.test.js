@@ -156,6 +156,56 @@ describe('Test the static method `create()`', () => {
         'The value of property \'.credential.type\' of the source object is not an enumerator of CredentialType: xxx',
       );
   });
+  test('`Person.create()` should preserve null values in source object', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: null,            // 设置null值
+      email: null,             // 设置null值，注意实际上email属性在目标对象Person中不存在
+      credential: {
+        type: 'PASSPORT',
+        number: null,         // 嵌套对象中的null值
+      },
+    };
+    const result = Person.create(data);
+    expect(result).toBeInstanceOf(Person);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    // 验证null值被保留而不是替换为默认值
+    expect(result.mobile).toBe(null);
+    // email属性在Person对象中不存在
+    expect(result).not.toHaveProperty('email');
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(null);
+  });
+
+  test('`Person.create()` should preserve undefined values in source object', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: undefined,      // 设置undefined值
+      credential: {
+        type: 'PASSPORT',
+        number: undefined,    // 嵌套对象中的undefined值
+      },
+    };
+    const result = Person.create(data);
+    expect(result).toBeInstanceOf(Person);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    // 验证undefined值被保留而不是替换为默认值
+    expect(result.mobile).toBe(undefined);
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(undefined);
+  });
 });
 
 describe('Test the static method `create()` with naming conversion', () => {

@@ -14,7 +14,8 @@ import isEnumClass from './is-enum-class';
  * A default normalizer for a non-static class field.
  *
  * This normalizer does the following things:
- * - If the value is `undefined` or `null`, it returns the value itself;
+ * - If the value is `undefined` or `null`, it returns the value itself without
+ *   changing it;
  * - If the value is a string, it returns the trimmed string;
  * - If the value is a collection, it returns the same type of collection whose
  *   elements are normalized by the default normalizer;

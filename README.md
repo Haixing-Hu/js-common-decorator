@@ -127,9 +127,11 @@ class.
   - `object`: the calling object itself.
 
 This function copies the fields of the object `obj` to this object, only copying 
-fields defined in this object's class. If a field in the `obj` object is 
-`undefined` or `null`, it sets the field's value to the default value. Note that 
-`obj` can have a different prototype to this object.
+fields defined in this object's class. If a field doesn't exist in the `obj` object, 
+it sets the field's value to the default value. If a field exists in the `obj` object 
+but its value is `null` or `undefined`, the function preserves the `null` or `undefined` 
+value rather than setting it to the default value. Note that `obj` can have a different 
+prototype to this object.
 
 #### <span id="model-clone">Instance method: Class.prototype.clone()</span>
 
@@ -226,6 +228,9 @@ parameter specifies the names of fields to be normalized. If `fields` is
 fields of this object. If `fields` is an array of strings, it normalizes all the
 normalizable fields whose names are specified in the array. Note that a field is 
 normalizable if and only if it is decorated by the `@Normalizable` decorator.
+
+**IMPORTANT**: If a field value is `null` or `undefined`, the normalization process will
+preserve the `null` or `undefined` value rather than replacing it with a default value.
 
 #### <span id="model-validateField">Instance method: Class.prototype.validateField(field)</span>
 
