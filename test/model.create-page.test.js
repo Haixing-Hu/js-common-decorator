@@ -124,13 +124,13 @@ describe('Test Model.createPage method', () => {
       totalCount: 2,
       totalPages: 1,
       content: [
-        { 
-          name: 'Alice', 
-          age: null        // null值
+        {
+          name: 'Alice',
+          age: null,        // null值
         },
-        { 
+        {
           name: undefined, // undefined值
-          age: 30 
+          age: 30,
         },
       ],
     };
@@ -139,12 +139,12 @@ describe('Test Model.createPage method', () => {
 
     expect(page).toBeInstanceOf(Page);
     expect(page.content).toHaveLength(2);
-    
+
     // 验证第一个对象中的null值被保留
     expect(page.content[0]).toBeInstanceOf(Person);
     expect(page.content[0].name).toBe('Alice');
     expect(page.content[0].age).toBe(null);
-    
+
     // 验证第二个对象中的undefined值被保留
     expect(page.content[1]).toBeInstanceOf(Person);
     expect(page.content[1].name).toBe(undefined);

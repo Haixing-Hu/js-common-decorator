@@ -393,9 +393,9 @@ describe('Test the prototype method `normalize()`', () => {
     obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
-    
+
     const result = obj.normalize();
-    
+
     expect(result).toBe(obj);
     // 验证null值被保留
     expect(obj.number).toBe(null);
@@ -417,9 +417,9 @@ describe('Test the prototype method `normalize()`', () => {
     obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
-    
+
     const result = obj.normalize();
-    
+
     expect(result).toBe(obj);
     // 验证undefined值被保留
     expect(obj.number).toBe(undefined);
@@ -433,23 +433,23 @@ describe('Test the prototype method `normalize()`', () => {
     const credential = new Credential();
     credential.type = CredentialType.IDENTITY_CARD;
     credential.number = null;                  // null值
-    
+
     const data = {
       number: ' 111xyz  ',
       type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: ['abc ', null, undefined],        // 数组中包含null和undefined
-      credential: credential,                  // 嵌套对象中包含null值
+      credential,                  // 嵌套对象中包含null值
     };
-    
+
     const obj = new ObjWithNormalizableField();
     obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
-    
+
     // 由于obj.array中的元素是string类型，DefaultNormalizer会对非null/undefined值进行trim和uppercase处理
     // 但现在null和undefined应该保持原样
     obj.normalize();
-    
+
     expect(obj.number).toBe('111XYZ');
     expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
     expect(obj.nonNormalizable).toBe(' 111xyz  ');
@@ -459,7 +459,7 @@ describe('Test the prototype method `normalize()`', () => {
     expect(array[0]).toBe('ABC');
     expect(array[1]).toBe(null);
     expect(array[2]).toBe(undefined);
-    
+
     // 嵌套对象中的null被保留
     expect(obj.credential).toBeInstanceOf(Credential);
     expect(obj.credential.type).toBe(CredentialType.IDENTITY_CARD);

@@ -39,12 +39,12 @@ import setClassMetadata from './impl/utils/set-class-metadata';
  *
  * - Instance method `assign(obj, options)`: Copies the properties of the object
  *   `obj` to this object, only copying properties defined in the class of this
- *   object. If a property in `obj` does not exist, it sets the property of this 
- *   object to the default value. If a property exists in `obj` but its value is 
- *   `null` or `undefined`, the function preserves the `null` or `undefined` value. 
- *   The function returns this object itself. Note that `obj` can have a different 
- *   prototype than this object. The `options` parameter is the additional options 
- *   for the assignment. Available options will be explained below. If the `options` 
+ *   object. If a property in `obj` does not exist, it sets the property of this
+ *   object to the default value. If a property exists in `obj` but its value is
+ *   `null` or `undefined`, the function preserves the `null` or `undefined` value.
+ *   The function returns this object itself. Note that `obj` can have a different
+ *   prototype than this object. The `options` parameter is the additional options
+ *   for the assignment. Available options will be explained below. If the `options`
  *   parameter is `undefined` or `null`, the default options will be used. The default
  *   options can be retrieved by calling `DefaultOptions.get('assign')`.
  * - Instance method `clear()`: Sets all the properties of this object to their
@@ -273,8 +273,8 @@ function Model(Class, context) {
      * copying properties defined in the class of this object.
      *
      * If a property in the data object doesn't exist, the function
-     * sets the property of this object to the default value. However, if a property 
-     * exists in the data object but its value is `null` or `undefined`, the function 
+     * sets the property of this object to the default value. However, if a property
+     * exists in the data object but its value is `null` or `undefined`, the function
      * will preserve that `null` or `undefined` value in this object.
      *
      * Note that the data object may have a different prototype than this object.
@@ -389,7 +389,7 @@ function Model(Class, context) {
      *
      * A field is normalizable if and only if it is decorated with the
      * `@{@link Normalizable}` decorator.
-     * 
+     *
      * If a field value is `null` or `undefined`, the normalization process will
      * preserve the `null` or `undefined` value rather than replacing it with a
      * default value.
@@ -687,9 +687,9 @@ function Model(Class, context) {
      * It copies the property values from the corresponding properties of the
      * specified data object maintaining the same prototype and class definition.
      *
-     * If a property doesn't exist in the data object, the function sets the property 
-     * of the created instance to the default value. If a property exists in the data 
-     * object but its value is `null` or `undefined`, the function preserves the `null` 
+     * If a property doesn't exist in the data object, the function sets the property
+     * of the created instance to the default value. If a property exists in the data
+     * object but its value is `null` or `undefined`, the function preserves the `null`
      * or `undefined` value.
      *
      * This method is usually used to transform a plain JSON object into the
@@ -743,9 +743,9 @@ function Model(Class, context) {
      * copied from the corresponding elements in the data object array,
      * maintaining the same prototype and class definition.
      *
-     * For each element in the array, if a property doesn't exist in the data object, 
-     * the function sets the property of the created instance to the default value. 
-     * If a property exists in the data object but its value is `null` or `undefined`, 
+     * For each element in the array, if a property doesn't exist in the data object,
+     * the function sets the property of the created instance to the default value.
+     * If a property exists in the data object but its value is `null` or `undefined`,
      * the function preserves the `null` or `undefined` value.
      *
      * This method is usually used to transform an array of plain JSON objects
@@ -799,9 +799,9 @@ function Model(Class, context) {
      *  list of domain objects obtained from a server using the GET method, and
      *  the object should conform to the `Page` class definition.
      *
-     *  For each element in the page content array, if a property doesn't exist in 
-     *  the data object, the function sets the property of the created instance to 
-     *  the default value. If a property exists in the data object but its value is 
+     *  For each element in the page content array, if a property doesn't exist in
+     *  the data object, the function sets the property of the created instance to
+     *  the default value. If a property exists in the data object but its value is
      *  `null` or `undefined`, the function preserves the `null` or `undefined` value.
      *
      * @param {object} page
