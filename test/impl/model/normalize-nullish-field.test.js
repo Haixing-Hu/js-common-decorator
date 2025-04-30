@@ -37,26 +37,28 @@ describe('normalizeNullishField', () => {
     getDefaultInstance.mockReturnValue(defaultInstance);
   });
 
-  test('should return true and set default value when field value is undefined', () => {
+  test('should return true and preserve undefined value when field value is undefined', () => {
     const obj = new TestClass();
     obj.stringField = undefined;
 
     const result = normalizeNullishField(TestClass, obj, 'stringField', undefined);
 
     expect(result).toBe(true);
-    expect(obj.stringField).toBe('default');
-    expect(getDefaultInstance).toHaveBeenCalledWith(TestClass);
+    expect(obj.stringField).toBe(undefined);
+    // 不应该调用getDefaultInstance，因为我们保留原始的undefined值
+    expect(getDefaultInstance).not.toHaveBeenCalled();
   });
 
-  test('should return true and set default value when field value is null', () => {
+  test('should return true and preserve null value when field value is null', () => {
     const obj = new TestClass();
     obj.numberField = null;
 
     const result = normalizeNullishField(TestClass, obj, 'numberField', null);
 
     expect(result).toBe(true);
-    expect(obj.numberField).toBe(42);
-    expect(getDefaultInstance).toHaveBeenCalledWith(TestClass);
+    expect(obj.numberField).toBe(null);
+    // 不应该调用getDefaultInstance，因为我们保留原始的null值
+    expect(getDefaultInstance).not.toHaveBeenCalled();
   });
 
   test('should return false and not modify field when value is a valid string', () => {

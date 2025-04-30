@@ -255,7 +255,7 @@ describe('Test the prototype method `normalize()`', () => {
   });
   test('测试 ObjWithNormalizableField.normalize(number)但number字段值是undefined', () => {
     const data = {
-      number: ' 111xyz  ',
+      number: undefined,
       type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
@@ -265,16 +265,15 @@ describe('Test the prototype method `normalize()`', () => {
     obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
-    obj.number = undefined;
-    const result = obj.normalize();
+    const result = obj.normalize('number');
     expect(result).toBe(obj);
     expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.number).toBe('');
+    expect(obj.number).toBe(undefined);
     expect(obj.nonNormalizable).toBe(' 111xyz  ');
   });
   test('测试 ObjWithNormalizableField.normalize(number)但number字段值是null', () => {
     const data = {
-      number: ' 111xyz  ',
+      number: null,
       type: 'IDENTITY_CARD',
       nonNormalizable: ' 111xyz  ',
       array: null,
@@ -284,11 +283,10 @@ describe('Test the prototype method `normalize()`', () => {
     obj.assign(data, { normalize: false });
     data.type = CredentialType.IDENTITY_CARD;
     expect(obj).toEqual(data);
-    obj.number = null;
-    const result = obj.normalize();
+    const result = obj.normalize('number');
     expect(result).toBe(obj);
     expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.number).toBe('');
+    expect(obj.number).toBe(null);
     expect(obj.nonNormalizable).toBe(' 111xyz  ');
   });
   test('@Normalizable参数不是函数', () => {
@@ -381,5 +379,90 @@ describe('Test the prototype method `normalize()`', () => {
     });
     goo.normalize();
     expect(goo.foo.id).toBe(809373128651177984n);
+  });
+
+  test('normalize应该保留null值', () => {
+    const data = {
+      number: null,              // null值
+      type: 'IDENTITY_CARD',
+      nonNormalizable: ' 111xyz  ',
+      array: null,               // null值
+      credential: null,          // null值
+    };
+    const obj = new ObjWithNormalizableField();
+    obj.assign(data, { normalize: false });
+    data.type = CredentialType.IDENTITY_CARD;
+    expect(obj).toEqual(data);
+
+    const result = obj.normalize();
+
+    expect(result).toBe(obj);
+    // 验证null值被保留
+    expect(obj.number).toBe(null);
+    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.nonNormalizable).toBe(' 111xyz  ');
+    expect(obj.array).toBe(null);
+    expect(obj.credential).toBe(null);
+  });
+
+  test('normalize应该保留undefined值', () => {
+    const data = {
+      number: undefined,          // undefined值
+      type: 'IDENTITY_CARD',
+      nonNormalizable: ' 111xyz  ',
+      array: undefined,           // undefined值
+      credential: undefined,      // undefined值
+    };
+    const obj = new ObjWithNormalizableField();
+    obj.assign(data, { normalize: false });
+    data.type = CredentialType.IDENTITY_CARD;
+    expect(obj).toEqual(data);
+
+    const result = obj.normalize();
+
+    expect(result).toBe(obj);
+    // 验证undefined值被保留
+    expect(obj.number).toBe(undefined);
+    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.nonNormalizable).toBe(' 111xyz  ');
+    expect(obj.array).toBe(undefined);
+    expect(obj.credential).toBe(undefined);
+  });
+
+  test('normalize应该在嵌套对象中保留null和undefined值', () => {
+    const credential = new Credential();
+    credential.type = CredentialType.IDENTITY_CARD;
+    credential.number = null;                  // null值
+
+    const data = {
+      number: ' 111xyz  ',
+      type: 'IDENTITY_CARD',
+      nonNormalizable: ' 111xyz  ',
+      array: ['abc ', null, undefined],        // 数组中包含null和undefined
+      credential,                  // 嵌套对象中包含null值
+    };
+
+    const obj = new ObjWithNormalizableField();
+    obj.assign(data, { normalize: false });
+    data.type = CredentialType.IDENTITY_CARD;
+
+    // 由于obj.array中的元素是string类型，DefaultNormalizer会对非null/undefined值进行trim和uppercase处理
+    // 但现在null和undefined应该保持原样
+    obj.normalize();
+
+    expect(obj.number).toBe('111XYZ');
+    expect(obj.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.nonNormalizable).toBe(' 111xyz  ');
+    // 对于数组中的null和undefined值的处理，这里我们检查一下数组的实际内容
+    const array = obj.array;
+    expect(array.length).toBe(3);
+    expect(array[0]).toBe('ABC');
+    expect(array[1]).toBe(null);
+    expect(array[2]).toBe(undefined);
+
+    // 嵌套对象中的null被保留
+    expect(obj.credential).toBeInstanceOf(Credential);
+    expect(obj.credential.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(obj.credential.number).toBe(null);
   });
 });

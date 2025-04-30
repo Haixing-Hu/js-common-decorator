@@ -44,7 +44,9 @@ export default class Credential {
         throw new TypeError('The type must be a string or an instance of `CredentialType`.');
       }
     }
-    this.number = trimUppercaseString(this.number);
+    if (this.number !== undefined && this.number !== null) {
+      this.number = trimUppercaseString(this.number);
+    }
     return this;
   }
 }

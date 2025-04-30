@@ -1,6 +1,6 @@
 {
   "name": "@qubit-ltd/common-decorator",
-  "version": "3.9.1",
+  "version": "3.10.0",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",

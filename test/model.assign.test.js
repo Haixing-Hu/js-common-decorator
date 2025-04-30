@@ -313,4 +313,55 @@ describe('Test the prototype method `assign()`', () => {
         'The value of property \'.credential.type\' of the source object is not an enumerator of CredentialType: xxx',
       );
   });
+  test('`assign()` should preserve null values in source object', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: null,            // 设置null值
+      email: 'i@i.com',        // 注意Person类中没有email属性
+      credential: {
+        type: 'PASSPORT',
+        number: null,         // 嵌套对象中的null值
+      },
+    };
+    const person = new Person();
+    const result = person.assign(data);
+    expect(result).toBe(person);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    // 验证null值被保留而不是替换为默认值
+    expect(result.mobile).toBe(null);
+    expect(result).not.toHaveProperty('email');
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(null);
+  });
+  test('`assign()` should preserve undefined values in source object', () => {
+    const data = {
+      id: 'xxxxx',
+      name: 'Bill Gates',
+      age: 55,
+      mobile: undefined,      // 设置undefined值
+      credential: {
+        type: 'PASSPORT',
+        number: undefined,    // 嵌套对象中的undefined值
+      },
+    };
+    const person = new Person();
+    const result = person.assign(data);
+    expect(result).toBe(person);
+    expect(result.id).toBe(data.id);
+    expect(result.name).toBe(data.name);
+    expect(result.age).toBe(data.age);
+    expect(result.gender).toBe('');
+    // 验证undefined值被保留而不是替换为默认值
+    expect(result.mobile).toBe(undefined);
+    // email属性在result中可能不存在，所以我们不做期望
+    expect(result.credential).toBeInstanceOf(Credential);
+    expect(result.credential.type).toBe(CredentialType.PASSPORT);
+    expect(result.credential.number).toBe(undefined);
+  });
 });

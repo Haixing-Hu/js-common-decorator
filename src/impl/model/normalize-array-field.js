@@ -59,7 +59,14 @@ function normalizeArrayField(Class, obj, field, value, options, normalizer) {
       types: options.types,
       elementTypes: options.elementTypes,
     };
-    obj[field] = value.map((v) => normalizer(v, context));
+    obj[field] = value.map((v) => {
+      // for null or undefined values, keep the original value without normalization
+      if (v === null || v === undefined) {
+        return v;
+      } else {
+        return normalizer(v, context);
+      }
+    });
     return true;
   }
   return false;

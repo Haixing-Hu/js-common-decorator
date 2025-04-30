@@ -156,9 +156,7 @@ describe('Test defaultNormalizer() function', () => {
     expect(obj.credential).toBeNull();
     expect(obj.noNormalizeField).toBeInstanceOf(NonDecoratedClass);
     expect(obj.noNormalizeField.value).toBe('  xxx ');
-    expect(obj.credentialDefaultNonNull).toBeInstanceOf(Credential);
-    expect(obj.credentialDefaultNonNull.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(obj.credentialDefaultNonNull.number).toBe('');
+    expect(obj.credentialDefaultNonNull).toBeNull();
   });
   test('Test whether defaultNormalizer takes effect on array fields', () => {
     const obj = new ObjWithArrayField();
