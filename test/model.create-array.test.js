@@ -34,23 +34,28 @@ describe('Test static method `createArray()`', () => {
     expect(result.length).toBe(0);
   });
   test('Test `Person.createArray()`', () => {
-    const array = [{
-      id: 'xxxxx',
-      name: 'Bill Gates',
-      age: 63,
-      mobile: '139280384745',
-      credential: {
-        type: 'PASSPORT',
-        number: '1234567',
+    const array = [
+      {
+        id: 'xxxxx',
+        name: 'Bill Gates',
+        age: 63,
+        gender: 'MALE',
+        credential: {
+          type: 'PASSPORT',
+          number: null,
+        },
       },
-    }, {
-      name: 'Jack Ma',
-      age: 55,
-      credential: {
-        type: '',
-        number: null,
+      {
+        id: 'yyyyy',
+        name: 'Jack Ma',
+        age: 55,
+        mobile: undefined,
+        credential: {
+          type: 'IDENTITY_CARD',
+        },
       },
-    }, null];
+      null,
+    ];
     const result = Person.createArray(array);
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(3);
@@ -58,114 +63,117 @@ describe('Test static method `createArray()`', () => {
     expect(result[0].id).toBe(array[0].id);
     expect(result[0].name).toBe(array[0].name);
     expect(result[0].age).toBe(array[0].age);
-    expect(result[0].gender).toBe('');
-    expect(result[0].mobile).toBe(array[0].mobile);
+    expect(result[0].gender).toBe(array[0].gender);
+    expect(result[0].mobile).toBe('');
     expect(result[0].credential).toBeInstanceOf(Credential);
     expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result[0].credential.number).toBe(array[0].credential.number);
+    expect(result[0].credential.number).toBeNull();
     expect(result[1]).toBeInstanceOf(Person);
-    expect(result[1].id).toBe('');
+    expect(result[1].id).toBe(array[1].id);
     expect(result[1].name).toBe(array[1].name);
     expect(result[1].age).toBe(array[1].age);
     expect(result[1].gender).toBe('');
-    expect(result[1].mobile).toBe('');
+    expect(result[1]).toHaveProperty('mobile');
+    expect(result[1].mobile).toBeUndefined();
     expect(result[1].credential).toBeInstanceOf(Credential);
     expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
     expect(result[1].credential.number).toBe('');
     expect(result[2]).toBeNull();
   });
+  test('`Person.createArray()` should not call `Credential.normalize()`', () => {
+    const array = [
+      {
+        id: 'xxxxx',
+        name: 'Bill Gates',
+        age: 63,
+        gender: 'MALE',
+        credential: {
+          type: 'PASSPORT',
+          number: '123abc ',
+        },
+      },
+      {
+        id: 'yyyyy',
+        name: 'Jack Ma',
+        age: 55,
+        mobile: undefined,
+        credential: {
+          type: 'IDENTITY_CARD',
+          number: null,
+        },
+      },
+      null,
+    ];
+    const result = Person.createArray(array, { normalize: false });
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBe(3);
+    expect(result[0]).toBeInstanceOf(Person);
+    expect(result[0].id).toBe(array[0].id);
+    expect(result[0].name).toBe(array[0].name);
+    expect(result[0].age).toBe(array[0].age);
+    expect(result[0].gender).toBe(array[0].gender);
+    expect(result[0].mobile).toBe('');
+    expect(result[0].credential).toBeInstanceOf(Credential);
+    expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
+    expect(result[0].credential.number).toBe('123abc ');
+    expect(result[1]).toBeInstanceOf(Person);
+    expect(result[1].id).toBe(array[1].id);
+    expect(result[1].name).toBe(array[1].name);
+    expect(result[1].age).toBe(array[1].age);
+    expect(result[1].gender).toBe('');
+    expect(result[1]).toHaveProperty('mobile');
+    expect(result[1].mobile).toBeUndefined();
+    expect(result[1].credential).toBeInstanceOf(Credential);
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(result[1].credential.number).toBe(null);
+    expect(result[2]).toBeNull();
+  });
   test('`Person.createArray()` should call `Credential.normalize()`', () => {
-    let result = Person.createArray(null);
-    expect(result).toBeNull();
-    result = Person.createArray(undefined);
-    expect(result).toBeNull();
-    result = Person.createArray([]);
-    expect(Array.isArray(result)).toBe(true);
-    expect(result.length).toBe(0);
-    const array = [{
-      id: 'xxxxx',
-      name: 'Bill Gates',
-      age: 63,
-      mobile: '139280384745',
-      credential: {
-        type: 'PASSPORT',
-        number: '1234567xx',
+    const array = [
+      {
+        id: 'xxxxx',
+        name: 'Bill Gates',
+        age: 63,
+        gender: 'MALE',
+        credential: {
+          type: 'PASSPORT',
+          number: '123abc ',
+        },
       },
-    }, {
-      name: 'Jack Ma',
-      age: 55,
-      credential: {
-        type: '',
-        number: null,
+      {
+        id: 'yyyyy',
+        name: 'Jack Ma',
+        age: 55,
+        mobile: undefined,
+        credential: {
+          type: 'IDENTITY_CARD',
+          number: null,
+        },
       },
-    }, null];
-    result = Person.createArray(array);
+      null,
+    ];
+    const result = Person.createArray(array, { normalize: true });
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(3);
     expect(result[0]).toBeInstanceOf(Person);
     expect(result[0].id).toBe(array[0].id);
     expect(result[0].name).toBe(array[0].name);
     expect(result[0].age).toBe(array[0].age);
-    expect(result[0].gender).toBe('');
-    expect(result[0].mobile).toBe(array[0].mobile);
+    expect(result[0].gender).toBe('MALE');
+    expect(result[0].mobile).toBe('');
     expect(result[0].credential).toBeInstanceOf(Credential);
     expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result[0].credential.number).toBe('1234567XX');
+    expect(result[0].credential.number).toBe('123ABC');
     expect(result[1]).toBeInstanceOf(Person);
-    expect(result[1].id).toBe('');
+    expect(result[1].id).toBe(array[1].id);
     expect(result[1].name).toBe(array[1].name);
     expect(result[1].age).toBe(array[1].age);
     expect(result[1].gender).toBe('');
-    expect(result[1].mobile).toBe('');
+    expect(result[1]).toHaveProperty('mobile');
+    expect(result[1].mobile).toBeUndefined();
     expect(result[1].credential).toBeInstanceOf(Credential);
     expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result[1].credential.number).toBe('');
-    expect(result[2]).toBeNull();
-
-    result = Person.createArray(array, { normalize: true });
-    expect(Array.isArray(result)).toBe(true);
-    expect(result.length).toBe(3);
-    expect(result[0]).toBeInstanceOf(Person);
-    expect(result[0].id).toBe(array[0].id);
-    expect(result[0].name).toBe(array[0].name);
-    expect(result[0].age).toBe(array[0].age);
-    expect(result[0].gender).toBe('');
-    expect(result[0].mobile).toBe(array[0].mobile);
-    expect(result[0].credential).toBeInstanceOf(Credential);
-    expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result[0].credential.number).toBe('1234567XX');
-    expect(result[1]).toBeInstanceOf(Person);
-    expect(result[1].id).toBe('');
-    expect(result[1].name).toBe(array[1].name);
-    expect(result[1].age).toBe(array[1].age);
-    expect(result[1].gender).toBe('');
-    expect(result[1].mobile).toBe('');
-    expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result[1].credential.number).toBe('');
-    expect(result[2]).toBeNull();
-
-    result = Person.createArray(array, { normalize: false });
-    expect(Array.isArray(result)).toBe(true);
-    expect(result.length).toBe(3);
-    expect(result[0]).toBeInstanceOf(Person);
-    expect(result[0].id).toBe(array[0].id);
-    expect(result[0].name).toBe(array[0].name);
-    expect(result[0].age).toBe(array[0].age);
-    expect(result[0].gender).toBe('');
-    expect(result[0].mobile).toBe(array[0].mobile);
-    expect(result[0].credential).toBeInstanceOf(Credential);
-    expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
-    expect(result[0].credential.number).toBe(array[0].credential.number);
-    expect(result[1]).toBeInstanceOf(Person);
-    expect(result[1].id).toBe('');
-    expect(result[1].name).toBe(array[1].name);
-    expect(result[1].age).toBe(array[1].age);
-    expect(result[1].gender).toBe('');
-    expect(result[1].mobile).toBe('');
-    expect(result[1].credential).toBeInstanceOf(Credential);
-    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
-    expect(result[1].credential.number).toBeNull();
+    expect(result[1].credential.number).toBe(null);
     expect(result[2]).toBeNull();
   });
   test('`Credential.createArray()` should handle the array managed by `Vue`', () => {
@@ -278,5 +286,58 @@ describe('Test static method `createArray()`', () => {
     expect(result[0].secondField.secondChildField.thePerson).toEqual(person);
     expect(result[0].secondField.secondChildField.thePerson).not.toBe(person);
     DefaultOptions.set('assign', { convertNaming: false });
+  });
+  test('`Person.createArray()` should preserve null and undefined values in source objects', () => {
+    const array = [
+      {
+        id: 'xxxxx',
+        name: 'Bill Gates',
+        age: 63,
+        mobile: null,             // null值
+        credential: {
+          type: 'PASSPORT',
+          number: null,           // 嵌套对象中的null值
+        },
+      },
+      {
+        id: 'yyyyy',
+        name: 'Jack Ma',
+        age: 55,
+        mobile: undefined,        // undefined值
+        credential: {
+          type: 'IDENTITY_CARD',
+          number: undefined,      // 嵌套对象中的undefined值
+        },
+      },
+    ];
+
+    const result = Person.createArray(array);
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBe(2);
+
+    // 验证第一个对象
+    expect(result[0]).toBeInstanceOf(Person);
+    expect(result[0].id).toBe(array[0].id);
+    expect(result[0].name).toBe(array[0].name);
+    expect(result[0].age).toBe(array[0].age);
+    expect(result[0].gender).toBe('');
+    // 验证null值被保留
+    expect(result[0].mobile).toBe(null);
+    expect(result[0].credential).toBeInstanceOf(Credential);
+    expect(result[0].credential.type).toBe(CredentialType.PASSPORT);
+    expect(result[0].credential.number).toBe(null);
+
+    // 验证第二个对象
+    expect(result[1]).toBeInstanceOf(Person);
+    expect(result[1].id).toBe(array[1].id);
+    expect(result[1].name).toBe(array[1].name);
+    expect(result[1].age).toBe(array[1].age);
+    expect(result[1].gender).toBe('');
+    // 验证undefined值被保留
+    expect(result[1].mobile).toBe(undefined);
+    expect(result[1].credential).toBeInstanceOf(Credential);
+    expect(result[1].credential.type).toBe(CredentialType.IDENTITY_CARD);
+    expect(result[1].credential.number).toBe(undefined);
   });
 });

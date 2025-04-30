@@ -112,7 +112,8 @@ pnpm add @qubit-ltd/common-decorator
     - `object`：调用该方法的对象自身。
 
 此函数将 `obj` 对象的字段复制到当前对象中，仅复制当前对象类中定义的字段。
-如果 `obj` 中的字段为 `undefined` 或 `null`，将其值设为默认值。
+如果 `obj` 中不存在某个字段，则将当前对象对应字段设为默认值。但如果 `obj` 中某个字段存在
+且值为 `null` 或 `undefined`，函数会保留这些 `null` 或 `undefined` 值，而不是设为默认值。
 注意，`obj` 可以与当前对象有不同的原型。
 
 #### <span id="model-clone">实例方法：Class.prototype.clone()</span>
@@ -188,6 +189,9 @@ pnpm add @qubit-ltd/common-decorator
 如果 `fields` 为 `undefined`、`null` 或字符串 `"*"`, 则规范化当前对象的所有可规范化字段。
 如果 `fields` 是一个字符串数组，则规范化数组中指定名称的所有可规范化字段。
 请注意，字段只有在被 `@Normalizable` 装饰器装饰时才是可规范化的。
+
+**重要提示**：如果字段值为 `null` 或 `undefined`，规范化过程将会保留这些 `null` 或 `undefined` 值，
+而不会将其替换为默认值。
 
 #### <span id="model-validateField">实例方法：Class.prototype.validateField(field)</span>
 

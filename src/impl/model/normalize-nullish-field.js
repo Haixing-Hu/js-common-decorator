@@ -21,19 +21,16 @@ import getDefaultInstance from '../utils/get-default-instance';
  * @param {any} value
  *     The value of the specified field of the specified object.
  * @returns {boolean}
- *     If the field value is nullish, this function normalizes the field of the
- *     specified object by setting its field value to the corresponding field
- *     value of the default instance of the specified class, and returns `true`;
+ *     If the field value is nullish, this function returns `true` and preserves
+ *     the nullish value (null or undefined) in the object's field;
  *     otherwise, this function does nothing and returns `false`.
  * @author Haixing Hu
  * @private
  */
 function normalizeNullishField(Class, obj, field, value) {
   if (value === undefined || value === null) {
-    // For field values that are `undefined` or `null`, the normalized value
-    // should be the default value of the field.
-    const defaultInstance = getDefaultInstance(Class);
-    obj[field] = defaultInstance[field];
+    // For field values that are `undefined` or `null`, preserve the original value
+    // instead of replacing it with the default value
     return true;
   }
   return false;
