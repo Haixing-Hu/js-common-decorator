@@ -19,9 +19,8 @@ import { KEY_CLASS_DEFAULT_INSTANCE } from '../metadata-keys';
  *     The default instance of the specified class, or a new instance will be
  *     created if it does not exist.
  * @author Haixing Hu
- * @private
  */
-export function getDefaultInstance(Class) {
+function getDefaultInstance(Class) {
   if (Class.prototype === Object.prototype) {   // Object is a special case
     return {};
   }

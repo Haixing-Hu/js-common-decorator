@@ -19,7 +19,6 @@ import { NamingStyle } from '@qubit-ltd/naming-style';
  * @return {string}
  *     The corresponding key of the source object.
  * @author Haixing Hu
- * @private
  */
 function getSourceField(targetField, options) {
   if (options?.convertNaming === true) {
