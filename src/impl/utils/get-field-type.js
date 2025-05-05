@@ -32,7 +32,6 @@ import getFieldMetadata from './get-field-metadata';
  * @return {function|undefined}
  *     the type of the specified field of the object, or `undefined` if the field
  *     type cannot be inferred.
- * @private
  * @author Haixing Hu
  */
 function getFieldType(Class, field, path = undefined, options = {}) {
