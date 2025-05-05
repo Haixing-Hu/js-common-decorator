@@ -16,6 +16,10 @@ import DefaultOptions from './default-options';
 import ElementType from './element-type';
 import Enum from './enum';
 import enumNormalizer from './enum-normalizer';
+import getDefaultInstance from './impl/utils/get-default-instance';
+import getFieldElementType from './impl/utils/get-field-element-type';
+import getFieldType from './impl/utils/get-field-type';
+import getSourceField from './impl/utils/get-source-field';
 import isEnumClass from './is-enum-class';
 import isEnumerator from './is-enumerator';
 import Label from './label';
@@ -34,29 +38,33 @@ import Type from './type';
 import Validatable from './validatable';
 
 export {
-  Page,
-  Model,
-  Type,
-  ElementType,
-  Normalizable,
-  Validatable,
-  Nullable,
-  NonEmpty,
-  Label,
-  NameField,
-  Enum,
-  isEnumClass,
-  isEnumerator,
   DefaultOptions,
+  ElementType,
+  Enum,
+  Label,
+  Model,
+  NameField,
+  NonEmpty,
+  Normalizable,
+  Nullable,
+  Page,
+  Readonly,
+  Type,
+  Validatable,
   assign,
   create,
   createArray,
   createPage,
-  normalize,
-  toJSON,
-  toJsonString,
-  stringifyId,
   defaultNormalizer,
   enumNormalizer,
-  Readonly,
+  getDefaultInstance,
+  getFieldElementType,
+  getFieldType,
+  getSourceField,
+  isEnumClass,
+  isEnumerator,
+  normalize,
+  stringifyId,
+  toJSON,
+  toJsonString,
 };

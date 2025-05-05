@@ -33,7 +33,6 @@ import getFieldMetadata from './get-field-metadata';
  * @return {function|null}
  *     the element type of the specified field of the object, or `null` if the
  *     field element type cannot be inferred.
- * @private
  * @author Haixing Hu
  */
 function getFieldElementType(Class, field, path = undefined, options = {}) {

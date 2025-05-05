@@ -6,7 +6,6 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import getDefaultInstance from '../utils/get-default-instance';
 
 /**
  * Normalizes the specified nullish field of the specified object.
