@@ -617,7 +617,13 @@ function Model(Class, context) {
      * @name Model#toJSON
      * @memberof Model
      */
-    Class.prototype.toJSON = function toJSON(key, options = undefined) {
+    Class.prototype.toJSON = function toJSON(key = '', options = {}) {
+      if (typeof key === 'object') {
+        // if the key is an object, it means that the `toJSON()` method is called
+        // directly with the only argument `options`, so the `key` is the `options`
+        options = key;
+        key = '';
+      }
       return toJsonImpl(this, key, {
         ...options,
         skipRootToJSON: true,
@@ -675,7 +681,7 @@ function Model(Class, context) {
      * @name Model#toJsonString
      * @memberof Model
      */
-    Class.prototype.toJsonString = function toJsonString(options = undefined) {
+    Class.prototype.toJsonString = function toJsonString(options = {}) {
       return toJsonStringImpl(Class, this, options);
     };
   }
