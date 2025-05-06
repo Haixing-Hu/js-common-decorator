@@ -84,7 +84,7 @@ pnpm add @qubit-ltd/common-decorator
   - [stringifyId](#stringifyId)
   - [toJSON](#util-toJSON)
   - [toJsonString](#util-toJsonString)
-  - [hasOwnClassField](#hasOwnClassField)
+  - [hasOwnProperty](#hasOwnProperty)
   - [hasOwnPrototypeFunction](#hasOwnPrototypeFunction)
   - [hasPrototypeFunction](#hasPrototypeFunction)
   - [getDefaultInstance](#getDefaultInstance)
@@ -1298,7 +1298,7 @@ toJsonString(bigData);
 // '{"id":9223372036854775807,"name":"Big Integer"}'
 ```
 
-### <span id="hasOwnClassField">hasOwnClassField(Class, field)</span>
+### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
 
 - Parameters:
   - `Class: function`: The constructor of the specified class.
@@ -1309,7 +1309,7 @@ toJsonString(bigData);
 This function tests whether the specified class has the specified field. It checks both the prototype of the class and its default instance, but only looks for properties directly owned by the class (not inherited from parent classes).
 
 ```javascript
-import { hasOwnClassField } from '@qubit-ltd/common-decorator';
+import { hasOwnProperty } from '@qubit-ltd/common-decorator';
 
 class Parent {
   constructor() {
@@ -1324,8 +1324,8 @@ class Child extends Parent {
   }
 }
 
-hasOwnClassField(Child, 'childField');  // true
-hasOwnClassField(Child, 'parentField'); // false (inherited from Parent)
+hasOwnProperty(Child, 'childField');  // true
+hasOwnProperty(Child, 'parentField'); // false (inherited from Parent)
 ```
 
 ### <span id="hasOwnPrototypeFunction">hasOwnPrototypeFunction(Class, name)</span>

@@ -84,7 +84,7 @@ pnpm add @qubit-ltd/common-decorator
     - [stringifyId](#stringifyId)
     - [toJSON](#util-toJSON)
     - [toJsonString](#util-toJsonString)
-    - [hasOwnClassField](#hasOwnClassField)
+    - [hasOwnProperty](#hasOwnProperty)
     - [hasOwnPrototypeFunction](#hasOwnPrototypeFunction)
     - [hasPrototypeFunction](#hasPrototypeFunction)
     - [getDefaultInstance](#getDefaultInstance)
@@ -1074,7 +1074,7 @@ toJsonString(bigData);
 // '{"id":9223372036854775807,"name":"Big Integer"}'
 ```
 
-### <span id="hasOwnClassField">hasOwnClassField(Class, field)</span>
+### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
 
 - 参数：
     - `Class: function`：指定类的构造函数。
@@ -1085,7 +1085,7 @@ toJsonString(bigData);
 此函数测试指定类是否拥有指定字段。它检查类的原型和默认实例，但只查找类直接拥有的属性（不包括从父类继承的属性）。
 
 ```javascript
-import { hasOwnClassField } from '@qubit-ltd/common-decorator';
+import { hasOwnProperty } from '@qubit-ltd/common-decorator';
 
 class Parent {
   constructor() {
@@ -1100,8 +1100,8 @@ class Child extends Parent {
   }
 }
 
-hasOwnClassField(Child, 'childField');  // true
-hasOwnClassField(Child, 'parentField'); // false (从Parent继承)
+hasOwnProperty(Child, 'childField');  // true
+hasOwnProperty(Child, 'parentField'); // false (从Parent继承)
 ```
 
 ### <span id="hasOwnPrototypeFunction">hasOwnPrototypeFunction(Class, name)</span>
