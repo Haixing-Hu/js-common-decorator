@@ -20,7 +20,7 @@ import getDefaultInstance from './impl/utils/get-default-instance';
 import getFieldElementType from './impl/utils/get-field-element-type';
 import getFieldType from './impl/utils/get-field-type';
 import getSourceField from './impl/utils/get-source-field';
-import hasOwnClassField from './impl/utils/has-own-class-field';
+import hasOwnProperty from './impl/utils/has-own-property';
 import hasOwnPrototypeFunction from './impl/utils/has-own-prototype-function';
 import hasPrototypeFunction from './impl/utils/has-prototype-function';
 import isEnumClass from './is-enum-class';
@@ -64,7 +64,7 @@ export {
   getFieldElementType,
   getFieldType,
   getSourceField,
-  hasOwnClassField,
+  hasOwnProperty,
   hasOwnPrototypeFunction,
   hasPrototypeFunction,
   isEnumClass,

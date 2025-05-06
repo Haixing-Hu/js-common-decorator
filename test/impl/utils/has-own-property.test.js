@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import hasOwnClassField from '../../../src/impl/utils/has-own-class-field';
+import hasOwnProperty from '../../../src/impl/utils/has-own-property';
 
 // 模拟class-metadata-cache的行为
 const mockMetadataCache = new Map();
@@ -66,26 +66,26 @@ describe('hasOwnClassField', () => {
   test('should return true when the field exists in class prototype', () => {
     // Define a field directly on prototype
     ParentClass.prototype.prototypeField = 'prototype';
-    expect(hasOwnClassField(ParentClass, 'prototypeField')).toBe(true);
+    expect(hasOwnProperty(ParentClass, 'prototypeField')).toBe(true);
   });
 
   test('should return true when the field exists in default instance', () => {
-    expect(hasOwnClassField(ModelClass, 'modelField')).toBe(true);
+    expect(hasOwnProperty(ModelClass, 'modelField')).toBe(true);
   });
 
   test('should return false when the field does not exist in class prototype or default instance', () => {
-    expect(hasOwnClassField(ChildClass, 'nonExistingField')).toBe(false);
+    expect(hasOwnProperty(ChildClass, 'nonExistingField')).toBe(false);
   });
 
   test('should return false for parent class fields', () => {
     // Testing inheritance - should only check own fields
-    expect(hasOwnClassField(ChildClass, 'parentField')).toBe(false);
+    expect(hasOwnProperty(ChildClass, 'parentField')).toBe(false);
   });
 
   test('should return false for invalid inputs', () => {
-    expect(hasOwnClassField(null, 'field')).toBe(false);
-    expect(hasOwnClassField(undefined, 'field')).toBe(false);
-    expect(hasOwnClassField({}, 'field')).toBe(false);
+    expect(hasOwnProperty(null, 'field')).toBe(false);
+    expect(hasOwnProperty(undefined, 'field')).toBe(false);
+    expect(hasOwnProperty({}, 'field')).toBe(false);
   });
 
   test('should return true for instance fields defined in class body', () => {
@@ -93,6 +93,6 @@ describe('hasOwnClassField', () => {
     class ModernClass {
       instanceField = 'instance';
     }
-    expect(hasOwnClassField(ModernClass, 'instanceField')).toBe(true);
+    expect(hasOwnProperty(ModernClass, 'instanceField')).toBe(true);
   });
 });

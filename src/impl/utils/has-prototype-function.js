@@ -6,6 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Determines whether the specified prototype function exists anywhere in the
  * prototype chain of a specified class.
