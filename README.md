@@ -1301,12 +1301,12 @@ toJsonString(bigData);
 ### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
 
 - Parameters:
-  - `Class: function`: The constructor of the specified class.
-  - `field: string`: The name of the specified field.
+  - `Class: function`: The constructor of the class to check.
+  - `field: string`: The name of the property to check for.
 - Returns:
-  - `boolean`: Whether the specified class has the specified field defined in its prototype or its default instance.
+  - `boolean`: Returns true if and only if the property is directly defined by the class (either on its prototype or default instance), not inherited from parent classes.
 
-This function tests whether the specified class has the specified field. It checks both the prototype of the class and its default instance, but only looks for properties directly owned by the class (not inherited from parent classes).
+This function determines whether a class directly owns a specific property. Unlike JavaScript's built-in `Object.prototype.hasOwnProperty`, this function accepts a class constructor rather than an object instance, checks both the prototype and default instance, and only reports properties owned directly by the class, not those inherited from parent classes.
 
 ```javascript
 import { hasOwnProperty } from '@qubit-ltd/common-decorator';

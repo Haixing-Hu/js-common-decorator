@@ -1077,12 +1077,12 @@ toJsonString(bigData);
 ### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
 
 - 参数：
-    - `Class: function`：指定类的构造函数。
-    - `field: string`：指定字段的名称。
+    - `Class: function`：要检查的类的构造函数。
+    - `field: string`：要检查的属性名称。
 - 返回值：
-    - `boolean`：指定类是否在其原型或默认实例中定义了指定字段。
+    - `boolean`：仅当该属性由类直接定义（无论是在其原型上还是在默认实例上）而非从父类继承时，返回true。
 
-此函数测试指定类是否拥有指定字段。它检查类的原型和默认实例，但只查找类直接拥有的属性（不包括从父类继承的属性）。
+此函数确定一个类是否直接拥有特定属性。与JavaScript内置的`Object.prototype.hasOwnProperty`不同，此函数接受类构造函数而非对象实例，同时检查原型和默认实例，并且只报告由类直接拥有的属性，而非那些从父类继承的属性。
 
 ```javascript
 import { hasOwnProperty } from '@qubit-ltd/common-decorator';
