@@ -21,7 +21,6 @@
  *     function. Note that the function may be inherited from its parent class.
  * @see hasOwnPrototypeFunction
  * @author Haixing Hu
- * @private
  */
 function hasPrototypeFunction(Class, name) {
   return (Class !== null)

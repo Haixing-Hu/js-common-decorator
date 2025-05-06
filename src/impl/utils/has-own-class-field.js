@@ -19,7 +19,6 @@ import getDefaultInstance from './get-default-instance';
  *     Whether the specified class has the specified field defined in its
  *     prototype or its default instance.
  * @author Haixing Hu
- * @private
  */
 function hasOwnClassField(Class, field) {
   if (!Class || !Class.prototype) {
