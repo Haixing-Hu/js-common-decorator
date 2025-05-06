@@ -84,6 +84,13 @@ pnpm add @qubit-ltd/common-decorator
   - [stringifyId](#stringifyId)
   - [toJSON](#util-toJSON)
   - [toJsonString](#util-toJsonString)
+  - [hasOwnClassField](#hasOwnClassField)
+  - [hasOwnPrototypeFunction](#hasOwnPrototypeFunction)
+  - [hasPrototypeFunction](#hasPrototypeFunction)
+  - [getDefaultInstance](#getDefaultInstance)
+  - [getFieldType](#getFieldType)
+  - [getFieldElementType](#getFieldElementType)
+  - [getSourceField](#getSourceField)
 - [Recent Updates](#recent-updates)
 - [Contributing](#contributing)
 - [License](#license)
@@ -1289,6 +1296,205 @@ const bigData = {
 };
 toJsonString(bigData);
 // '{"id":9223372036854775807,"name":"Big Integer"}'
+```
+
+### <span id="hasOwnClassField">hasOwnClassField(Class, field)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the specified class.
+  - `field: string`: The name of the specified field.
+- Returns:
+  - `boolean`: Whether the specified class has the specified field defined in its prototype or its default instance.
+
+This function tests whether the specified class has the specified field. It checks both the prototype of the class and its default instance, but only looks for properties directly owned by the class (not inherited from parent classes).
+
+```javascript
+import { hasOwnClassField } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  constructor() {
+    this.parentField = 'parent';
+  }
+}
+
+class Child extends Parent {
+  constructor() {
+    super();
+    this.childField = 'child';
+  }
+}
+
+hasOwnClassField(Child, 'childField');  // true
+hasOwnClassField(Child, 'parentField'); // false (inherited from Parent)
+```
+
+### <span id="hasOwnPrototypeFunction">hasOwnPrototypeFunction(Class, name)</span>
+
+- Parameters:
+  - `Class: function`: Constructor for the specified class.
+  - `name: string`: The name of the specified prototype function.
+- Returns:
+  - `boolean`: Returns true if and only if the specified function is directly defined on the prototype of the class itself (not inherited from parent classes).
+
+This function determines whether the specified prototype function is directly defined in the prototype of a specified class (not inherited from parent classes). It uses `Object.prototype.hasOwnProperty` to ensure only "own properties" of the prototype are considered.
+
+```javascript
+import { hasOwnPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasOwnPrototypeFunction(Child, 'childMethod');  // true
+hasOwnPrototypeFunction(Child, 'parentMethod'); // false (inherited from Parent)
+```
+
+### <span id="hasPrototypeFunction">hasPrototypeFunction(Class, name)</span>
+
+- Parameters:
+  - `Class: function`: Constructor for the specified class.
+  - `name: string`: The name of the specified prototype function.
+- Returns:
+  - `boolean`: Returns true if the specified function exists anywhere in the prototype chain of the class, whether defined by the class itself or inherited from a parent class.
+
+This function determines whether the specified prototype function exists anywhere in the prototype chain of a specified class. It checks the entire prototype chain, including methods inherited from parent classes, using `Reflect.has()`.
+
+```javascript
+import { hasPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasPrototypeFunction(Child, 'childMethod');  // true
+hasPrototypeFunction(Child, 'parentMethod'); // true (inherited from Parent)
+```
+
+### <span id="getDefaultInstance">getDefaultInstance(Class)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the specified class.
+- Returns:
+  - `object`: The default instance of the specified class, or a new instance will be created if it does not exist.
+
+This function gets the default instance of the specified class, or creates a new instance if it does not exist. It's used internally by many of the library's functions to get default values.
+
+```javascript
+import { getDefaultInstance } from '@qubit-ltd/common-decorator';
+
+class User {
+  constructor() {
+    this.name = '';
+    this.age = 0;
+  }
+}
+
+const defaultUser = getDefaultInstance(User);
+console.log(defaultUser.name); // ''
+console.log(defaultUser.age);  // 0
+```
+
+### <span id="getFieldType">getFieldType(Class, field, path, options)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the class of the object.
+  - `field: string`: The name of the field.
+  - `path: string` (optional): The path of the field in the property tree of the original root object.
+  - `options: object` (optional): Additional options for type resolution.
+- Returns:
+  - `function|undefined`: The type of the specified field of the object, or `undefined` if the field type cannot be inferred.
+
+This function gets the type of the specified field of an object. It first checks the annotated type information, then the additional type information in options, and finally tries to infer from the default field value.
+
+```javascript
+import { getFieldType } from '@qubit-ltd/common-decorator';
+
+class Address {
+  constructor() {
+    this.street = '';
+    this.city = '';
+  }
+}
+
+class User {
+  constructor() {
+    this.name = '';
+    this.address = new Address();
+  }
+}
+
+const addressType = getFieldType(User, 'address');
+console.log(addressType === Address); // true
+```
+
+### <span id="getFieldElementType">getFieldElementType(Class, field, path, options)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the class of the object.
+  - `field: string`: The name of the field.
+  - `path: string` (optional): The path of the field in the property tree of the original root object.
+  - `options: object` (optional): Additional options for type resolution.
+- Returns:
+  - `function|null`: The element type of the specified field of the object, or `null` if the field element type cannot be inferred.
+
+This function gets the element type of a field of an object, particularly useful for collections (arrays, sets, maps). It checks annotated element type information, additional type information in options, and tries to infer from default field values.
+
+```javascript
+import { getFieldElementType, ElementType } from '@qubit-ltd/common-decorator';
+
+class Item {
+  constructor() {
+    this.id = 0;
+    this.name = '';
+  }
+}
+
+class Shop {
+  constructor() {
+    this.items = [];
+  }
+}
+
+// Using decorator to specify element type
+class DecoratedShop {
+  constructor() {
+    this.items = [];
+  }
+}
+ElementType(Item)(DecoratedShop, 'items');
+
+console.log(getFieldElementType(DecoratedShop, 'items') === Item); // true
+```
+
+### <span id="getSourceField">getSourceField(targetField, options)</span>
+
+- Parameters:
+  - `targetField: string`: The key of the target object.
+  - `options: object`: The options for naming style conversion.
+- Returns:
+  - `string`: The corresponding key of the source object.
+
+This function gets the name of the field of the source object from the corresponding field of the target object, supporting naming style conversion between different conventions (camelCase, snake_case, etc.).
+
+```javascript
+import { getSourceField } from '@qubit-ltd/common-decorator';
+
+const options = {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_UNDERSCORE',
+  targetNamingStyle: 'LOWER_CAMEL',
+};
+
+const sourceField = getSourceField('firstName', options);
+console.log(sourceField); // 'first_name'
 ```
 
 ## <span id="recent-updates">Recent Updates</span>
