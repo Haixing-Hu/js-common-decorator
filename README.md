@@ -21,6 +21,7 @@ With this library, you can easily add common methods to your domain classes, imp
 - **Normalization Support**: `@Normalizable` decorator enables field normalization
 - **Type Safety**: `@Type` and `@ElementType` decorators for type checking
 - **Serialization Utilities**: Built-in JSON serialization/deserialization support
+- **Utility Functions**: Standalone helper functions for ID conversion, JSON serialization, and more
 - **High Test Coverage**: Comprehensive test suite ensuring reliability of all features
 
 ## Installation
@@ -79,6 +80,10 @@ pnpm add @qubit-ltd/common-decorator
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
   - [Bundling with vite](#vite)
+- [Utility Functions](#utility-functions)
+  - [stringifyId](#stringifyId)
+  - [toJSON](#util-toJSON)
+  - [toJsonString](#util-toJsonString)
 - [Recent Updates](#recent-updates)
 - [Contributing](#contributing)
 - [License](#license)
@@ -1162,6 +1167,129 @@ must be at least `7.24.0`.
       },
     });
     ```
+
+## <span id="utility-functions">Utility Functions</span>
+
+The library provides several standalone utility functions that can be used without decorating classes.
+
+### <span id="stringifyId">stringifyId(id)</span>
+
+- Parameters:
+  - `id: string|number|bigint`: The ID to be converted to a string.
+- Returns:
+  - `string`: The string representation of the ID, or an empty string if the ID is `null` or `undefined`.
+
+This function converts an ID to a string representation. It handles different types of IDs:
+- If the ID is `null` or `undefined`, it returns an empty string.
+- If the ID is already a string, it returns the string as is.
+- If the ID is a number or bigint, it converts it to a string.
+- If the ID is any other type of object, it serializes it to a JSON string.
+
+```javascript
+import { stringifyId } from '@qubit-ltd/common-decorator';
+
+stringifyId(123);          // "123"
+stringifyId("abc");        // "abc"
+stringifyId(123456789012345678901n);  // "123456789012345678901"
+stringifyId(null);         // ""
+stringifyId(undefined);    // ""
+stringifyId({ id: 123 });  // '{"id":123}'
+```
+
+### <span id="util-toJSON">toJSON(value, options)</span>
+
+- Parameters:
+  - `value: any`: The value to be converted to a JSON-serializable object.
+  - `options: null|undefined|object`: Additional options for serialization.
+- Returns:
+  - `object`: A plain JavaScript object ready to be serialized by `JSON.stringify()`.
+
+This function converts a value to an object that can be serialized by `JSON.stringify()`. If the value has a `toJSON()` method, it will use that method to determine what data to serialize.
+
+Available options include:
+- `normalize: boolean`: Whether to normalize the object before serializing (default: `true`).
+- `removeEmptyFields: boolean`: Whether to remove empty fields from the object (default: `false`).
+- `convertNaming: boolean`: Whether to convert property names to a different naming style (default: `false`).
+- `sourceNamingStyle: string`: The naming style of source object (default: `'LOWER_CAMEL'`).
+- `targetNamingStyle: string`: The naming style for the resulting object (default: `'LOWER_UNDERSCORE'`).
+- `space: string|number`: Whitespace for formatting (default: `null`).
+
+```javascript
+import { toJSON } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+  toJSON() {
+    return {
+      fullName: `${this.firstName} ${this.lastName}`,
+      age: this.age,
+    };
+  },
+};
+
+// Using the object's toJSON method
+const result = toJSON(user);
+// { fullName: 'John Doe', age: 30 }
+
+// Converting naming style
+const resultWithNaming = toJSON(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+});
+// { full_name: 'John Doe', age: 30 }
+```
+
+### <span id="util-toJsonString">toJsonString(obj, options)</span>
+
+- Parameters:
+  - `obj: object`: The object to be serialized into a JSON string.
+  - `options: null|undefined|object`: Additional options for serialization.
+- Returns:
+  - `string`: A JSON string representation of the object.
+
+This function serializes an object to a JSON string with additional options. It supports native `bigint` values and other customization options.
+
+Available options are the same as for `toJSON()`.
+
+```javascript
+import { toJsonString } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+};
+
+// Basic serialization
+const json = toJsonString(user);
+// '{"firstName":"John","lastName":"Doe","age":30}'
+
+// Pretty-printed JSON with naming style conversion
+const prettyJson = toJsonString(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+  space: 2,
+});
+/*
+{
+  "first_name": "John",
+  "last_name": "Doe", 
+  "age": 30
+}
+*/
+
+// Handling bigint values
+const bigData = {
+  id: 9223372036854775807n,
+  name: 'Big Integer'
+};
+toJsonString(bigData);
+// '{"id":9223372036854775807,"name":"Big Integer"}'
+```
 
 ## <span id="recent-updates">Recent Updates</span>
 

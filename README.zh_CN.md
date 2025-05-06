@@ -21,6 +21,7 @@
 - **规范化支持**：`@Normalizable` 装饰器实现字段规范化
 - **类型安全**：`@Type` 和 `@ElementType` 装饰器用于类型检查
 - **序列化工具**：内置 JSON 序列化/反序列化支持
+- **工具函数**：独立的辅助函数，用于ID转换、JSON序列化等功能
 - **高测试覆盖率**：全面的测试套件确保所有功能的可靠性
 
 ## 安装
@@ -79,6 +80,10 @@ pnpm add @qubit-ltd/common-decorator
 - [配置](#configuration)
     - [使用 webpack 打包](#webpack)
     - [使用 vite 打包](#vite)
+- [工具函数](#utility-functions)
+    - [stringifyId](#stringifyId)
+    - [toJSON](#util-toJSON)
+    - [toJsonString](#util-toJsonString)
 - [最新更新](#recent-updates)
 - [贡献](#contributing)
 - [许可证](#license)
@@ -938,6 +943,129 @@ expect(opt1.convertNaming).toBe(false);
       },
     });
     ```
+
+## <span id="utility-functions">工具函数</span>
+
+本库提供了几个独立的工具函数，可以在不装饰类的情况下使用。
+
+### <span id="stringifyId">stringifyId(id)</span>
+
+- 参数：
+    - `id: string|number|bigint`：要转换为字符串的ID。
+- 返回值：
+    - `string`：ID的字符串表示形式，如果ID为`null`或`undefined`，则返回空字符串。
+
+此函数将ID转换为字符串表示形式。它处理不同类型的ID：
+- 如果ID为`null`或`undefined`，则返回空字符串。
+- 如果ID已经是字符串，则按原样返回该字符串。
+- 如果ID是数字或bigint，则将其转换为字符串。
+- 如果ID是任何其他类型的对象，则将其序列化为JSON字符串。
+
+```javascript
+import { stringifyId } from '@qubit-ltd/common-decorator';
+
+stringifyId(123);          // "123"
+stringifyId("abc");        // "abc"
+stringifyId(123456789012345678901n);  // "123456789012345678901"
+stringifyId(null);         // ""
+stringifyId(undefined);    // ""
+stringifyId({ id: 123 });  // '{"id":123}'
+```
+
+### <span id="util-toJSON">toJSON(value, options)</span>
+
+- 参数：
+    - `value: any`：要转换为可JSON序列化对象的值。
+    - `options: null|undefined|object`：序列化的附加选项。
+- 返回值：
+    - `object`：可以被`JSON.stringify()`序列化的普通JavaScript对象。
+
+此函数将值转换为可以被`JSON.stringify()`序列化的对象。如果该值具有`toJSON()`方法，则将使用该方法来确定要序列化的数据。
+
+可用选项包括：
+- `normalize: boolean`：是否在序列化前规范化对象（默认值：`true`）。
+- `removeEmptyFields: boolean`：是否从对象中删除空字段（默认值：`false`）。
+- `convertNaming: boolean`：是否将属性名转换为不同的命名风格（默认值：`false`）。
+- `sourceNamingStyle: string`：源对象的命名风格（默认值：`'LOWER_CAMEL'`）。
+- `targetNamingStyle: string`：结果对象的命名风格（默认值：`'LOWER_UNDERSCORE'`）。
+- `space: string|number`：用于格式化的空白字符（默认值：`null`）。
+
+```javascript
+import { toJSON } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+  toJSON() {
+    return {
+      fullName: `${this.firstName} ${this.lastName}`,
+      age: this.age,
+    };
+  },
+};
+
+// 使用对象的toJSON方法
+const result = toJSON(user);
+// { fullName: 'John Doe', age: 30 }
+
+// 转换命名风格
+const resultWithNaming = toJSON(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+});
+// { full_name: 'John Doe', age: 30 }
+```
+
+### <span id="util-toJsonString">toJsonString(obj, options)</span>
+
+- 参数：
+    - `obj: object`：要序列化为JSON字符串的对象。
+    - `options: null|undefined|object`：序列化的附加选项。
+- 返回值：
+    - `string`：对象的JSON字符串表示形式。
+
+此函数将对象序列化为具有附加选项的JSON字符串。它支持原生`bigint`值和其他自定义选项。
+
+可用选项与`toJSON()`相同。
+
+```javascript
+import { toJsonString } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+};
+
+// 基本序列化
+const json = toJsonString(user);
+// '{"firstName":"John","lastName":"Doe","age":30}'
+
+// 带有命名风格转换的美化JSON
+const prettyJson = toJsonString(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+  space: 2,
+});
+/*
+{
+  "first_name": "John",
+  "last_name": "Doe", 
+  "age": 30
+}
+*/
+
+// 处理bigint值
+const bigData = {
+  id: 9223372036854775807n,
+  name: 'Big Integer'
+};
+toJsonString(bigData);
+// '{"id":9223372036854775807,"name":"Big Integer"}'
+```
 
 ## <span id="recent-updates">最新更新</span>
 

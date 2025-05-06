@@ -21,6 +21,7 @@ import getFieldElementType from './impl/utils/get-field-element-type';
 import getFieldType from './impl/utils/get-field-type';
 import getSourceField from './impl/utils/get-source-field';
 import hasOwnClassField from './impl/utils/has-own-class-field';
+import hasOwnPrototypeFunction from './impl/utils/has-own-prototype-function';
 import hasPrototypeFunction from './impl/utils/has-prototype-function';
 import isEnumClass from './is-enum-class';
 import isEnumerator from './is-enumerator';
@@ -64,6 +65,7 @@ export {
   getFieldType,
   getSourceField,
   hasOwnClassField,
+  hasOwnPrototypeFunction,
   hasPrototypeFunction,
   isEnumClass,
   isEnumerator,

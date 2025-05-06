@@ -7,19 +7,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 /**
- * Determine whether the prototype of a specified class has the specified
- * prototype function.
+ * Determines whether the specified prototype function exists anywhere in the
+ * prototype chain of a specified class.
  *
- * Note that the function may be inherited from its parent class.
+ * This function checks the entire prototype chain, including methods inherited
+ * from parent classes. It uses `Reflect.has()` which searches through the complete
+ * prototype chain, unlike `Object.prototype.hasOwnProperty` which only checks
+ * direct properties.
  *
  * @param {function} Class
  *     Constructor for the specified class.
  * @param {string} name
  *     The name of the specified prototype function.
  * @returns {Boolean}
- *     Whether the prototype of the specified class has the specified prototype
- *     function. Note that the function may be inherited from its parent class.
+ *     Returns true if the specified function exists anywhere in the prototype chain
+ *     of the class, whether defined by the class itself or inherited from a parent class.
  * @see hasOwnPrototypeFunction
+ *     Checks only methods defined directly on the class.
  * @author Haixing Hu
  */
 function hasPrototypeFunction(Class, name) {

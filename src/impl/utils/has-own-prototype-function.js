@@ -6,18 +6,24 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
- * Determines whether the specified prototype function is defined in the
- * prototype of a specified class.
+ * Determines whether the specified prototype function is directly defined in the
+ * prototype of a specified class (not inherited from parent classes).
+ *
+ * This function checks ONLY the methods defined directly on the class's prototype,
+ * and ignores methods inherited from parent classes. It uses `Object.prototype.hasOwnProperty`
+ * to ensure only "own properties" of the prototype are considered.
  *
  * @param {function} Class
  *     Constructor for the specified class.
  * @param {string} name
  *     The name of the specified prototype function.
  * @returns {Boolean}
- *     Whether the specified prototype function is defined in the prototype of
- *     the specified class.
+ *     Returns true if and only if the specified function is directly defined on
+ *     the prototype of the class itself (not inherited from parent classes).
  * @see hasPrototypeFunction
+ *     Checks for methods anywhere in the prototype chain.
  * @author Haixing Hu
  * @private
  */
