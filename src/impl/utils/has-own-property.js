@@ -10,11 +10,11 @@ import getDefaultInstance from './get-default-instance';
 
 /**
  * Determines whether a class directly owns a specific property (not inherited from parent classes).
- * 
+ *
  * This function checks if the specified property is directly defined on either:
  * 1. The prototype of the class itself, or
  * 2. The default instance of the class
- * 
+ *
  * Unlike JavaScript's built-in Object.prototype.hasOwnProperty, this function:
  * - Accepts a class constructor rather than an object instance
  * - Checks both the prototype and default instance
