@@ -15,7 +15,7 @@ import getDefaultInstance from './get-default-instance';
  * 1. The prototype of the class itself, or
  * 2. The default instance of the class
  *
- * Unlike JavaScript's built-in Object.prototype.hasOwnProperty, this function:
+ * Unlike JavaScript's built-in `Object.prototype.hasOwnProperty`, this function:
  * - Accepts a class constructor rather than an object instance
  * - Checks both the prototype and default instance
  * - Only reports properties owned directly by the class (not inherited properties)

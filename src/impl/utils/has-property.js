@@ -25,7 +25,7 @@ import getDefaultInstance from './get-default-instance';
  * @param {string} field
  *     The name of the property to check for.
  * @returns {boolean}
- *     Returns true if the property is defined by the class or any of its parent 
+ *     Returns true if the property is defined by the class or any of its parent
  *     classes (either on its prototype chain or default instance).
  * @see hasOwnProperty
  *     For checking only direct properties not inherited from parent classes.

@@ -6,34 +6,15 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import hasProperty from '../../../src/impl/utils/has-property';
+import { hasProperty } from '../../../src';
 
 // 模拟class-metadata-cache的行为
 const mockMetadataCache = new Map();
 
-// 模拟获取默认实例的方法
-jest.mock('../../../src/impl/utils/get-default-instance', () => ({
-  __esModule: true,
-  default: jest.fn((Class) => {
-    // 如果我们有特殊的模拟，就返回它
-    if (mockMetadataCache.has(Class)) {
-      return mockMetadataCache.get(Class);
-    }
-    // 对于继承类，我们需要处理特殊情况
-    if (Class.name === 'ChildClass') {
-      // 创建一个只有childField的实例，不包含parentField
-      const instance = new Class();
-      return instance;
-    }
-    // 否则返回普通的实例
-    return new Class();
-  }),
-}));
-
 describe('hasProperty', () => {
   class ParentClass {
     parentField = 'parent';
-    
+
     parentMethod() {
       return 'parent method';
     }
@@ -41,7 +22,7 @@ describe('hasProperty', () => {
 
   class ChildClass extends ParentClass {
     childField = 'child';
-    
+
     childMethod() {
       return 'child method';
     }
@@ -77,7 +58,7 @@ describe('hasProperty', () => {
     // Testing inheritance - should check parent fields too
     expect(hasProperty(ChildClass, 'parentField')).toBe(true);
   });
-  
+
   test('should return true for inherited methods from parent class', () => {
     expect(hasProperty(ChildClass, 'parentMethod')).toBe(true);
   });
@@ -99,16 +80,17 @@ describe('hasProperty', () => {
     }
     expect(hasProperty(ModernClass, 'instanceField')).toBe(true);
   });
-  
+
   test('should return true for static fields and methods', () => {
     class StaticClass {
       static staticField = 'static';
+
       static staticMethod() { return 'static method'; }
     }
-    
+
     // Note: hasProperty checks prototype and instance, not the class itself
     // Static members are on the class constructor, not prototype or instance
     expect(hasProperty(StaticClass, 'staticField')).toBe(false);
     expect(hasProperty(StaticClass, 'staticMethod')).toBe(false);
   });
-}); 
+});
