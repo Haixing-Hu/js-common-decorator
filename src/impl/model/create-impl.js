@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////////
-import hasPrototypeFunction from '../utils/has-prototype-function';
 //
 //    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.
@@ -7,6 +6,7 @@ import hasPrototypeFunction from '../utils/has-prototype-function';
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
+import hasPrototypeFunction from '../utils/has-prototype-function';
 import assignImpl from './assign-impl';
 
 /**

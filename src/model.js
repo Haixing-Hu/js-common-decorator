@@ -25,7 +25,7 @@ import toJsonImpl from './impl/model/to-json-impl';
 import toJsonStringImpl from './impl/model/to-json-string-impl';
 import validateFieldImpl from './impl/model/validate-field-impl';
 import validateImpl from './impl/model/validate-impl';
-import hasOwnClassField from './impl/utils/has-own-class-field';
+import hasOwnProperty from './impl/utils/has-own-property';
 import hasOwnPrototypeFunction from './impl/utils/has-own-prototype-function';
 import hasPrototypeFunction from './impl/utils/has-prototype-function';
 import setClassMetadata from './impl/utils/set-class-metadata';
@@ -527,7 +527,7 @@ function Model(Class, context) {
     };
   }
   // Add the instance method `generateId()` to the class containing the `id` field
-  if (hasOwnClassField(Class, 'id') && !hasPrototypeFunction(Class, 'generateId')) {
+  if (hasOwnProperty(Class, 'id') && !hasPrototypeFunction(Class, 'generateId')) {
     // If its own instance has an `id` field, and there is no `generateId()`
     // method on itself or its parent class prototype
     setClassMetadata(Class, KEY_CLASS_NEXT_ID, 0);

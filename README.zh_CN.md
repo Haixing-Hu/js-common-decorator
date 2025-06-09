@@ -21,6 +21,7 @@
 - **规范化支持**：`@Normalizable` 装饰器实现字段规范化
 - **类型安全**：`@Type` 和 `@ElementType` 装饰器用于类型检查
 - **序列化工具**：内置 JSON 序列化/反序列化支持
+- **工具函数**：独立的辅助函数，用于ID转换、JSON序列化等功能
 - **高测试覆盖率**：全面的测试套件确保所有功能的可靠性
 
 ## 安装
@@ -79,6 +80,17 @@ pnpm add @qubit-ltd/common-decorator
 - [配置](#configuration)
     - [使用 webpack 打包](#webpack)
     - [使用 vite 打包](#vite)
+- [工具函数](#utility-functions)
+    - [stringifyId](#stringifyId)
+    - [toJSON](#util-toJSON)
+    - [toJsonString](#util-toJsonString)
+    - [hasOwnProperty](#hasOwnProperty)
+    - [hasOwnPrototypeFunction](#hasOwnPrototypeFunction)
+    - [hasPrototypeFunction](#hasPrototypeFunction)
+    - [getDefaultInstance](#getDefaultInstance)
+    - [getFieldType](#getFieldType)
+    - [getFieldElementType](#getFieldElementType)
+    - [getSourceField](#getSourceField)
 - [最新更新](#recent-updates)
 - [贡献](#contributing)
 - [许可证](#license)
@@ -938,6 +950,328 @@ expect(opt1.convertNaming).toBe(false);
       },
     });
     ```
+
+## <span id="utility-functions">工具函数</span>
+
+本库提供了几个独立的工具函数，可以在不装饰类的情况下使用。
+
+### <span id="stringifyId">stringifyId(id)</span>
+
+- 参数：
+    - `id: string|number|bigint`：要转换为字符串的ID。
+- 返回值：
+    - `string`：ID的字符串表示形式，如果ID为`null`或`undefined`，则返回空字符串。
+
+此函数将ID转换为字符串表示形式。它处理不同类型的ID：
+- 如果ID为`null`或`undefined`，则返回空字符串。
+- 如果ID已经是字符串，则按原样返回该字符串。
+- 如果ID是数字或bigint，则将其转换为字符串。
+- 如果ID是任何其他类型的对象，则将其序列化为JSON字符串。
+
+```javascript
+import { stringifyId } from '@qubit-ltd/common-decorator';
+
+stringifyId(123);          // "123"
+stringifyId("abc");        // "abc"
+stringifyId(123456789012345678901n);  // "123456789012345678901"
+stringifyId(null);         // ""
+stringifyId(undefined);    // ""
+stringifyId({ id: 123 });  // '{"id":123}'
+```
+
+### <span id="util-toJSON">toJSON(value, options)</span>
+
+- 参数：
+    - `value: any`：要转换为可JSON序列化对象的值。
+    - `options: null|undefined|object`：序列化的附加选项。
+- 返回值：
+    - `object`：可以被`JSON.stringify()`序列化的普通JavaScript对象。
+
+此函数将值转换为可以被`JSON.stringify()`序列化的对象。如果该值具有`toJSON()`方法，则将使用该方法来确定要序列化的数据。
+
+可用选项包括：
+- `normalize: boolean`：是否在序列化前规范化对象（默认值：`true`）。
+- `removeEmptyFields: boolean`：是否从对象中删除空字段（默认值：`false`）。
+- `convertNaming: boolean`：是否将属性名转换为不同的命名风格（默认值：`false`）。
+- `sourceNamingStyle: string`：源对象的命名风格（默认值：`'LOWER_CAMEL'`）。
+- `targetNamingStyle: string`：结果对象的命名风格（默认值：`'LOWER_UNDERSCORE'`）。
+- `space: string|number`：用于格式化的空白字符（默认值：`null`）。
+
+```javascript
+import { toJSON } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+  toJSON() {
+    return {
+      fullName: `${this.firstName} ${this.lastName}`,
+      age: this.age,
+    };
+  },
+};
+
+// 使用对象的toJSON方法
+const result = toJSON(user);
+// { fullName: 'John Doe', age: 30 }
+
+// 转换命名风格
+const resultWithNaming = toJSON(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+});
+// { full_name: 'John Doe', age: 30 }
+```
+
+### <span id="util-toJsonString">toJsonString(obj, options)</span>
+
+- 参数：
+    - `obj: object`：要序列化为JSON字符串的对象。
+    - `options: null|undefined|object`：序列化的附加选项。
+- 返回值：
+    - `string`：对象的JSON字符串表示形式。
+
+此函数将对象序列化为具有附加选项的JSON字符串。它支持原生`bigint`值和其他自定义选项。
+
+可用选项与`toJSON()`相同。
+
+```javascript
+import { toJsonString } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+};
+
+// 基本序列化
+const json = toJsonString(user);
+// '{"firstName":"John","lastName":"Doe","age":30}'
+
+// 带有命名风格转换的美化JSON
+const prettyJson = toJsonString(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+  space: 2,
+});
+/*
+{
+  "first_name": "John",
+  "last_name": "Doe", 
+  "age": 30
+}
+*/
+
+// 处理bigint值
+const bigData = {
+  id: 9223372036854775807n,
+  name: 'Big Integer'
+};
+toJsonString(bigData);
+// '{"id":9223372036854775807,"name":"Big Integer"}'
+```
+
+### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
+
+- 参数：
+    - `Class: function`：要检查的类的构造函数。
+    - `field: string`：要检查的属性名称。
+- 返回值：
+    - `boolean`：仅当该属性由类直接定义（无论是在其原型上还是在默认实例上）而非从父类继承时，返回true。
+
+此函数确定一个类是否直接拥有特定属性。与JavaScript内置的`Object.prototype.hasOwnProperty`不同，此函数接受类构造函数而非对象实例，同时检查原型和默认实例，并且只报告由类直接拥有的属性，而非那些从父类继承的属性。
+
+```javascript
+import { hasOwnProperty } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  constructor() {
+    this.parentField = 'parent';
+  }
+}
+
+class Child extends Parent {
+  constructor() {
+    super();
+    this.childField = 'child';
+  }
+}
+
+hasOwnProperty(Child, 'childField');  // true
+hasOwnProperty(Child, 'parentField'); // false (从Parent继承)
+```
+
+### <span id="hasOwnPrototypeFunction">hasOwnPrototypeFunction(Class, name)</span>
+
+- 参数：
+    - `Class: function`：指定类的构造函数。
+    - `name: string`：指定原型函数的名称。
+- 返回值：
+    - `boolean`：当且仅当指定函数直接定义在类本身的原型上（不是从父类继承）时返回true。
+
+此函数确定指定的原型函数是否直接定义在指定类的原型中（不是从父类继承）。它使用`Object.prototype.hasOwnProperty`来确保只考虑原型的"自有属性"。
+
+```javascript
+import { hasOwnPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasOwnPrototypeFunction(Child, 'childMethod');  // true
+hasOwnPrototypeFunction(Child, 'parentMethod'); // false (从Parent继承)
+```
+
+### <span id="hasPrototypeFunction">hasPrototypeFunction(Class, name)</span>
+
+- 参数：
+    - `Class: function`：指定类的构造函数。
+    - `name: string`：指定原型函数的名称。
+- 返回值：
+    - `boolean`：如果指定函数存在于类的原型链中的任何位置（无论是由类本身定义还是从父类继承），则返回true。
+
+此函数确定指定的原型函数是否存在于指定类的原型链中的任何位置。它检查整个原型链，包括从父类继承的方法，使用`Reflect.has()`。
+
+```javascript
+import { hasPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasPrototypeFunction(Child, 'childMethod');  // true
+hasPrototypeFunction(Child, 'parentMethod'); // true (从Parent继承)
+```
+
+### <span id="getDefaultInstance">getDefaultInstance(Class)</span>
+
+- 参数：
+    - `Class: function`：指定类的构造函数。
+- 返回值：
+    - `object`：指定类的默认实例，如果不存在则创建一个新实例。
+
+此函数获取指定类的默认实例，如果不存在则创建一个新实例。它被库的许多函数内部使用，以获取默认值。
+
+```javascript
+import { getDefaultInstance } from '@qubit-ltd/common-decorator';
+
+class User {
+  constructor() {
+    this.name = '';
+    this.age = 0;
+  }
+}
+
+const defaultUser = getDefaultInstance(User);
+console.log(defaultUser.name); // ''
+console.log(defaultUser.age);  // 0
+```
+
+### <span id="getFieldType">getFieldType(Class, field, path, options)</span>
+
+- 参数：
+    - `Class: function`：对象所属类的构造函数。
+    - `field: string`：字段的名称。
+    - `path: string`（可选）：字段在原始根对象的属性树中的路径。
+    - `options: object`（可选）：类型解析的附加选项。
+- 返回值：
+    - `function|undefined`：对象指定字段的类型，如果无法推断字段类型，则为`undefined`。
+
+此函数获取对象指定字段的类型。它首先检查注解的类型信息，然后检查选项中的附加类型信息，最后尝试从默认字段值推断。
+
+```javascript
+import { getFieldType } from '@qubit-ltd/common-decorator';
+
+class Address {
+  constructor() {
+    this.street = '';
+    this.city = '';
+  }
+}
+
+class User {
+  constructor() {
+    this.name = '';
+    this.address = new Address();
+  }
+}
+
+const addressType = getFieldType(User, 'address');
+console.log(addressType === Address); // true
+```
+
+### <span id="getFieldElementType">getFieldElementType(Class, field, path, options)</span>
+
+- 参数：
+    - `Class: function`：对象所属类的构造函数。
+    - `field: string`：字段的名称。
+    - `path: string`（可选）：字段在原始根对象的属性树中的路径。
+    - `options: object`（可选）：类型解析的附加选项。
+- 返回值：
+    - `function|null`：对象指定字段的元素类型，如果无法推断字段元素类型，则为`null`。
+
+此函数获取对象字段的元素类型，特别适用于集合（数组、集合、映射）。它检查注解的元素类型信息，选项中的附加类型信息，并尝试从默认字段值推断。
+
+```javascript
+import { getFieldElementType, ElementType } from '@qubit-ltd/common-decorator';
+
+class Item {
+  constructor() {
+    this.id = 0;
+    this.name = '';
+  }
+}
+
+class Shop {
+  constructor() {
+    this.items = [];
+  }
+}
+
+// 使用装饰器指定元素类型
+class DecoratedShop {
+  constructor() {
+    this.items = [];
+  }
+}
+ElementType(Item)(DecoratedShop, 'items');
+
+console.log(getFieldElementType(DecoratedShop, 'items') === Item); // true
+```
+
+### <span id="getSourceField">getSourceField(targetField, options)</span>
+
+- 参数：
+    - `targetField: string`：目标对象的键。
+    - `options: object`：命名风格转换的选项。
+- 返回值：
+    - `string`：源对象的对应键。
+
+此函数从目标对象的对应字段获取源对象的字段名称，支持不同命名规范（驼峰命名法、蛇形命名法等）之间的命名风格转换。
+
+```javascript
+import { getSourceField } from '@qubit-ltd/common-decorator';
+
+const options = {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_UNDERSCORE',
+  targetNamingStyle: 'LOWER_CAMEL',
+};
+
+const sourceField = getSourceField('firstName', options);
+console.log(sourceField); // 'first_name'
+```
 
 ## <span id="recent-updates">最新更新</span>
 

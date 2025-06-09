@@ -21,6 +21,7 @@ With this library, you can easily add common methods to your domain classes, imp
 - **Normalization Support**: `@Normalizable` decorator enables field normalization
 - **Type Safety**: `@Type` and `@ElementType` decorators for type checking
 - **Serialization Utilities**: Built-in JSON serialization/deserialization support
+- **Utility Functions**: Standalone helper functions for ID conversion, JSON serialization, and more
 - **High Test Coverage**: Comprehensive test suite ensuring reliability of all features
 
 ## Installation
@@ -79,6 +80,17 @@ pnpm add @qubit-ltd/common-decorator
 - [Configuration](#configuration)
   - [Bundling with webpack](#webpack)
   - [Bundling with vite](#vite)
+- [Utility Functions](#utility-functions)
+  - [stringifyId](#stringifyId)
+  - [toJSON](#util-toJSON)
+  - [toJsonString](#util-toJsonString)
+  - [hasOwnProperty](#hasOwnProperty)
+  - [hasOwnPrototypeFunction](#hasOwnPrototypeFunction)
+  - [hasPrototypeFunction](#hasPrototypeFunction)
+  - [getDefaultInstance](#getDefaultInstance)
+  - [getFieldType](#getFieldType)
+  - [getFieldElementType](#getFieldElementType)
+  - [getSourceField](#getSourceField)
 - [Recent Updates](#recent-updates)
 - [Contributing](#contributing)
 - [License](#license)
@@ -1162,6 +1174,328 @@ must be at least `7.24.0`.
       },
     });
     ```
+
+## <span id="utility-functions">Utility Functions</span>
+
+The library provides several standalone utility functions that can be used without decorating classes.
+
+### <span id="stringifyId">stringifyId(id)</span>
+
+- Parameters:
+  - `id: string|number|bigint`: The ID to be converted to a string.
+- Returns:
+  - `string`: The string representation of the ID, or an empty string if the ID is `null` or `undefined`.
+
+This function converts an ID to a string representation. It handles different types of IDs:
+- If the ID is `null` or `undefined`, it returns an empty string.
+- If the ID is already a string, it returns the string as is.
+- If the ID is a number or bigint, it converts it to a string.
+- If the ID is any other type of object, it serializes it to a JSON string.
+
+```javascript
+import { stringifyId } from '@qubit-ltd/common-decorator';
+
+stringifyId(123);          // "123"
+stringifyId("abc");        // "abc"
+stringifyId(123456789012345678901n);  // "123456789012345678901"
+stringifyId(null);         // ""
+stringifyId(undefined);    // ""
+stringifyId({ id: 123 });  // '{"id":123}'
+```
+
+### <span id="util-toJSON">toJSON(value, options)</span>
+
+- Parameters:
+  - `value: any`: The value to be converted to a JSON-serializable object.
+  - `options: null|undefined|object`: Additional options for serialization.
+- Returns:
+  - `object`: A plain JavaScript object ready to be serialized by `JSON.stringify()`.
+
+This function converts a value to an object that can be serialized by `JSON.stringify()`. If the value has a `toJSON()` method, it will use that method to determine what data to serialize.
+
+Available options include:
+- `normalize: boolean`: Whether to normalize the object before serializing (default: `true`).
+- `removeEmptyFields: boolean`: Whether to remove empty fields from the object (default: `false`).
+- `convertNaming: boolean`: Whether to convert property names to a different naming style (default: `false`).
+- `sourceNamingStyle: string`: The naming style of source object (default: `'LOWER_CAMEL'`).
+- `targetNamingStyle: string`: The naming style for the resulting object (default: `'LOWER_UNDERSCORE'`).
+- `space: string|number`: Whitespace for formatting (default: `null`).
+
+```javascript
+import { toJSON } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+  toJSON() {
+    return {
+      fullName: `${this.firstName} ${this.lastName}`,
+      age: this.age,
+    };
+  },
+};
+
+// Using the object's toJSON method
+const result = toJSON(user);
+// { fullName: 'John Doe', age: 30 }
+
+// Converting naming style
+const resultWithNaming = toJSON(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+});
+// { full_name: 'John Doe', age: 30 }
+```
+
+### <span id="util-toJsonString">toJsonString(obj, options)</span>
+
+- Parameters:
+  - `obj: object`: The object to be serialized into a JSON string.
+  - `options: null|undefined|object`: Additional options for serialization.
+- Returns:
+  - `string`: A JSON string representation of the object.
+
+This function serializes an object to a JSON string with additional options. It supports native `bigint` values and other customization options.
+
+Available options are the same as for `toJSON()`.
+
+```javascript
+import { toJsonString } from '@qubit-ltd/common-decorator';
+
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+};
+
+// Basic serialization
+const json = toJsonString(user);
+// '{"firstName":"John","lastName":"Doe","age":30}'
+
+// Pretty-printed JSON with naming style conversion
+const prettyJson = toJsonString(user, {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_CAMEL',
+  targetNamingStyle: 'LOWER_UNDERSCORE',
+  space: 2,
+});
+/*
+{
+  "first_name": "John",
+  "last_name": "Doe", 
+  "age": 30
+}
+*/
+
+// Handling bigint values
+const bigData = {
+  id: 9223372036854775807n,
+  name: 'Big Integer'
+};
+toJsonString(bigData);
+// '{"id":9223372036854775807,"name":"Big Integer"}'
+```
+
+### <span id="hasOwnProperty">hasOwnProperty(Class, field)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the class to check.
+  - `field: string`: The name of the property to check for.
+- Returns:
+  - `boolean`: Returns true if and only if the property is directly defined by the class (either on its prototype or default instance), not inherited from parent classes.
+
+This function determines whether a class directly owns a specific property. Unlike JavaScript's built-in `Object.prototype.hasOwnProperty`, this function accepts a class constructor rather than an object instance, checks both the prototype and default instance, and only reports properties owned directly by the class, not those inherited from parent classes.
+
+```javascript
+import { hasOwnProperty } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  constructor() {
+    this.parentField = 'parent';
+  }
+}
+
+class Child extends Parent {
+  constructor() {
+    super();
+    this.childField = 'child';
+  }
+}
+
+hasOwnProperty(Child, 'childField');  // true
+hasOwnProperty(Child, 'parentField'); // false (inherited from Parent)
+```
+
+### <span id="hasOwnPrototypeFunction">hasOwnPrototypeFunction(Class, name)</span>
+
+- Parameters:
+  - `Class: function`: Constructor for the specified class.
+  - `name: string`: The name of the specified prototype function.
+- Returns:
+  - `boolean`: Returns true if and only if the specified function is directly defined on the prototype of the class itself (not inherited from parent classes).
+
+This function determines whether the specified prototype function is directly defined in the prototype of a specified class (not inherited from parent classes). It uses `Object.prototype.hasOwnProperty` to ensure only "own properties" of the prototype are considered.
+
+```javascript
+import { hasOwnPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasOwnPrototypeFunction(Child, 'childMethod');  // true
+hasOwnPrototypeFunction(Child, 'parentMethod'); // false (inherited from Parent)
+```
+
+### <span id="hasPrototypeFunction">hasPrototypeFunction(Class, name)</span>
+
+- Parameters:
+  - `Class: function`: Constructor for the specified class.
+  - `name: string`: The name of the specified prototype function.
+- Returns:
+  - `boolean`: Returns true if the specified function exists anywhere in the prototype chain of the class, whether defined by the class itself or inherited from a parent class.
+
+This function determines whether the specified prototype function exists anywhere in the prototype chain of a specified class. It checks the entire prototype chain, including methods inherited from parent classes, using `Reflect.has()`.
+
+```javascript
+import { hasPrototypeFunction } from '@qubit-ltd/common-decorator';
+
+class Parent {
+  parentMethod() { return 'parent'; }
+}
+
+class Child extends Parent {
+  childMethod() { return 'child'; }
+}
+
+hasPrototypeFunction(Child, 'childMethod');  // true
+hasPrototypeFunction(Child, 'parentMethod'); // true (inherited from Parent)
+```
+
+### <span id="getDefaultInstance">getDefaultInstance(Class)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the specified class.
+- Returns:
+  - `object`: The default instance of the specified class, or a new instance will be created if it does not exist.
+
+This function gets the default instance of the specified class, or creates a new instance if it does not exist. It's used internally by many of the library's functions to get default values.
+
+```javascript
+import { getDefaultInstance } from '@qubit-ltd/common-decorator';
+
+class User {
+  constructor() {
+    this.name = '';
+    this.age = 0;
+  }
+}
+
+const defaultUser = getDefaultInstance(User);
+console.log(defaultUser.name); // ''
+console.log(defaultUser.age);  // 0
+```
+
+### <span id="getFieldType">getFieldType(Class, field, path, options)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the class of the object.
+  - `field: string`: The name of the field.
+  - `path: string` (optional): The path of the field in the property tree of the original root object.
+  - `options: object` (optional): Additional options for type resolution.
+- Returns:
+  - `function|undefined`: The type of the specified field of the object, or `undefined` if the field type cannot be inferred.
+
+This function gets the type of the specified field of an object. It first checks the annotated type information, then the additional type information in options, and finally tries to infer from the default field value.
+
+```javascript
+import { getFieldType } from '@qubit-ltd/common-decorator';
+
+class Address {
+  constructor() {
+    this.street = '';
+    this.city = '';
+  }
+}
+
+class User {
+  constructor() {
+    this.name = '';
+    this.address = new Address();
+  }
+}
+
+const addressType = getFieldType(User, 'address');
+console.log(addressType === Address); // true
+```
+
+### <span id="getFieldElementType">getFieldElementType(Class, field, path, options)</span>
+
+- Parameters:
+  - `Class: function`: The constructor of the class of the object.
+  - `field: string`: The name of the field.
+  - `path: string` (optional): The path of the field in the property tree of the original root object.
+  - `options: object` (optional): Additional options for type resolution.
+- Returns:
+  - `function|null`: The element type of the specified field of the object, or `null` if the field element type cannot be inferred.
+
+This function gets the element type of a field of an object, particularly useful for collections (arrays, sets, maps). It checks annotated element type information, additional type information in options, and tries to infer from default field values.
+
+```javascript
+import { getFieldElementType, ElementType } from '@qubit-ltd/common-decorator';
+
+class Item {
+  constructor() {
+    this.id = 0;
+    this.name = '';
+  }
+}
+
+class Shop {
+  constructor() {
+    this.items = [];
+  }
+}
+
+// Using decorator to specify element type
+class DecoratedShop {
+  constructor() {
+    this.items = [];
+  }
+}
+ElementType(Item)(DecoratedShop, 'items');
+
+console.log(getFieldElementType(DecoratedShop, 'items') === Item); // true
+```
+
+### <span id="getSourceField">getSourceField(targetField, options)</span>
+
+- Parameters:
+  - `targetField: string`: The key of the target object.
+  - `options: object`: The options for naming style conversion.
+- Returns:
+  - `string`: The corresponding key of the source object.
+
+This function gets the name of the field of the source object from the corresponding field of the target object, supporting naming style conversion between different conventions (camelCase, snake_case, etc.).
+
+```javascript
+import { getSourceField } from '@qubit-ltd/common-decorator';
+
+const options = {
+  convertNaming: true,
+  sourceNamingStyle: 'LOWER_UNDERSCORE',
+  targetNamingStyle: 'LOWER_CAMEL',
+};
+
+const sourceField = getSourceField('firstName', options);
+console.log(sourceField); // 'first_name'
+```
 
 ## <span id="recent-updates">Recent Updates</span>
 
