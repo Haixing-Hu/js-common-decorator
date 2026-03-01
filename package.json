@@ -1,17 +1,17 @@
 {
   "name": "@qubit-ltd/common-decorator",
-  "version": "3.10.6",
+  "version": "3.10.7",
   "description": "A JavaScript ES7 library of common decorators",
   "author": "Haixing Hu (starfish.hu@gmail.com)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Haixing-Hu/js-common-decorator.git"
+    "url": "git+https://github.com/qubit-ltd/js-common-decorator.git"
   },
   "bugs": {
-    "url": "https://github.com/Haixing-Hu/js-common-decorator/issues"
+    "url": "https://github.com/qubit-ltd/js-common-decorator/issues"
   },
-  "homepage": "https://github.com/Haixing-Hu/js-common-decorator",
+  "homepage": "https://github.com/qubit-ltd/js-common-decorator",
   "keywords": [
     "JavaScript",
     "decorator"

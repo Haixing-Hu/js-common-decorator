@@ -3,8 +3,8 @@
 [![npm package](https://img.shields.io/npm/v/@qubit-ltd/common-decorator.svg)](https://npmjs.com/package/@qubit-ltd/common-decorator)
 [![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![English Document](https://img.shields.io/badge/Document-English-blue.svg)](README.md)
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Haixing-Hu/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Haixing-Hu/js-common-decorator/tree/master)
-[![Coverage Status](https://coveralls.io/repos/github/Haixing-Hu/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/Haixing-Hu/js-common-decorator?branch=master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/qubit-ltd/js-common-decorator/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/qubit-ltd/js-common-decorator/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/qubit-ltd/js-common-decorator/badge.svg?branch=master)](https://coveralls.io/github/qubit-ltd/js-common-decorator?branch=master)
 
 ## 概述
 
@@ -1301,7 +1301,7 @@ console.log(sourceField); // 'first_name'
 [@babel/plugin-proposal-decorators]: https://babeljs.io/docs/babel-plugin-proposal-decorators
 [JavaScript 装饰器 stage 3 提案]: https://github.com/tc39/proposal-decorators
 [JavaScript 装饰器元数据 stage 3 提案]: https://github.com/tc39/proposal-decorator-metadata
-[GitHub 仓库]: https://github.com/Haixing-Hu/js-common-decorator
+[GitHub 仓库]: https://github.com/qubit-ltd/js-common-decorator
 [webpack]: https://webpack.js.org/
 [vite]: https://vitejs.dev/
 [vite-plugin-vue]: https://www.npmjs.com/package/@vitejs/plugin-vue
