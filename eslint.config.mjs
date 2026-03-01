@@ -7,12 +7,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import qubitConfig from '@qubit-ltd/eslint-config';
+import babelParser from '@babel/eslint-parser';
 
 export default [
   ...qubitConfig,
   {
     files: ['src/**/*.js', 'test/**/*.js'],
     languageOptions: {
+      parser: babelParser,
       parserOptions: {
         requireConfigFile: false,
         babelOptions: {
