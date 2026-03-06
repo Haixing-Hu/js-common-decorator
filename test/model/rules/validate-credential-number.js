@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import CredentialType from '../credential-type';
 import IdentityCard from './identity-card';
 import OfficerCard from './officer-card';

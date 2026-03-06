@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Mock ValidationResult before importing modules that use it
-jest.mock('@qubit-ltd/common-validation-rule', () => ({
+jest.mock('@qubit-ltd/validation-rule', () => ({
   ValidationResult: jest.fn().mockImplementation((success, message) => ({
     success,
     message,

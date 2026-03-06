@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isEmpty } from '@qubit-ltd/common-util';
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import getFieldLabel from '../utils/get-field-label';
 import getInstanceName from '../utils/get-instance-name';
 import isFieldNonEmpty from '../utils/is-field-non-empty';

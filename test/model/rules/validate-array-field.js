@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isUndefinedOrNullOrEmptyArray } from '@qubit-ltd/common-util';
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 
 /**
  * 校验某个对象的一个数组类型的字段值中每个元素是否合法。

@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import validateFieldImpl from '../../../src/impl/model/validate-field-impl';
 
 /**

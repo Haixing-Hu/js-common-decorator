@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import { Model, Validatable } from '../src';
 import defaultValidator from '../src/default-validator';
 import classMetadataCache from '../src/impl/class-metadata-cache';

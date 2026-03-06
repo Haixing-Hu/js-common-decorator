@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 //
 //    Copyright (c) 2022 - 2025.
 //    Haixing Hu, Qubit Co. Ltd.

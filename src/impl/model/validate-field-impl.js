@@ -6,7 +6,7 @@
 //    All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import classMetadataCache from '../class-metadata-cache';
 import { KEY_FIELD_VALIDATOR } from '../metadata-keys';
 import getFieldMetadata from '../utils/get-field-metadata';

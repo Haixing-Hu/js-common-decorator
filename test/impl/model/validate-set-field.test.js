@@ -8,7 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Mock ValidationResult before importing modules that use it
-jest.mock('@qubit-ltd/common-validation-rule', () => {
+jest.mock('@qubit-ltd/validation-rule', () => {
   const ValidationResultMock = jest.fn().mockImplementation((success, message) => ({
     success,
     message,
@@ -31,7 +31,7 @@ jest.mock('@qubit-ltd/common-validation-rule', () => {
 });
 
 // Import after mocking
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import validateEmptyField from '../../../src/impl/model/validate-empty-field';
 import validateSetField from '../../../src/impl/model/validate-set-field';
 import getElementValidationContext from '../../../src/impl/utils/get-element-validation-context';

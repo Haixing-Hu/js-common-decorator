@@ -7,7 +7,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 import { isUndefinedOrNullOrEmptyString } from '@qubit-ltd/common-util';
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import Integer from './integer';
 
 /**

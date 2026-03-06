@@ -10,7 +10,7 @@
 /**
  * 测试validateImpl函数
  */
-import { ValidationResult } from '@qubit-ltd/common-validation-rule';
+import { ValidationResult } from '@qubit-ltd/validation-rule';
 import validateImpl from '../../../src/impl/model/validate-impl';
 
 // 模拟 ValidationResult.merge 方法
